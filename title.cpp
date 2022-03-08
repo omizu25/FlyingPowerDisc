@@ -10,10 +10,12 @@
 // インクルード
 //--------------------------------------------------
 #include "main.h" 
-#include "title.h"
-#include "input.h"
 #include "fade.h"
+#include "input.h"
 #include "menu.h"
+#include "mode.h"
+#include "rectangle.h"
+#include "title.h"
 
 #include <assert.h>
 
@@ -65,11 +67,12 @@ static LPDIRECT3DTEXTURE9			s_pTexture = NULL;				// テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuff = NULL;				// 頂点バッファへのポインタ
 static LPDIRECT3DTEXTURE9			s_pTextureLight = NULL;			// 後光のテクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuffLight = NULL;			// 後光の頂点バッファへのポインタ
+static LPDIRECT3DTEXTURE9			s_pTextureFrame = NULL;			// 枠のテクスチャへのポインタ
 static LPDIRECT3DTEXTURE9			s_pTextureMenu[MENU_MAX];		// メニューのテクスチャへのポインタ
 static Light						s_light[MAX_LIGHT];				// 後光の情報
 static int							s_nTime;						// 時間
 static int							s_nSelectMenu;					// 選ばれているメニュー
-static int							s_nIdxMenu;						// 使っているメニューの番号
+static int							s_nIdxUseMenu;					// 使っているメニューの番号
 
 //--------------------------------------------------
 // プロトタイプ宣言
@@ -82,6 +85,9 @@ static void Input(void);
 //--------------------------------------------------
 void InitTitle(void)
 {
+	// 矩形の初期化
+	InitRectAngle();
+
 	// デバイスへのポインタの取得
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 
@@ -90,7 +96,7 @@ void InitTitle(void)
 
 	// テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data/TEXTURE/0.png",
+		"data/TEXTURE/BG.png",
 		&s_pTextureBG);
 
 	// テクスチャの読み込み
@@ -102,6 +108,12 @@ void InitTitle(void)
 	D3DXCreateTextureFromFile(pDevice,
 		"data/TEXTURE/TitleLight_red.png",
 		&s_pTextureLight);
+
+	// テクスチャの読み込み
+	D3DXCreateTextureFromFile(
+		pDevice,
+		"data/TEXTURE/Frame.png",
+		&s_pTextureFrame);
 
 	// テクスチャの読み込み
 	D3DXCreateTextureFromFile(
@@ -159,10 +171,10 @@ void InitTitle(void)
 	pVtx[3].rhw = 1.0f;
 
 	// 頂点カラーの設定
-	pVtx[0].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
-	pVtx[1].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
-	pVtx[2].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
-	pVtx[3].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+	pVtx[0].col = WHITE_COLOR;
+	pVtx[1].col = WHITE_COLOR;
+	pVtx[2].col = WHITE_COLOR;
+	pVtx[3].col = WHITE_COLOR;
 
 	// テクスチャ座標の設定
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -194,10 +206,10 @@ void InitTitle(void)
 	pVtx[3].rhw = 1.0f;
 
 	// 頂点カラーの設定
-	pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[0].col = WHITE_COLOR;
+	pVtx[1].col = WHITE_COLOR;
+	pVtx[2].col = WHITE_COLOR;
+	pVtx[3].col = WHITE_COLOR;
 
 	// テクスチャ座標の設定
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -261,10 +273,10 @@ void InitTitle(void)
 		pVtx[3].rhw = 1.0f;
 
 		// 頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[0].col = WHITE_COLOR;
+		pVtx[1].col = WHITE_COLOR;
+		pVtx[2].col = WHITE_COLOR;
+		pVtx[3].col = WHITE_COLOR;
 
 		// テクスチャ座標の設定
 		pVtx[0].tex = D3DXVECTOR2(0.0f + (i * 1.0f), 0.0f);
@@ -278,24 +290,40 @@ void InitTitle(void)
 	// 頂点バッファをアンロックする
 	s_pVtxBuffLight->Unlock();
 
-	InitMenu();		// メニュー
+	// 矩形の設定
+	SetRectAngle(&s_pTextureBG, &s_pVtxBuffBG, 1);
+
+	SetRectAngle(&s_pTextureLight, &s_pVtxBuffLight, MAX_LIGHT);
+
+	SetRectAngle(&s_pTexture, &s_pVtxBuff, 1);
+
+	// メニューの初期化
+	InitMenu();
 
 	MenuArgument menu;
 	menu.nNumUse = MENU_MAX;
-	menu.fLeft = 0.0f;
-	menu.fRight = SCREEN_WIDTH;
+	menu.fLeft = SCREEN_WIDTH * 0.25f;
+	menu.fRight = SCREEN_WIDTH * 0.75f;
 	menu.fTop = SCREEN_HEIGHT * 0.5f;
 	menu.fBottom = SCREEN_HEIGHT;
 	menu.fWidth = MENU_WIDTH;
 	menu.fHeight = MENU_HEIGHT;
+	menu.bSort = true;
 
 	for (int i = 0; i < MENU_MAX; i++)
 	{
 		menu.pTexture[i] = &s_pTextureMenu[i];
 	}
+
+	FrameArgument Frame;
+	Frame.bUse = true;
+	Frame.col = WHITE_COLOR;
+//	Frame.col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	Frame.pTexture = &s_pTextureFrame;
+//	Frame.pTexture = NULL;
 	
 	// メニューの設定
-	s_nIdxMenu = SetMenu(menu);
+	s_nIdxUseMenu = SetMenu(menu, Frame);
 }
 
 //--------------------------------------------------
@@ -303,7 +331,11 @@ void InitTitle(void)
 //--------------------------------------------------
 void UninitTitle(void)
 {
-	UninitMenu();	// メニュー
+	// 矩形の終了
+	UninitRectAngle();
+
+	// メニューの終了
+	UninitMenu();
 
 	if (s_pTextureBG != NULL)
 	{// テクスチャの解放
@@ -341,6 +373,12 @@ void UninitTitle(void)
 		s_pTextureLight = NULL;
 	}
 
+	if (s_pTextureFrame != NULL)
+	{// テクスチャの解放
+		s_pTextureFrame->Release();
+		s_pTextureFrame = NULL;
+	}
+
 	for (int i = 0; i < MENU_MAX; i++)
 	{
 		if (s_pTextureMenu[i] != NULL)
@@ -356,13 +394,14 @@ void UninitTitle(void)
 //--------------------------------------------------
 void UpdateTitle(void)
 {
-	UpdateMenu();	// メニュー
-
 	// 後光
 	UpdateLight();
 
 	// 入力
 	Input();
+
+	// メニューの更新
+	UpdateMenu();
 }
 
 //--------------------------------------------------
@@ -370,58 +409,11 @@ void UpdateTitle(void)
 //--------------------------------------------------
 void DrawTitle(void)
 {
-	// デバイスへのポインタの取得
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();
+	// 矩形の描画
+	DrawRectAngle();
 
-	// 頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, s_pVtxBuffBG, 0, sizeof(VERTEX_2D));
-
-	// 頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	//テクスチャの設定
-	pDevice->SetTexture(0, s_pTextureBG);
-
-	// ポリゴンの描画
-	pDevice->DrawPrimitive(
-		D3DPT_TRIANGLESTRIP,		// プリミティブの種類
-		0,							// 描画する最初の頂点インデックス
-		2);							// 描画するプリミティブ数
-
-	// 頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, s_pVtxBuffLight, 0, sizeof(VERTEX_2D));
-
-	// 頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	//テクスチャの設定
-	pDevice->SetTexture(0, s_pTextureLight);
-
-	for (int i = 0; i < MAX_LIGHT; i++)
-	{
-		// ポリゴンの描画
-		pDevice->DrawPrimitive(
-			D3DPT_TRIANGLESTRIP,		// プリミティブの種類
-			i * 4,						// 描画する最初の頂点インデックス
-			2);							// 描画するプリミティブ数
-	}
-
-	// 頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, s_pVtxBuff, 0, sizeof(VERTEX_2D));
-
-	// 頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	//テクスチャの設定
-	pDevice->SetTexture(0, s_pTexture);
-
-	// ポリゴンの描画
-	pDevice->DrawPrimitive(
-		D3DPT_TRIANGLESTRIP,		// プリミティブの種類
-		0,							// 描画する最初の頂点インデックス
-		2);							// 描画するプリミティブ数
-
-	DrawMenu();		// メニュー
+	// メニューの描画
+	DrawMenu();
 }
 
 //--------------------------------------------------
@@ -491,12 +483,24 @@ static void Input(void)
 
 	if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP, 0))
 	{// Wキーが押されたかどうか
+		// 選択肢の色の初期化
+		InitColorOption();
+
 		s_nSelectMenu = ((s_nSelectMenu - 1) + MENU_MAX) % MENU_MAX;
+
+		// 選択肢の変更
+		ChangeOption(s_nSelectMenu);
 
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN, 0))
 	{// Sキーが押されたかどうか
+		// 選択肢の色の初期化
+		InitColorOption();
+
 		s_nSelectMenu = ((s_nSelectMenu + 1) + MENU_MAX) % MENU_MAX;
+
+		// 選択肢の変更
+		ChangeOption(s_nSelectMenu);
 	}
 
 	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START, 0))
@@ -511,5 +515,8 @@ static void Input(void)
 			assert(false);
 			break;
 		}
+
+		// 選択肢の決定
+		DecisionOption();
 	}
 }

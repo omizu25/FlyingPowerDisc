@@ -1,6 +1,6 @@
 //==================================================
 //
-// 3Dゲーム制作 ( main.h )
+// FPD制作 ( main.h )
 // Author  : katsuki mizuki
 //
 //==================================================
@@ -28,24 +28,10 @@
 //--------------------------------------------------
 // マクロ定義
 //--------------------------------------------------
-#define SCREEN_WIDTH		(1280)																// ウインドウの幅
-#define SCREEN_HEIGHT		(720)																// ウインドウの高さ
-#define FVF_VERTEX_2D		(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)						// 頂点フォーマット[2D]
-#define FVF_VERTEX_3D		(D3DFVF_XYZ |  D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)		// 頂点フォーマット[3D] 位置・法線・カラー・テクスチャ
-#define FVF_VERTEX_LINE		(D3DFVF_XYZ | D3DFVF_DIFFUSE)										// 頂点フォーマット[線] 位置・カラー
-#define FILE_NAME			"data/TEXT/system.txt"												// テキストの名前
-#define MAX_TEXT			(1024)																// テキストの最大文字数
-
-//--------------------------------------------------
-// 列挙型
-//--------------------------------------------------
-typedef enum
-{
-	MODE_TITLE = 0,		// タイトル
-	MODE_GAME,			// ゲーム
-	MODE_MAX,
-	MODE_NONE
-}MODE;
+#define SCREEN_WIDTH		(1280)												// ウインドウの幅
+#define SCREEN_HEIGHT		(720)												// ウインドウの高さ
+#define FVF_VERTEX_2D		(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)		// 頂点フォーマット[2D]
+#define WHITE_COLOR			(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))					// 白色
 
 //--------------------------------------------------
 // 構造体
@@ -62,8 +48,5 @@ typedef struct
 // プロトタイプ宣言
 //--------------------------------------------------
 LPDIRECT3DDEVICE9 GetDevice(void);
-void SetMode(void);
-MODE GetMode(void);
-void ChangeMode(MODE mode);
 
 #endif // !_MAIN_H_
