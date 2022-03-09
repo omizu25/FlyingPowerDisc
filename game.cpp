@@ -9,9 +9,11 @@
 // ƒCƒ“ƒNƒ‹[ƒh
 //--------------------------------------------------
 #include "main.h"
+#include "disc.h"
 #include "fade.h"
 #include "game.h"
 #include "input.h"
+#include "rectangle.h"
 #include "sound.h"
 
 #include <assert.h>
@@ -28,6 +30,12 @@ static bool				s_bPause = false;					// ƒ|[ƒY’†‚©‚Ç‚¤‚© [‚µ‚Ä‚é  : true ‚µ‚Ä‚È‚
 //--------------------------------------------------
 void InitGame(void)
 {
+	// ‹éŒ`‚Ì‰Šú‰»
+	InitRectAngle();
+
+	// ƒfƒBƒXƒN‚Ì‰Šú‰»
+	InitDisc();
+
 	s_gameState = GAMESTATE_START;		// ŠJnó‘Ô‚Éİ’è
 
 	s_nCounterState = 0;				// ƒJƒEƒ“ƒ^[‚Ì‰Šú‰»
@@ -42,6 +50,12 @@ void UninitGame(void)
 {
 	//ƒTƒEƒ“ƒh‚Ì’â~
 	StopSound();
+
+	// ‹éŒ`‚ÌI—¹
+	UninitRectAngle();
+
+	// ƒfƒBƒXƒN‚ÌI—¹
+	UninitDisc();
 }
 
 //--------------------------------------------------
@@ -71,6 +85,9 @@ void UpdateGame(void)
 
 	case GAMESTATE_NORMAL:		// ’Êíó‘Ô
 		
+		// ƒfƒBƒXƒN‚ÌXV
+		UpdateDisc();
+
 		break;
 
 	case GAMESTATE_END:			// I—¹ó‘Ô
@@ -96,6 +113,9 @@ void DrawGame(void)
 	{// ƒ|[ƒY’†
 		return;
 	}
+
+	// ‹éŒ`‚Ì•`‰æ
+	DrawRectAngle();
 }
 
 //--------------------------------------------------

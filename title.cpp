@@ -318,9 +318,7 @@ void InitTitle(void)
 	FrameArgument Frame;
 	Frame.bUse = true;
 	Frame.col = WHITE_COLOR;
-//	Frame.col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
 	Frame.pTexture = &s_pTextureFrame;
-//	Frame.pTexture = NULL;
 	
 	// ƒƒjƒ…[‚Ìİ’è
 	s_nIdxUseMenu = SetMenu(menu, Frame);
