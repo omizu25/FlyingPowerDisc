@@ -57,6 +57,7 @@ typedef struct
 	float			fSaveLength;		// 初期化での対角線の長さを保存
 	float			fAngle;				// 対角線の角度
 	float			fSpeed;				// 速度
+	int				nIdx;				// 矩形のインデックス
 }Light;
 
 //==================================================
@@ -64,10 +65,9 @@ typedef struct
 //==================================================
 static LPDIRECT3DTEXTURE9			s_pTextureBG = NULL;			// 背景のテクスチャへのポインタ
 static int							s_nIdxBG;						// 背景の矩形のインデックス
-static LPDIRECT3DTEXTURE9			s_pTexture = NULL;				// テクスチャへのポインタ
-static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuff = NULL;				// 頂点バッファへのポインタ
 static LPDIRECT3DTEXTURE9			s_pTextureLight = NULL;			// 後光のテクスチャへのポインタ
-static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuffLight = NULL;			// 後光の頂点バッファへのポインタ
+static LPDIRECT3DTEXTURE9			s_pTexture = NULL;				// テクスチャへのポインタ
+static int							s_nIdx;							// 矩形のインデックス
 static LPDIRECT3DTEXTURE9			s_pTextureFrame = NULL;			// 枠のテクスチャへのポインタ
 static LPDIRECT3DTEXTURE9			s_pTextureMenu[MENU_MAX];		// メニューのテクスチャへのポインタ
 static Light						s_light[MAX_LIGHT];				// 後光の情報
@@ -125,175 +125,98 @@ void InitTitle(void)
 	// 矩形の設定
 	s_nIdxBG = SetRectangle(s_pTextureBG);
 
-	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(
-		sizeof(VERTEX_2D) * 4,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,
-		&s_pVtxBuff,
-		NULL);
-
-	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(
-		sizeof(VERTEX_2D) * 4 * MAX_LIGHT,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,
-		&s_pVtxBuffLight,
-		NULL);
-
-	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
-
-	{
-		// 頂点バッファをロックし、頂点情報へのポインタを取得
-		GetVtxBuffRectangle(s_nIdxBG)->Lock(0, 0, (void**)&pVtx, 0);
-
-		float fWidth = SCREEN_WIDTH * 0.5f;
-		float fHeight = SCREEN_HEIGHT * 0.5f;
-
-		D3DXVECTOR3 pos = D3DXVECTOR3(fWidth, fHeight, 0.0f);
-
-		// 頂点座標の設定
-		pVtx[0].pos = pos + D3DXVECTOR3(-fWidth, -fHeight, 0.0f);
-		pVtx[1].pos = pos + D3DXVECTOR3(fWidth, -fHeight, 0.0f);
-		pVtx[2].pos = pos + D3DXVECTOR3(-fWidth, fHeight, 0.0f);
-		pVtx[3].pos = pos + D3DXVECTOR3(fWidth, fHeight, 0.0f);
-
-		// rhwの設定
-		pVtx[0].rhw = 1.0f;
-		pVtx[1].rhw = 1.0f;
-		pVtx[2].rhw = 1.0f;
-		pVtx[3].rhw = 1.0f;
-
-		D3DXCOLOR col = GetColor(COLOR_WHITE);
-
-		// 頂点カラーの設定
-		pVtx[0].col = col;
-		pVtx[1].col = col;
-		pVtx[2].col = col;
-		pVtx[3].col = col;
-
-		// テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
-		// 頂点バッファをアンロックする
-		GetVtxBuffRectangle(s_nIdxBG)->Unlock();
-	}
-
-	// 頂点バッファをロックし、頂点情報へのポインタを取得
-	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	float fWidth = TITLE_WIDTH * 0.5f;
-	float fHeight = TITLE_HEIGHT * 0.5f;
-
-	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
-
-	// 頂点座標の設定
-	pVtx[0].pos = pos + D3DXVECTOR3(-fWidth, -fHeight, 0.0f);
-	pVtx[1].pos = pos + D3DXVECTOR3(fWidth, -fHeight, 0.0f);
-	pVtx[2].pos = pos + D3DXVECTOR3(-fWidth, fHeight, 0.0f);
-	pVtx[3].pos = pos + D3DXVECTOR3(fWidth, fHeight, 0.0f);
-
-	// rhwの設定
-	pVtx[0].rhw = 1.0f;
-	pVtx[1].rhw = 1.0f;
-	pVtx[2].rhw = 1.0f;
-	pVtx[3].rhw = 1.0f;
-
-	D3DXCOLOR col = GetColor(COLOR_WHITE);
-
-	// 頂点カラーの設定
-	pVtx[0].col = col;
-	pVtx[1].col = col;
-	pVtx[2].col = col;
-	pVtx[3].col = col;
-
-	// テクスチャ座標の設定
-	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
-	// 頂点バッファをアンロックする
-	s_pVtxBuff->Unlock();
-
-	// 頂点バッファをロックし、頂点情報へのポインタを取得
-	s_pVtxBuffLight->Lock(0, 0, (void**)&pVtx, 0);
-
+	// 矩形の設定
 	for (int i = 0; i < MAX_LIGHT; i++)
 	{
 		Light *pLight = &s_light[i];
-
-		pLight->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-		if (i == 0)
-		{//	奥
-			fWidth = LIGHT_WIDTH;
-			fHeight = LIGHT_HEIGHT;
-			pLight->fSpeed = MAX_ROTATION * DECREASE_SPEED;
-		}
-		else
-		{// 手前
-			fWidth = LIGHT_WIDTH * DECREASE_SIZE;
-			fHeight = LIGHT_HEIGHT * DECREASE_SIZE;
-			pLight->fSpeed = MAX_ROTATION;
-		}
-
-		// 対角線の長さを算出する
-		pLight->fSaveLength = sqrtf((fWidth * fWidth) + (fHeight * fHeight));
-		pLight->fLength = pLight->fSaveLength;
-
-		// 対角線の角度を算出する
-		pLight->fAngle = atan2f(fWidth, fHeight);
-
-		// 頂点座標の設定
-		pVtx[0].pos.x = pos.x + (sinf(pLight->rot.z + (-D3DX_PI + pLight->fAngle)) * pLight->fLength);
-		pVtx[0].pos.y = pos.y + (cosf(pLight->rot.z + (-D3DX_PI + pLight->fAngle)) * pLight->fLength);
-		pVtx[0].pos.z = 0.0f;
-
-		pVtx[1].pos.x = pos.x + (sinf(pLight->rot.z + (D3DX_PI + (pLight->fAngle * -1.0f))) * pLight->fLength);
-		pVtx[1].pos.y = pos.y + (cosf(pLight->rot.z + (D3DX_PI + (pLight->fAngle * -1.0f))) * pLight->fLength);
-		pVtx[1].pos.z = 0.0f;
-
-		pVtx[2].pos.x = pos.x + (sinf(pLight->rot.z + (pLight->fAngle * -1.0f)) * pLight->fLength);
-		pVtx[2].pos.y = pos.y + (cosf(pLight->rot.z + (pLight->fAngle * -1.0f)) * pLight->fLength);
-		pVtx[2].pos.z = 0.0f;
-
-		pVtx[3].pos.x = pos.x + (sinf(pLight->rot.z + pLight->fAngle) * pLight->fLength);
-		pVtx[3].pos.y = pos.y + (cosf(pLight->rot.z + pLight->fAngle) * pLight->fLength);
-		pVtx[3].pos.z = 0.0f;
-
-		// rhwの設定
-		pVtx[0].rhw = 1.0f;
-		pVtx[1].rhw = 1.0f;
-		pVtx[2].rhw = 1.0f;
-		pVtx[3].rhw = 1.0f;
-
-		// 頂点カラーの設定
-		pVtx[0].col = col;
-		pVtx[1].col = col;
-		pVtx[2].col = col;
-		pVtx[3].col = col;
-
-		// テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f + (i * 1.0f), 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f + (i * -1.0f), 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f + (i * 1.0f), 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f + (i * -1.0f), 1.0f);
-
-		pVtx += 4;
+		pLight->nIdx = SetRectangle(s_pTextureLight);
 	}
 
-	// 頂点バッファをアンロックする
-	s_pVtxBuffLight->Unlock();
+	// 矩形の設定
+	s_nIdx = SetRectangle(s_pTexture);
 
-	/*SetRectangle(&s_pTextureLight, &s_pVtxBuffLight, MAX_LIGHT);
+	{// 背景
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
+		D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
 
-	SetRectangle(&s_pTexture, &s_pVtxBuff, 1);*/
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxBG, pos, size);
+	}
+
+	{// ロゴ
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
+		D3DXVECTOR3 size = D3DXVECTOR3(TITLE_WIDTH, TITLE_HEIGHT, 0.0f);
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdx, pos, size);
+	}
+
+	{// 後光
+		VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
+		LPDIRECT3DVERTEXBUFFER9 pVtxBuff = NULL;
+
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
+
+		for (int i = 0; i < MAX_LIGHT; i++)
+		{
+			Light *pLight = &s_light[i];
+
+			pLight->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+			float fWidth = 0.0f, fHeight = 0.0f;
+
+			if (i == 0)
+			{//	奥
+				fWidth = LIGHT_WIDTH;
+				fHeight = LIGHT_HEIGHT;
+				pLight->fSpeed = MAX_ROTATION * DECREASE_SPEED;
+			}
+			else
+			{// 手前
+				fWidth = LIGHT_WIDTH * DECREASE_SIZE;
+				fHeight = LIGHT_HEIGHT * DECREASE_SIZE;
+				pLight->fSpeed = MAX_ROTATION;
+			}
+
+			// 対角線の長さを算出する
+			pLight->fSaveLength = sqrtf((fWidth * fWidth) + (fHeight * fHeight));
+			pLight->fLength = pLight->fSaveLength;
+
+			// 対角線の角度を算出する
+			pLight->fAngle = atan2f(fWidth, fHeight);
+
+			pVtxBuff = GetVtxBuffRectangle(pLight->nIdx);
+
+			// 頂点バッファをロックし、頂点情報へのポインタを取得
+			pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+			// 頂点座標の設定
+			pVtx[0].pos.x = pos.x + (sinf(pLight->rot.z + (-D3DX_PI + pLight->fAngle)) * pLight->fLength);
+			pVtx[0].pos.y = pos.y + (cosf(pLight->rot.z + (-D3DX_PI + pLight->fAngle)) * pLight->fLength);
+			pVtx[0].pos.z = 0.0f;
+
+			pVtx[1].pos.x = pos.x + (sinf(pLight->rot.z + (D3DX_PI + (pLight->fAngle * -1.0f))) * pLight->fLength);
+			pVtx[1].pos.y = pos.y + (cosf(pLight->rot.z + (D3DX_PI + (pLight->fAngle * -1.0f))) * pLight->fLength);
+			pVtx[1].pos.z = 0.0f;
+
+			pVtx[2].pos.x = pos.x + (sinf(pLight->rot.z + (pLight->fAngle * -1.0f)) * pLight->fLength);
+			pVtx[2].pos.y = pos.y + (cosf(pLight->rot.z + (pLight->fAngle * -1.0f)) * pLight->fLength);
+			pVtx[2].pos.z = 0.0f;
+
+			pVtx[3].pos.x = pos.x + (sinf(pLight->rot.z + pLight->fAngle) * pLight->fLength);
+			pVtx[3].pos.y = pos.y + (cosf(pLight->rot.z + pLight->fAngle) * pLight->fLength);
+			pVtx[3].pos.z = 0.0f;
+
+			// 頂点バッファをアンロックする
+			pVtxBuff->Unlock();
+
+			D3DXVECTOR2 U = D3DXVECTOR2(0.0f + (i * 1.0f), 1.0f + (i * -1.0f));
+			D3DXVECTOR2 V = D3DXVECTOR2(0.0f, 1.0f);
+
+			// テクスチャ座標の設定
+			SetTexRectangle(pLight->nIdx, U, V);
+		}
+	}
 
 	// メニューの初期化
 	InitMenu();
@@ -310,13 +233,13 @@ void InitTitle(void)
 
 	for (int i = 0; i < MENU_MAX; i++)
 	{
-		menu.pTexture[i] = &s_pTextureMenu[i];
+		menu.pTexture[i] = s_pTextureMenu[i];
 	}
 
 	FrameArgument Frame;
 	Frame.bUse = true;
 	Frame.col = GetColor(COLOR_WHITE);
-	Frame.pTexture = &s_pTextureFrame;
+	Frame.pTexture = s_pTextureFrame;
 	
 	// メニューの設定
 	s_nIdxUseMenu = SetMenu(menu, Frame);
@@ -335,6 +258,13 @@ void UninitTitle(void)
 
 	// 使うのを止める
 	StopUseRectangle(s_nIdxBG);
+	StopUseRectangle(s_nIdx);
+
+	for (int i = 0; i < MAX_LIGHT; i++)
+	{
+		Light *pLight = &s_light[i];
+		StopUseRectangle(pLight->nIdx);
+	}
 
 	if (s_pTextureBG != NULL)
 	{// テクスチャの解放
@@ -348,20 +278,8 @@ void UninitTitle(void)
 		s_pTexture = NULL;
 	}
 
-	if (s_pVtxBuff != NULL)
-	{// 頂点バッファの解放
-		s_pVtxBuff->Release();
-		s_pVtxBuff = NULL;
-	}
-
 	if (s_pTextureLight != NULL)
 	{// テクスチャの解放
-		s_pTextureLight->Release();
-		s_pTextureLight = NULL;
-	}
-
-	if (s_pTextureLight != NULL)
-	{// 頂点バッファの解放
 		s_pTextureLight->Release();
 		s_pTextureLight = NULL;
 	}
@@ -417,17 +335,14 @@ static void UpdateLight(void)
 	s_nTime++;
 
 	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
-
-	// 頂点バッファをロックし、頂点情報へのポインタを取得
-	s_pVtxBuffLight->Lock(0, 0, (void**)&pVtx, 0);
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff = NULL;
 
 	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
+	float fCurve = sinf((s_nTime * CHANGE_SPEED) * (D3DX_PI * 2.0f));
 
 	for (int i = 0; i < MAX_LIGHT; i++)
 	{
 		Light *pLight = &s_light[i];
-
-		float fCurve = sinf((s_nTime * CHANGE_SPEED) * (D3DX_PI * 2.0f));
 
 		pLight->fLength = pLight->fSaveLength * ((fCurve * CHANGE_AMOUNT) + MEDIAN_LENGTH);
 
@@ -439,6 +354,11 @@ static void UpdateLight(void)
 		{// 手前
 			pLight->rot.z += -pLight->fSpeed;
 		}
+
+		pVtxBuff = GetVtxBuffRectangle(pLight->nIdx);
+
+		// 頂点バッファをロックし、頂点情報へのポインタを取得
+		pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		// 頂点座標の設定
 		pVtx[0].pos.x = pos.x + (sinf(pLight->rot.z + (-D3DX_PI + pLight->fAngle)) * pLight->fLength);
@@ -457,11 +377,9 @@ static void UpdateLight(void)
 		pVtx[3].pos.y = pos.y + (cosf(pLight->rot.z + pLight->fAngle) * pLight->fLength);
 		pVtx[3].pos.z = 0.0f;
 
-		pVtx += 4;
+		// 頂点バッファをアンロックする
+		pVtxBuff->Unlock();
 	}
-
-	// 頂点バッファをアンロックする
-	s_pVtxBuffLight->Unlock();
 }
 
 //--------------------------------------------------

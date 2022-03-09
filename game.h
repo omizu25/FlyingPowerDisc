@@ -45,19 +45,19 @@ void DrawGame(void);
 
 //--------------------------------------------------
 // 設定
-// 引数  : state 列挙型 状態
+// 引数  : GAMESTATE state / 列挙型 状態
 //--------------------------------------------------
-void SetGameState(GAMESTATE state);
+void SetGameState(const GAMESTATE &state);
 
 //--------------------------------------------------
 // 取得
-// 返値  : GAMESTATE 列挙型 状態
+// 返値  : GAMESTATE / 列挙型 状態
 //--------------------------------------------------
 GAMESTATE GetGameState(void);
 
 //--------------------------------------------------
 // ポーズの有効無効設定
-// 引数  : bPause ポーズするかどうか [ true : する false : しない ]
+// 引数  : bool bPause / ポーズするかどうか [ true : する false : しない ]
 //--------------------------------------------------
 void SetEnablePause(bool bPause);
 

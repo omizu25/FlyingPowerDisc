@@ -20,7 +20,7 @@
 
 typedef struct
 {
-	LPDIRECT3DTEXTURE9		*pTexture[MAX_OPTION];		// テクスチャ
+	LPDIRECT3DTEXTURE9		pTexture[MAX_OPTION];		// テクスチャ
 	int						nNumUse;					// 使用数
 	float					fLeft;						// 左端
 	float					fRight;						// 右端
@@ -35,7 +35,7 @@ typedef struct
 
 typedef struct
 {
-	LPDIRECT3DTEXTURE9		*pTexture;		// テクスチャ
+	LPDIRECT3DTEXTURE9		pTexture;		// テクスチャ
 	D3DXCOLOR				col;			// 色
 	bool					bUse;			// 枠がいるかどうか [ true : いる false : いらない ]
 }FrameArgument;
@@ -65,8 +65,8 @@ void DrawMenu(void);
 
 //--------------------------------------------------
 // 設定
-// 第1引数  : menu 構造体 メニュー情報
-// 第2引数  : Frame 構造体 枠の情報
+// 引数1  : MenuArgument menu / 構造体 メニュー情報
+// 引数2  : FrameArgument Frame / 構造体 枠の情報
 //--------------------------------------------------
 int SetMenu(const MenuArgument &menu, const FrameArgument &Frame);
 
@@ -77,6 +77,7 @@ void InitColorOption(void);
 
 //--------------------------------------------------
 // 選択肢の変更
+// 引数  : int nIdx / 選択肢のインデックス
 //--------------------------------------------------
 void ChangeOption(int nIdx);
 
@@ -87,6 +88,7 @@ void DecisionOption(void);
 
 //--------------------------------------------------
 // メニューのリセット
+// 引数  : int nIdx / メニューのインデックス
 //--------------------------------------------------
 void ResetMenu(int nIdx);
 

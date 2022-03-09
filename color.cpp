@@ -40,7 +40,7 @@ static const D3DXCOLOR s_Colors[] =
 //--------------------------------------------------
 // Žæ“¾
 //--------------------------------------------------
-D3DXCOLOR GetColor(COLOR color)
+D3DXCOLOR GetColor(const COLOR &color)
 {
 	assert(color >= 0 && color < COLOR_MAX);
 

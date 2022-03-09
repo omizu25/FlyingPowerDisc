@@ -32,20 +32,43 @@ void DrawRectangle(void);
 
 //--------------------------------------------------
 // 設定
-// 引数  : pTexture テクスチャ
+// 引数  : LPDIRECT3DTEXTURE9 pTexture / テクスチャ
 //--------------------------------------------------
 int SetRectangle(LPDIRECT3DTEXTURE9 pTexture);
 
 //--------------------------------------------------
 // 使うのを止める
-// 引数  : nIdx インデックス
+// 引数  : int nIdx / インデックス
 //--------------------------------------------------
 void StopUseRectangle(int nIdx);
 
 //--------------------------------------------------
+// 位置の設定
+// 引数1  : int nIdx / インデックス
+// 引数2  : D3DXVECTOR3 pos / 中心の位置
+// 引数3  : D3DXVECTOR3 size / サイズ
+//--------------------------------------------------
+void SetPosRectangle(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size);
+
+//--------------------------------------------------
+// 色の設定
+// 引数1  : int nIdx / インデックス
+// 引数2  : D3DXCOLOR color / 色
+//--------------------------------------------------
+void SetColorRectangle(int nIdx, const D3DXCOLOR &color);
+
+//--------------------------------------------------
+// テクスチャ座標の設定
+// 引数1  : int nIdx / インデックス
+// 引数2  : D3DXVECTOR2 U / x = 左端, y = 右端
+// 引数3  : D3DXVECTOR2 V / x = 上端, y = 下端
+//--------------------------------------------------
+void SetTexRectangle(int nIdx, const D3DXVECTOR2 &U, const D3DXVECTOR2 &V);
+
+//--------------------------------------------------
 // 頂点バッファの取得
-// 引数  : nIdx インデックス
-// 返値  : LPDIRECT3DVERTEXBUFFER9 頂点バッファ
+// 引数  : int nIdx / インデックス
+// 返値  : LPDIRECT3DVERTEXBUFFER9 / 頂点バッファ
 //--------------------------------------------------
 LPDIRECT3DVERTEXBUFFER9 GetVtxBuffRectangle(int nIdx);
 

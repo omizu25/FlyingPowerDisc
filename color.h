@@ -28,9 +28,9 @@ typedef enum
 //==================================================
 //--------------------------------------------------
 // 取得
-// 引数  : color 列挙型 種類
-// 返値  : D3DXCOLOR 色
+// 引数  : COLOR color / 列挙型 種類
+// 返値  : D3DXCOLOR / 色
 //--------------------------------------------------
-D3DXCOLOR GetColor(COLOR color);
+D3DXCOLOR GetColor(const COLOR &color);
 
 #endif // !_COLOR_H_

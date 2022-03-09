@@ -153,7 +153,7 @@ MODE GetMode(void)
 //--------------------------------------------------
 // ïœçX
 //--------------------------------------------------
-void ChangeMode(MODE modeNext)
+void ChangeMode(const MODE &modeNext)
 {
 	s_modeNext = modeNext;
 }

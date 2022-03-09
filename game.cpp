@@ -148,7 +148,7 @@ void DrawGame(void)
 //--------------------------------------------------
 // ê›íË
 //--------------------------------------------------
-void SetGameState(GAMESTATE state)
+void SetGameState(const GAMESTATE &state)
 {
 	s_gameState = state;
 	s_nCounterState = 0;

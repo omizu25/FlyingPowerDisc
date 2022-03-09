@@ -243,14 +243,7 @@ void DrawMenu(void)
 			pDevice->SetFVF(FVF_VERTEX_2D);
 
 			// テクスチャの設定
-			if (pMenu->pTexture != NULL)
-			{// テクスチャがある
-				pDevice->SetTexture(0, pMenu->pTexture);
-			}
-			else
-			{// テクスチャがない
-				pDevice->SetTexture(0, NULL);
-			}	
+			pDevice->SetTexture(0, pMenu->pTexture);
 
 			// ポリゴンの描画
 			pDevice->DrawPrimitive(
@@ -329,14 +322,7 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		s_nIdxMenu = nIdx;
 		s_nIdxOption = 0;
 
-		if (Frame.pTexture != NULL)
-		{// テクスチャがある
-			pMenu->pTexture = *Frame.pTexture;
-		}
-		else
-		{// テクスチャがない
-			pMenu->pTexture = NULL;
-		}
+		pMenu->pTexture = Frame.pTexture;
 
 		if (Frame.bUse)
 		{// 枠がいる
@@ -384,7 +370,7 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		pOption->col = GetColor(COLOR_WHITE);
 		pOption->fWidth = menu.fWidth;
 		pOption->fHeight = menu.fHeight;
-		pOption->pTexture = *menu.pTexture[j];
+		pOption->pTexture = menu.pTexture[j];
 
 		// 頂点情報をロックし、頂点情報へのポインタを取得
 		s_pVtxBuffOption->Lock(0, 0, (void**)&pVtx, 0);
