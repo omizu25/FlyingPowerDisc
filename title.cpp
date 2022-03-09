@@ -213,7 +213,7 @@ void InitTitle(void)
 			D3DXVECTOR2 U = D3DXVECTOR2(0.0f + (i * 1.0f), 1.0f + (i * -1.0f));
 			D3DXVECTOR2 V = D3DXVECTOR2(0.0f, 1.0f);
 
-			// テクスチャ座標の設定
+			// 矩形のテクスチャ座標の設定
 			SetTexRectangle(pLight->nIdx, U, V);
 		}
 	}
@@ -322,9 +322,6 @@ void DrawTitle(void)
 {
 	// 矩形の描画
 	DrawRectangle();
-
-	// メニューの描画
-	DrawMenu();
 }
 
 //--------------------------------------------------

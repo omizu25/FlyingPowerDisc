@@ -13,6 +13,7 @@
 #include "menu.h"
 #include "fade.h"
 #include "color.h"
+#include "rectangle.h"
 
 //==================================================
 // マクロ定義
@@ -33,6 +34,7 @@ typedef struct
 	D3DXVECTOR3				pos;			// 位置
 	D3DXCOLOR				col;			// 色
 	LPDIRECT3DTEXTURE9		pTexture;		// テクスチャ
+	int						nIdx;			// 矩形のインデックス
 	float					fWidth;			// 幅
 	float					fHeight;		// 高さ
 }Option;
@@ -45,6 +47,7 @@ typedef struct
 	LPDIRECT3DTEXTURE9		pTexture;				// テクスチャ
 	Option					Option[MAX_OPTION];		// 選択肢の情報
 	int						nNumUse;				// 使用数
+	int						nIdx;					// 矩形のインデックス
 	float					fWidth;					// 幅
 	float					fHeight;				// 高さ
 	float					fInterval;				// 選択肢の間隔
@@ -56,12 +59,10 @@ typedef struct
 //==================================================
 // スタティック変数
 //==================================================
-static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuffMenu = NULL;			// メニューの頂点バッファへのポインタ
-static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuffOption = NULL;		// 選択肢の頂点バッファへのポインタ
-static Menu							s_aMenu[MAX_MENU];				// メニューの情報
-static int							s_nIdxMenu;						// 選ばれているメニューの番号
-static int							s_nIdxOption;					// 選ばれている選択肢の番号
-static int							s_nAlphaTime;					// α値変更用の時間
+static Menu		s_aMenu[MAX_MENU];		// メニューの情報
+static int		s_nIdxMenu;				// 選ばれているメニューの番号
+static int		s_nIdxOption;			// 選ばれている選択肢の番号
+static int		s_nAlphaTime;			// α値変更用の時間
 
 //==================================================
 // プロトタイプ宣言
@@ -73,112 +74,12 @@ static void ChangeColor(Menu *pMenu);
 //--------------------------------------------------
 void InitMenu(void)
 {
-	// デバイスへのポインタの取得
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();
-
 	s_nIdxMenu = 0;
 	s_nIdxOption = 0;
 	s_nAlphaTime = 0;
 
 	// メモリのクリア
 	memset(s_aMenu, 0, sizeof(s_aMenu));
-
-	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(
-		sizeof(VERTEX_2D) * 4 * MAX_MENU,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,
-		&s_pVtxBuffMenu,
-		NULL);
-
-	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(
-		sizeof(VERTEX_2D) * 4 * MAX_MENU * MAX_OPTION,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,
-		&s_pVtxBuffOption,
-		NULL);
-
-	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
-
-	// 頂点情報をロックし、頂点情報へのポインタを取得
-	s_pVtxBuffMenu->Lock(0, 0, (void**)&pVtx, 0);
-
-	for (int i = 0; i < MAX_MENU; i++)
-	{
-		// 頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-		// rhwの設定
-		pVtx[0].rhw = 1.0f;
-		pVtx[1].rhw = 1.0f;
-		pVtx[2].rhw = 1.0f;
-		pVtx[3].rhw = 1.0f;
-
-		D3DXCOLOR col = GetColor(COLOR_WHITE);
-
-		// 頂点カラーの設定
-		pVtx[0].col = col;
-		pVtx[1].col = col;
-		pVtx[2].col = col;
-		pVtx[3].col = col;
-
-		// テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
-		pVtx += 4;
-	}
-
-	// 頂点バッファをアンロックする
-	s_pVtxBuffMenu->Unlock();
-
-	// 頂点情報をロックし、頂点情報へのポインタを取得
-	s_pVtxBuffOption->Lock(0, 0, (void**)&pVtx, 0);
-
-	for (int i = 0; i < MAX_MENU; i++)
-	{
-		for (int j = 0; j < MAX_OPTION; j++)
-		{
-			// 頂点座標の設定
-			pVtx[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			pVtx[1].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			pVtx[2].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			pVtx[3].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-			// rhwの設定
-			pVtx[0].rhw = 1.0f;
-			pVtx[1].rhw = 1.0f;
-			pVtx[2].rhw = 1.0f;
-			pVtx[3].rhw = 1.0f;
-
-			D3DXCOLOR col = GetColor(COLOR_WHITE);
-
-			// 頂点カラーの設定
-			pVtx[0].col = col;
-			pVtx[1].col = col;
-			pVtx[2].col = col;
-			pVtx[3].col = col;
-
-			// テクスチャ座標の設定
-			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
-			pVtx += 4;
-		}
-	}
-
-	// 頂点バッファをアンロックする
-	s_pVtxBuffOption->Unlock();
 }
 
 //--------------------------------------------------
@@ -186,16 +87,30 @@ void InitMenu(void)
 //--------------------------------------------------
 void UninitMenu(void)
 {
-	if (s_pVtxBuffMenu != NULL)
-	{// 頂点バッファの解放
-		s_pVtxBuffMenu->Release();
-		s_pVtxBuffMenu = NULL;
-	}
+	for (int i = 0; i < MAX_MENU; i++)
+	{
+		Menu *pMenu = &s_aMenu[i];
 
-	if (s_pVtxBuffOption != NULL)
-	{// 頂点バッファの解放
-		s_pVtxBuffOption->Release();
-		s_pVtxBuffOption = NULL;
+		if (!pMenu->bUse)
+		{// 使用していない
+			continue;
+		}
+
+		/*↓ 使用している ↓*/
+
+		if (pMenu->bFrame)
+		{// 枠を使っている
+			// 使うのを止める
+			StopUseRectangle(pMenu->nIdx);
+		}
+
+		for (int j = 0; j < pMenu->nNumUse; j++)
+		{
+			Option *pOption = &pMenu->Option[j];
+
+			// 使うのを止める
+			StopUseRectangle(pOption->nIdx);
+		}
 	}
 }
 
@@ -216,73 +131,12 @@ void UpdateMenu(void)
 }
 
 //--------------------------------------------------
-// 描画
-//--------------------------------------------------
-void DrawMenu(void)
-{
-	// デバイスへのポインタの取得
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();
-
-	for (int i = 0; i < MAX_MENU; i++)
-	{
-		Menu *pMenu = &s_aMenu[i];
-
-		if (!pMenu->bUse)
-		{// 使用していない
-			continue;
-		}
-
-		/*↓ 使用している ↓*/
-
-		if (pMenu->bFrame)
-		{// 枠がいる
-			// 頂点バッファをデータストリームに設定
-			pDevice->SetStreamSource(0, s_pVtxBuffMenu, 0, sizeof(VERTEX_2D));
-
-			// 頂点フォーマットの設定
-			pDevice->SetFVF(FVF_VERTEX_2D);
-
-			// テクスチャの設定
-			pDevice->SetTexture(0, pMenu->pTexture);
-
-			// ポリゴンの描画
-			pDevice->DrawPrimitive(
-				D3DPT_TRIANGLESTRIP,		// プリミティブの種類
-				i * 4,						// 描画する最初の頂点インデックス
-				2);							// プリミティブ(ポリゴン)数
-		}
-
-		// 頂点バッファをデータストリームに設定
-		pDevice->SetStreamSource(0, s_pVtxBuffOption, 0, sizeof(VERTEX_2D));
-
-		// 頂点フォーマットの設定
-		pDevice->SetFVF(FVF_VERTEX_2D);
-
-		for (int j = 0; j < pMenu->nNumUse; j++)
-		{
-			// テクスチャの設定
-			pDevice->SetTexture(0, pMenu->Option[j].pTexture);
-
-			int nIdx = (i * MAX_MENU) + (j * 4);
-
-			// ポリゴンの描画
-			pDevice->DrawPrimitive(
-				D3DPT_TRIANGLESTRIP,		// プリミティブの種類
-				nIdx,						// 描画する最初の頂点インデックス
-				2);							// プリミティブ(ポリゴン)数
-		}
-	}
-}
-
-//--------------------------------------------------
 // 設定
 //--------------------------------------------------
 int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 {
-	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
-
 	int nIdx = 0;
-	Menu *pMenu = NULL;
+	Menu *pMenu = nullptr;
 
 	for (nIdx = 0; nIdx < MAX_MENU; nIdx++)
 	{
@@ -300,9 +154,11 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 
 		pMenu->pos = D3DXVECTOR3(fPosX, fPosY, 0.0f);
 		pMenu->nNumUse = menu.nNumUse;
-
 		pMenu->fWidth = menu.fRight - menu.fLeft;
 		pMenu->fHeight = menu.fBottom - menu.fTop;
+		pMenu->fBlinkSpeed = NORMAL_BLINK_SPEED;
+		pMenu->pTexture = Frame.pTexture;
+		pMenu->bFrame = Frame.bUse;
 
 		if (menu.bSort)
 		{// 縦
@@ -313,42 +169,26 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 			pMenu->fInterval = pMenu->fWidth / (menu.nNumUse + 1);
 		}
 
-		pMenu->fBlinkSpeed = NORMAL_BLINK_SPEED;
-		
-		pMenu->bFrame = Frame.bUse;
-
 		pMenu->bUse = true;
 
 		s_nIdxMenu = nIdx;
 		s_nIdxOption = 0;
 
-		pMenu->pTexture = Frame.pTexture;
-
 		if (Frame.bUse)
 		{// 枠がいる
-			// 頂点情報をロックし、頂点情報へのポインタを取得
-			s_pVtxBuffMenu->Lock(0, 0, (void**)&pVtx, 0);
+			// 矩形の設定
+			pMenu->nIdx = SetRectangle(Frame.pTexture);
 
-			pVtx += nIdx * 4;		// 指定の位置までポインタを進める
+			fPosX = menu.fLeft + (pMenu->fWidth * 0.5f);
+			fPosY = menu.fTop + (pMenu->fHeight * 0.5f);
+			D3DXVECTOR3 pos = D3DXVECTOR3(fPosX, fPosY, 0.0f);
+			D3DXVECTOR3 size = D3DXVECTOR3(pMenu->fWidth, pMenu->fHeight, 0.0f);
 
-			float fWidth = (menu.fRight - menu.fLeft) * 0.5f;
-			float fHeight = (menu.fBottom - menu.fTop) * 0.5f;
-			D3DXVECTOR3 pos = D3DXVECTOR3(menu.fLeft + fWidth, menu.fTop + fHeight, 0.0f);
+			// 矩形の位置の設定
+			SetPosRectangle(pMenu->nIdx, pos, size);
 
-			// 頂点座標の設定
-			pVtx[0].pos = pos + D3DXVECTOR3(-fWidth, -fHeight, 0.0f);
-			pVtx[1].pos = pos + D3DXVECTOR3( fWidth, -fHeight, 0.0f);
-			pVtx[2].pos = pos + D3DXVECTOR3(-fWidth,  fHeight, 0.0f);
-			pVtx[3].pos = pos + D3DXVECTOR3( fWidth,  fHeight, 0.0f);
-
-			// 頂点カラーの設定
-			pVtx[0].col = Frame.col;
-			pVtx[1].col = Frame.col;
-			pVtx[2].col = Frame.col;
-			pVtx[3].col = Frame.col;
-
-			// 頂点バッファをアンロックする
-			s_pVtxBuffMenu->Unlock();
+			// 矩形の色の設定
+			SetColorRectangle(pMenu->nIdx, Frame.col);
 		}
 
 		break;
@@ -372,28 +212,16 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		pOption->fHeight = menu.fHeight;
 		pOption->pTexture = menu.pTexture[j];
 
-		// 頂点情報をロックし、頂点情報へのポインタを取得
-		s_pVtxBuffOption->Lock(0, 0, (void**)&pVtx, 0);
+		// 矩形の設定
+		pOption->nIdx = SetRectangle(menu.pTexture[j]);
 
-		pVtx += (nIdx * MAX_MENU) + (j * 4);		// 指定の位置までポインタを進める
+		D3DXVECTOR3 size = D3DXVECTOR3(menu.fWidth, menu.fHeight, 0.0f);
 
-		float fWidth = menu.fWidth * 0.5f;
-		float fHeight = menu.fHeight * 0.5f;
+		// 矩形の位置の設定
+		SetPosRectangle(pOption->nIdx, pOption->pos, size);
 
-		// 頂点座標の設定
-		pVtx[0].pos = pOption->pos + D3DXVECTOR3(-fWidth, -fHeight, 0.0f);
-		pVtx[1].pos = pOption->pos + D3DXVECTOR3(fWidth, -fHeight, 0.0f);
-		pVtx[2].pos = pOption->pos + D3DXVECTOR3(-fWidth, fHeight, 0.0f);
-		pVtx[3].pos = pOption->pos + D3DXVECTOR3(fWidth, fHeight, 0.0f);
-
-		// 頂点カラーの設定
-		pVtx[0].col = pOption->col;
-		pVtx[1].col = pOption->col;
-		pVtx[2].col = pOption->col;
-		pVtx[3].col = pOption->col;
-
-		// 頂点バッファをアンロックする
-		s_pVtxBuffOption->Unlock();
+		// 矩形の色の設定
+		SetColorRectangle(pOption->nIdx, pOption->col);
 	}
 
 	return nIdx;
@@ -404,24 +232,10 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 //--------------------------------------------------
 void InitColorOption(void)
 {
-	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
+	Option *pOption = &s_aMenu[s_nIdxMenu].Option[s_nIdxOption];
 
-	// 頂点情報をロックし、頂点情報へのポインタを取得
-	s_pVtxBuffOption->Lock(0, 0, (void**)&pVtx, 0);
-
-	// 指定の位置までポインタを進める
-	pVtx += (s_nIdxMenu * MAX_MENU) + (s_nIdxOption * 4);
-
-	D3DXCOLOR col = GetColor(COLOR_WHITE);
-
-	// 頂点カラーの設定
-	pVtx[0].col = col;
-	pVtx[1].col = col;
-	pVtx[2].col = col;
-	pVtx[3].col = col;
-
-	// 頂点バッファをアンロックする
-	s_pVtxBuffOption->Unlock();
+	// 矩形の色の設定
+	SetColorRectangle(pOption->nIdx, GetColor(COLOR_WHITE));
 }
 
 //--------------------------------------------------
@@ -448,7 +262,24 @@ void ResetMenu(int nIdx)
 	s_nIdxMenu = 0;
 	s_nIdxOption = 0;
 	s_nAlphaTime = 0;
-	s_aMenu[nIdx].bUse = false;
+	
+	Menu *pMenu = &s_aMenu[nIdx];
+
+	if (pMenu->bFrame)
+	{// 枠を使っている
+		// 使うのを止める
+		StopUseRectangle(pMenu->nIdx);
+	}
+
+	for (int i = 0; i < pMenu->nNumUse; i++)
+	{
+		Option *pOption = &pMenu->Option[i];
+
+		// 使うのを止める
+		StopUseRectangle(pOption->nIdx);
+	}
+
+	pMenu->bUse = false;
 }
 
 //--------------------------------------------------
@@ -465,19 +296,6 @@ static void ChangeColor(Menu *pMenu)
 
 	pOption->col = D3DXCOLOR(1.0f, 0.0f, 0.0f, fAlpha);
 
-	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
-
-	// 頂点情報をロックし、頂点情報へのポインタを取得
-	s_pVtxBuffOption->Lock(0, 0, (void**)&pVtx, 0);
-
-	pVtx += (s_nIdxMenu * MAX_MENU) + (s_nIdxOption * 4);		// 指定の位置までポインタを進める
-
-	// 頂点カラーの設定
-	pVtx[0].col = pOption->col;
-	pVtx[1].col = pOption->col;
-	pVtx[2].col = pOption->col;
-	pVtx[3].col = pOption->col;
-
-	// 頂点バッファをアンロックする
-	s_pVtxBuffOption->Unlock();
+	// 矩形の色の設定
+	SetColorRectangle(pOption->nIdx, pOption->col);
 }
