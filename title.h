@@ -15,4 +15,4 @@ void UninitTitle(void);
 void UpdateTitle(void);
 void DrawTitle(void);
 
-#endif
+#endif // !_TITLE_H_

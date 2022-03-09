@@ -62,7 +62,7 @@ typedef struct
 // スタティック変数
 //--------------------------------------------------
 static LPDIRECT3DTEXTURE9			s_pTextureBG = NULL;			// 背景のテクスチャへのポインタ
-static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuffBG = NULL;			// 背景の頂点バッファへのポインタ
+static int							s_nIdxBG;						// 背景の矩形のインデックス
 static LPDIRECT3DTEXTURE9			s_pTexture = NULL;				// テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuff = NULL;				// 頂点バッファへのポインタ
 static LPDIRECT3DTEXTURE9			s_pTextureLight = NULL;			// 後光のテクスチャへのポインタ
@@ -86,7 +86,7 @@ static void Input(void);
 void InitTitle(void)
 {
 	// 矩形の初期化
-	InitRectAngle();
+	InitRectangle();
 
 	// デバイスへのポインタの取得
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
@@ -121,14 +121,8 @@ void InitTitle(void)
 		"data/TEXTURE/New_GAMESTART_NoBG.png",
 		&s_pTextureMenu[MENU_GAME]);
 
-	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(
-		sizeof(VERTEX_2D) * 4,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,
-		&s_pVtxBuffBG,
-		NULL);
+	// 矩形の設定
+	s_nIdxBG = SetRectangle(s_pTextureBG);
 
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(
@@ -150,48 +144,50 @@ void InitTitle(void)
 
 	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
 
-	// 頂点バッファをロックし、頂点情報へのポインタを取得
-	s_pVtxBuffBG->Lock(0, 0, (void**)&pVtx, 0);
+	{
+		// 頂点バッファをロックし、頂点情報へのポインタを取得
+		GetVtxBuffRectangle(s_nIdxBG)->Lock(0, 0, (void**)&pVtx, 0);
 
-	float fWidth = SCREEN_WIDTH * 0.5f;
-	float fHeight = SCREEN_HEIGHT * 0.5f;
+		float fWidth = SCREEN_WIDTH * 0.5f;
+		float fHeight = SCREEN_HEIGHT * 0.5f;
 
-	D3DXVECTOR3 pos = D3DXVECTOR3(fWidth, fHeight, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(fWidth, fHeight, 0.0f);
 
-	// 頂点座標の設定
-	pVtx[0].pos = pos + D3DXVECTOR3(-fWidth, -fHeight, 0.0f);
-	pVtx[1].pos = pos + D3DXVECTOR3(fWidth, -fHeight, 0.0f);
-	pVtx[2].pos = pos + D3DXVECTOR3(-fWidth, fHeight, 0.0f);
-	pVtx[3].pos = pos + D3DXVECTOR3(fWidth, fHeight, 0.0f);
+		// 頂点座標の設定
+		pVtx[0].pos = pos + D3DXVECTOR3(-fWidth, -fHeight, 0.0f);
+		pVtx[1].pos = pos + D3DXVECTOR3(fWidth, -fHeight, 0.0f);
+		pVtx[2].pos = pos + D3DXVECTOR3(-fWidth, fHeight, 0.0f);
+		pVtx[3].pos = pos + D3DXVECTOR3(fWidth, fHeight, 0.0f);
 
-	// rhwの設定
-	pVtx[0].rhw = 1.0f;
-	pVtx[1].rhw = 1.0f;
-	pVtx[2].rhw = 1.0f;
-	pVtx[3].rhw = 1.0f;
+		// rhwの設定
+		pVtx[0].rhw = 1.0f;
+		pVtx[1].rhw = 1.0f;
+		pVtx[2].rhw = 1.0f;
+		pVtx[3].rhw = 1.0f;
 
-	// 頂点カラーの設定
-	pVtx[0].col = WHITE_COLOR;
-	pVtx[1].col = WHITE_COLOR;
-	pVtx[2].col = WHITE_COLOR;
-	pVtx[3].col = WHITE_COLOR;
+		// 頂点カラーの設定
+		pVtx[0].col = WHITE_COLOR;
+		pVtx[1].col = WHITE_COLOR;
+		pVtx[2].col = WHITE_COLOR;
+		pVtx[3].col = WHITE_COLOR;
 
-	// テクスチャ座標の設定
-	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		// テクスチャ座標の設定
+		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
-	// 頂点バッファをアンロックする
-	s_pVtxBuffBG->Unlock();
+		// 頂点バッファをアンロックする
+		GetVtxBuffRectangle(s_nIdxBG)->Unlock();
+	}
 
 	// 頂点バッファをロックし、頂点情報へのポインタを取得
 	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	fWidth = TITLE_WIDTH * 0.5f;
-	fHeight = TITLE_HEIGHT * 0.5f;
+	float fWidth = TITLE_WIDTH * 0.5f;
+	float fHeight = TITLE_HEIGHT * 0.5f;
 
-	pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
+	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
 
 	// 頂点座標の設定
 	pVtx[0].pos = pos + D3DXVECTOR3(-fWidth, -fHeight, 0.0f);
@@ -290,12 +286,9 @@ void InitTitle(void)
 	// 頂点バッファをアンロックする
 	s_pVtxBuffLight->Unlock();
 
-	// 矩形の設定
-	SetRectAngle(&s_pTextureBG, &s_pVtxBuffBG, 1);
+	/*SetRectangle(&s_pTextureLight, &s_pVtxBuffLight, MAX_LIGHT);
 
-	SetRectAngle(&s_pTextureLight, &s_pVtxBuffLight, MAX_LIGHT);
-
-	SetRectAngle(&s_pTexture, &s_pVtxBuff, 1);
+	SetRectangle(&s_pTexture, &s_pVtxBuff, 1);*/
 
 	// メニューの初期化
 	InitMenu();
@@ -330,21 +323,18 @@ void InitTitle(void)
 void UninitTitle(void)
 {
 	// 矩形の終了
-	UninitRectAngle();
+	UninitRectangle();
 
 	// メニューの終了
 	UninitMenu();
+
+	// 使うのを止める
+	StopUseRectangle(s_nIdxBG);
 
 	if (s_pTextureBG != NULL)
 	{// テクスチャの解放
 		s_pTextureBG->Release();
 		s_pTextureBG = NULL;
-	}
-
-	if (s_pVtxBuffBG != NULL)
-	{// 頂点バッファの解放
-		s_pVtxBuffBG->Release();
-		s_pVtxBuffBG = NULL;
 	}
 
 	if (s_pTexture != NULL)
@@ -408,7 +398,7 @@ void UpdateTitle(void)
 void DrawTitle(void)
 {
 	// 矩形の描画
-	DrawRectAngle();
+	DrawRectangle();
 
 	// メニューの描画
 	DrawMenu();

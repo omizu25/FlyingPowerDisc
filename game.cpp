@@ -32,7 +32,7 @@ static bool				s_bPause = false;					// ƒ|[ƒY’†‚©‚Ç‚¤‚© [‚µ‚Ä‚é  : true ‚µ‚Ä‚È‚
 void InitGame(void)
 {
 	// ‹éŒ`‚Ì‰Šú‰»
-	InitRectAngle();
+	InitRectangle();
 
 	// ƒfƒBƒXƒN‚Ì‰Šú‰»
 	InitDisc();
@@ -62,7 +62,7 @@ void UninitGame(void)
 	UninitRule();
 
 	// ‹éŒ`‚ÌI—¹
-	UninitRectAngle();
+	UninitRectangle();
 
 	// ƒfƒBƒXƒN‚ÌI—¹
 	UninitDisc();
@@ -86,11 +86,11 @@ void UpdateGame(void)
 	switch (s_gameState)
 	{
 	case GAMESTATE_NONE:		// ‰½‚à‚µ‚Ä‚¢‚È‚¢ó‘Ô
-
+		assert(false);
 		break;
 
 	case GAMESTATE_START:		// ŠJnó‘Ô
-
+		s_gameState = GAMESTATE_NORMAL;
 		break;
 
 	case GAMESTATE_NORMAL:		// ’Êíó‘Ô
@@ -125,10 +125,12 @@ void DrawGame(void)
 	{// ƒ|[ƒY’†
 		return;
 	}
+
 	//ƒ‹[ƒ‹‘I‘ğ‰æ–Ê‚Ì•`‰æ
-	DrawRule();	
+	DrawRule();
+
 	// ‹éŒ`‚Ì•`‰æ
-	DrawRectAngle();}
+	DrawRectangle();}
 
 //--------------------------------------------------
 // İ’è
