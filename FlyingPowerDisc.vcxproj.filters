@@ -71,9 +71,6 @@
     <ClInclude Include="rectangle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="disc.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
