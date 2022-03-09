@@ -13,7 +13,7 @@
 #include "game.h"
 #include "input.h"
 #include "sound.h"
-
+#include "player.h"
 #include <assert.h>
 
 //--------------------------------------------------
@@ -33,6 +33,8 @@ void InitGame(void)
 	s_nCounterState = 0;				// カウンターの初期化
 
 	s_bPause = false;					// ポーズ解除
+
+	InitPlayer();
 }
 
 //--------------------------------------------------
@@ -42,6 +44,8 @@ void UninitGame(void)
 {
 	//サウンドの停止
 	StopSound();
+
+	UninitPlayer();
 }
 
 //--------------------------------------------------
@@ -62,11 +66,11 @@ void UpdateGame(void)
 	switch (s_gameState)
 	{
 	case GAMESTATE_NONE:		// 何もしていない状態
-
+		
 		break;
 
 	case GAMESTATE_START:		// 開始状態
-
+		UpdatePlayer();
 		break;
 
 	case GAMESTATE_NORMAL:		// 通常状態
@@ -96,6 +100,7 @@ void DrawGame(void)
 	{// ポーズ中
 		return;
 	}
+	DrawPlayer();
 }
 
 //--------------------------------------------------
