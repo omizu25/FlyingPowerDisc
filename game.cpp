@@ -13,6 +13,7 @@
 #include "game.h"
 #include "input.h"
 #include "sound.h"
+#include "rule.h"
 
 #include <assert.h>
 
@@ -30,6 +31,12 @@ void InitGame(void)
 {
 	s_gameState = GAMESTATE_START;		// 開始状態に設定
 
+	//ルール選択画面の初期化
+	InitRule();
+
+	//ルール選択画面の設定
+	SetRule(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+
 	s_nCounterState = 0;				// カウンターの初期化
 
 	s_bPause = false;					// ポーズ解除
@@ -40,6 +47,9 @@ void InitGame(void)
 //--------------------------------------------------
 void UninitGame(void)
 {
+	//ルール選択画面の終了
+	UninitRule();
+
 	//サウンドの停止
 	StopSound();
 }
@@ -70,7 +80,8 @@ void UpdateGame(void)
 		break;
 
 	case GAMESTATE_NORMAL:		// 通常状態
-		
+		//ルール選択画面の更新
+		UpdateRule();
 		break;
 
 	case GAMESTATE_END:			// 終了状態
@@ -96,6 +107,9 @@ void DrawGame(void)
 	{// ポーズ中
 		return;
 	}
+
+	//ルール選択画面の描画
+	DrawRule();
 }
 
 //--------------------------------------------------

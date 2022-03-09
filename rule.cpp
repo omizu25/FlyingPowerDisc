@@ -16,6 +16,7 @@
 static LPDIRECT3DTEXTURE9		s_pTexture = NULL;	//テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuff = NULL;	//頂点バッファへのポインタ
 static Rule s_Rule[MAX_RULE];	//構造体の取得
+static int s_nTime;				//点滅の時間
 
 //============================
 // ルール選択画面の初期化
@@ -118,7 +119,45 @@ void UninitRule(void)
 //============================
 void UpdateRule(void)
 {
+	VERTEX_2D*pVtx;		//頂点情報へのポインタ
 
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	s_nTime++;		//タイムの加算
+	s_nTime %= 40;	//タイムの初期化
+
+	for (int nCnt = 0; nCnt < MAX_RULE; nCnt++)
+	{
+		Rule *rule = s_Rule + nCnt;
+
+		if (rule->bUse == true)
+		{//使用しているなら
+			//------------------------------
+			//	テクスチャの点滅
+			//------------------------------
+			if (s_nTime >= 20)
+			{
+				//頂点カラーの設定
+				pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f);
+				pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f);
+				pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f);
+				pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f);
+			}
+			else
+			{
+				//頂点カラーの設定
+				pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			}
+			pVtx += 4;
+		}
+	}
+
+	//頂点バッファをアンロックする
+	s_pVtxBuff->Unlock();
 }
 
 //============================
@@ -139,14 +178,14 @@ void DrawRule(void)
 		Rule *rule = s_Rule + nCnt;
 
 		if (rule->bUse == true)
-		{
+		{//使用しているなら
 			//テクスチャの設定
 			pDevice->SetTexture(0, s_pTexture);
 
 			//リザルトの描画
 			pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,		//プリミティブの種類
-				nCnt * 4,						//描画する最初の頂点インデックス
-				2);						//描画するプリミティブ数
+								   nCnt * 4,				//描画する最初の頂点インデックス
+								   2);						//描画するプリミティブ数
 		}
 	}
 }
@@ -166,7 +205,7 @@ void SetRule(D3DXVECTOR3 pos)
 		Rule *rule = s_Rule + nCnt;
 
 		if (rule->bUse == false)
-		{
+		{//使用していないなら
 			//構造体の設定
 			rule->pos = pos;
 			rule->fWidth = 50.0f;
