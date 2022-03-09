@@ -51,6 +51,16 @@ void StopUseRectangle(int nIdx);
 void SetPosRectangle(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size);
 
 //--------------------------------------------------
+// 回転する位置の設定
+// 引数1  : int nIdx / インデックス
+// 引数2  : D3DXVECTOR3 pos / 中心の位置
+// 引数3  : D3DXVECTOR3 rot / 向き
+// 引数4  : float fAngle / 角度
+// 引数5  : float fLength / 長さ
+//--------------------------------------------------
+void SetRotationPosRectangle(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &rot, float fAngle, float fLength);
+
+//--------------------------------------------------
 // 色の設定
 // 引数1  : int nIdx / インデックス
 // 引数2  : D3DXCOLOR color / 色

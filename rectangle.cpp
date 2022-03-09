@@ -173,7 +173,7 @@ void StopUseRectangle(int nIdx)
 }
 
 //--------------------------------------------------
-// 位置を設定
+// 位置の設定
 //--------------------------------------------------
 void SetPosRectangle(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size)
 {
@@ -194,6 +194,41 @@ void SetPosRectangle(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size)
 	pVtx[1].pos = pos + D3DXVECTOR3(fWidth, -fHeight, 0.0f);
 	pVtx[2].pos = pos + D3DXVECTOR3(-fWidth, fHeight, 0.0f);
 	pVtx[3].pos = pos + D3DXVECTOR3(fWidth, fHeight, 0.0f);
+
+	// 頂点バッファをアンロックする
+	pVtxBuff->Unlock();
+}
+
+//--------------------------------------------------
+// 回転する位置の設定
+//--------------------------------------------------
+void SetRotationPosRectangle(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &rot, float fAngle, float fLength)
+{
+	assert(nIdx >= 0 && nIdx < MAX_RECTANGLE);
+
+	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
+
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff = GetVtxBuffRectangle(nIdx);
+
+	// 頂点情報をロックし、頂点情報へのポインタを取得
+	pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点座標の設定
+	pVtx[0].pos.x = pos.x + (sinf(rot.z + (-D3DX_PI + fAngle)) * fLength);
+	pVtx[0].pos.y = pos.y + (cosf(rot.z + (-D3DX_PI + fAngle)) * fLength);
+	pVtx[0].pos.z = 0.0f;
+
+	pVtx[1].pos.x = pos.x + (sinf(rot.z + (D3DX_PI + (fAngle * -1.0f))) * fLength);
+	pVtx[1].pos.y = pos.y + (cosf(rot.z + (D3DX_PI + (fAngle * -1.0f))) * fLength);
+	pVtx[1].pos.z = 0.0f;
+
+	pVtx[2].pos.x = pos.x + (sinf(rot.z + (fAngle * -1.0f)) * fLength);
+	pVtx[2].pos.y = pos.y + (cosf(rot.z + (fAngle * -1.0f)) * fLength);
+	pVtx[2].pos.z = 0.0f;
+
+	pVtx[3].pos.x = pos.x + (sinf(rot.z + fAngle) * fLength);
+	pVtx[3].pos.y = pos.y + (cosf(rot.z + fAngle) * fLength);
+	pVtx[3].pos.z = 0.0f;
 
 	// 頂点バッファをアンロックする
 	pVtxBuff->Unlock();

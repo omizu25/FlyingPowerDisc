@@ -23,20 +23,20 @@
 //==================================================
 // マクロ定義
 //==================================================
-#define MAX_LIGHT				(2)				// 後光の最大数
-#define TITLE_POS_Y				(200.0f)		// タイトルのYの位置
-#define TITLE_WIDTH				(900.0f)		// タイトルの幅
-#define TITLE_HEIGHT			(200.0f)		// タイトルの高さ
-#define LIGHT_WIDTH				(280.0f)		// ライトの幅
-#define LIGHT_HEIGHT			(280.0f)		// ライトの高さ
-#define CHANGE_SPEED			(0.005f)		// 収縮の速度
-#define CHANGE_AMOUNT			(0.1f)			// 変化量
-#define MEDIAN_LENGTH			(0.95f)			// 長さの中央値
-#define MAX_ROTATION			(0.003f)		// 回転の最大値
-#define DECREASE_SIZE			(0.6f)			// サイズの減少割合
-#define DECREASE_SPEED			(0.5f)			// 速度の減少割合
-#define MENU_WIDTH				(540.0f)		// メニューの幅
-#define MENU_HEIGHT				(64.0f)			// メニューの高さ
+#define MAX_LIGHT			(2)				// 後光の最大数
+#define TITLE_POS_Y			(200.0f)		// タイトルのYの位置
+#define TITLE_WIDTH			(900.0f)		// タイトルの幅
+#define TITLE_HEIGHT		(200.0f)		// タイトルの高さ
+#define LIGHT_WIDTH			(280.0f)		// ライトの幅
+#define LIGHT_HEIGHT		(280.0f)		// ライトの高さ
+#define CHANGE_SPEED		(0.005f)		// 収縮の速度
+#define CHANGE_AMOUNT		(0.1f)			// 変化量
+#define MEDIAN_LENGTH		(0.95f)			// 長さの中央値
+#define MAX_ROTATION		(0.003f)		// 回転の最大値
+#define DECREASE_SIZE		(0.6f)			// サイズの減少割合
+#define DECREASE_SPEED		(0.5f)			// 速度の減少割合
+#define MENU_WIDTH			(540.0f)		// メニューの幅
+#define MENU_HEIGHT			(64.0f)			// メニューの高さ
 
 //==================================================
 // 列挙型
@@ -63,17 +63,17 @@ typedef struct
 //==================================================
 // スタティック変数
 //==================================================
-static LPDIRECT3DTEXTURE9			s_pTextureBG = NULL;			// 背景のテクスチャへのポインタ
-static int							s_nIdxBG;						// 背景の矩形のインデックス
-static LPDIRECT3DTEXTURE9			s_pTextureLight = NULL;			// 後光のテクスチャへのポインタ
-static LPDIRECT3DTEXTURE9			s_pTexture = NULL;				// テクスチャへのポインタ
-static int							s_nIdx;							// 矩形のインデックス
-static LPDIRECT3DTEXTURE9			s_pTextureFrame = NULL;			// 枠のテクスチャへのポインタ
-static LPDIRECT3DTEXTURE9			s_pTextureMenu[MENU_MAX];		// メニューのテクスチャへのポインタ
-static Light						s_light[MAX_LIGHT];				// 後光の情報
-static int							s_nTime;						// 時間
-static int							s_nSelectMenu;					// 選ばれているメニュー
-static int							s_nIdxUseMenu;					// 使っているメニューの番号
+static LPDIRECT3DTEXTURE9		s_pTextureBG = NULL;			// 背景のテクスチャへのポインタ
+static int						s_nIdxBG;						// 背景の矩形のインデックス
+static LPDIRECT3DTEXTURE9		s_pTextureLight = NULL;			// 後光のテクスチャへのポインタ
+static LPDIRECT3DTEXTURE9		s_pTexture = NULL;				// テクスチャへのポインタ
+static int						s_nIdx;							// 矩形のインデックス
+static LPDIRECT3DTEXTURE9		s_pTextureFrame = NULL;			// 枠のテクスチャへのポインタ
+static LPDIRECT3DTEXTURE9		s_pTextureMenu[MENU_MAX];		// メニューのテクスチャへのポインタ
+static Light					s_light[MAX_LIGHT];				// 後光の情報
+static int						s_nTime;						// 時間
+static int						s_nSelectMenu;					// 選ばれているメニュー
+static int						s_nIdxUseMenu;					// 使っているメニューの番号
 
 //==================================================
 // プロトタイプ宣言
@@ -152,9 +152,6 @@ void InitTitle(void)
 	}
 
 	{// 後光
-		VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
-		LPDIRECT3DVERTEXBUFFER9 pVtxBuff = NULL;
-
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
 
 		for (int i = 0; i < MAX_LIGHT; i++)
@@ -185,30 +182,8 @@ void InitTitle(void)
 			// 対角線の角度を算出する
 			pLight->fAngle = atan2f(fWidth, fHeight);
 
-			pVtxBuff = GetVtxBuffRectangle(pLight->nIdx);
-
-			// 頂点バッファをロックし、頂点情報へのポインタを取得
-			pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-			// 頂点座標の設定
-			pVtx[0].pos.x = pos.x + (sinf(pLight->rot.z + (-D3DX_PI + pLight->fAngle)) * pLight->fLength);
-			pVtx[0].pos.y = pos.y + (cosf(pLight->rot.z + (-D3DX_PI + pLight->fAngle)) * pLight->fLength);
-			pVtx[0].pos.z = 0.0f;
-
-			pVtx[1].pos.x = pos.x + (sinf(pLight->rot.z + (D3DX_PI + (pLight->fAngle * -1.0f))) * pLight->fLength);
-			pVtx[1].pos.y = pos.y + (cosf(pLight->rot.z + (D3DX_PI + (pLight->fAngle * -1.0f))) * pLight->fLength);
-			pVtx[1].pos.z = 0.0f;
-
-			pVtx[2].pos.x = pos.x + (sinf(pLight->rot.z + (pLight->fAngle * -1.0f)) * pLight->fLength);
-			pVtx[2].pos.y = pos.y + (cosf(pLight->rot.z + (pLight->fAngle * -1.0f)) * pLight->fLength);
-			pVtx[2].pos.z = 0.0f;
-
-			pVtx[3].pos.x = pos.x + (sinf(pLight->rot.z + pLight->fAngle) * pLight->fLength);
-			pVtx[3].pos.y = pos.y + (cosf(pLight->rot.z + pLight->fAngle) * pLight->fLength);
-			pVtx[3].pos.z = 0.0f;
-
-			// 頂点バッファをアンロックする
-			pVtxBuff->Unlock();
+			// 矩形の回転する位置の設定
+			SetRotationPosRectangle(pLight->nIdx, pos, pLight->rot, pLight->fAngle, pLight->fLength);
 
 			D3DXVECTOR2 U = D3DXVECTOR2(0.0f + (i * 1.0f), 1.0f + (i * -1.0f));
 			D3DXVECTOR2 V = D3DXVECTOR2(0.0f, 1.0f);
@@ -331,9 +306,6 @@ static void UpdateLight(void)
 {
 	s_nTime++;
 
-	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
-	LPDIRECT3DVERTEXBUFFER9 pVtxBuff = NULL;
-
 	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
 	float fCurve = sinf((s_nTime * CHANGE_SPEED) * (D3DX_PI * 2.0f));
 
@@ -352,30 +324,8 @@ static void UpdateLight(void)
 			pLight->rot.z += -pLight->fSpeed;
 		}
 
-		pVtxBuff = GetVtxBuffRectangle(pLight->nIdx);
-
-		// 頂点バッファをロックし、頂点情報へのポインタを取得
-		pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-		// 頂点座標の設定
-		pVtx[0].pos.x = pos.x + (sinf(pLight->rot.z + (-D3DX_PI + pLight->fAngle)) * pLight->fLength);
-		pVtx[0].pos.y = pos.y + (cosf(pLight->rot.z + (-D3DX_PI + pLight->fAngle)) * pLight->fLength);
-		pVtx[0].pos.z = 0.0f;
-
-		pVtx[1].pos.x = pos.x + (sinf(pLight->rot.z + (D3DX_PI + (pLight->fAngle * -1.0f))) * pLight->fLength);
-		pVtx[1].pos.y = pos.y + (cosf(pLight->rot.z + (D3DX_PI + (pLight->fAngle * -1.0f))) * pLight->fLength);
-		pVtx[1].pos.z = 0.0f;
-
-		pVtx[2].pos.x = pos.x + (sinf(pLight->rot.z + (pLight->fAngle * -1.0f)) * pLight->fLength);
-		pVtx[2].pos.y = pos.y + (cosf(pLight->rot.z + (pLight->fAngle * -1.0f)) * pLight->fLength);
-		pVtx[2].pos.z = 0.0f;
-
-		pVtx[3].pos.x = pos.x + (sinf(pLight->rot.z + pLight->fAngle) * pLight->fLength);
-		pVtx[3].pos.y = pos.y + (cosf(pLight->rot.z + pLight->fAngle) * pLight->fLength);
-		pVtx[3].pos.z = 0.0f;
-
-		// 頂点バッファをアンロックする
-		pVtxBuff->Unlock();
+		// 矩形の回転する位置の設定
+		SetRotationPosRectangle(pLight->nIdx, pos, pLight->rot, pLight->fAngle, pLight->fLength);
 	}
 }
 

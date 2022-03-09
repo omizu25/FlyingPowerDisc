@@ -138,11 +138,11 @@ void DrawGame(void)
 	//ルール選択画面の描画
 	DrawRule();
 
-	// 矩形の描画
-	DrawRectangle();
-
 	// プレイヤーの描画
 	DrawPlayer();
+
+	// 矩形の描画
+	DrawRectangle();
 }
 
 //--------------------------------------------------
