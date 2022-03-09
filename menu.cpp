@@ -434,9 +434,9 @@ void InitColorOption(void)
 //--------------------------------------------------
 // ëIëéàÇÃïœçX
 //--------------------------------------------------
-void ChangeOption(int Idx)
+void ChangeOption(int nIdx)
 {
-	s_nIdxOption = Idx;
+	s_nIdxOption = nIdx;
 }
 
 //--------------------------------------------------

@@ -63,5 +63,6 @@ void SetUp(VERTEX_2D *pVtx,
 	float rotPlayer,		//ƒvƒŒƒCƒ„[‰ñ“]
 	float fAngleAttack 		//‘ÎŠpüŠp“x
 	, float fLengthAttack);	//‘ÎŠpüƒm’·‚³
+void LoadFile(char *Filename);
 #endif
 

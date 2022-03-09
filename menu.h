@@ -49,7 +49,7 @@ void UpdateMenu(void);
 void DrawMenu(void);
 int SetMenu(const MenuArgument &menu, const FrameArgument &Frame);
 void InitColorOption(void);
-void ChangeOption(int Idx);
+void ChangeOption(int nIdx);
 void DecisionOption(void);
 void ResetMenu(int nIdx);
 

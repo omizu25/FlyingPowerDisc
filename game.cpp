@@ -15,7 +15,8 @@
 #include "sound.h"
 #include "player.h"
 #include <assert.h>
-
+#include "rectangle.h"
+#include "rule.h"
 //--------------------------------------------------
 // スタティック変数
 //--------------------------------------------------
@@ -70,6 +71,7 @@ void UpdateGame(void)
 		break;
 
 	case GAMESTATE_START:		// 開始状態
+		// Player
 		UpdatePlayer();
 		break;
 
@@ -100,9 +102,15 @@ void DrawGame(void)
 	{// ポーズ中
 		return;
 	}
+	
+
+	//ルール選択画面の描画
+	DrawRule();
+	// 矩形の描画
+	DrawRectangle();
+	// Playerの描画
 	DrawPlayer();
 }
-
 //--------------------------------------------------
 // 設定
 //--------------------------------------------------

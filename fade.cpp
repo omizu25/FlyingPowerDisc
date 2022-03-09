@@ -55,23 +55,29 @@ void InitFade(void)
 
 	D3DXVECTOR3 pos = D3DXVECTOR3(fWidth, fHeight, 0.0f);
 
-	// 頂点座標の設定処理
+	// 頂点座標の設定
 	pVtx[0].pos = pos + D3DXVECTOR3(-fWidth, -fHeight, 0.0f);
 	pVtx[1].pos = pos + D3DXVECTOR3( fWidth, -fHeight, 0.0f);
 	pVtx[2].pos = pos + D3DXVECTOR3(-fWidth,  fHeight, 0.0f);
 	pVtx[3].pos = pos + D3DXVECTOR3( fWidth,  fHeight, 0.0f);
 
-	// rhwの初期化処理
+	// rhwの設定
 	pVtx[0].rhw = 1.0f;
 	pVtx[1].rhw = 1.0f;
 	pVtx[2].rhw = 1.0f;
 	pVtx[3].rhw = 1.0f;
 
-	// 頂点カラーの設定処理
+	// 頂点カラーの設定
 	pVtx[0].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, s_fAlpha);
 	pVtx[1].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, s_fAlpha);
 	pVtx[2].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, s_fAlpha);
 	pVtx[3].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, s_fAlpha);
+
+	// テクスチャ座標の設定
+	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
 	// 頂点バッファをアンロックする
 	s_pVtxBuff->Unlock();
