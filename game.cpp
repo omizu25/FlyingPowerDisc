@@ -9,16 +9,15 @@
 // インクルード
 //==================================================
 #include "main.h"
-#include "disc.h"
 #include "fade.h"
 #include "game.h"
 #include "input.h"
-#include "rectangle.h"
 #include "sound.h"
+#include "player.h"
+#include "rectangle.h"
 #include "rule.h"
 
 #include <assert.h>
-
 //==================================================
 // スタティック変数
 //==================================================
@@ -36,6 +35,9 @@ void InitGame(void)
 
 	// ディスクの初期化
 	InitDisc();
+
+	//プレイヤーの初期化
+	InitPlayer();
 
 	//ルール選択画面の初期化
 	InitRule();
@@ -66,6 +68,9 @@ void UninitGame(void)
 
 	// ディスクの終了
 	UninitDisc();
+
+	// プレイヤーの終了
+	UninitPlayer();
 }
 
 //--------------------------------------------------
@@ -100,6 +105,9 @@ void UpdateGame(void)
 		// ディスクの更新
 		UpdateDisc();
 
+		// プレイヤーの更新
+		UpdatePlayer();
+		
 		break;
 
 	case GAMESTATE_END:			// 終了状態
@@ -130,7 +138,11 @@ void DrawGame(void)
 	DrawRule();
 
 	// 矩形の描画
-	DrawRectangle();}
+	DrawRectangle();
+
+	// プレイヤーの描画
+	DrawPlayer();
+}
 
 //--------------------------------------------------
 // 設定
