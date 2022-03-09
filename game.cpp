@@ -16,6 +16,7 @@
 #include "player.h"
 #include "rectangle.h"
 #include "rule.h"
+#include "disc.h"
 
 #include <assert.h>
 //==================================================
@@ -57,7 +58,7 @@ void InitGame(void)
 //--------------------------------------------------
 void UninitGame(void)
 {
-	//サウンドの停止
+	// サウンドの停止
 	StopSound();
 
 	//ルール選択画面の終了
