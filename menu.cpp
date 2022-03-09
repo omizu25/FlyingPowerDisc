@@ -1,29 +1,30 @@
-//==================================================
+//**************************************************
 // 
 // FPG制作 ( menu.cpp )
 // Author  : katsuki mizuki
 // 
-//==================================================
+//**************************************************
 
-//--------------------------------------------------
+//==================================================
 // インクルード
-//--------------------------------------------------
+//==================================================
 #include "main.h"
 #include "input.h"
 #include "menu.h"
 #include "fade.h"
+#include "color.h"
 
-//--------------------------------------------------
+//==================================================
 // マクロ定義
-//--------------------------------------------------
+//==================================================
 #define MAX_MENU					(16)		// メニューの最大数
 #define NORMAL_BLINK_SPEED			(0.01f)		// 通常時の点滅速度
 #define DECISION_BLINK_SPEED		(0.1f)		// 決定時の点滅速度
 #define MIN_ALPHA					(0.6f)		// α値の最小値
 
-//--------------------------------------------------
+//==================================================
 // 構造体
-//--------------------------------------------------
+//==================================================
 
 /*↓ 選択肢 ↓*/
 
@@ -52,9 +53,9 @@ typedef struct
 	bool					bUse;					// 使用しているかどうか
 }Menu;
 
-//--------------------------------------------------
+//==================================================
 // スタティック変数
-//--------------------------------------------------
+//==================================================
 static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuffMenu = NULL;			// メニューの頂点バッファへのポインタ
 static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuffOption = NULL;		// 選択肢の頂点バッファへのポインタ
 static Menu							s_aMenu[MAX_MENU];				// メニューの情報
@@ -62,9 +63,9 @@ static int							s_nIdxMenu;						// 選ばれているメニューの番号
 static int							s_nIdxOption;					// 選ばれている選択肢の番号
 static int							s_nAlphaTime;					// α値変更用の時間
 
-//--------------------------------------------------
+//==================================================
 // プロトタイプ宣言
-//--------------------------------------------------
+//==================================================
 static void ChangeColor(Menu *pMenu);
 
 //--------------------------------------------------
@@ -119,11 +120,13 @@ void InitMenu(void)
 		pVtx[2].rhw = 1.0f;
 		pVtx[3].rhw = 1.0f;
 
+		D3DXCOLOR col = GetColor(COLOR_WHITE);
+
 		// 頂点カラーの設定
-		pVtx[0].col = WHITE_COLOR;
-		pVtx[1].col = WHITE_COLOR;
-		pVtx[2].col = WHITE_COLOR;
-		pVtx[3].col = WHITE_COLOR;
+		pVtx[0].col = col;
+		pVtx[1].col = col;
+		pVtx[2].col = col;
+		pVtx[3].col = col;
 
 		// テクスチャ座標の設定
 		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -156,11 +159,13 @@ void InitMenu(void)
 			pVtx[2].rhw = 1.0f;
 			pVtx[3].rhw = 1.0f;
 
+			D3DXCOLOR col = GetColor(COLOR_WHITE);
+
 			// 頂点カラーの設定
-			pVtx[0].col = WHITE_COLOR;
-			pVtx[1].col = WHITE_COLOR;
-			pVtx[2].col = WHITE_COLOR;
-			pVtx[3].col = WHITE_COLOR;
+			pVtx[0].col = col;
+			pVtx[1].col = col;
+			pVtx[2].col = col;
+			pVtx[3].col = col;
 
 			// テクスチャ座標の設定
 			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -375,8 +380,8 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		{// 横
 			pOption->pos = D3DXVECTOR3(menu.fLeft + (pMenu->fInterval * (j + 1)), pMenu->pos.y, 0.0f);
 		}
-
-		pOption->col = WHITE_COLOR;
+		
+		pOption->col = GetColor(COLOR_WHITE);
 		pOption->fWidth = menu.fWidth;
 		pOption->fHeight = menu.fHeight;
 		pOption->pTexture = *menu.pTexture[j];
@@ -421,11 +426,13 @@ void InitColorOption(void)
 	// 指定の位置までポインタを進める
 	pVtx += (s_nIdxMenu * MAX_MENU) + (s_nIdxOption * 4);
 
+	D3DXCOLOR col = GetColor(COLOR_WHITE);
+
 	// 頂点カラーの設定
-	pVtx[0].col = WHITE_COLOR;
-	pVtx[1].col = WHITE_COLOR;
-	pVtx[2].col = WHITE_COLOR;
-	pVtx[3].col = WHITE_COLOR;
+	pVtx[0].col = col;
+	pVtx[1].col = col;
+	pVtx[2].col = col;
+	pVtx[3].col = col;
 
 	// 頂点バッファをアンロックする
 	s_pVtxBuffOption->Unlock();

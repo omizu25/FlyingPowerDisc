@@ -1,14 +1,14 @@
-//==================================================
+//**************************************************
 //
 // タイトル画面 ( title.cpp )
 // Author  : katsuki mizuki
 // Author:Teruto Sato
 //
-//==================================================
+//**************************************************
 
-//--------------------------------------------------
+//==================================================
 // インクルード
-//--------------------------------------------------
+//==================================================
 #include "main.h" 
 #include "fade.h"
 #include "input.h"
@@ -16,12 +16,13 @@
 #include "mode.h"
 #include "rectangle.h"
 #include "title.h"
+#include "color.h"
 
 #include <assert.h>
 
-//--------------------------------------------------
+//==================================================
 // マクロ定義
-//--------------------------------------------------
+//==================================================
 #define MAX_LIGHT				(2)				// 後光の最大数
 #define TITLE_POS_Y				(200.0f)		// タイトルのYの位置
 #define TITLE_WIDTH				(900.0f)		// タイトルの幅
@@ -37,18 +38,18 @@
 #define MENU_WIDTH				(540.0f)		// メニューの幅
 #define MENU_HEIGHT				(64.0f)			// メニューの高さ
 
-//--------------------------------------------------
+//==================================================
 // 列挙型
-//--------------------------------------------------
+//==================================================
 typedef enum
 {
 	MENU_GAME = 0,		// ゲーム
 	MENU_MAX
 }MENU;
 
-//--------------------------------------------------
+//==================================================
 // 構造体
-//--------------------------------------------------
+//==================================================
 typedef struct
 {
 	D3DXVECTOR3		rot;				// 向き
@@ -58,9 +59,9 @@ typedef struct
 	float			fSpeed;				// 速度
 }Light;
 
-//--------------------------------------------------
+//==================================================
 // スタティック変数
-//--------------------------------------------------
+//==================================================
 static LPDIRECT3DTEXTURE9			s_pTextureBG = NULL;			// 背景のテクスチャへのポインタ
 static int							s_nIdxBG;						// 背景の矩形のインデックス
 static LPDIRECT3DTEXTURE9			s_pTexture = NULL;				// テクスチャへのポインタ
@@ -74,9 +75,9 @@ static int							s_nTime;						// 時間
 static int							s_nSelectMenu;					// 選ばれているメニュー
 static int							s_nIdxUseMenu;					// 使っているメニューの番号
 
-//--------------------------------------------------
+//==================================================
 // プロトタイプ宣言
-//--------------------------------------------------
+//==================================================
 static void UpdateLight(void);
 static void Input(void);
 
@@ -165,11 +166,13 @@ void InitTitle(void)
 		pVtx[2].rhw = 1.0f;
 		pVtx[3].rhw = 1.0f;
 
+		D3DXCOLOR col = GetColor(COLOR_WHITE);
+
 		// 頂点カラーの設定
-		pVtx[0].col = WHITE_COLOR;
-		pVtx[1].col = WHITE_COLOR;
-		pVtx[2].col = WHITE_COLOR;
-		pVtx[3].col = WHITE_COLOR;
+		pVtx[0].col = col;
+		pVtx[1].col = col;
+		pVtx[2].col = col;
+		pVtx[3].col = col;
 
 		// テクスチャ座標の設定
 		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -201,11 +204,13 @@ void InitTitle(void)
 	pVtx[2].rhw = 1.0f;
 	pVtx[3].rhw = 1.0f;
 
+	D3DXCOLOR col = GetColor(COLOR_WHITE);
+
 	// 頂点カラーの設定
-	pVtx[0].col = WHITE_COLOR;
-	pVtx[1].col = WHITE_COLOR;
-	pVtx[2].col = WHITE_COLOR;
-	pVtx[3].col = WHITE_COLOR;
+	pVtx[0].col = col;
+	pVtx[1].col = col;
+	pVtx[2].col = col;
+	pVtx[3].col = col;
 
 	// テクスチャ座標の設定
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -269,10 +274,10 @@ void InitTitle(void)
 		pVtx[3].rhw = 1.0f;
 
 		// 頂点カラーの設定
-		pVtx[0].col = WHITE_COLOR;
-		pVtx[1].col = WHITE_COLOR;
-		pVtx[2].col = WHITE_COLOR;
-		pVtx[3].col = WHITE_COLOR;
+		pVtx[0].col = col;
+		pVtx[1].col = col;
+		pVtx[2].col = col;
+		pVtx[3].col = col;
 
 		// テクスチャ座標の設定
 		pVtx[0].tex = D3DXVECTOR2(0.0f + (i * 1.0f), 0.0f);
@@ -310,7 +315,7 @@ void InitTitle(void)
 
 	FrameArgument Frame;
 	Frame.bUse = true;
-	Frame.col = WHITE_COLOR;
+	Frame.col = GetColor(COLOR_WHITE);
 	Frame.pTexture = &s_pTextureFrame;
 	
 	// メニューの設定
