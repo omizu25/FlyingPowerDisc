@@ -1,23 +1,24 @@
-//==================================================
+//**************************************************
 //
 // FPD制作 ( mode.cpp )
 // Author  : katsuki mizuki
 //
-//==================================================
+//**************************************************
 
-//--------------------------------------------------
+//==================================================
 // インクルード
-//--------------------------------------------------
+//==================================================
 #include "fade.h"
 #include "game.h"
 #include "mode.h"
 #include "title.h"
+#include "rule.h"
 
 #include <assert.h>
 
-//--------------------------------------------------
+//==================================================
 // スタティック変数
-//--------------------------------------------------
+//==================================================
 static MODE		s_mode = MODE_NONE;			// 現在のモード
 static MODE		s_modeNext = MODE_NONE;		// 次のモード
 
@@ -31,6 +32,9 @@ void UninitMode(void)
 
 	// ゲームの終了
 	UninitGame();
+
+	//ルール選択画面の終了
+	UninitRule();
 }
 
 //--------------------------------------------------
@@ -42,6 +46,14 @@ void UpdateMode(void)
 	{// どのモード？
 	case MODE_TITLE:		// タイトル
 		UpdateTitle();
+		break;
+
+	case MODE_MAP:			// マップ
+		break;
+
+	case MODE_RULE:			// ルール
+		//ルール選択画面の更新
+		UpdateRule();
 		break;
 
 	case MODE_GAME:			// ゲーム
@@ -69,6 +81,14 @@ void DrawMode(void)
 		DrawTitle();
 		break;
 
+	case MODE_MAP:			// マップ
+		break;
+
+	case MODE_RULE:			// ルール
+		//ルール選択画面の描画
+		DrawRule();
+		break;
+
 	case MODE_GAME:			// ゲーム
 		DrawGame();
 		break;
@@ -84,7 +104,7 @@ void DrawMode(void)
 }
 
 //--------------------------------------------------
-// モードの設定
+// 設定
 //--------------------------------------------------
 void SetMode(void)
 {
@@ -109,6 +129,14 @@ void SetMode(void)
 		UninitTitle();
 		break;
 
+	case MODE_MAP:			// マップ
+		break;
+
+	case MODE_RULE:			// ルール
+		//ルール選択画面の終了
+		UninitRule();
+		break;
+
 	case MODE_GAME:			// ゲーム
 		UninitGame();
 		break;
@@ -128,6 +156,17 @@ void SetMode(void)
 		InitTitle();
 		break;
 
+	case MODE_MAP:			// マップ
+		break;
+
+	case MODE_RULE:			// ルール
+		//ルール選択画面の初期化
+		InitRule();
+
+		//ルール選択画面の設定
+		SetRule(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+		break;
+
 	case MODE_GAME:			// ゲーム
 		InitGame();
 		break;
@@ -143,7 +182,7 @@ void SetMode(void)
 }
 
 //--------------------------------------------------
-// モードの取得
+// 取得
 //--------------------------------------------------
 MODE GetMode(void)
 {
@@ -151,9 +190,9 @@ MODE GetMode(void)
 }
 
 //--------------------------------------------------
-// モードの変更
+// 変更
 //--------------------------------------------------
-void ChangeMode(MODE mode)
+void ChangeMode(const MODE &modeNext)
 {
-	s_modeNext = mode;
+	s_modeNext = modeNext;
 }

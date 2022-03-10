@@ -1,27 +1,26 @@
-//==================================================
+//**************************************************
 //
 // FPD§ì ( game.cpp )
 // Author  : katsuki mizuki
 //
-//==================================================
+//**************************************************
 
-//--------------------------------------------------
+//==================================================
 // ƒCƒ“ƒNƒ‹[ƒh
-//--------------------------------------------------
+//==================================================
 #include "main.h"
-#include "disc.h"
 #include "fade.h"
 #include "game.h"
 #include "input.h"
-#include "rectangle.h"
 #include "sound.h"
-#include "rule.h"
+#include "player.h"
+#include "rectangle.h"
+#include "disc.h"
 
 #include <assert.h>
-
-//--------------------------------------------------
+//==================================================
 // ƒXƒ^ƒeƒBƒbƒN•Ï”
-//--------------------------------------------------
+//==================================================
 static GAMESTATE		s_gameState = GAMESTATE_NONE;		// ƒQ[ƒ€‚Ìó‘Ô
 static int				s_nCounterState;					// ó‘ÔŠÇ—ƒJƒEƒ“ƒ^[
 static bool				s_bPause = false;					// ƒ|[ƒY’†‚©‚Ç‚¤‚© [‚µ‚Ä‚é  : true ‚µ‚Ä‚È‚¢  : false]
@@ -32,16 +31,13 @@ static bool				s_bPause = false;					// ƒ|[ƒY’†‚©‚Ç‚¤‚© [‚µ‚Ä‚é  : true ‚µ‚Ä‚È‚
 void InitGame(void)
 {
 	// ‹éŒ`‚Ì‰Šú‰»
-	InitRectAngle();
+	InitRectangle();
 
 	// ƒfƒBƒXƒN‚Ì‰Šú‰»
 	InitDisc();
 
-	//ƒ‹[ƒ‹‘I‘ğ‰æ–Ê‚Ì‰Šú‰»
-	InitRule();
-
-	//ƒ‹[ƒ‹‘I‘ğ‰æ–Ê‚Ìİ’è
-	SetRule(D3DXVECTOR3(1000.0f, SCREEN_HEIGHT / 2, 0.0f));
+	//ƒvƒŒƒCƒ„[‚Ì‰Šú‰»
+	InitPlayer();
 
 	s_gameState = GAMESTATE_START;		// ŠJnó‘Ô‚Éİ’è
 
@@ -55,17 +51,17 @@ void InitGame(void)
 //--------------------------------------------------
 void UninitGame(void)
 {
-	//ƒTƒEƒ“ƒh‚Ì’â~
+	// ƒTƒEƒ“ƒh‚Ì’â~
 	StopSound();
 
-	//ƒ‹[ƒ‹‘I‘ğ‰æ–Ê‚ÌI—¹
-	UninitRule();
-
 	// ‹éŒ`‚ÌI—¹
-	UninitRectAngle();
+	UninitRectangle();
 
 	// ƒfƒBƒXƒN‚ÌI—¹
 	UninitDisc();
+
+	// ƒvƒŒƒCƒ„[‚ÌI—¹
+	UninitPlayer();
 }
 
 //--------------------------------------------------
@@ -86,20 +82,20 @@ void UpdateGame(void)
 	switch (s_gameState)
 	{
 	case GAMESTATE_NONE:		// ‰½‚à‚µ‚Ä‚¢‚È‚¢ó‘Ô
-
+		assert(false);
 		break;
 
 	case GAMESTATE_START:		// ŠJnó‘Ô
-
+		s_gameState = GAMESTATE_NORMAL;
 		break;
 
 	case GAMESTATE_NORMAL:		// ’Êíó‘Ô
-		//ƒ‹[ƒ‹‘I‘ğ‰æ–Ê‚ÌXV
-		UpdateRule();
-
 		// ƒfƒBƒXƒN‚ÌXV
 		UpdateDisc();
 
+		// ƒvƒŒƒCƒ„[‚ÌXV
+		UpdatePlayer();
+		
 		break;
 
 	case GAMESTATE_END:			// I—¹ó‘Ô
@@ -125,15 +121,18 @@ void DrawGame(void)
 	{// ƒ|[ƒY’†
 		return;
 	}
-	//ƒ‹[ƒ‹‘I‘ğ‰æ–Ê‚Ì•`‰æ
-	DrawRule();	
+
+	// ƒvƒŒƒCƒ„[‚Ì•`‰æ
+	DrawPlayer();
+
 	// ‹éŒ`‚Ì•`‰æ
-	DrawRectAngle();}
+	DrawRectangle();
+}
 
 //--------------------------------------------------
 // İ’è
 //--------------------------------------------------
-void SetGameState(GAMESTATE state)
+void SetGameState(const GAMESTATE &state)
 {
 	s_gameState = state;
 	s_nCounterState = 0;

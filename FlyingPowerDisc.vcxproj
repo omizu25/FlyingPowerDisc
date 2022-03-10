@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="color.cpp" />
     <ClCompile Include="disc.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
@@ -157,12 +158,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="mode.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="rectangle.cpp" />
     <ClCompile Include="rule.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="color.h" />
     <ClInclude Include="disc.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="mode.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="rectangle.h" />
     <ClInclude Include="rule.h" />
     <ClInclude Include="sound.h" />

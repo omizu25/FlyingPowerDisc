@@ -1,29 +1,56 @@
-//==================================================
+//**************************************************
 //
 // FPD制作 ( disc.cpp )
 // Author  : katsuki mizuki
 //
-//==================================================
+//**************************************************
 
-//--------------------------------------------------
+//==================================================
 // インクルード
-//--------------------------------------------------
+//==================================================
 #include "main.h"
 #include "disc.h"
 #include "rectangle.h"
+#include "color.h"
 
 #include <assert.h>
 
-//--------------------------------------------------
+//==================================================
 // マクロ定義
-//--------------------------------------------------
-#define DISC_SIZE		(150.0f)		// ディスクのサイズ
+//==================================================
+#define DISC_SIZE			(75.0f)										// ディスクのサイズ
+#define DISC_ROT_SPEED		(-0.25f)									// ディスクの回転速度
+#define MAX_MOVE			(5.0f)										// 移動量の最大値
+#define START_POS_X			(SCREEN_WIDTH * 0.5f)						// ディスクの始まりのXの位置
+#define START_POS_Y			(SCREEN_HEIGHT - (DISC_SIZE * 0.5f))		// ディスクの始まりのYの位置
 
-//--------------------------------------------------
+//==================================================
+// 構造体
+//==================================================
+typedef struct
+{
+	D3DXVECTOR3		pos;			// 位置
+	D3DXVECTOR3		rot;			// 向き
+	D3DXVECTOR3		move;			// 移動量
+	int				nIdx;			// 矩形のインデックス
+	float			fSize;			// サイズ
+	float			fLength;		// 対角線の長さ
+	float			fAngle;			// 対角線の角度
+	bool			bUse;			// 使用してるかどうか
+}Disc;
+
+//==================================================
 // スタティック変数
-//--------------------------------------------------
-static LPDIRECT3DTEXTURE9			s_pTexture = NULL;		// テクスチャへのポインタ
-static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuff = NULL;		// 頂点バッファのポインタ
+//==================================================
+static LPDIRECT3DTEXTURE9		s_pTexture = NULL;		// テクスチャへのポインタ
+static Disc						s_disc;					// ディスクの情報
+static int						s_nPossPlayer;			// 次のディスクの始まりのプレイヤー
+
+//==================================================
+// プロトタイプ宣言
+//==================================================
+static void OffScreen(void);
+static void NormalizeAngle(void);
 
 //--------------------------------------------------
 // 初期化
@@ -38,53 +65,22 @@ void InitDisc(void)
 		"data/TEXTURE/disc.png",
 		&s_pTexture);
 
-	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(
-		sizeof(VERTEX_2D) * 4,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,
-		&s_pVtxBuff,
-		NULL);
-
-	VERTEX_2D *pVtx;		// 頂点情報へのポインタ
-
-	// 頂点情報をロックし、頂点情報へのポインタを取得
-	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
-
-	float fSize = DISC_SIZE * 0.5f;
-
-	// 頂点座標の設定
-	pVtx[0].pos = pos + D3DXVECTOR3(-fSize, -fSize, 0.0f);
-	pVtx[1].pos = pos + D3DXVECTOR3(fSize, -fSize, 0.0f);
-	pVtx[2].pos = pos + D3DXVECTOR3(-fSize, fSize, 0.0f);
-	pVtx[3].pos = pos + D3DXVECTOR3(fSize, fSize, 0.0f);
-
-	// rhwの設定
-	pVtx[0].rhw = 1.0f;
-	pVtx[1].rhw = 1.0f;
-	pVtx[2].rhw = 1.0f;
-	pVtx[3].rhw = 1.0f;
-
-	// 頂点カラーの設定
-	pVtx[0].col = WHITE_COLOR;
-	pVtx[1].col = WHITE_COLOR;
-	pVtx[2].col = WHITE_COLOR;
-	pVtx[3].col = WHITE_COLOR;
-
-	// テクスチャ座標の設定
-	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
-	// 頂点バッファをアンロックする
-	s_pVtxBuff->Unlock();
+	s_disc.pos = D3DXVECTOR3(START_POS_X, START_POS_Y, 0.0f);
+	s_disc.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_disc.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_disc.fSize = DISC_SIZE * 0.5f;
 
 	// 矩形の設定
-	SetRectAngle(&s_pTexture, &s_pVtxBuff, 1);
+	s_disc.nIdx = SetRectangle(s_pTexture);
+
+	// 対角線の長さを算出する
+	s_disc.fLength = sqrtf((s_disc.fSize * s_disc.fSize) + (s_disc.fSize * s_disc.fSize));
+
+	// 対角線の角度を算出する
+	s_disc.fAngle = atan2f(s_disc.fSize, s_disc.fSize);
+
+	// 矩形の回転する位置の設定
+	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, s_disc.fAngle, s_disc.fLength);
 }
 
 //--------------------------------------------------
@@ -97,12 +93,6 @@ void UninitDisc(void)
 		s_pTexture->Release();
 		s_pTexture = NULL;
 	}
-
-	if (s_pVtxBuff != NULL)
-	{// 頂点バッファの破棄
-		s_pVtxBuff->Release();
-		s_pVtxBuff = NULL;
-	}
 }
 
 //--------------------------------------------------
@@ -110,5 +100,61 @@ void UninitDisc(void)
 //--------------------------------------------------
 void UpdateDisc(void)
 {
-	
+	// 回転
+	s_disc.rot.z += DISC_ROT_SPEED;
+
+	// 角度の正規化
+	NormalizeAngle();
+
+	// 位置の更新
+	s_disc.pos += s_disc.move;
+
+	// 画面外
+	OffScreen();
+
+	// 矩形の回転する位置の設定
+	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, s_disc.fAngle, s_disc.fLength);
+}
+
+//--------------------------------------------------
+// 画面外
+//--------------------------------------------------
+static void OffScreen(void)
+{
+	if (s_disc.pos.y >= SCREEN_HEIGHT - s_disc.fSize)
+	{// 下
+		s_disc.pos.y = SCREEN_HEIGHT - s_disc.fSize;
+		s_disc.move.y *= -1.0f;
+	}
+	else if (s_disc.pos.y <= s_disc.fSize)
+	{// 上
+		s_disc.pos.y = s_disc.fSize;
+		s_disc.move.y *= -1.0f;
+	}
+
+	if (s_disc.pos.x >= SCREEN_WIDTH - s_disc.fSize)
+	{// 右
+		s_disc.pos.x = SCREEN_WIDTH - s_disc.fSize;
+		s_disc.move.x *= -1.0f;
+	}
+	else if (s_disc.pos.x <= s_disc.fSize)
+	{// 左
+		s_disc.pos.x = s_disc.fSize;
+		s_disc.move.x *= -1.0f;
+	}
+}
+
+//--------------------------------------------------
+// 角度の正規化
+//--------------------------------------------------
+static void NormalizeAngle(void)
+{
+	if (s_disc.rot.z >= D3DX_PI)
+	{// 3.14より大きい
+		s_disc.rot.z -= D3DX_PI * 2.0f;
+	}
+	else if (s_disc.rot.z <= -D3DX_PI)
+	{// -3.14より小さい
+		s_disc.rot.z += D3DX_PI * 2.0f;
+	}
 }
