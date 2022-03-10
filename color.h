@@ -31,6 +31,6 @@ typedef enum
 // ˆø”  : COLOR color / —ñ‹“Œ^ í—Ş
 // •Ô’l  : D3DXCOLOR / F
 //--------------------------------------------------
-D3DXCOLOR GetColor(const COLOR &color);
+D3DXCOLOR GetColor(COLOR color);
 
 #endif // !_COLOR_H_

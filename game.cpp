@@ -92,12 +92,11 @@ void UpdateGame(void)
 
 	switch (s_gameState)
 	{
-	case GAMESTATE_NONE:		// 何もしていない状態
-		assert(false);
-		break;
-
 	case GAMESTATE_START:		// 開始状態
 		s_gameState = GAMESTATE_NORMAL;
+		break;
+
+	case GAMESTATE_RESTART:		// 再開始状態
 		break;
 
 	case GAMESTATE_NORMAL:		// 通常状態
@@ -120,6 +119,7 @@ void UpdateGame(void)
 
 		break;
 
+	case GAMESTATE_NONE:		// 何もしていない状態
 	default:
 		assert(false);
 		break;
@@ -149,7 +149,7 @@ void DrawGame(void)
 //--------------------------------------------------
 // 設定
 //--------------------------------------------------
-void SetGameState(const GAMESTATE &state)
+void SetGameState(GAMESTATE state)
 {
 	s_gameState = state;
 	s_nCounterState = 0;

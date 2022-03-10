@@ -53,6 +53,6 @@ MODE GetMode(void);
 // •ÏX
 // ˆø”  : MODE modeNext / —ñ‹“Œ^ Ÿ‚Ìƒ‚[ƒh
 //--------------------------------------------------
-void ChangeMode(const MODE &modeNext);
+void ChangeMode(MODE modeNext);
 
 #endif // !_MODE_H_

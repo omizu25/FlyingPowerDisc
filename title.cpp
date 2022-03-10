@@ -54,9 +54,8 @@ typedef enum
 typedef struct
 {
 	D3DXVECTOR3		rot;				// Œü‚«
-	float			fLength;			// ‘ÎŠpü‚Ì’·‚³
-	float			fSaveLength;		// ‰Šú‰»‚Å‚Ì‘ÎŠpü‚Ì’·‚³‚ð•Û‘¶
-	float			fAngle;				// ‘ÎŠpü‚ÌŠp“x
+	float			fWidth;				// •
+	float			fHeight;			// ‚‚³
 	float			fSpeed;				// ‘¬“x
 	int				nIdx;				// ‹éŒ`‚ÌƒCƒ“ƒfƒbƒNƒX
 }Light;
@@ -161,30 +160,21 @@ void InitTitle(void)
 
 			pLight->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-			float fWidth = 0.0f, fHeight = 0.0f;
-
 			if (i == 0)
 			{//	‰œ
-				fWidth = LIGHT_WIDTH;
-				fHeight = LIGHT_HEIGHT;
+				pLight->fWidth = LIGHT_WIDTH;
+				pLight->fHeight = LIGHT_HEIGHT;
 				pLight->fSpeed = MAX_ROTATION * DECREASE_SPEED;
 			}
-			else
+			else if (i == 1)
 			{// Žè‘O
-				fWidth = LIGHT_WIDTH * DECREASE_SIZE;
-				fHeight = LIGHT_HEIGHT * DECREASE_SIZE;
+				pLight->fWidth = LIGHT_WIDTH * DECREASE_SIZE;
+				pLight->fHeight = LIGHT_HEIGHT * DECREASE_SIZE;
 				pLight->fSpeed = MAX_ROTATION;
 			}
 
-			// ‘ÎŠpü‚Ì’·‚³‚ðŽZo‚·‚é
-			pLight->fSaveLength = sqrtf((fWidth * fWidth) + (fHeight * fHeight));
-			pLight->fLength = pLight->fSaveLength;
-
-			// ‘ÎŠpü‚ÌŠp“x‚ðŽZo‚·‚é
-			pLight->fAngle = atan2f(fWidth, fHeight);
-
 			// ‹éŒ`‚Ì‰ñ“]‚·‚éˆÊ’u‚ÌÝ’è
-			SetRotationPosRectangle(pLight->nIdx, pos, pLight->rot, pLight->fAngle, pLight->fLength);
+			SetRotationPosRectangle(pLight->nIdx, pos, pLight->rot, pLight->fWidth, pLight->fHeight);
 
 			D3DXVECTOR2 texU = D3DXVECTOR2(0.0f + (i * 1.0f), 1.0f + (i * -1.0f));
 			D3DXVECTOR2 texV = D3DXVECTOR2(0.0f, 1.0f);
@@ -314,8 +304,6 @@ static void UpdateLight(void)
 	{
 		Light *pLight = &s_light[i];
 
-		pLight->fLength = pLight->fSaveLength * ((fCurve * CHANGE_AMOUNT) + MEDIAN_LENGTH);
-
 		if (i == 0)
 		{// ‰œ
 			pLight->rot.z += pLight->fSpeed;
@@ -325,8 +313,12 @@ static void UpdateLight(void)
 			pLight->rot.z += -pLight->fSpeed;
 		}
 
+		float fRatio = (fCurve * CHANGE_AMOUNT) + MEDIAN_LENGTH;
+		float fWidth = pLight->fWidth * fRatio;
+		float fHeight = pLight->fHeight * fRatio;
+
 		// ‹éŒ`‚Ì‰ñ“]‚·‚éˆÊ’u‚ÌÝ’è
-		SetRotationPosRectangle(pLight->nIdx, pos, pLight->rot, pLight->fAngle, pLight->fLength);
+		SetRotationPosRectangle(pLight->nIdx, pos, pLight->rot, fWidth, fHeight);
 	}
 }
 

@@ -56,5 +56,6 @@ void SetUp(VERTEX_2D *pVtx,
 	, float fLengthAttack);	//‘ÎŠpüƒm’·‚³
 void SetTex2d(VERTEX_2D *pVtx, float left, float right, float top, float down);
 void LoadFile(char *Filename);
+Player* GetPlayer(void);
 #endif
 

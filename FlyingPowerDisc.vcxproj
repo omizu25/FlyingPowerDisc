@@ -162,6 +162,7 @@
     <ClCompile Include="rectangle.cpp" />
     <ClCompile Include="rule.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="texture.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="ui.cpp" />
   </ItemGroup>
@@ -178,6 +179,7 @@
     <ClInclude Include="rectangle.h" />
     <ClInclude Include="rule.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="texture.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="ui.h" />
   </ItemGroup>
