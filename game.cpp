@@ -18,7 +18,7 @@
 #include "disc.h"
 #include "ui.h"
 #include "pause.h"
-
+#include "wall.h"
 #include <assert.h>
 //==================================================
 // ƒXƒ^ƒeƒBƒbƒN•Ï”
@@ -32,6 +32,8 @@ static bool				s_bPause = false;					// ƒ|[ƒY’†‚©‚Ç‚¤‚© [‚µ‚Ä‚é  : true ‚µ‚Ä‚È‚
 //--------------------------------------------------
 void InitGame(void)
 {
+
+	InitWall();
 	// ‹éŒ`‚Ì‰Šú‰»
 	InitRectangle();
 
@@ -65,6 +67,8 @@ void UninitGame(void)
 {
 	// ƒTƒEƒ“ƒh‚Ì’â~
 	StopSound();
+
+	UninitWall();
 
 	// ‹éŒ`‚ÌI—¹
 	UninitRectangle();
@@ -115,6 +119,8 @@ void UpdateGame(void)
 		break;
 
 	case GAMESTATE_NORMAL:		// ’Êíó‘Ô
+		
+		UpdateWall();
 		// ƒvƒŒƒCƒ„[‚ÌXV
 		UpdatePlayer();
 		
@@ -147,6 +153,7 @@ void UpdateGame(void)
 //--------------------------------------------------
 void DrawGame(void)
 {
+	DrawWall();
 	// ƒvƒŒƒCƒ„[‚Ì•`‰æ
 	DrawPlayer();
 
