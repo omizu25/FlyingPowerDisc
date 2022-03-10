@@ -1,0 +1,42 @@
+#==============================================================================
+#
+# ステータス読み込みファイル
+# Author : HAMADA RYUUGA
+#
+#==============================================================================
+SCRIPT			# この行は絶対消さないこと！
+
+TEXTURE_FILENAME = data/TEXTURE/kitune.png				# [0]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/enemy000.png			# [1]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/sky_enemy_002.png		# [2]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/zolbak.png				# [3]Playerテクスチャ
+
+STATUSSET
+
+ATTACKPOW = 7.0
+MOVESPEED = 13.0
+
+ENDSET
+
+STATUSSET
+
+ATTACKPOW = 5.0
+MOVESPEED = 5.0
+
+ENDSET
+
+STATUSSET
+
+ATTACKPOW = 3.0
+MOVESPEED = 7.0
+
+ENDSET
+
+STATUSSET
+
+ATTACKPOW = 2.0
+MOVESPEED = 8.0
+
+ENDSET
+
+END_SCRIPT		# この行は絶対消さないこと??
