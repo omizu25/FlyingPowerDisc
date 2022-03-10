@@ -26,6 +26,7 @@ void UninitRule(void);
 void UpdateRule(void);
 void DrawRule(void);
 void SetRule(D3DXVECTOR3 pos);
-void FlashTexture(int nCnt);
+void FlashTexture(int nNumber);
+int ChangeSelect(void);
 
 #endif

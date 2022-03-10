@@ -10,6 +10,7 @@
 #include "main.h"
 #include "rectangle.h"
 #include "color.h"
+#include "input.h"
 
 //マクロ定義
 #define MAX_RULE	(3)				//ルールの最大数
@@ -20,6 +21,7 @@
 static LPDIRECT3DTEXTURE9		s_pTexture = NULL;	//テクスチャへのポインタ
 static Rule s_Rule[MAX_RULE];	//構造体の取得
 static int s_nTime;				//点滅の時間
+static int s_nSelect;			//選択中の番号
 
 //============================
 // ルール選択画面の初期化
@@ -81,16 +83,11 @@ void UpdateRule(void)
 	s_nTime++;				//タイムの加算
 	s_nTime %= MAX_FLASH;	//タイムの初期化
 
-	for (int nCnt = 0; nCnt < MAX_RULE; nCnt++)
-	{
-		Rule *rule = s_Rule + nCnt;
+	//選択番号の切り替え
+	int nNumber = ChangeSelect();
 
-		if (rule->bUse == true)
-		{//使用しているなら
-			//テクスチャの点滅
-			FlashTexture(nCnt);
-		}
-	}
+	//テクスチャの点滅
+	FlashTexture(nNumber);
 }
 
 //============================
@@ -135,16 +132,42 @@ void SetRule(D3DXVECTOR3 pos)
 //============================
 // テクスチャの点滅
 //============================
-void FlashTexture(int nCnt)
+void FlashTexture(int nNumber)
 {
 	if (s_nTime >= HALF_FLASH)
 	{
 		// 矩形の色の設定
-		SetColorRectangle(s_Rule[nCnt].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+		SetColorRectangle(s_Rule[nNumber].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
 	}
 	else
 	{
 		// 矩形の色の設定
-		SetColorRectangle(s_Rule[nCnt].nIdx, GetColor(COLOR_WHITE));
+		SetColorRectangle(s_Rule[nNumber].nIdx, GetColor(COLOR_WHITE));
 	}
+}
+
+//============================
+// 選択番号の切り替え
+//============================
+int ChangeSelect(void)
+{
+	// 矩形の色の設定
+	SetColorRectangle(s_Rule[s_nSelect].nIdx, GetColor(COLOR_WHITE));
+
+	if (GetKeyboardTrigger(DIK_W))
+	{//Wキーが押されたとき
+		if (s_nSelect >= 1 && s_nSelect <= MAX_RULE)
+		{//0未満にならないなら
+			s_nSelect--;
+		}
+	}
+	else if (GetKeyboardTrigger(DIK_S))
+	{//Sキーが押されたとき
+		if (s_nSelect >= 0 && s_nSelect < (MAX_RULE - 1))
+		{//最大数を超えならないなら
+			s_nSelect++;
+		}
+	}
+
+	return s_nSelect;
 }
