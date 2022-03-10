@@ -46,14 +46,15 @@ void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
 void SetPlayer(D3DXVECTOR3 pos, int nType, bool light);
-void SetTex2d(VERTEX_2D *pVtx, float left, float right, float top, float down);
 
+void MovePlayer(void);
 void SetUp(VERTEX_2D *pVtx,
 	float posx,		//中心点ｘ
 	float posy,		//中心点ｙ
 	float rotPlayer,		//プレイヤー回転
 	float fAngleAttack 		//対角線角度
 	, float fLengthAttack);	//対角線ノ長さ
+void SetTex2d(VERTEX_2D *pVtx, float left, float right, float top, float down);
 void LoadFile(char *Filename);
 #endif
 
