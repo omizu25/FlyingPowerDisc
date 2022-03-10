@@ -21,10 +21,12 @@ static const char *s_FileName[] =
 	"data/TEXTURE/BG.png",
 	"data/TEXTURE/Disc.png",
 	"data/TEXTURE/Frame.png",
-	"data/TEXTURE/New_GAMESTART.png",
-	"data/TEXTURE/New_GAMESTART_NoBG.png",
 	"data/TEXTURE/Title_blue.png",
 	"data/TEXTURE/TitleLight_red.png",
+	"data/TEXTURE/Game_Start.png",
+	"data/TEXTURE/Back_to_game.png",
+	"data/TEXTURE/Retry.png",
+	"data/TEXTURE/Back_to_title.png",
 	"data/TEXTURE/UI000.png",
 	"data/TEXTURE/UI001.png",
 };
@@ -73,5 +75,7 @@ void UninitTexture(void)
 //--------------------------------------------------
 LPDIRECT3DTEXTURE9 GetTexture(TEXTURE texture)
 {
+	assert(texture >= 0 && texture < TEXTURE_MAX);
+
 	return s_pTexture[texture];
 }

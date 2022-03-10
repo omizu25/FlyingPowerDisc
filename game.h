@@ -13,11 +13,11 @@
 typedef enum
 {
 	GAMESTATE_NONE = 0,		// 何もしていない状態
-	GAMESTATE_START,		// 開始状態(ゲーム開始中)
-	GAMESTATE_RESTART,		// 再開始状態(ゲーム再開始中)
-	GAMESTATE_NORMAL,		// 通常状態(ゲーム進行中)
-	GAMESTATE_END,			// 終了状態(ゲーム終了時)
-	GAMESTATE_RESULT,		// リザルト状態(ゲーム終了後)
+	GAMESTATE_START,		// 開始状態
+	GAMESTATE_NORMAL,		// 通常状態
+	GAMESTART_RESET,		// リセット状態
+	GAMESTATE_END,			// 終了状態
+	GAMESTATE_RESULT,		// リザルト状態
 	GAMESTATE_MAX
 }GAMESTATE;
 

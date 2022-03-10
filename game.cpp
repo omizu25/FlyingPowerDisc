@@ -17,6 +17,7 @@
 #include "rectangle.h"
 #include "disc.h"
 #include "ui.h"
+#include "pause.h"
 
 #include <assert.h>
 //==================================================
@@ -42,6 +43,9 @@ void InitGame(void)
 
 	//UIの初期化
 	InitUi();
+
+	// ポーズの初期化
+	InitPause();
 
 	//UIの配置
 	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0);
@@ -73,6 +77,9 @@ void UninitGame(void)
 
 	//UIの終了
 	UninitUi();
+
+	// ポーズの終了
+	UninitPause();
 }
 
 //--------------------------------------------------
@@ -80,15 +87,26 @@ void UninitGame(void)
 //--------------------------------------------------
 void UpdateGame(void)
 {
-	if (GetKeyboardTrigger(DIK_P) || GetJoypadTrigger(JOYKEY_START, 0))
-	{// Pキーが押されたかどうか
+	if (GetDirectJoypadTrigger(JOYKEY_DIRECT_7_BUTTON) || GetKeyboardTrigger(DIK_P))
+	{
 		s_bPause = !s_bPause;
+
+		if (s_bPause)
+		{// ポーズしている
+			// メニューの設定
+			SetPause();
+		}
 	}
 
 	if (s_bPause)
-	{// ポーズ中
+	{// ポーズしている
+		// ポーズの更新
+		UpdatePause();
 		return;
 	}
+
+	// ディスクの更新
+	UpdateDisc();
 
 	switch (s_gameState)
 	{
@@ -96,18 +114,16 @@ void UpdateGame(void)
 		s_gameState = GAMESTATE_NORMAL;
 		break;
 
-	case GAMESTATE_RESTART:		// 再開始状態
-		break;
-
 	case GAMESTATE_NORMAL:		// 通常状態
-		// ディスクの更新
-		UpdateDisc();
-
 		// プレイヤーの更新
 		UpdatePlayer();
 		
 		//UIの更新(まだ何もしてない)
 		UpdateUi();
+
+		break;
+
+	case GAMESTART_RESET:		// リセット状態
 
 		break;
 
@@ -131,19 +147,14 @@ void UpdateGame(void)
 //--------------------------------------------------
 void DrawGame(void)
 {
-	if (s_bPause)
-	{// ポーズ中
-		return;
-	}
-
 	// プレイヤーの描画
 	DrawPlayer();
 
-	// 矩形の描画
-	DrawRectangle();
-
 	//UIの描画
 	DrawUi();
+
+	// 矩形の描画
+	DrawRectangle();
 }
 
 //--------------------------------------------------

@@ -17,6 +17,7 @@
 #include "rectangle.h"
 #include "title.h"
 #include "color.h"
+#include "texture.h"
 
 #include <assert.h>
 
@@ -63,17 +64,12 @@ typedef struct
 //==================================================
 // スタティック変数
 //==================================================
-static LPDIRECT3DTEXTURE9		s_pTextureBG = NULL;			// 背景のテクスチャへのポインタ
-static int						s_nIdxBG;						// 背景の矩形のインデックス
-static LPDIRECT3DTEXTURE9		s_pTextureLight = NULL;			// 後光のテクスチャへのポインタ
-static LPDIRECT3DTEXTURE9		s_pTexture = NULL;				// テクスチャへのポインタ
-static int						s_nIdx;							// 矩形のインデックス
-static LPDIRECT3DTEXTURE9		s_pTextureFrame = NULL;			// 枠のテクスチャへのポインタ
-static LPDIRECT3DTEXTURE9		s_pTextureMenu[MENU_MAX];		// メニューのテクスチャへのポインタ
-static Light					s_light[MAX_LIGHT];				// 後光の情報
-static int						s_nTime;						// 時間
-static int						s_nSelectMenu;					// 選ばれているメニュー
-static int						s_nIdxUseMenu;					// 使っているメニューの番号
+static int			s_nIdxBG;				// 背景の矩形のインデックス
+static int			s_nIdx;					// 矩形のインデックス
+static Light		s_light[MAX_LIGHT];		// 後光の情報
+static int			s_nTime;				// 時間
+static int			s_nSelectMenu;			// 選ばれているメニュー
+static int			s_nIdxUseMenu;			// 使っているメニューの番号
 
 //==================================================
 // プロトタイプ宣言
@@ -89,51 +85,21 @@ void InitTitle(void)
 	// 矩形の初期化
 	InitRectangle();
 
-	// デバイスへのポインタの取得
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();
-
 	s_nTime = 0;
 	s_nSelectMenu = 0;
 
-	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice,
-		"data/TEXTURE/BG.png",
-		&s_pTextureBG);
-
-	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice,
-		"data/TEXTURE/Title_blue.png",
-		&s_pTexture);
-
-	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice,
-		"data/TEXTURE/TitleLight_red.png",
-		&s_pTextureLight);
-
-	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(
-		pDevice,
-		"data/TEXTURE/Frame.png",
-		&s_pTextureFrame);
-
-	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(
-		pDevice,
-		"data/TEXTURE/New_GAMESTART_NoBG.png",
-		&s_pTextureMenu[MENU_GAME]);
-
 	// 矩形の設定
-	s_nIdxBG = SetRectangle(s_pTextureBG);
+	s_nIdxBG = SetRectangle(GetTexture(TEXTURE_BG));
 
 	// 矩形の設定
 	for (int i = 0; i < MAX_LIGHT; i++)
 	{
 		Light *pLight = &s_light[i];
-		pLight->nIdx = SetRectangle(s_pTextureLight);
+		pLight->nIdx = SetRectangle(GetTexture(TEXTURE_TitleLight_red));
 	}
 
 	// 矩形の設定
-	s_nIdx = SetRectangle(s_pTexture);
+	s_nIdx = SetRectangle(GetTexture(TEXTURE_Title_blue));
 
 	{// 背景
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
@@ -197,15 +163,13 @@ void InitTitle(void)
 	menu.fHeight = MENU_HEIGHT;
 	menu.bSort = true;
 
-	for (int i = 0; i < MENU_MAX; i++)
-	{
-		menu.pTexture[i] = s_pTextureMenu[MENU_GAME];
-	}
+	menu.pTexture[MENU_GAME] = GetTexture(TEXTURE_Game_Start);
+	menu.pTexture[MENU_RULE] = menu.pTexture[MENU_GAME];
 
 	FrameArgument Frame;
 	Frame.bUse = true;
 	Frame.col = GetColor(COLOR_WHITE);
-	Frame.pTexture = s_pTextureFrame;
+	Frame.pTexture = GetTexture(TEXTURE_Frame);
 	
 	// メニューの設定
 	s_nIdxUseMenu = SetMenu(menu, Frame);
@@ -230,39 +194,6 @@ void UninitTitle(void)
 	{
 		Light *pLight = &s_light[i];
 		StopUseRectangle(pLight->nIdx);
-	}
-
-	if (s_pTextureBG != NULL)
-	{// テクスチャの解放
-		s_pTextureBG->Release();
-		s_pTextureBG = NULL;
-	}
-
-	if (s_pTexture != NULL)
-	{// テクスチャの解放
-		s_pTexture->Release();
-		s_pTexture = NULL;
-	}
-
-	if (s_pTextureLight != NULL)
-	{// テクスチャの解放
-		s_pTextureLight->Release();
-		s_pTextureLight = NULL;
-	}
-
-	if (s_pTextureFrame != NULL)
-	{// テクスチャの解放
-		s_pTextureFrame->Release();
-		s_pTextureFrame = NULL;
-	}
-
-	for (int i = 0; i < MENU_MAX; i++)
-	{
-		if (s_pTextureMenu[i] != NULL)
-		{// テクスチャの解放
-			s_pTextureMenu[i]->Release();
-			s_pTextureMenu[i] = NULL;
-		}
 	}
 }
 
@@ -332,7 +263,7 @@ static void Input(void)
 		return;
 	}
 
-	if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP, 0))
+	if (GetKeyboardTrigger(DIK_W))
 	{// Wキーが押されたかどうか
 		// 選択肢の色の初期化
 		InitColorOption();
@@ -343,7 +274,7 @@ static void Input(void)
 		ChangeOption(s_nSelectMenu);
 
 	}
-	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN, 0))
+	else if (GetKeyboardTrigger(DIK_S))
 	{// Sキーが押されたかどうか
 		// 選択肢の色の初期化
 		InitColorOption();
@@ -354,7 +285,7 @@ static void Input(void)
 		ChangeOption(s_nSelectMenu);
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START, 0))
+	if (GetKeyboardTrigger(DIK_RETURN))
 	{//決定キー(ENTERキー)が押されたかどうか
 		switch (s_nSelectMenu)
 		{
