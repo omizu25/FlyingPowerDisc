@@ -67,7 +67,7 @@ void InitDisc(void)
 
 	s_disc.pos = D3DXVECTOR3(START_POS_X, START_POS_Y, 0.0f);
 	s_disc.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_disc.move = D3DXVECTOR3(MAX_MOVE, MAX_MOVE, 0.0f);
+	s_disc.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_disc.fSize = DISC_SIZE * 0.5f;
 
 	// ãÈå`ÇÃê›íË

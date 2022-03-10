@@ -70,10 +70,10 @@ void SetColorRectangle(int nIdx, const D3DXCOLOR &color);
 //--------------------------------------------------
 // テクスチャ座標の設定
 // 引数1  : int nIdx / インデックス
-// 引数2  : D3DXVECTOR2 U / x = 左端, y = 右端
-// 引数3  : D3DXVECTOR2 V / x = 上端, y = 下端
+// 引数2  : D3DXVECTOR2 texU / x = 左端, y = 右端
+// 引数3  : D3DXVECTOR2 texV / x = 上端, y = 下端
 //--------------------------------------------------
-void SetTexRectangle(int nIdx, const D3DXVECTOR2 &U, const D3DXVECTOR2 &V);
+void SetTexRectangle(int nIdx, const D3DXVECTOR2 &texU, const D3DXVECTOR2 &texV);
 
 //--------------------------------------------------
 // 頂点バッファの取得

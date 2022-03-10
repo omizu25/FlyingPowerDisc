@@ -12,6 +12,7 @@
 #include "game.h"
 #include "mode.h"
 #include "title.h"
+#include "rule.h"
 
 #include <assert.h>
 
@@ -31,6 +32,9 @@ void UninitMode(void)
 
 	// ゲームの終了
 	UninitGame();
+
+	//ルール選択画面の終了
+	UninitRule();
 }
 
 //--------------------------------------------------
@@ -42,6 +46,14 @@ void UpdateMode(void)
 	{// どのモード？
 	case MODE_TITLE:		// タイトル
 		UpdateTitle();
+		break;
+
+	case MODE_MAP:			// マップ
+		break;
+
+	case MODE_RULE:			// ルール
+		//ルール選択画面の更新
+		UpdateRule();
 		break;
 
 	case MODE_GAME:			// ゲーム
@@ -67,6 +79,14 @@ void DrawMode(void)
 	{// どのモード？
 	case MODE_TITLE:		// タイトル
 		DrawTitle();
+		break;
+
+	case MODE_MAP:			// マップ
+		break;
+
+	case MODE_RULE:			// ルール
+		//ルール選択画面の描画
+		DrawRule();
 		break;
 
 	case MODE_GAME:			// ゲーム
@@ -109,6 +129,14 @@ void SetMode(void)
 		UninitTitle();
 		break;
 
+	case MODE_MAP:			// マップ
+		break;
+
+	case MODE_RULE:			// ルール
+		//ルール選択画面の終了
+		UninitRule();
+		break;
+
 	case MODE_GAME:			// ゲーム
 		UninitGame();
 		break;
@@ -126,6 +154,17 @@ void SetMode(void)
 	{// 次のモードの初期化
 	case MODE_TITLE:		// タイトル
 		InitTitle();
+		break;
+
+	case MODE_MAP:			// マップ
+		break;
+
+	case MODE_RULE:			// ルール
+		//ルール選択画面の初期化
+		InitRule();
+
+		//ルール選択画面の設定
+		SetRule(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 		break;
 
 	case MODE_GAME:			// ゲーム

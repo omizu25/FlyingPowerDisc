@@ -13,6 +13,8 @@
 typedef enum
 {
 	MODE_TITLE = 0,		// タイトル
+	MODE_MAP,			// マップ
+	MODE_RULE,			// ルール
 	MODE_GAME,			// ゲーム
 	MODE_MAX,
 	MODE_NONE

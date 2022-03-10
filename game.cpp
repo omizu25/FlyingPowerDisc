@@ -15,7 +15,6 @@
 #include "sound.h"
 #include "player.h"
 #include "rectangle.h"
-#include "rule.h"
 #include "disc.h"
 
 #include <assert.h>
@@ -40,12 +39,6 @@ void InitGame(void)
 	//プレイヤーの初期化
 	InitPlayer();
 
-	//ルール選択画面の初期化
-	InitRule();
-
-	//ルール選択画面の設定
-	SetRule(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
-
 	s_gameState = GAMESTATE_START;		// 開始状態に設定
 
 	s_nCounterState = 0;				// カウンターの初期化
@@ -60,9 +53,6 @@ void UninitGame(void)
 {
 	// サウンドの停止
 	StopSound();
-
-	//ルール選択画面の終了
-	UninitRule();
 
 	// 矩形の終了
 	UninitRectangle();
@@ -100,9 +90,6 @@ void UpdateGame(void)
 		break;
 
 	case GAMESTATE_NORMAL:		// 通常状態
-		//ルール選択画面の更新
-		UpdateRule();
-
 		// ディスクの更新
 		UpdateDisc();
 
@@ -134,9 +121,6 @@ void DrawGame(void)
 	{// ポーズ中
 		return;
 	}
-
-	//ルール選択画面の描画
-	DrawRule();
 
 	// プレイヤーの描画
 	DrawPlayer();
