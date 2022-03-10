@@ -41,7 +41,7 @@ void InitGame(void)
 	InitRule();
 
 	//ルール選択画面の設定
-	SetRule(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+	SetRule(D3DXVECTOR3(1000.0f, SCREEN_HEIGHT / 2, 0.0f));
 
 	s_gameState = GAMESTATE_START;		// 開始状態に設定
 

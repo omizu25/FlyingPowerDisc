@@ -42,7 +42,7 @@ void InitRule(void)
 		rule->pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 		rule->fWidth = 0.0f;	//幅
 		rule->fHeight = 0.0f;	//高さ
-		rule->bUse = false;
+		rule->bUse = false;		//使用していない状態
 	}
 
 	//頂点バッファの生成
