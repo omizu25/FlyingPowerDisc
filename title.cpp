@@ -44,6 +44,7 @@
 typedef enum
 {
 	MENU_GAME = 0,		// ゲーム
+	MENU_RULE,			// ルール
 	MENU_MAX
 }MENU;
 
@@ -185,11 +186,11 @@ void InitTitle(void)
 			// 矩形の回転する位置の設定
 			SetRotationPosRectangle(pLight->nIdx, pos, pLight->rot, pLight->fAngle, pLight->fLength);
 
-			D3DXVECTOR2 U = D3DXVECTOR2(0.0f + (i * 1.0f), 1.0f + (i * -1.0f));
-			D3DXVECTOR2 V = D3DXVECTOR2(0.0f, 1.0f);
+			D3DXVECTOR2 texU = D3DXVECTOR2(0.0f + (i * 1.0f), 1.0f + (i * -1.0f));
+			D3DXVECTOR2 texV = D3DXVECTOR2(0.0f, 1.0f);
 
 			// 矩形のテクスチャ座標の設定
-			SetTexRectangle(pLight->nIdx, U, V);
+			SetTexRectangle(pLight->nIdx, texU, texV);
 		}
 	}
 
@@ -208,7 +209,7 @@ void InitTitle(void)
 
 	for (int i = 0; i < MENU_MAX; i++)
 	{
-		menu.pTexture[i] = s_pTextureMenu[i];
+		menu.pTexture[i] = s_pTextureMenu[MENU_GAME];
 	}
 
 	FrameArgument Frame;
@@ -367,6 +368,10 @@ static void Input(void)
 		{
 		case MENU_GAME:				// ゲーム
 			ChangeMode(MODE_GAME);
+			break;
+
+		case MENU_RULE:				// ゲーム
+			ChangeMode(MODE_RULE);
 			break;
 
 		default:
