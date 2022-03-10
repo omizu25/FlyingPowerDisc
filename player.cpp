@@ -10,8 +10,8 @@
 #include"sound.h"
 #include <stdio.h>
 
-#define MAXPLAYER (2)
-#define MAXPLAYERTYPE (4)
+#define MAXPLAYER (2)//登場最大数
+#define MAXPLAYERTYPE (4)//Type最大数
 #define MOVESPEED (5.0f)
 //スタティック変数///スタティックをヘッタに使うなよ？
 
@@ -23,7 +23,7 @@ static float s_fAnglePlayer;		//対角線角度
 static float s_fLengthAttack;      //対角線ノ長さ
 static float s_fAngleAttack;		//対角線角度
 static Player s_Player[MAXPLAYER];//プレイヤー構造体取得
-static Player s_PlayerType[MAXPLAYERTYPE];//プレイヤー構造体取得Type別
+static Player s_PlayerType[MAXPLAYERTYPE];//プレイヤーのTypeを保存する
 
 
 //=======================
