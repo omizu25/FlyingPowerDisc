@@ -44,8 +44,8 @@ void InitGame(void)
 	InitUi();
 
 	//UIの配置
-	SetUi(D3DXVECTOR3 (SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, 0.0f), 100.0f, 30.0f, 0);
-	SetUi(D3DXVECTOR3 (SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7, 0.0f), 100.0f, 60.0f, 0);
+	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0);
+	SetUi(D3DXVECTOR3 (SCREEN_WIDTH - 50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 1);
 
 	s_gameState = GAMESTATE_START;		// 開始状態に設定
 
