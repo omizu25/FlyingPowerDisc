@@ -183,6 +183,8 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 		break;
 	}
 }
+
+#if 0	// もう使ってないよ。
 //------------------------------------
 //中心点真ん中のPOSセット
 //------------------------------------
@@ -224,6 +226,8 @@ void SetTex2d(VERTEX_2D *pVtx, float left, float right, float top, float down)
 	pVtx[3].tex = D3DXVECTOR2(right, down);
 
 }
+#endif
+
 void LoadFile(char *Filename)
 {
 	char	s_aString[256];//
