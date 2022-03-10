@@ -223,7 +223,7 @@ static void Reflect(void)
 	else if (s_disc.pos.x <= fRadius)
 	{// ¶
 		// ƒQ[ƒ€‚Ìó‘Ô‚ÌÝ’è
-		SetGameState(GAMESTART_RESET);
+		//SetGameState(GAMESTART_RESET);
 	}
 }
 

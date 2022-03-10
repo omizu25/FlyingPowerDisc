@@ -3,12 +3,13 @@
 //autho hamada ryuuga
 //====================
 
-#include"main.h"
-#include"Player.h"
+#include "main.h"
+#include "Player.h"
 #include "input.h"
-#include"fade.h"
-#include"sound.h"
+#include "fade.h"
+#include "sound.h"
 #include "rectangle.h"
+#include "wall.h"
 #include <stdio.h>
 
 #define MAXPLAYER (2)//登場最大数
@@ -90,45 +91,56 @@ void UpdatePlayer(void)
 	{
 		Player *pPlayer = &s_Player[count];
 
+		CollisionWall(&s_Player[1].pos, &s_Player[1].posOld);
+
+		/*CalcParticlePlaneAfterPos(
+			&s_Player[count].pos,
+			&s_Player[count].move,
+			1.1f,
+			1.2f,
+			&s_Player[count].pos,
+			&s_Player[count].move
+		);*/
+
 		//移動量を更新(減衰させる)
 		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  
 		s_Player[count].move.y += (0.0f - s_Player[count].move.y)*0.2f;//（目的の値-現在の値）＊減衰係数
 
 			//前回の位置の保存
-			s_Player[count].posOld = s_Player[count].pos;
-			//更新
-			s_Player[count].pos.x += s_Player[count].move.x;
-			s_Player[count].pos.y += s_Player[count].move.y;
+		s_Player[count].posOld = s_Player[count].pos;
+		//更新
+		s_Player[count].pos.x += s_Player[count].move.x;
+		s_Player[count].pos.y += s_Player[count].move.y;
 
-			//壁---------------------------------------------------
-			if (s_Player[count].pos.x <= 0.0f + PLAYERMOVE)
-			{//横壁（左）
-				 s_Player[count].pos.x = 0.0f + PLAYERMOVE;
-			}
-			else if (s_Player[count].pos.x >= SCREEN_WIDTH - PLAYERMOVE)
-			{//横壁（右）
-				s_Player[count].pos.x = SCREEN_WIDTH - PLAYERMOVE;
-			}
-			if (s_Player[count].pos.y <= 0.0f + PLAYERMOVE)
-			{//上壁　
-				s_Player[count].pos.y = 0.0f + PLAYERMOVE;
-			}
-			if (s_Player[count].pos.y >= SCREEN_HEIGHT - PLAYERMOVE)
-			{//下壁
-				s_Player[count].pos.y = SCREEN_HEIGHT - PLAYERMOVE;
-			}
-			//真ん中ライン
-			if (s_Player[0].pos.x >= SCREEN_WIDTH* 0.5f - PLAYERMOVE)
-			{
-				s_Player[0].pos.x = SCREEN_WIDTH* 0.5f - PLAYERMOVE;
-			}
-			if (s_Player[1].pos.x <= SCREEN_WIDTH * 0.5f + PLAYERMOVE)
-			{
-				s_Player[1].pos.x = SCREEN_WIDTH * 0.5f + PLAYERMOVE;
-			}
-			
-			// 矩形の回転する位置の設定
-			SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
+		//壁---------------------------------------------------
+		if (s_Player[count].pos.x <= 0.0f + pPlayer->fwidth / 2.0f)
+		{//横壁（左）
+			s_Player[count].pos.x = 0.0f + pPlayer->fwidth / 2.0f;
+		}
+		else if (s_Player[count].pos.x >= SCREEN_WIDTH - pPlayer->fwidth / 2.0f)
+		{//横壁（右）
+			s_Player[count].pos.x = SCREEN_WIDTH - pPlayer->fwidth / 2.0f;
+		}
+		if (s_Player[count].pos.y <= 0.0f + pPlayer->fheight / 2.0f)
+		{//上壁　
+			s_Player[count].pos.y = 0.0f + pPlayer->fheight / 2.0f;
+		}
+		if (s_Player[count].pos.y >= SCREEN_HEIGHT - pPlayer->fheight / 2.0f)
+		{//下壁
+			s_Player[count].pos.y = SCREEN_HEIGHT - pPlayer->fheight / 2.0f;
+		}
+		//真ん中ライン
+		if (s_Player[0].pos.x >= SCREEN_WIDTH* 0.5f - pPlayer->fwidth / 2.0f)
+		{
+			s_Player[0].pos.x = SCREEN_WIDTH* 0.5f - pPlayer->fwidth / 2.0f;
+		}
+		if (s_Player[1].pos.x <= SCREEN_WIDTH * 0.5f + pPlayer->fwidth / 2.0f)
+		{
+			s_Player[1].pos.x = SCREEN_WIDTH * 0.5f + pPlayer->fwidth / 2.0f;
+		}
+
+		// 矩形の回転する位置の設定
+		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
 	}
 }
 //===================
@@ -147,7 +159,6 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 		{
 			continue;
 		}
-		
 		s_Player[count].nType = nType;
 		s_Player[count].bUse = true;
 		s_Player[count].pos = pos;
@@ -352,6 +363,7 @@ void MovePlayer(void)
 	}
 
 }
+
 
 //----------------------------
 //Player情報を取得
