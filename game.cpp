@@ -18,6 +18,8 @@
 #include "disc.h"
 #include "ui.h"
 #include "pause.h"
+#include "menu.h"
+
 #include "wall.h"
 #include <assert.h>
 //==================================================
@@ -48,6 +50,9 @@ void InitGame(void)
 
 	// ポーズの初期化
 	InitPause();
+
+	// メニューの初期化
+	InitMenu();
 
 	//UIの配置
 	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0);
@@ -84,6 +89,9 @@ void UninitGame(void)
 
 	// ポーズの終了
 	UninitPause();
+
+	// メニューの終了
+	UninitMenu();
 }
 
 //--------------------------------------------------
@@ -93,6 +101,9 @@ void UpdateGame(void)
 {
 	if (GetDirectJoypadTrigger(JOYKEY_DIRECT_7_BUTTON) || GetKeyboardTrigger(DIK_P))
 	{
+		// ポーズのリセット
+		ResetPause();
+
 		s_bPause = !s_bPause;
 
 		if (s_bPause)
@@ -106,6 +117,9 @@ void UpdateGame(void)
 	{// ポーズしている
 		// ポーズの更新
 		UpdatePause();
+
+		// メニューの更新
+		UpdateMenu();
 		return;
 	}
 

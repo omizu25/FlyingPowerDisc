@@ -37,7 +37,7 @@
 #define DECREASE_SIZE		(0.6f)			// サイズの減少割合
 #define DECREASE_SPEED		(0.5f)			// 速度の減少割合
 #define MENU_WIDTH			(540.0f)		// メニューの幅
-#define MENU_HEIGHT			(64.0f)			// メニューの高さ
+#define MENU_HEIGHT			(150.0f)		// メニューの高さ
 
 //==================================================
 // 列挙型

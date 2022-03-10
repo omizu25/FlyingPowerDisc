@@ -200,9 +200,9 @@ void SetPosRectangle(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size)
 
 	// 頂点座標の設定
 	pVtx[0].pos = pos + D3DXVECTOR3(-fWidth, -fHeight, 0.0f);
-	pVtx[1].pos = pos + D3DXVECTOR3(fWidth, -fHeight, 0.0f);
-	pVtx[2].pos = pos + D3DXVECTOR3(-fWidth, fHeight, 0.0f);
-	pVtx[3].pos = pos + D3DXVECTOR3(fWidth, fHeight, 0.0f);
+	pVtx[1].pos = pos + D3DXVECTOR3(+fWidth, -fHeight, 0.0f);
+	pVtx[2].pos = pos + D3DXVECTOR3(-fWidth, +fHeight, 0.0f);
+	pVtx[3].pos = pos + D3DXVECTOR3(+fWidth, +fHeight, 0.0f);
 
 	// 頂点バッファをアンロックする
 	pVtxBuff->Unlock();

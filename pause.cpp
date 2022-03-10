@@ -28,7 +28,7 @@
 #define MENU_TOP		(SCREEN_HEIGHT * 0.1f)					// メニューの上端
 #define MENU_BOTTOM		(SCREEN_HEIGHT * 0.9f)					// メニューの下端
 #define BG_COLOR		(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f))		// 背景の色
-#define FRAME_COLOR		(D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f))		// フレームの色
+#define FRAME_COLOR		(D3DXCOLOR(0.5f, 1.0f, 0.5f, 1.0f))		// フレームの色
 
 //==================================================
 // 列挙型
@@ -58,11 +58,6 @@ static void Input(void);
 void InitPause(void)
 {
 	s_nSelectMenu = 0;
-
-	float fWidth = SCREEN_WIDTH * 0.5f;
-	float fHeight = SCREEN_HEIGHT* 0.5f;
-
-	D3DXVECTOR3 pos = D3DXVECTOR3(fWidth, fHeight, 0.0f);
 }
 
 //--------------------------------------------------
@@ -94,8 +89,6 @@ void DrawPause(void)
 //--------------------------------------------------
 void SetPause(void)
 {
-	ResetMenu(s_nIdxMenu);
-
 	MenuArgument menu;
 	menu.nNumUse = MENU_MAX;
 	menu.fLeft = MENU_LEFT;
@@ -112,11 +105,20 @@ void SetPause(void)
 	
 	FrameArgument Frame;
 	Frame.bUse = true;
-	Frame.col = D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f);
+	Frame.col = FRAME_COLOR;
 	Frame.pTexture = NULL;
 
 	// メニューの設定
 	s_nIdxMenu = SetMenu(menu, Frame);
+}
+
+//--------------------------------------------------
+// リセット
+//--------------------------------------------------
+void ResetPause(void)
+{
+	// メニューのリセット
+	ResetMenu(s_nIdxMenu);
 }
 
 //--------------------------------------------------
