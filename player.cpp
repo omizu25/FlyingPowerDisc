@@ -26,12 +26,6 @@ static Player s_PlayerType[MAXPLAYERTYPE];//プレイヤー構造体取得Type別
 //=======================
 void InitPlayer(void)
 {
-
-	LPDIRECT3DDEVICE9 pDevice;//デバイスのポインタ
-
-							  //デバイスの取得
-	pDevice = GetDevice();
-
 	LoadFile("data\\txt\\Status.txt");
 
 	for (int count = 0; count < MAXPLAYER; count++)
