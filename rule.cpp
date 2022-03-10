@@ -11,6 +11,7 @@
 #include "rectangle.h"
 #include "color.h"
 #include "input.h"
+#include "texture.h"
 
 //マクロ定義
 #define MAX_RULE	(3)				//ルールの最大数
@@ -31,14 +32,8 @@ void InitRule(void)
 	// 矩形の初期化
 	InitRectangle();
 
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスの取得
-
-	//------------------------------
-	//	テクスチャの読み込み
-	//------------------------------
-	D3DXCreateTextureFromFile(pDevice,
-							  "data\\TEXTURE\\Title_blue.png",
-							  &s_pTexture);
+	// テクスチャの取得
+	s_pTexture = GetTexture(TEXTURE_Title_blue);
 
 	//------------------------------
 	//	構造体の初期化
@@ -59,13 +54,6 @@ void InitRule(void)
 //============================
 void UninitRule(void)
 {
-	//テクスチャの破棄
-	if (s_pTexture != NULL)
-	{
-		s_pTexture->Release();
-		s_pTexture = NULL;
-	}
-
 	for (int nCnt = 0; nCnt < MAX_RULE; nCnt++)
 	{
 		Rule *rule = s_Rule + nCnt;

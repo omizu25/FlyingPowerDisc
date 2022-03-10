@@ -2,6 +2,7 @@
 //
 // 入力処理 [jobiusinput.cpp]
 // Author1 : KOZUNA HIROHITO
+// Author2  : katsuki mizuki
 //
 //=============================================================================
 
@@ -39,20 +40,20 @@ typedef struct
 //-----------------------------------------------------------------------------
 
 //キーボード
-static LPDIRECTINPUT8 g_pInput = NULL;					//DirectInputオブジェクトへのポインタ
-static LPDIRECTINPUTDEVICE8 g_pDevKeyboard = NULL;		//入力デバイス（キーボード（コントローラー用は別に作る））へのポインタ
-static BYTE g_aKeyState[NUM_KEY_MAX];					//キーボードのプレス情報
-static BYTE g_aKeyStateTrigger[NUM_KEY_MAX];			//キーボードのトリガー情報
-static BYTE g_aKeyStateRelease[NUM_KEY_MAX];			//キーボードのリリース情報
+static LPDIRECTINPUT8 s_pInput = NULL;					//DirectInputオブジェクトへのポインタ
+static LPDIRECTINPUTDEVICE8 s_pDevKeyboard = NULL;		//入力デバイス（キーボード（コントローラー用は別に作る））へのポインタ
+static BYTE s_aKeyState[NUM_KEY_MAX];					//キーボードのプレス情報
+static BYTE s_aKeyStateTrigger[NUM_KEY_MAX];			//キーボードのトリガー情報
+static BYTE s_aKeyStateRelease[NUM_KEY_MAX];			//キーボードのリリース情報
 
 //ジョイパッド(DirectInput)
-static JoyKeyDirect g_aJoyKeyDirectState;				//ジョイパッド(DirectInput)の構造体変数
+static JoyKeyDirect s_aJoyKeyDirectState;				//ジョイパッド(DirectInput)の構造体変数
 
 //ジョイパッド
-static XINPUT_STATE g_JoyKeyState[PLAYER_MAX];			//ジョイパットのプレス情報
-static XINPUT_STATE g_JoyKeyStateTrigger[PLAYER_MAX];	//ジョイパットのトリガー情報
-static D3DXVECTOR3 g_JoyStickPos[PLAYER_MAX];			//ジョイスティックの傾き
-static JOYKEY_CROSS g_OldJoyKeyStick;					//前回のスティックの位置
+static XINPUT_STATE s_JoyKeyState[PLAYER_MAX];			//ジョイパットのプレス情報
+static XINPUT_STATE s_JoyKeyStateTrigger[PLAYER_MAX];	//ジョイパットのトリガー情報
+static D3DXVECTOR3 s_JoyStickPos[PLAYER_MAX];			//ジョイスティックの傾き
+static JOYKEY_CROSS s_OldJoyKeyStick;					//前回のスティックの位置
 
 //-----------------------------------------------------------------------------
 //プロトタイプ宣言
@@ -90,11 +91,11 @@ HRESULT InitInput(HINSTANCE hInstance, HWND hWnd)
 
 	if (FAILED(InitJoypadDirect(hInstance, hWnd)))
 	{
-		g_aJoyKeyDirectState.bJoyKey = false;
+		s_aJoyKeyDirectState.bJoyKey = false;
 	}
 	else
 	{
-		g_aJoyKeyDirectState.bJoyKey = true;
+		s_aJoyKeyDirectState.bJoyKey = true;
 	}
 
 	//ジョイパッド初期化
@@ -139,32 +140,32 @@ HRESULT InitKeyboard(HINSTANCE hInstance, HWND hWnd)
 {
 	//DirectInputオブジェクトの生成
 	if (FAILED(DirectInput8Create(hInstance, DIRECTINPUT_VERSION,
-		IID_IDirectInput8, (void**)&g_pInput, NULL)))
+		IID_IDirectInput8, (void**)&s_pInput, NULL)))
 	{
 		return E_FAIL;
 	}
 
 	//入力デバイス（キーボード）の生成
-	if (FAILED(g_pInput->CreateDevice(GUID_SysKeyboard, &g_pDevKeyboard, NULL)))
+	if (FAILED(s_pInput->CreateDevice(GUID_SysKeyboard, &s_pDevKeyboard, NULL)))
 	{
 		return E_FAIL;
 	}
 
 	//データフォーマットを設定
-	if (FAILED(g_pDevKeyboard->SetDataFormat(&c_dfDIKeyboard)))
+	if (FAILED(s_pDevKeyboard->SetDataFormat(&c_dfDIKeyboard)))
 	{
 		return E_FAIL;
 	}
 
 	//協調モードを設定
-	if (FAILED(g_pDevKeyboard->SetCooperativeLevel(hWnd,
+	if (FAILED(s_pDevKeyboard->SetCooperativeLevel(hWnd,
 		(DISCL_FOREGROUND | DISCL_NONEXCLUSIVE))))
 	{
 		return E_FAIL;
 	}
 
 	//キーボードへのアクセス権を獲得
-	g_pDevKeyboard->Acquire();
+	s_pDevKeyboard->Acquire();
 
 	return S_OK;
 }
@@ -173,18 +174,18 @@ HRESULT InitKeyboard(HINSTANCE hInstance, HWND hWnd)
 void UninitKeyboard(void)
 {
 	//入力デバイス（キーボード）の放棄
-	if (g_pDevKeyboard != NULL)
+	if (s_pDevKeyboard != NULL)
 	{
-		g_pDevKeyboard->Unacquire();		//キーボードへのアクセス権を放棄
-		g_pDevKeyboard->Release();
-		g_pDevKeyboard = NULL;
+		s_pDevKeyboard->Unacquire();		//キーボードへのアクセス権を放棄
+		s_pDevKeyboard->Release();
+		s_pDevKeyboard = NULL;
 	}
 
 	//DirectInputオブジェクトの破壊
-	if (g_pInput != NULL)
+	if (s_pInput != NULL)
 	{
-		g_pInput->Release();
-		g_pInput = NULL;
+		s_pInput->Release();
+		s_pInput = NULL;
 	}
 }
 
@@ -194,36 +195,36 @@ void UpdateKeyboard(void)
 	BYTE aKeyState[NUM_KEY_MAX];		//キーボードの入力情報
 	int nCntKey;
 	//入力デバイスからデータを取得
-	if (SUCCEEDED(g_pDevKeyboard->GetDeviceState(sizeof(aKeyState), &aKeyState[0])))
+	if (SUCCEEDED(s_pDevKeyboard->GetDeviceState(sizeof(aKeyState), &aKeyState[0])))
 	{
 		for (nCntKey = 0; nCntKey < NUM_KEY_MAX; nCntKey++)
 		{
-			g_aKeyStateTrigger[nCntKey] = (g_aKeyState[nCntKey] ^ aKeyState[nCntKey]) & aKeyState[nCntKey]; //キーボードのトリガー情報を保存
-			g_aKeyState[nCntKey] = aKeyState[nCntKey];		//キーボードのプレス情報を保存
+			s_aKeyStateTrigger[nCntKey] = (s_aKeyState[nCntKey] ^ aKeyState[nCntKey]) & aKeyState[nCntKey]; //キーボードのトリガー情報を保存
+			s_aKeyState[nCntKey] = aKeyState[nCntKey];		//キーボードのプレス情報を保存
 		}
 	}
 	else
 	{
-		g_pDevKeyboard->Acquire();			//キーボードへのアクセス権を獲得
+		s_pDevKeyboard->Acquire();			//キーボードへのアクセス権を獲得
 	}
 }
 
 //キーボードのプレス情報を取得
 bool GetKeyboardPress(int nKey)
 {
-	return (g_aKeyState[nKey] & 0x80) ? true : false;
+	return (s_aKeyState[nKey] & 0x80) ? true : false;
 }
 
 //キーボードのトリガー情報を取得
 bool GetKeyboardTrigger(int nKey)
 {
-	return (g_aKeyStateTrigger[nKey] & 0x80) ? true : false;
+	return (s_aKeyStateTrigger[nKey] & 0x80) ? true : false;
 }
 
 //キーボードのリリース情報を取得
 bool GetKeyboardRelease(int nKey)
 {
-	return (g_aKeyStateRelease[nKey] & 0x80) ? true : false;
+	return (s_aKeyStateRelease[nKey] & 0x80) ? true : false;
 }
 
 //キーボードの全キープレス情報を取得
@@ -261,32 +262,32 @@ HRESULT InitJoypadDirect(HINSTANCE hInstance, HWND hWnd)
 {
 	//DirectInputオブジェクトの生成
 	if (FAILED(DirectInput8Create(hInstance, DIRECTINPUT_VERSION,
-		IID_IDirectInput8, (void**)&g_aJoyKeyDirectState.pJoyKeyInput, NULL)))
+		IID_IDirectInput8, (void**)&s_aJoyKeyDirectState.pJoyKeyInput, NULL)))
 	{
 		return E_FAIL;
 	}
 
 	//入力デバイス（ジョイパッド(DirectInput)）の生成
-	if (FAILED(g_aJoyKeyDirectState.pJoyKeyInput->CreateDevice(GUID_Joystick, &g_aJoyKeyDirectState.pDevJoyKey, NULL)))
+	if (FAILED(s_aJoyKeyDirectState.pJoyKeyInput->CreateDevice(GUID_Joystick, &s_aJoyKeyDirectState.pDevJoyKey, NULL)))
 	{
 		return E_FAIL;
 	}
 
 	//データフォーマットを設定
-	if (FAILED(g_aJoyKeyDirectState.pDevJoyKey->SetDataFormat(&c_dfDIJoystick2)))
+	if (FAILED(s_aJoyKeyDirectState.pDevJoyKey->SetDataFormat(&c_dfDIJoystick2)))
 	{
 		return E_FAIL;
 	}
 
 	//協調モードを設定
-	if (FAILED(g_aJoyKeyDirectState.pDevJoyKey->SetCooperativeLevel(hWnd,
+	if (FAILED(s_aJoyKeyDirectState.pDevJoyKey->SetCooperativeLevel(hWnd,
 		(DISCL_FOREGROUND | DISCL_NONEXCLUSIVE))))
 	{
 		return E_FAIL;
 	}
 
 	//ジョイパッド(DirectInput)へのアクセス権を獲得
-	g_aJoyKeyDirectState.pDevJoyKey->Acquire();
+	s_aJoyKeyDirectState.pDevJoyKey->Acquire();
 
 	return S_OK;
 }
@@ -296,18 +297,18 @@ void UninitJoypadDirect(void)
 {
 
 	//入力デバイス（ジョイパッド(DirectInput)）の放棄
-	if (g_aJoyKeyDirectState.pDevJoyKey != NULL)
+	if (s_aJoyKeyDirectState.pDevJoyKey != NULL)
 	{
-		g_aJoyKeyDirectState.pDevJoyKey->Unacquire();		//ジョイパッド(DirectInput)へのアクセス権を放棄
-		g_aJoyKeyDirectState.pDevJoyKey->Release();
-		g_aJoyKeyDirectState.pDevJoyKey = NULL;
+		s_aJoyKeyDirectState.pDevJoyKey->Unacquire();		//ジョイパッド(DirectInput)へのアクセス権を放棄
+		s_aJoyKeyDirectState.pDevJoyKey->Release();
+		s_aJoyKeyDirectState.pDevJoyKey = NULL;
 	}
 
 	//DirectInputオブジェクトの破壊
-	if (g_aJoyKeyDirectState.pJoyKeyInput != NULL)
+	if (s_aJoyKeyDirectState.pJoyKeyInput != NULL)
 	{
-		g_aJoyKeyDirectState.pJoyKeyInput->Release();
-		g_aJoyKeyDirectState.pJoyKeyInput = NULL;
+		s_aJoyKeyDirectState.pJoyKeyInput->Release();
+		s_aJoyKeyDirectState.pJoyKeyInput = NULL;
 	}
 
 }
@@ -318,20 +319,20 @@ void UpdateJoypadDirect(void)
 	DIJOYSTATE2 aKeyState;		//ジョイパッド(DirectInput)の入力情報
 
 
-	if (g_aJoyKeyDirectState.bJoyKey)
+	if (s_aJoyKeyDirectState.bJoyKey)
 	{
 		//入力デバイスからデータを取得
-		if (SUCCEEDED(g_aJoyKeyDirectState.pDevJoyKey->GetDeviceState(sizeof(aKeyState), &aKeyState)))
+		if (SUCCEEDED(s_aJoyKeyDirectState.pDevJoyKey->GetDeviceState(sizeof(aKeyState), &aKeyState)))
 		{
 			for (int nCnt = 0; nCnt < 32; nCnt++)
 			{
-				g_aJoyKeyDirectState.JoyKeyStateDirectTrigger.rgbButtons[nCnt] = (g_aJoyKeyDirectState.JoyKeyStateDirect.rgbButtons[nCnt] ^ aKeyState.rgbButtons[nCnt]) & aKeyState.rgbButtons[nCnt]; //キーボードのトリガー情報を保存
+				s_aJoyKeyDirectState.JoyKeyStateDirectTrigger.rgbButtons[nCnt] = (s_aJoyKeyDirectState.JoyKeyStateDirect.rgbButtons[nCnt] ^ aKeyState.rgbButtons[nCnt]) & aKeyState.rgbButtons[nCnt]; //キーボードのトリガー情報を保存
 			}
-			g_aJoyKeyDirectState.JoyKeyStateDirect = aKeyState;		//プレス処理
+			s_aJoyKeyDirectState.JoyKeyStateDirect = aKeyState;		//プレス処理
 		}
 		else
 		{
-			g_aJoyKeyDirectState.pDevJoyKey->Acquire();			//ジョイパッド(DirectInput)へのアクセス権を獲得
+			s_aJoyKeyDirectState.pDevJoyKey->Acquire();			//ジョイパッド(DirectInput)へのアクセス権を獲得
 		}
 	}
 }
@@ -348,7 +349,7 @@ bool GetDirectJoypadAllPress(void)
 	}
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
-		if (g_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[nCnt] != 0xFFFFFFFF)
+		if (s_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[nCnt] != 0xFFFFFFFF)
 		{
 			return true;
 		}
@@ -359,36 +360,36 @@ bool GetDirectJoypadAllPress(void)
 //ジョイパッド(DirectInput)プレス処理
 bool GetDirectJoypadPress(JOYKEY_DIRECT Key)
 {
-	return (g_aJoyKeyDirectState.JoyKeyStateDirect.rgbButtons[Key] & 0x80) ? true : false;
+	return (s_aJoyKeyDirectState.JoyKeyStateDirect.rgbButtons[Key] & 0x80) ? true : false;
 }
 
 //ジョイパッド(DirectInput)プレス処理(十字キーのみ)
 bool GetDirectJoypadPress(JOYKEY_CROSS Key)
 {
-	return (signed)g_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[0] == Key;
+	return (signed)s_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[0] == Key;
 }
 
 //ジョイパッド(DirectInput)トリガー処理(十字キーのみ)
 bool GetDirectJoypadTrigger(JOYKEY_CROSS Key)
 {
-	if (g_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[0] == g_aJoyKeyDirectState.OldJoyKeyDirect)
+	if (s_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[0] == s_aJoyKeyDirectState.OldJoyKeyDirect)
 	{
 		return false;
 	}
-	else if ((signed)g_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[0] == Key
-		&& (signed)g_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[0] != g_aJoyKeyDirectState.OldJoyKeyDirect)
+	else if ((signed)s_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[0] == Key
+		&& (signed)s_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[0] != s_aJoyKeyDirectState.OldJoyKeyDirect)
 	{
-		g_aJoyKeyDirectState.OldJoyKeyDirect = g_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[0];
+		s_aJoyKeyDirectState.OldJoyKeyDirect = s_aJoyKeyDirectState.JoyKeyStateDirect.rgdwPOV[0];
 		return true;
 	}
-	g_aJoyKeyDirectState.OldJoyKeyDirect = 0xffffffff;
+	s_aJoyKeyDirectState.OldJoyKeyDirect = 0xffffffff;
 	return false;
 }
 
 //ジョイパッド(DirectInput)トリガー処理
 bool GetDirectJoypadTrigger(JOYKEY_DIRECT Key)
 {
-	return (g_aJoyKeyDirectState.JoyKeyStateDirectTrigger.rgbButtons[Key] & 0x80) ? true : false;
+	return (s_aJoyKeyDirectState.JoyKeyStateDirectTrigger.rgbButtons[Key] & 0x80) ? true : false;
 }
 
 //ジョイパッド(DirectInput)スティック処理
@@ -397,10 +398,10 @@ D3DXVECTOR3 GetDirectJoypadStick(JOYKEY_RIGHT_LEFT Key)
 	switch (Key)
 	{
 	case JOYKEY_RIGHT_STICK:
-		return D3DXVECTOR3(float(g_aJoyKeyDirectState.JoyKeyStateDirect.lZ) / 32767.0f - 1.0f, -float(g_aJoyKeyDirectState.JoyKeyStateDirect.lRz) / 32767.0f + 1.0f, 0.0f);
+		return D3DXVECTOR3(float(s_aJoyKeyDirectState.JoyKeyStateDirect.lZ) / 32767.0f - 1.0f, -float(s_aJoyKeyDirectState.JoyKeyStateDirect.lRz) / 32767.0f + 1.0f, 0.0f);
 		break;
 	case JOYKEY_LEFT_STICK:
-		return D3DXVECTOR3(float(g_aJoyKeyDirectState.JoyKeyStateDirect.lX) / 32767.0f - 1.0f, -float(g_aJoyKeyDirectState.JoyKeyStateDirect.lY) / 32767.0f + 1.0f, 0.0f);
+		return D3DXVECTOR3(float(s_aJoyKeyDirectState.JoyKeyStateDirect.lX) / 32767.0f - 1.0f, -float(s_aJoyKeyDirectState.JoyKeyStateDirect.lY) / 32767.0f + 1.0f, 0.0f);
 		break;
 	}
 
@@ -469,18 +470,18 @@ bool GetDirectJoypadStickPress(JOYKEY_RIGHT_LEFT RightLeft, JOYKEY_CROSS Key)
 bool GetDirectJoypadStickTrigger(JOYKEY_RIGHT_LEFT RightLeft, JOYKEY_CROSS Key)
 {
 	if (GetDirectJoypadStickPress(RightLeft, Key)
-		&& Key != g_aJoyKeyDirectState.OldJoyKeyStickDirect)
+		&& Key != s_aJoyKeyDirectState.OldJoyKeyStickDirect)
 	{
-		g_aJoyKeyDirectState.OldJoyKeyStickDirect = Key;
+		s_aJoyKeyDirectState.OldJoyKeyStickDirect = Key;
 		return true;
 	}
 	else if (GetDirectJoypadStickPress(RightLeft, Key)
-		&& Key == g_aJoyKeyDirectState.OldJoyKeyStickDirect)
+		&& Key == s_aJoyKeyDirectState.OldJoyKeyStickDirect)
 	{
 		return false;
 	}
 
-	g_aJoyKeyDirectState.OldJoyKeyStickDirect = JOYKEY_CROSS_MAX;
+	s_aJoyKeyDirectState.OldJoyKeyStickDirect = JOYKEY_CROSS_MAX;
 	return false;
 }
 
@@ -497,8 +498,8 @@ HRESULT InitJoypad(void)
 	for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
 	{
 		//メモリーのクリア
-		memset(&g_JoyKeyState[nCnt], 0, sizeof(XINPUT_STATE));
-		memset(&g_JoyKeyStateTrigger[nCnt], 0, sizeof(XINPUT_STATE));
+		memset(&s_JoyKeyState[nCnt], 0, sizeof(XINPUT_STATE));
+		memset(&s_JoyKeyStateTrigger[nCnt], 0, sizeof(XINPUT_STATE));
 	}
 	return S_OK;
 }
@@ -520,10 +521,10 @@ void UpdateJoypad(void)
 		//ジョイパッドの状態を取得
 		if (XInputGetState(nCnt, &JoyKeyState[nCnt]) == ERROR_SUCCESS)
 		{
-			g_JoyKeyStateTrigger[nCnt].Gamepad.wButtons
-				= ~g_JoyKeyState[nCnt].Gamepad.wButtons
+			s_JoyKeyStateTrigger[nCnt].Gamepad.wButtons
+				= ~s_JoyKeyState[nCnt].Gamepad.wButtons
 				& JoyKeyState[nCnt].Gamepad.wButtons; //トリガー情報を保存
-			g_JoyKeyState[nCnt] = JoyKeyState[nCnt];  //プレス処理
+			s_JoyKeyState[nCnt] = JoyKeyState[nCnt];  //プレス処理
 		}
 	}
 }
@@ -531,13 +532,13 @@ void UpdateJoypad(void)
 //ジョイパッドのプレス処理
 bool GetJoypadPress(JOYKEY Key, int nPlayer)
 {
-	return (g_JoyKeyState[nPlayer].Gamepad.wButtons & (0x01 << Key)) ? true : false;
+	return (s_JoyKeyState[nPlayer].Gamepad.wButtons & (0x01 << Key)) ? true : false;
 }
 
 //ジョイパッドのトリガー処理
 bool GetJoypadTrigger(JOYKEY Key, int nPlayer)
 {
-	return (g_JoyKeyStateTrigger[nPlayer].Gamepad.wButtons & (0x01 << Key)) ? true : false;
+	return (s_JoyKeyStateTrigger[nPlayer].Gamepad.wButtons & (0x01 << Key)) ? true : false;
 }
 
 //ジョイパット（スティックプレス）処理
@@ -546,14 +547,14 @@ D3DXVECTOR3 GetJoypadStick(JOYKEY_RIGHT_LEFT RightLeft, int nPlayer)
 	switch (RightLeft)
 	{
 	case JOYKEY_LEFT_STICK:
-		g_JoyStickPos[nPlayer] = D3DXVECTOR3(g_JoyKeyState[nPlayer].Gamepad.sThumbLX / 32767.0f, -g_JoyKeyState[nPlayer].Gamepad.sThumbLY / 32767.0f, 0.0f);
+		s_JoyStickPos[nPlayer] = D3DXVECTOR3(s_JoyKeyState[nPlayer].Gamepad.sThumbLX / 32767.0f, -s_JoyKeyState[nPlayer].Gamepad.sThumbLY / 32767.0f, 0.0f);
 		break;
 	case JOYKEY_RIGHT_STICK:
-		g_JoyStickPos[nPlayer] = D3DXVECTOR3(g_JoyKeyState[nPlayer].Gamepad.sThumbRX / 32767.0f, -g_JoyKeyState[nPlayer].Gamepad.sThumbRY / 32767.0f, 0.0f);
+		s_JoyStickPos[nPlayer] = D3DXVECTOR3(s_JoyKeyState[nPlayer].Gamepad.sThumbRX / 32767.0f, -s_JoyKeyState[nPlayer].Gamepad.sThumbRY / 32767.0f, 0.0f);
 		break;
 	}
 
-	return g_JoyStickPos[nPlayer];
+	return s_JoyStickPos[nPlayer];
 }
 
 //ジョイパット（トリガーペダル）処理
@@ -563,10 +564,10 @@ int GetJoypadTriggerPedal(JOYKEY Key, int nPlayer)
 	switch (Key)
 	{
 	case JOYKEY_LEFT_TRIGGER:
-		nJoypadTriggerPedal = g_JoyKeyState[nPlayer].Gamepad.bLeftTrigger;
+		nJoypadTriggerPedal = s_JoyKeyState[nPlayer].Gamepad.bLeftTrigger;
 		break;
 	case JOYKEY_RIGHT_TRIGGER:
-		nJoypadTriggerPedal = g_JoyKeyState[nPlayer].Gamepad.bRightTrigger;
+		nJoypadTriggerPedal = s_JoyKeyState[nPlayer].Gamepad.bRightTrigger;
 		break;
 	}
 
@@ -633,17 +634,17 @@ bool GetJoypadStickPress(JOYKEY_RIGHT_LEFT RightLeft, JOYKEY_CROSS Key, int nPla
 bool GetJoypadStickTrigger(JOYKEY_RIGHT_LEFT RightLeft, JOYKEY_CROSS Key, int nPlayer)
 {
 	if (GetJoypadStickPress(RightLeft, Key, nPlayer)
-		&& Key != g_OldJoyKeyStick)
+		&& Key != s_OldJoyKeyStick)
 	{
-		g_OldJoyKeyStick = Key;
+		s_OldJoyKeyStick = Key;
 		return true;
 	}
 	else if (GetJoypadStickPress(RightLeft, Key, nPlayer)
-		&& Key == g_OldJoyKeyStick)
+		&& Key == s_OldJoyKeyStick)
 	{
 		return false;
 	}
 
-	g_OldJoyKeyStick = JOYKEY_CROSS_MAX;
+	s_OldJoyKeyStick = JOYKEY_CROSS_MAX;
 	return false;
 }

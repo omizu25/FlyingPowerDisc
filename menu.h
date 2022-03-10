@@ -59,9 +59,15 @@ void UninitMenu(void);
 void UpdateMenu(void);
 
 //--------------------------------------------------
+// 描画
+//--------------------------------------------------
+void DrawMenu(void);
+
+//--------------------------------------------------
 // 設定
 // 引数1  : MenuArgument menu / 構造体 メニュー情報
 // 引数2  : FrameArgument Frame / 構造体 枠の情報
+// 返値   ; int / 何番目かのインデックス
 //--------------------------------------------------
 int SetMenu(const MenuArgument &menu, const FrameArgument &Frame);
 

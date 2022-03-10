@@ -15,6 +15,8 @@
 #include "color.h"
 #include "rectangle.h"
 
+#include <assert.h>
+
 //==================================================
 // マクロ定義
 //==================================================
@@ -31,29 +33,27 @@
 
 typedef struct
 {
-	D3DXVECTOR3				pos;			// 位置
-	D3DXCOLOR				col;			// 色
-	LPDIRECT3DTEXTURE9		pTexture;		// テクスチャ
-	int						nIdx;			// 矩形のインデックス
-	float					fWidth;			// 幅
-	float					fHeight;		// 高さ
+	D3DXVECTOR3		pos;			// 位置
+	D3DXCOLOR		col;			// 色
+	int				nIdx;			// 矩形のインデックス
+	float			fWidth;			// 幅
+	float			fHeight;		// 高さ
 }Option;
 
 /*↓ メニュー ↓*/
 
 typedef struct
 {
-	D3DXVECTOR3				pos;					// 位置
-	LPDIRECT3DTEXTURE9		pTexture;				// テクスチャ
-	Option					Option[MAX_OPTION];		// 選択肢の情報
-	int						nNumUse;				// 使用数
-	int						nIdx;					// 矩形のインデックス
-	float					fWidth;					// 幅
-	float					fHeight;				// 高さ
-	float					fInterval;				// 選択肢の間隔
-	float					fBlinkSpeed;			// 点滅速度
-	bool					bFrame;					// 枠がいるかどうか [ true : いる false : いらない ]
-	bool					bUse;					// 使用しているかどうか
+	D3DXVECTOR3		pos;					// 位置
+	Option			Option[MAX_OPTION];		// 選択肢の情報
+	int				nNumUse;				// 使用数
+	int				nIdx;					// 矩形のインデックス
+	float			fWidth;					// 幅
+	float			fHeight;				// 高さ
+	float			fInterval;				// 選択肢の間隔
+	float			fBlinkSpeed;			// 点滅速度
+	bool			bFrame;					// 枠がいるかどうか [ true : いる false : いらない ]
+	bool			bUse;					// 使用しているかどうか
 }Menu;
 
 //==================================================
@@ -131,10 +131,20 @@ void UpdateMenu(void)
 }
 
 //--------------------------------------------------
+// 描画
+//--------------------------------------------------
+void DrawMenu(void)
+{
+	/* 矩形で描画してます */
+}
+
+//--------------------------------------------------
 // 設定
 //--------------------------------------------------
 int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 {
+	assert(menu.nNumUse < MAX_OPTION);
+
 	int nIdx = 0;
 	Menu *pMenu = nullptr;
 
@@ -157,7 +167,6 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		pMenu->fWidth = menu.fRight - menu.fLeft;
 		pMenu->fHeight = menu.fBottom - menu.fTop;
 		pMenu->fBlinkSpeed = NORMAL_BLINK_SPEED;
-		pMenu->pTexture = Frame.pTexture;
 		pMenu->bFrame = Frame.bUse;
 
 		if (menu.bSort)
@@ -210,7 +219,6 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		pOption->col = GetColor(COLOR_WHITE);
 		pOption->fWidth = menu.fWidth;
 		pOption->fHeight = menu.fHeight;
-		pOption->pTexture = menu.pTexture[j];
 
 		// 矩形の設定
 		pOption->nIdx = SetRectangle(menu.pTexture[j]);
