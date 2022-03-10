@@ -109,50 +109,11 @@ void UpdatePlayer(void)
 	s_pVtxBuffPlayer->Lock(0, 0, (void**)&pVtx, 0);
 
 
+	MovePlayer();
+
 	for (int count = 0; count < MAXPLAYER; count++,pVtx += 4)
 	{
 	
-
-		if (count == 0)
-		{
-			//行動
-			if (GetKeyboardPress(DIK_W))
-			{
-				s_Player[0].move.y = -s_Player[count].Speed;
-			}
-			if (GetKeyboardPress(DIK_A))
-			{
-				s_Player[0].move.x = -s_Player[count].Speed;
-			}
-			if (GetKeyboardPress(DIK_S))
-			{
-				s_Player[0].move.y = s_Player[count].Speed;
-			}
-			if (GetKeyboardPress(DIK_D))
-			{
-				s_Player[0].move.x = s_Player[count].Speed;
-			}
-
-		}
-		else
-		{
-			if (GetKeyboardPress(DIK_UP))
-			{
-				s_Player[1].move.y = -s_Player[count].Speed;
-			}
-			if (GetKeyboardPress(DIK_LEFT))
-			{
-				s_Player[1].move.x = -s_Player[count].Speed;
-			}
-			if (GetKeyboardPress(DIK_DOWN))
-			{
-				s_Player[1].move.y = s_Player[count].Speed;
-			}
-			if (GetKeyboardPress(DIK_RIGHT))
-			{
-				s_Player[1].move.x = s_Player[count].Speed;
-			}
-		}
 
 		//移動量を更新(減衰させる)
 		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  
@@ -164,7 +125,7 @@ void UpdatePlayer(void)
 			s_Player[count].pos.x += s_Player[count].move.x;
 			s_Player[count].pos.y += s_Player[count].move.y;
 
-			//壁
+			//壁---------------------------------------------------
 			if (s_Player[count].pos.x <= 0.0f + PLAYERMOVE)
 			{//横壁（左）
 				 s_Player[count].pos.x = 0.0f + PLAYERMOVE;
@@ -335,7 +296,6 @@ void LoadFile(char *Filename)
 {
 	char	s_aString[256];//
 	int		Num_Tex = 0;
-	int     MoveSet = 0;
 
 	// ファイルポインタの宣言
 	FILE* pFile;
@@ -407,7 +367,9 @@ void LoadFile(char *Filename)
 		fclose(pFile);
 	}
 }
-
+//----------------------------
+//Player動き
+//----------------------------
 void MovePlayer(void)
 {
 	//---------------------------------------
@@ -457,4 +419,12 @@ void MovePlayer(void)
 
 	}
 
+}
+
+//----------------------------
+//Player情報を取得
+//----------------------------
+Player* GetPlayer(void)
+{
+	return s_Player;
 }
