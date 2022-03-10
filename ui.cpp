@@ -29,11 +29,11 @@ void InitUi(void)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\Frame.png",
+		"data\\TEXTURE\\UI000.png",
 		&g_pTextureUi[0]);
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\Bg.png",
+		"data\\TEXTURE\\UI001.png",
 		&g_pTextureUi[1]);
 	////テクスチャの読み込み
 	//D3DXCreateTextureFromFile(pDevice,
