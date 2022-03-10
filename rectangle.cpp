@@ -241,10 +241,14 @@ void SetRotationPosRectangle(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3
 	D3DXMatrixMultiply(&mtx, &mtx, &mtxTrans);
 
 	D3DXVECTOR3 pVtxpos[NUM_VERTEX];
-	pVtxpos[0] = D3DXVECTOR3(-fWidth, -fHeight, 0.0f);
-	pVtxpos[1] = D3DXVECTOR3(fWidth, -fHeight, 0.0f);
-	pVtxpos[2] = D3DXVECTOR3(-fWidth, fHeight, 0.0f);
-	pVtxpos[3] = D3DXVECTOR3(fWidth, fHeight, 0.0f);
+
+	float fHalfWidth = fWidth * 0.5f;
+	float fHalfHeight = fHeight * 0.5f;
+
+	pVtxpos[0] = D3DXVECTOR3(-fHalfWidth, -fHalfHeight, 0.0f);
+	pVtxpos[1] = D3DXVECTOR3(+fHalfWidth, -fHalfHeight, 0.0f);
+	pVtxpos[2] = D3DXVECTOR3(-fHalfWidth, +fHalfHeight, 0.0f);
+	pVtxpos[3] = D3DXVECTOR3(+fHalfWidth, +fHalfHeight, 0.0f);
 	
 	for (int i = 0; i < NUM_VERTEX; i++)
 	{
