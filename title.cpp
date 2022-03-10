@@ -28,8 +28,8 @@
 #define TITLE_POS_Y			(200.0f)		// タイトルのYの位置
 #define TITLE_WIDTH			(900.0f)		// タイトルの幅
 #define TITLE_HEIGHT		(200.0f)		// タイトルの高さ
-#define LIGHT_WIDTH			(280.0f)		// ライトの幅
-#define LIGHT_HEIGHT		(280.0f)		// ライトの高さ
+#define LIGHT_WIDTH			(560.0f)		// ライトの幅
+#define LIGHT_HEIGHT		(560.0f)		// ライトの高さ
 #define CHANGE_SPEED		(0.005f)		// 収縮の速度
 #define CHANGE_AMOUNT		(0.1f)			// 変化量
 #define MEDIAN_LENGTH		(0.95f)			// 長さの中央値

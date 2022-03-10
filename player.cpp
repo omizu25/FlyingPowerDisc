@@ -8,6 +8,7 @@
 #include "input.h"
 #include"fade.h"
 #include"sound.h"
+#include "rectangle.h"
 #include <stdio.h>
 
 #define MAXPLAYER (2)
@@ -16,12 +17,6 @@
 //スタティック変数///スタティックをヘッタに使うなよ？
 
 static LPDIRECT3DTEXTURE9 s_pTexturePlayer[MAXPLAYERTYPE] = {}; //テクスチャのポインタ
-static LPDIRECT3DVERTEXBUFFER9 s_pVtxBuffPlayer = NULL; //頂点バッファの設定
-static D3DXVECTOR3	s_rotPlayer;	//向き
-static float s_fLengthPlayer;      //対角線ノ長さ
-static float s_fAnglePlayer;		//対角線角度
-static float s_fLengthAttack;      //対角線ノ長さ
-static float s_fAngleAttack;		//対角線角度
 static Player s_Player[MAXPLAYER];//プレイヤー構造体取得
 static Player s_PlayerType[MAXPLAYERTYPE];//プレイヤー構造体取得Type別
 
@@ -39,31 +34,20 @@ void InitPlayer(void)
 
 	LoadFile("data\\txt\\Status.txt");
 
-	//対角線の長さを算出する
-	s_fLengthAttack = sqrtf(PLAYERSIZ_X * PLAYERSIZ_X + PLAYERSIZ_Y * PLAYERSIZ_Y) / 2.0f;
-
-	//対角線の角度を算出する
-	s_fAngleAttack = atan2f(PLAYERSIZ_X, PLAYERSIZ_Y);
-
-	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * MAXPLAYER *4,//ここは確保するバッファのサイズsizeof(VERTEX_2D)*でここはきまる
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,//ここ頂点フォーマット
-		&s_pVtxBuffPlayer,
-		NULL);
-
 	for (int count = 0; count < MAXPLAYER; count++)
 	{
 		
 		s_Player[count].state = PLAYESTATE_NORMAL;
 		s_Player[count].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		s_Player[count].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_Player[count].nLife = 5;
 		s_Player[count].Speed = 0;
 		s_Player[count].bUse = false;
 		s_Player[count].fheight = PLAYERSIZ_Y;
 		s_Player[count].fwidth = PLAYERSIZ_X;
 
+		// 矩形の設定
+		s_Player[count].nIdx = SetRectangle(s_pTexturePlayer[count]);
 	}
 	SetPlayer(D3DXVECTOR3((float)0, (float)SCREEN_HEIGHT * 0.5f, 0.0f), 0,true);
 	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT * 0.5f, 0.0f), 1,false);
@@ -88,14 +72,11 @@ void UninitPlayer(void)
 		}
 	}
 
-
-	//頂点バッファの破棄
-	if (s_pVtxBuffPlayer != NULL)
+	for (int count = 0; count < MAXPLAYER; count++)
 	{
-		s_pVtxBuffPlayer->Release();
-		s_pVtxBuffPlayer = NULL;
+		// 使うのを止める
+		StopUseRectangle(s_Player[count].nIdx);
 	}
-
 }
 
 //===================
@@ -103,17 +84,11 @@ void UninitPlayer(void)
 //===================
 void UpdatePlayer(void)
 {
-
-	VERTEX_2D*pVtx; //頂点へのポインタ
-					//頂点バッファをロックし頂点情報へのポインタを取得
-	s_pVtxBuffPlayer->Lock(0, 0, (void**)&pVtx, 0);
-
-
 	MovePlayer();
 
-	for (int count = 0; count < MAXPLAYER; count++,pVtx += 4)
+	for (int count = 0; count < MAXPLAYER; count++)
 	{
-	
+		Player *pPlayer = &s_Player[count];
 
 		//移動量を更新(減衰させる)
 		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  
@@ -152,52 +127,22 @@ void UpdatePlayer(void)
 				s_Player[1].pos.x = SCREEN_WIDTH * 0.5f + PLAYERMOVE;
 			}
 			
-			SetUp(pVtx,
-				s_Player[count].pos.x,		//プレイヤー中心点ｘ
-				s_Player[count].pos.y,		//プレイヤー中心点ｙ
-				s_rotPlayer.z,		//プレイヤー回転
-				s_fAngleAttack, 		//対角線角度
-				s_fLengthAttack);	//対角線ノ長さ長さを算出する
+			// 矩形の回転する位置の設定
+			SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
 	}
-	//頂点バッファをアンロック
-	s_pVtxBuffPlayer->Unlock();
 }
 //===================
 //描画処理
 //===================
 void DrawPlayer(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();//デバイスのポインタ
-
-
-	//頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, s_pVtxBuffPlayer, 0, sizeof(VERTEX_2D));
-
-	//頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	for (int count = 0; count < MAXPLAYER; count++)
-	{
-		if (s_Player[count].bUse)
-		{
-			//テクスチャの設定
-			pDevice->SetTexture(0, s_pTexturePlayer[s_Player[count].nType]); //);
-
-			//ポリゴンの描画
-			pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, count*4, 2);
-
-		}
-	}
 }
 void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 {
-	VERTEX_2D*pVtx; //頂点へのポインタ
-
-	//頂点バッファをロックし頂点情報へのポインタを取得
-	s_pVtxBuffPlayer->Lock(0, 0, (void**)&pVtx, 0);
-
-	for (int count = 0; count< MAXPLAYER; count++, pVtx += 4)
+	for (int count = 0; count< MAXPLAYER; count++)
 	{
+		Player *pPlayer = &s_Player[count];
+
 		if (s_Player[count].bUse)
 		{
 			continue;
@@ -206,18 +151,6 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 		s_Player[count].nType = nType;
 		s_Player[count].bUse = true;
 		s_Player[count].pos = pos;
-
-		//RHWの設定
-		pVtx[0].rhw = 1.0f;
-		pVtx[1].rhw = 1.0f;
-		pVtx[2].rhw = 1.0f;
-		pVtx[3].rhw = 1.0f;
-
-		//頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 		s_Player[count].state = PLAYESTATE_NORMAL;
 		s_Player[count].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -229,27 +162,26 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 	
 		if (light)
 		{
-			//テクスチャの座標設定
-			SetTex2d(pVtx, 1.0f, 0.0f, 0.0f, 1.0f);
+			D3DXVECTOR2 texU(1.0f, 0.0f);
+			D3DXVECTOR2 texV(0.0f, 1.0f);
 
+			// 矩形のテクスチャ座標の設定
+			SetTexRectangle(pPlayer->nIdx, texU, texV);
 		}
 		else
-		{//テクスチャの座標設定
-			SetTex2d(pVtx, 0.0f, 1.0f, 0.0f, 1.0f);
-			
+		{
+			D3DXVECTOR2 texU(0.0f, 1.0f);
+			D3DXVECTOR2 texV(0.0f, 1.0f);
 
+			// 矩形のテクスチャ座標の設定
+			SetTexRectangle(pPlayer->nIdx, texU, texV);
 		}
-		SetUp(pVtx,
-			s_Player[count].pos.x,		//プレイヤー中心点ｘ
-			s_Player[count].pos.y,		//プレイヤー中心点ｙ
-			s_rotPlayer.z,		//プレイヤー回転
-			s_fAngleAttack, 		//対角線角度
-			s_fLengthAttack);	//対角線ノ長さ長さを算出する
+
+		// 矩形の回転する位置の設定
+		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
+		
 		break;
 	}
-	//頂点バッファをアンロック
-	s_pVtxBuffPlayer->Unlock();
-
 }
 //------------------------------------
 //中心点真ん中のPOSセット

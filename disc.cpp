@@ -36,7 +36,6 @@ typedef struct
 	D3DXVECTOR3		rot;			// 向き
 	D3DXVECTOR3		move;			// 移動量
 	int				nIdx;			// 矩形のインデックス
-	float			fSize;			// サイズ
 	bool			bUse;			// 使用してるかどうか
 }Disc;
 
@@ -65,13 +64,12 @@ void InitDisc(void)
 	s_disc.pos = D3DXVECTOR3(START_POS_X, START_POS_Y, 0.0f);
 	s_disc.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_disc.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_disc.fSize = DISC_SIZE * 0.5f;
 
 	// 矩形の設定
 	s_disc.nIdx = SetRectangle(GetTexture(TEXTURE_Disc));
 
 	// 矩形の回転する位置の設定
-	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, s_disc.fSize, s_disc.fSize);
+	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);
 }
 
 //--------------------------------------------------
@@ -183,7 +181,7 @@ static void UpdateNormal(void)
 	Reflect();
 
 	// 矩形の回転する位置の設定
-	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, s_disc.fSize, s_disc.fSize);
+	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);
 }
 
 //--------------------------------------------------
@@ -196,7 +194,7 @@ static void UpdateReset(void)
 	s_disc.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 矩形の回転する位置の設定
-	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, s_disc.fSize, s_disc.fSize);
+	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);
 }
 
 //--------------------------------------------------
@@ -204,23 +202,25 @@ static void UpdateReset(void)
 //--------------------------------------------------
 static void Reflect(void)
 {
-	if (s_disc.pos.y >= SCREEN_HEIGHT - s_disc.fSize)
+	float fRadius = DISC_SIZE * 0.5f;
+
+	if (s_disc.pos.y >= SCREEN_HEIGHT - fRadius)
 	{// 下
-		s_disc.pos.y = SCREEN_HEIGHT - s_disc.fSize;
+		s_disc.pos.y = SCREEN_HEIGHT - fRadius;
 		s_disc.move.y *= -1.0f;
 	}
-	else if (s_disc.pos.y <= s_disc.fSize)
+	else if (s_disc.pos.y <= fRadius)
 	{// 上
-		s_disc.pos.y = s_disc.fSize;
+		s_disc.pos.y = fRadius;
 		s_disc.move.y *= -1.0f;
 	}
 
-	if (s_disc.pos.x >= SCREEN_WIDTH - s_disc.fSize)
+	if (s_disc.pos.x >= SCREEN_WIDTH - fRadius)
 	{// 右
 		// ゲームの状態の設定
 		SetGameState(GAMESTART_RESET);
 	}
-	else if (s_disc.pos.x <= s_disc.fSize)
+	else if (s_disc.pos.x <= fRadius)
 	{// 左
 		// ゲームの状態の設定
 		SetGameState(GAMESTART_RESET);

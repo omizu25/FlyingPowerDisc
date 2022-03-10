@@ -30,9 +30,11 @@ typedef struct
 	D3DXVECTOR3 pos;			//位置
 	D3DXVECTOR3 posOld;			//前回の位置
 	D3DXVECTOR3 move;			//前回の位置
+	D3DXVECTOR3 rot;			// 向き
 	PLAYESTATE state;			//状態
 	int nLife;					//寿命
 	int nType;					//タイプ
+	int nIdx;					// 矩形のインデックス
 	float fheight;				//高さ
 	float fwidth;				//幅
 	float Pow;					//パワー

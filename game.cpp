@@ -147,9 +147,6 @@ void UpdateGame(void)
 //--------------------------------------------------
 void DrawGame(void)
 {
-	// ƒvƒŒƒCƒ„[‚Ì•`‰æ
-	DrawPlayer();
-
 	//UI‚Ì•`‰æ
 	DrawUi();
 
