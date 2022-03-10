@@ -17,6 +17,7 @@ typedef struct
 	float fWidth;		//幅
 	float fHeight;		//高さ
 	bool bUse;			//使用しているか
+	int	nIdx;			// 矩形のインデックス
 }Rule;
 
 //プロトタイプ宣言
@@ -25,5 +26,6 @@ void UninitRule(void);
 void UpdateRule(void);
 void DrawRule(void);
 void SetRule(D3DXVECTOR3 pos);
+void FlashTexture(int nCnt);
 
 #endif

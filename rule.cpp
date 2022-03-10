@@ -12,11 +12,12 @@
 #include "color.h"
 
 //マクロ定義
-#define MAX_RULE	(3)		//ルールの最大数
+#define MAX_RULE	(3)				//ルールの最大数
+#define MAX_FLASH	(80)			//点滅の往復時間
+#define HALF_FLASH	(MAX_FLASH / 2)	//点滅の切り替え時間
 
 //スタティック変数
 static LPDIRECT3DTEXTURE9		s_pTexture = NULL;	//テクスチャへのポインタ
-static int	s_nIdx;	// 矩形のインデックス
 static Rule s_Rule[MAX_RULE];	//構造体の取得
 static int s_nTime;				//点滅の時間
 
@@ -63,8 +64,13 @@ void UninitRule(void)
 		s_pTexture = NULL;
 	}
 
-	// 矩形を使うのを止める
-	StopUseRectangle(s_nIdx);
+	for (int nCnt = 0; nCnt < MAX_RULE; nCnt++)
+	{
+		Rule *rule = s_Rule + nCnt;
+
+		// 矩形を使うのを止める
+		StopUseRectangle(rule->nIdx);
+	}
 }
 
 //============================
@@ -72,8 +78,8 @@ void UninitRule(void)
 //============================
 void UpdateRule(void)
 {
-	s_nTime++;		//タイムの加算
-	s_nTime %= 40;	//タイムの初期化
+	s_nTime++;				//タイムの加算
+	s_nTime %= MAX_FLASH;	//タイムの初期化
 
 	for (int nCnt = 0; nCnt < MAX_RULE; nCnt++)
 	{
@@ -81,19 +87,8 @@ void UpdateRule(void)
 
 		if (rule->bUse == true)
 		{//使用しているなら
-			//------------------------------
-			//	テクスチャの点滅
-			//------------------------------
-			if (s_nTime >= 20)
-			{
-				// 矩形の色の設定
-				SetColorRectangle(s_nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
-			}
-			else
-			{
-				// 矩形の色の設定
-				SetColorRectangle(s_nIdx, GetColor(COLOR_WHITE));
-			}
+			//テクスチャの点滅
+			FlashTexture(nCnt);
 		}
 	}
 }
@@ -120,19 +115,36 @@ void SetRule(D3DXVECTOR3 pos)
 		{//使用していないなら
 			//構造体の設定
 			rule->pos = pos;
-			rule->fWidth = 50.0f;
-			rule->fHeight = 25.0f;
+			rule->fWidth = 200.0f;
+			rule->fHeight = 100.0f;
 			rule->bUse = true;
 
 			// 矩形の設定
-			s_nIdx = SetRectangle(s_pTexture);
-
+			rule->nIdx = SetRectangle(s_pTexture);
+			
 			D3DXVECTOR3 size = D3DXVECTOR3(rule->fWidth, rule->fHeight, 0.0f);
 
 			// 矩形の位置の設定
-			SetPosRectangle(s_nIdx, pos, size);
+			SetPosRectangle(rule->nIdx, pos, size);
 
 			break;
 		}
+	}
+}
+
+//============================
+// テクスチャの点滅
+//============================
+void FlashTexture(int nCnt)
+{
+	if (s_nTime >= HALF_FLASH)
+	{
+		// 矩形の色の設定
+		SetColorRectangle(s_Rule[nCnt].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+	}
+	else
+	{
+		// 矩形の色の設定
+		SetColorRectangle(s_Rule[nCnt].nIdx, GetColor(COLOR_WHITE));
 	}
 }
