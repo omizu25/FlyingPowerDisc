@@ -16,6 +16,7 @@
 #include "player.h"
 #include "rectangle.h"
 #include "disc.h"
+#include "ui.h"
 
 #include <assert.h>
 //==================================================
@@ -38,6 +39,13 @@ void InitGame(void)
 
 	//プレイヤーの初期化
 	InitPlayer();
+
+	//UIの初期化
+	InitUi();
+
+	//UIの配置
+	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0);
+	SetUi(D3DXVECTOR3 (SCREEN_WIDTH - 50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 1);
 
 	s_gameState = GAMESTATE_START;		// 開始状態に設定
 
@@ -62,6 +70,9 @@ void UninitGame(void)
 
 	// プレイヤーの終了
 	UninitPlayer();
+
+	//UIの終了
+	UninitUi();
 }
 
 //--------------------------------------------------
@@ -95,6 +106,9 @@ void UpdateGame(void)
 		// プレイヤーの更新
 		UpdatePlayer();
 		
+		//UIの更新(まだ何もしてない)
+		UpdateUi();
+
 		break;
 
 	case GAMESTATE_END:			// 終了状態
@@ -127,6 +141,9 @@ void DrawGame(void)
 
 	// 矩形の描画
 	DrawRectangle();
+
+	//UIの描画
+	DrawUi();
 }
 
 //--------------------------------------------------
