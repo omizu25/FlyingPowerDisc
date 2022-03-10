@@ -13,10 +13,9 @@
 #include "input.h"
 #include "mode.h"
 #include "sound.h"
+#include "texture.h"
 
 #include <stdio.h>
-#include <assert.h>
-#include <time.h>
 
 //==================================================
 // マクロ定義
@@ -285,9 +284,6 @@ static HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH,
 		"Terminal", &s_pFont);
 
-	//世界の種子の初期化
-	srand((unsigned int)time(NULL));
-
 	// 入力処理の初期化
 	if (FAILED(InitInput(hInstance, hWnd)))
 	{
@@ -296,6 +292,9 @@ static HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	// サウンドの初期化
 	InitSound(hWnd);
+
+	// テクスチャの読み込み
+	LoadTexture();
 
 	// フェードの初期化
 	InitFade();
@@ -320,6 +319,9 @@ static void Uninit(void)
 
 	// サウンドの終了
 	UninitSound();
+
+	// テクスチャの終了
+	UninitTexture();
 
 	// モードの終了
 	UninitMode();

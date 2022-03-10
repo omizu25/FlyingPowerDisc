@@ -19,6 +19,8 @@ typedef enum
 	TEXTURE_New_GAMESTART_NoBG,
 	TEXTURE_Title_blue,
 	TEXTURE_TitleLight_red,
+	TEXTURE_UI000,
+	TEXTURE_UI001,
 	TEXTURE_MAX,
 }TEXTURE;
 
