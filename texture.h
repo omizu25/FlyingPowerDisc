@@ -23,6 +23,8 @@ typedef enum
 	TEXTURE_Back_to_title,
 	TEXTURE_UI000,
 	TEXTURE_UI001,
+	TEXTURE_Select_Left,
+	TEXTURE_Select_Right,
 	TEXTURE_MAX,
 }TEXTURE;
 

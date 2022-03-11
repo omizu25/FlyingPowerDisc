@@ -157,7 +157,7 @@ void DrawWall(void)
 //----------------------------
 //Wall動き
 //----------------------------
-bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld)
+bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *move)
 {
 	VERTEX_2D*pVtx; //頂点へのポインタ
 	s_pVtxBuffWall->Lock(0, 0, (void**)&pVtx, 0);
@@ -235,8 +235,8 @@ bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld)
 				}
 				else
 				{//交差してるとき
-					pPos->x -= (vecMove.x) + (vecC.x*0.5f);
-					pPos->y = (vecMove.y) + (vecC.y*0.5f);
+					pPos->x += (vecMove.x) + (vecC.x*10.0f);
+					pPos->y += (vecMove.y) + (vecC.y*10.0f);
 					//頂点カラーの設定
 					pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 					pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
@@ -266,33 +266,33 @@ bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld)
 // pNormal : 平面の法線
 // pOut_pos : パーティクルの反射後位置
 // pOut_velo : パーティクルの反射後速度ベクトル
-
-bool CalcParticlePlaneAfterPos(
-	D3DXVECTOR3 *pColliPos,
-	D3DXVECTOR3 *pVelo,
-	FLOAT res,
-	FLOAT time,
-	D3DXVECTOR3 *pOut_pos,
-	D3DXVECTOR3 *pOut_velo
-)
-{
-	VERTEX_2D*pVtx; //頂点へのポインタ
-	s_pVtxBuffWall->Lock(0, 0, (void**)&pVtx, 0);
-
-
-	D3DXVECTOR3 vecWall = D3DXVECTOR3(pVtx[1].pos) - D3DXVECTOR3(pVtx[0].pos);
-	// 反射後速度を算出
-	D3DXVECTOR3 N;
-	D3DXVec3Normalize(&N, &vecWall);
-	*pOut_velo = *pVelo - (1 + res)*D3DXVec3Dot(&N, pVelo)*N;
-
-	// 移動位置を計算
-	*pOut_pos = *pColliPos + *pOut_velo * time;
-	// 頂点座標をアンロック
-	s_pVtxBuffWall->Unlock();
-
-	return true;
-}
+//
+//bool CalcParticlePlaneAfterPos(
+//	D3DXVECTOR3 *pColliPos,
+//	D3DXVECTOR3 *pVelo,
+//	FLOAT res,
+//	FLOAT time,
+//	D3DXVECTOR3 *pOut_pos,
+//	D3DXVECTOR3 *pOut_velo
+//)
+//{
+//	VERTEX_2D*pVtx; //頂点へのポインタ
+//	s_pVtxBuffWall->Lock(0, 0, (void**)&pVtx, 0);
+//
+//
+//	D3DXVECTOR3 vecWall = D3DXVECTOR3(pVtx[1].pos) - D3DXVECTOR3(pVtx[0].pos);
+//	// 反射後速度を算出
+//	D3DXVECTOR3 N;
+//	D3DXVec3Normalize(&N, &vecWall);
+//	*pOut_velo = *pVelo - (1 + res)*D3DXVec3Dot(&N, pVelo)*N;
+//
+//	// 移動位置を計算
+//	*pOut_pos = *pColliPos + *pOut_velo * time;
+//	// 頂点座標をアンロック
+//	s_pVtxBuffWall->Unlock();
+//
+//	return true;
+//}
 
 // 反射ベクトル
 //
@@ -300,12 +300,12 @@ bool CalcParticlePlaneAfterPos(
 // front : 進行ベクトル
 // normal: 衝突点での法線ベクトル
 //
-D3DXVECTOR3* calcReflectVector(D3DXVECTOR3* out, const D3DXVECTOR3& front, const D3DXVECTOR3& normal)
-{
-	D3DXVECTOR3 normal_n;
-	D3DXVec3Normalize(&normal_n, &normal);
-	return D3DXVec3Normalize(out, &(front - 2.0f * D3DXVec3Dot(&front, &normal_n) * normal_n));
-}
+//D3DXVECTOR3* calcReflectVector(D3DXVECTOR3* out, const D3DXVECTOR3& front, const D3DXVECTOR3& normal)
+//{
+//	D3DXVECTOR3 normal_n;
+//	D3DXVec3Normalize(&normal_n, &normal);
+//	return D3DXVec3Normalize(out, &(front - 2.0f * D3DXVec3Dot(&front, &normal_n) * normal_n));
+//}
 
 void SetNormalpos2d(VERTEX_2D *pVtx, float XUP, float XDW, float YUP, float YDW)
 {
