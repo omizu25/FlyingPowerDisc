@@ -33,7 +33,7 @@ const char *s_FileName[] =
 	"data/TEXTURE/UI001.png",
 	"data/TEXTURE/Select_Left.png",
 	"data/TEXTURE/Select_Right.png",
-	"data/TEXTURE/Number_0To9",
+	"data/TEXTURE/Number_0To9.png",
 };
 }// namespace‚Í‚±‚±‚Ü‚Å
 

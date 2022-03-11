@@ -12,6 +12,36 @@
 #include "color.h"
 #include "input.h"
 #include "texture.h"
+#include "number.h"
+
+//==================================================
+// 定義
+//==================================================
+namespace
+{
+const int	START_TIME = 60;		// タイムの始まりの値
+const int	START_POINT = 21;		// ポイントの始まりの値
+const int	START_SET = 2;			// セットの始まりの値
+const int	CHANGE_TIME = 30;		// タイムの変更値
+const int	CHANGE_POINT = 3;		// ポイントの変更値
+const int	CHANGE_SET = 1;			// セットの変更値
+const int	MAX_TIME = 90;			// タイムの最大値
+const int	MAX_POINT = 24;			// ポイントの最大値
+const int	MAX_SET = 3;			// セットの最大値
+const int	MIN_TIME = 30;			// タイムの最小値
+const int	MIN_POINT = 18;			// ポイントの最小値
+const int	MIN_SET = 1;			// セットの最小値
+const float	NUMBER_WIDTH = 30.0f;	// 数の幅
+const float	NUMBER_HEIGHT = 100.0f;	// 数の高さ
+
+typedef enum
+{
+	OPTION_TIME = 0,	// タイム
+	OPTION_POINT,		// ポイント
+	OPTION_SET,			// セット
+	OPTION_MAX
+}OPTION;
+}// namespaceはここまで
 
 //マクロ定義
 #define MAX_RULE	(3)					//ルールの最大数
@@ -27,11 +57,8 @@ static Rule s_Rule[MAX_RULE];		//ルール構造体の取得
 static Switch s_Switch[MAX_SWITCH];	//スイッチ構造体の取得
 static int s_nFlashTime;			//点滅の時間
 static int s_nSelect;				//選択中の番号
-
-//ルール選択用
-static int s_nMaxTime = 60;	//時間
-static int s_MaxPoint = 21;	//ポイント数
-static int s_MaxSet = 2;	//セット数
+static int s_nOption[OPTION_MAX];	// 選択肢の値
+static int s_nIdx[OPTION_MAX];		// 選択肢の値のインデックス
 
 //============================
 // ルール選択画面の初期化
@@ -74,6 +101,13 @@ void InitRule(void)
 		Switch->fHeight = 0.0f;		//高さ
 		Switch->bUse = false;		//使用していない状態
 	}
+
+	// 数の初期化
+	InitNumber();
+
+	s_nOption[OPTION_TIME] = START_TIME;
+	s_nOption[OPTION_POINT] = START_POINT;
+	s_nOption[OPTION_SET] = START_SET;
 }
 
 //============================
@@ -81,6 +115,9 @@ void InitRule(void)
 //============================
 void UninitRule(void)
 {
+	// 数の終了
+	UninitNumber();
+
 	for (int nCnt = 0; nCnt < MAX_RULE; nCnt++)
 	{
 		Rule *rule = s_Rule + nCnt;
@@ -115,6 +152,9 @@ void UpdateRule(void)
 
 	//テクスチャの点滅
 	FlashTexture(nNumber);
+
+	// 数の更新
+	UpdateNumber();
 }
 
 //============================
@@ -154,6 +194,12 @@ void SetRule(D3DXVECTOR3 pos)
 			//切り替えボタンの設定
 			SetSwitchLeft(rule->pos);	//左
 			SetSwitchRight(rule->pos);	//右
+
+			D3DXVECTOR3 posNumber = pos + D3DXVECTOR3(450.0f, 0.0f, 0.0f);
+			D3DXVECTOR3 sizeNumber = D3DXVECTOR3(NUMBER_WIDTH, NUMBER_HEIGHT, 0.0f);
+
+			// 数の設定
+			s_nIdx[nCnt] = SetNumber(posNumber, sizeNumber, GetColor(COLOR_RED), s_nOption[nCnt]);
 
 			break;
 		}
@@ -285,23 +331,23 @@ void AddRule(int nNumber)
 {
 	if (nNumber == 0)
 	{
-		if (s_nMaxTime <= 60)
+		if (s_nOption[nNumber] < MAX_TIME)
 		{
-			s_nMaxTime += 30;	//時間の減少
+			s_nOption[nNumber] += CHANGE_TIME;	//時間の増加
 		}
 	}
 	else if (nNumber == 1)
 	{
-		if (s_MaxPoint <= 21)
+		if (s_nOption[nNumber] < MAX_POINT)
 		{
-			s_MaxPoint += 3;	//ポイントの減少
+			s_nOption[nNumber] += CHANGE_TIME;	//ポイントの増加
 		}
 	}
 	else if (nNumber == 2)
 	{
-		if (s_MaxPoint <= 2)
+		if (s_nOption[nNumber] < MAX_SET)
 		{
-			s_MaxSet += 1;	//セット数の減少
+			s_nOption[nNumber] += CHANGE_TIME;	//セット数の増加
 		}
 	}
 }
@@ -313,23 +359,23 @@ void SubRule(int nNumber)
 {
 	if (nNumber == 0)
 	{
-		if (s_nMaxTime >= 60)
+		if (s_nOption[nNumber] > MIN_TIME)
 		{
-			s_nMaxTime -= 30;	//時間の減少
+			s_nOption[nNumber] -= CHANGE_TIME;	//時間の減少
 		}
 	}
 	else if (nNumber == 1)
 	{
-		if (s_MaxPoint >= 21)
+		if (s_nOption[nNumber] > MIN_POINT)
 		{
-			s_MaxPoint -= 3;	//ポイントの減少
+			s_nOption[nNumber] -= CHANGE_TIME;	//ポイントの減少
 		}
 	}
 	else if (nNumber == 2)
 	{
-		if (s_MaxPoint >= 2)
+		if (s_nOption[nNumber] > MIN_SET)
 		{
-			s_MaxSet -= 1;	//セット数の減少
+			s_nOption[nNumber] -= CHANGE_TIME;	//セット数の減少
 		}
 	}
 }
