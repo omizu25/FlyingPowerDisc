@@ -19,43 +19,46 @@
 #include <assert.h>
 
 //==================================================
-// 定数
+// 定義
 //==================================================
 namespace
 {
-	const float		DISC_SIZE = 75.0f;										// ディスクのサイズ
-	const float		DISC_ROT_SPEED = -0.25f;								// ディスクの回転速度
-	const float		MAX_MOVE = 5.0f;										// 移動量の最大値
-	const float		START_POS_X = SCREEN_WIDTH * 0.5f;						// ディスクの始まりのXの位置
-	const float		START_POS_Y = SCREEN_HEIGHT - (DISC_SIZE * 0.5f);		// ディスクの始まりのYの位置
-}
+const float	DISC_SIZE = 75.0f;									// ディスクのサイズ
+const float	DISC_ROT_SPEED = -0.25f;							// ディスクの回転速度
+const float	MAX_MOVE = 5.0f;									// 移動量の最大値
+const float	START_POS_X = SCREEN_WIDTH * 0.5f;					// ディスクの始まりのXの位置
+const float	START_POS_Y = SCREEN_HEIGHT - (DISC_SIZE * 0.5f);	// ディスクの始まりのYの位置
 
-//==================================================
-// 構造体
-//==================================================
 typedef struct
 {
-	D3DXVECTOR3		pos;			// 位置
-	D3DXVECTOR3		rot;			// 向き
-	D3DXVECTOR3		move;			// 移動量
-	int				nIdx;			// 矩形のインデックス
-	bool			bUse;			// 使用してるかどうか
+	D3DXVECTOR3	pos;	// 位置
+	D3DXVECTOR3	rot;	// 向き
+	D3DXVECTOR3	move;	// 移動量
+	int			nIdx;	// 矩形のインデックス
+	bool		bUse;	// 使用してるかどうか
 }Disc;
+}// namespaceはここまで
 
 //==================================================
 // スタティック変数
 //==================================================
-static Disc		s_disc;				// ディスクの情報
-static int		s_nPossPlayer;		// 次のディスクの始まりのプレイヤー
+namespace
+{
+Disc	s_disc;			// ディスクの情報
+int		s_nPossPlayer;	// 次のディスクの始まりのプレイヤー
+}// namespaceはここまで
 
 //==================================================
-// プロトタイプ宣言
+// スタティック関数プロトタイプ宣言
 //==================================================
-static void UpdateStart(void);
-static void UpdateReset(void);
-static void UpdateNormal(void);
-static void Reflect(void);
-static void NormalizeAngle(void);
+namespace
+{
+void UpdateStart(void);
+void UpdateReset(void);
+void UpdateNormal(void);
+void Reflect(void);
+void NormalizeAngle(void);
+}// namespaceはここまで
 
 //--------------------------------------------------
 // 初期化
@@ -91,24 +94,24 @@ void UpdateDisc(void)
 {
 	switch (GetGameState())
 	{
-	case GAMESTATE_START:		// 開始状態
+	case GAMESTATE_START:	// 開始状態
 		UpdateStart();
 		break;
 
-	case GAMESTATE_NORMAL:		// 通常状態
+	case GAMESTATE_NORMAL:	// 通常状態
 		UpdateNormal();
 		break;
 
-	case GAMESTART_RESET:		// リセット状態
+	case GAMESTART_RESET:	// リセット状態
 		UpdateReset();
 		break;
 
-	case GAMESTATE_END:			// 終了状態
-	case GAMESTATE_RESULT:		// リザルト状態
+	case GAMESTATE_END:		// 終了状態
+	case GAMESTATE_RESULT:	// リザルト状態
 
 		break;
 
-	case GAMESTATE_NONE:		// 何もしていない状態
+	case GAMESTATE_NONE:	// 何もしていない状態
 	default:
 		assert(false);
 		break;
@@ -123,10 +126,15 @@ void DrawDisc(void)
 	/* 矩形で描画してます */
 }
 
+//==================================================
+// スタティック関数
+//==================================================
+namespace
+{
 //--------------------------------------------------
 // 開始状態
 //--------------------------------------------------
-static void UpdateStart(void)
+void UpdateStart(void)
 {
 	Player *pPlayer = GetPlayer();
 
@@ -141,7 +149,7 @@ static void UpdateStart(void)
 	fRotDest = atan2f(pPlayer->pos.x - s_disc.pos.x, pPlayer->pos.y - s_disc.pos.y);
 
 
-	fRotDiff = fRotDest - fRotMove;		//目的の移動方向までの差分
+	fRotDiff = fRotDest - fRotMove;	//目的の移動方向までの差分
 
 	if (fRotDiff >= D3DX_PI)
 	{
@@ -152,7 +160,7 @@ static void UpdateStart(void)
 		fRotDiff = fRotDiff + (D3DX_PI * 2.0f);
 	}
 
-	fRotMove += fRotDiff;		//移動方向(角度)の補正
+	fRotMove += fRotDiff;	//移動方向(角度)の補正
 
 	if (fRotMove >= D3DX_PI)
 	{
@@ -170,7 +178,7 @@ static void UpdateStart(void)
 //--------------------------------------------------
 // 通常状態
 //--------------------------------------------------
-static void UpdateNormal(void)
+void UpdateNormal(void)
 {
 	// 回転
 	s_disc.rot.z += DISC_ROT_SPEED;
@@ -191,7 +199,7 @@ static void UpdateNormal(void)
 //--------------------------------------------------
 // リセット状態
 //--------------------------------------------------
-static void UpdateReset(void)
+void UpdateReset(void)
 {
 	s_disc.pos = D3DXVECTOR3(START_POS_X, START_POS_Y, 0.0f);
 	s_disc.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -204,7 +212,7 @@ static void UpdateReset(void)
 //--------------------------------------------------
 // 反射
 //--------------------------------------------------
-static void Reflect(void)
+void Reflect(void)
 {
 	float fRadius = DISC_SIZE * 0.5f;
 
@@ -234,7 +242,7 @@ static void Reflect(void)
 //--------------------------------------------------
 // 角度の正規化
 //--------------------------------------------------
-static void NormalizeAngle(void)
+void NormalizeAngle(void)
 {
 	if (s_disc.rot.z >= D3DX_PI)
 	{// 3.14より大きい
@@ -245,3 +253,4 @@ static void NormalizeAngle(void)
 		s_disc.rot.z += D3DX_PI * 2.0f;
 	}
 }
+} // namespaceはここまで

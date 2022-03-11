@@ -14,21 +14,20 @@
 #include <assert.h>
 
 //==================================================
-// 定数
+// 定義
 //==================================================
 namespace
 {
-	const D3DXCOLOR		RED(1.0f, 0.0f, 0.0f, 1.0f);			// 赤
-	const D3DXCOLOR		GREEN(0.0f, 1.0f, 0.0f, 1.0f);			// 緑
-	const D3DXCOLOR		BLUE(0.0f, 0.0f, 1.0f, 1.0f);			// 青
-	const D3DXCOLOR		YELLOW(1.0f, 1.0f, 0.0f, 1.0f);			// 黄色
-	const D3DXCOLOR		PURPLE(1.0f, 0.0f, 1.0f, 1.0f);			// 紫
-	const D3DXCOLOR		LIGHTBLUE(0.0f, 1.0f, 1.0f, 1.0f);		// 水色
-	const D3DXCOLOR		WHITE(1.0f, 1.0f, 1.0f, 1.0f);			// 白
-	const D3DXCOLOR		BLACK(0.0f, 0.0f, 0.0f, 1.0f);			// 黒
-}
+const D3DXCOLOR	RED(1.0f, 0.0f, 0.0f, 1.0f);		// 赤
+const D3DXCOLOR	GREEN(0.0f, 1.0f, 0.0f, 1.0f);		// 緑
+const D3DXCOLOR	BLUE(0.0f, 0.0f, 1.0f, 1.0f);		// 青
+const D3DXCOLOR	YELLOW(1.0f, 1.0f, 0.0f, 1.0f);		// 黄色
+const D3DXCOLOR	PURPLE(1.0f, 0.0f, 1.0f, 1.0f);		// 紫
+const D3DXCOLOR	LIGHTBLUE(0.0f, 1.0f, 1.0f, 1.0f);	// 水色
+const D3DXCOLOR	WHITE(1.0f, 1.0f, 1.0f, 1.0f);		// 白
+const D3DXCOLOR	BLACK(0.0f, 0.0f, 0.0f, 1.0f);		// 黒
 
-static const D3DXCOLOR* s_Colors[] =
+const D3DXCOLOR* s_Colors[] =
 {// 色の配列
 	&RED,
 	&GREEN,
@@ -39,6 +38,7 @@ static const D3DXCOLOR* s_Colors[] =
 	&WHITE,
 	&BLACK
 };
+}// namespaceはここまで
 
 static_assert(sizeof(s_Colors) / sizeof(s_Colors[0]) == COLOR_MAX, "aho");
 

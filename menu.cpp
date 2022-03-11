@@ -22,55 +22,55 @@
 //==================================================
 namespace
 {
-	const int		MAX_MENU = 16;						// メニューの最大数
-	const float		NORMAL_BLINK_SPEED = 0.01f;			// 通常時の点滅速度
-	const float		DECISION_BLINK_SPEED = 0.1f;		// 決定時の点滅速度
-	const float		MIN_ALPHA = 0.6f;					// α値の最小値
-}
-
-//==================================================
-// 構造体
-//==================================================
+const int	MAX_MENU = 16;					// メニューの最大数
+const float	NORMAL_BLINK_SPEED = 0.01f;		// 通常時の点滅速度
+const float	DECISION_BLINK_SPEED = 0.1f;	// 決定時の点滅速度
+const float	MIN_ALPHA = 0.6f;				// α値の最小値
 
 /*↓ 選択肢 ↓*/
-
 typedef struct
 {
-	D3DXVECTOR3		pos;			// 位置
-	D3DXCOLOR		col;			// 色
-	int				nIdx;			// 矩形のインデックス
-	float			fWidth;			// 幅
-	float			fHeight;		// 高さ
+	D3DXVECTOR3	pos;		// 位置
+	D3DXCOLOR	col;		// 色
+	int			nIdx;		// 矩形のインデックス
+	float		fWidth;		// 幅
+	float		fHeight;	// 高さ
 }Option;
 
 /*↓ メニュー ↓*/
-
 typedef struct
 {
-	D3DXVECTOR3		pos;					// 位置
-	Option			Option[MAX_OPTION];		// 選択肢の情報
-	int				nNumUse;				// 使用数
-	int				nIdx;					// 矩形のインデックス
-	float			fWidth;					// 幅
-	float			fHeight;				// 高さ
-	float			fInterval;				// 選択肢の間隔
-	float			fBlinkSpeed;			// 点滅速度
-	bool			bFrame;					// 枠がいるかどうか [ true : いる false : いらない ]
-	bool			bUse;					// 使用しているかどうか
+	D3DXVECTOR3	pos;				// 位置
+	Option		Option[MAX_OPTION];	// 選択肢の情報
+	int			nNumUse;			// 使用数
+	int			nIdx;				// 矩形のインデックス
+	float		fWidth;				// 幅
+	float		fHeight;			// 高さ
+	float		fInterval;			// 選択肢の間隔
+	float		fBlinkSpeed;		// 点滅速度
+	bool		bFrame;				// 枠がいるかどうか [ true : いる false : いらない ]
+	bool		bUse;				// 使用しているかどうか
 }Menu;
+}// namespaceはここまで
 
 //==================================================
 // スタティック変数
 //==================================================
-static Menu		s_aMenu[MAX_MENU];		// メニューの情報
-static int		s_nIdxMenu;				// 選ばれているメニューの番号
-static int		s_nIdxOption;			// 選ばれている選択肢の番号
-static int		s_nAlphaTime;			// α値変更用の時間
+namespace
+{
+Menu	s_aMenu[MAX_MENU];	// メニューの情報
+int		s_nIdxMenu;			// 選ばれているメニューの番号
+int		s_nIdxOption;		// 選ばれている選択肢の番号
+int		s_nAlphaTime;		// α値変更用の時間
+}// namespaceはここまで
 
 //==================================================
 // プロトタイプ宣言
 //==================================================
-static void ChangeColor(Menu *pMenu);
+namespace
+{
+void ChangeColor(Menu *pMenu);
+}// namespaceはここまで
 
 //--------------------------------------------------
 // 初期化
@@ -295,10 +295,12 @@ void ResetMenu(int nIdx)
 	pMenu->bUse = false;
 }
 
+namespace
+{
 //--------------------------------------------------
 // 色の変更
 //--------------------------------------------------
-static void ChangeColor(Menu *pMenu)
+void ChangeColor(Menu *pMenu)
 {
 	s_nAlphaTime++;
 
@@ -312,3 +314,4 @@ static void ChangeColor(Menu *pMenu)
 	// 矩形の色の設定
 	SetColorRectangle(pOption->nIdx, pOption->col);
 }
+}// namespaceはここまで

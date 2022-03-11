@@ -26,59 +26,59 @@
 //==================================================
 namespace
 {
-	const int		MAX_LIGHT = 2;				// 後光の最大数
-	const float		TITLE_POS_Y = 200.0f;		// タイトルのYの位置
-	const float		TITLE_WIDTH = 900.0f;		// タイトルの幅
-	const float		TITLE_HEIGHT = 200.0f;		// タイトルの高さ
-	const float		LIGHT_WIDTH = 560.0f;		// ライトの幅
-	const float		LIGHT_HEIGHT = 560.0f;		// ライトの高さ
-	const float		CHANGE_SPEED = 0.005f;		// 収縮の速度
-	const float		CHANGE_AMOUNT = 0.1f;		// 変化量
-	const float		MEDIAN_LENGTH = 0.95f;		// 長さの中央値
-	const float		MAX_ROTATION = 0.003f;		// 回転の最大値
-	const float		DECREASE_SIZE = 0.6f;		// サイズの減少割合
-	const float		DECREASE_SPEED = 0.5f;		// 速度の減少割合
-	const float		MENU_WIDTH = 540.0f;		// メニューの幅
-	const float		MENU_HEIGHT = 150.0f;		// メニューの高さ
-}
+const int	MAX_LIGHT = 2;			// 後光の最大数
+const float	TITLE_POS_Y = 200.0f;	// タイトルのYの位置
+const float	TITLE_WIDTH = 900.0f;	// タイトルの幅
+const float	TITLE_HEIGHT = 200.0f;	// タイトルの高さ
+const float	LIGHT_WIDTH = 560.0f;	// ライトの幅
+const float	LIGHT_HEIGHT = 560.0f;	// ライトの高さ
+const float	CHANGE_SPEED = 0.005f;	// 収縮の速度
+const float	CHANGE_AMOUNT = 0.1f;	// 変化量
+const float	MEDIAN_LENGTH = 0.95f;	// 長さの中央値
+const float	MAX_ROTATION = 0.003f;	// 回転の最大値
+const float	DECREASE_SIZE = 0.6f;	// サイズの減少割合
+const float	DECREASE_SPEED = 0.5f;	// 速度の減少割合
+const float	MENU_WIDTH = 540.0f;	// メニューの幅
+const float	MENU_HEIGHT = 150.0f;	// メニューの高さ
 
-//==================================================
-// 列挙型
-//==================================================
 typedef enum
 {
-	MENU_GAME = 0,		// ゲーム
-	MENU_RULE,			// ルール
+	MENU_GAME = 0,	// ゲーム
+	MENU_RULE,		// ルール
 	MENU_MAX
 }MENU;
 
-//==================================================
-// 構造体
-//==================================================
 typedef struct
 {
-	D3DXVECTOR3		rot;				// 向き
-	float			fWidth;				// 幅
-	float			fHeight;			// 高さ
-	float			fSpeed;				// 速度
-	int				nIdx;				// 矩形のインデックス
+	D3DXVECTOR3	rot;		// 向き
+	float		fWidth;		// 幅
+	float		fHeight;	// 高さ
+	float		fSpeed;		// 速度
+	int			nIdx;		// 矩形のインデックス
 }Light;
+}// namespaceはここまで
 
 //==================================================
 // スタティック変数
 //==================================================
-static int			s_nIdxBG;				// 背景の矩形のインデックス
-static int			s_nIdx;					// 矩形のインデックス
-static Light		s_light[MAX_LIGHT];		// 後光の情報
-static int			s_nFlashTime;				// 時間
-static int			s_nSelectMenu;			// 選ばれているメニュー
-static int			s_nIdxUseMenu;			// 使っているメニューの番号
+namespace
+{
+int		s_nIdxBG;			// 背景の矩形のインデックス
+int		s_nIdx;				// 矩形のインデックス
+Light	s_light[MAX_LIGHT];	// 後光の情報
+int		s_nFlashTime;		// 時間
+int		s_nSelectMenu;		// 選ばれているメニュー
+int		s_nIdxUseMenu;		// 使っているメニューの番号
+}// namespaceはここまで
 
 //==================================================
-// プロトタイプ宣言
+// スタティック関数プロトタイプ宣言
 //==================================================
-static void UpdateLight(void);
-static void Input(void);
+namespace
+{
+void UpdateLight(void);
+void Input(void);
+}// namespaceはここまで
 
 //--------------------------------------------------
 // 初期化
@@ -153,29 +153,31 @@ void InitTitle(void)
 		}
 	}
 
-	// メニューの初期化
-	InitMenu();
+	{// メニュー
+		// メニューの初期化
+		InitMenu();
 
-	MenuArgument menu;
-	menu.nNumUse = MENU_MAX;
-	menu.fLeft = SCREEN_WIDTH * 0.25f;
-	menu.fRight = SCREEN_WIDTH * 0.75f;
-	menu.fTop = SCREEN_HEIGHT * 0.5f;
-	menu.fBottom = SCREEN_HEIGHT;
-	menu.fWidth = MENU_WIDTH;
-	menu.fHeight = MENU_HEIGHT;
-	menu.bSort = true;
+		MenuArgument menu;
+		menu.nNumUse = MENU_MAX;
+		menu.fLeft = SCREEN_WIDTH * 0.25f;
+		menu.fRight = SCREEN_WIDTH * 0.75f;
+		menu.fTop = SCREEN_HEIGHT * 0.5f;
+		menu.fBottom = SCREEN_HEIGHT;
+		menu.fWidth = MENU_WIDTH;
+		menu.fHeight = MENU_HEIGHT;
+		menu.bSort = true;
 
-	menu.texture[MENU_GAME] = TEXTURE_Game_Start;
-	menu.texture[MENU_RULE] = menu.texture[MENU_GAME];
+		menu.texture[MENU_GAME] = TEXTURE_Game_Start;
+		menu.texture[MENU_RULE] = menu.texture[MENU_GAME];
 
-	FrameArgument Frame;
-	Frame.bUse = true;
-	Frame.col = GetColor(COLOR_WHITE);
-	Frame.texture = TEXTURE_Frame;
-	
-	// メニューの設定
-	s_nIdxUseMenu = SetMenu(menu, Frame);
+		FrameArgument Frame;
+		Frame.bUse = true;
+		Frame.col = GetColor(COLOR_WHITE);
+		Frame.texture = TEXTURE_Frame;
+
+		// メニューの設定
+		s_nIdxUseMenu = SetMenu(menu, Frame);
+	}
 }
 
 //--------------------------------------------------
@@ -224,10 +226,12 @@ void DrawTitle(void)
 	DrawRectangle();
 }
 
+namespace
+{
 //--------------------------------------------------
 // 後光
 //--------------------------------------------------
-static void UpdateLight(void)
+void UpdateLight(void)
 {
 	s_nFlashTime++;
 
@@ -259,7 +263,7 @@ static void UpdateLight(void)
 //--------------------------------------------------
 // 入力
 //--------------------------------------------------
-static void Input(void)
+void Input(void)
 {
 	if (GetFade() != FADE_NONE)
 	{// フェードしている
@@ -292,11 +296,11 @@ static void Input(void)
 	{//決定キー(ENTERキー)が押されたかどうか
 		switch (s_nSelectMenu)
 		{
-		case MENU_GAME:				// ゲーム
+		case MENU_GAME:	// ゲーム
 			ChangeMode(MODE_GAME);
 			break;
 
-		case MENU_RULE:				// ゲーム
+		case MENU_RULE:	// ゲーム
 			ChangeMode(MODE_RULE);
 			break;
 
@@ -309,3 +313,4 @@ static void Input(void)
 		DecisionOption();
 	}
 }
+}// namespaceはここまで

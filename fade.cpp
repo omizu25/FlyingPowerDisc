@@ -18,15 +18,18 @@
 //==================================================
 namespace
 {
-	const float		ALPHA_CHANGE = 0.07f;		// フェードのα値の変化量
-}
+const float	ALPHA_CHANGE = 0.07f;	// フェードのα値の変化量
+}// namespaceはここまで
 
 //==================================================
 // スタティック変数
 //==================================================
-static LPDIRECT3DVERTEXBUFFER9		s_pVtxBuff = NULL;		// 頂点バッファのポインタ
-static FADE							s_fade;					// 今のフェード
-static float						s_fAlpha;				// ポリゴン(フェード)のα値
+namespace
+{
+LPDIRECT3DVERTEXBUFFER9	s_pVtxBuff = NULL;	// 頂点バッファのポインタ
+FADE					s_fade;				// 今のフェード
+float					s_fAlpha;			// ポリゴン(フェード)のα値
+}
 
 //--------------------------------------------------
 // 初期化
@@ -36,8 +39,8 @@ void InitFade(void)
 	// デバイスへのポインタの取得
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 
-	s_fAlpha = 0.0f;		// 黒いポリゴン(不透明)にしておく
-	s_fade = FADE_NONE;		// 何もしてない状態
+	s_fAlpha = 0.0f;	// 黒いポリゴン(不透明)にしておく
+	s_fade = FADE_NONE;	// 何もしてない状態
 
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(
@@ -48,7 +51,7 @@ void InitFade(void)
 		&s_pVtxBuff,
 		NULL);
 
-	VERTEX_2D *pVtx;		// 頂点情報へのポインタ
+	VERTEX_2D *pVtx;	// 頂点情報へのポインタ
 
 	// 頂点情報をロックし、頂点情報へのポインタを取得
 	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
@@ -109,33 +112,33 @@ void UpdateFade(void)
 	}
 	switch (s_fade)
 	{
-	case FADE_OUT:		// フェードアウト状態
-		s_fAlpha += ALPHA_CHANGE;		// ポリゴンを不透明にしていく
+	case FADE_OUT:	// フェードアウト状態
+		s_fAlpha += ALPHA_CHANGE;	// ポリゴンを不透明にしていく
 
 		if (s_fAlpha >= 1.0f)
 		{// 不透明になった
 			s_fAlpha = 1.0f;
-			s_fade = FADE_IN;		// フェードイン状態に
+			s_fade = FADE_IN;	// フェードイン状態に
 		}
 		break;
 
-	case FADE_IN:		// フェードイン状態
-		s_fAlpha -= ALPHA_CHANGE;		// ポリゴンを透明にしていく
+	case FADE_IN:	// フェードイン状態
+		s_fAlpha -= ALPHA_CHANGE;	// ポリゴンを透明にしていく
 
 		if (s_fAlpha <= 0.0f)
 		{// 透明になった
 			s_fAlpha = 0.0f;
-			s_fade = FADE_NONE;		// 何もしていない状態に
+			s_fade = FADE_NONE;	// 何もしていない状態に
 		}
 		break;
 
-	case FADE_NONE:		// 何もしてない状態
+	case FADE_NONE:	// 何もしてない状態
 	default:
 		assert(false);
 		break;
 	}
 
-	VERTEX_2D *pVtx;		// 頂点情報へのポインタ
+	VERTEX_2D *pVtx;	// 頂点情報へのポインタ
 
 	// 頂点情報をロックし、頂点情報へのポインタを取得
 	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
@@ -169,9 +172,9 @@ void DrawFade(void)
 
 	// ポリゴンの描画
 	pDevice->DrawPrimitive(
-		D3DPT_TRIANGLESTRIP,		// プリミティブの種類
-		0,							// 描画する最初の頂点インデックス
-		2);							// プリミティブ(ポリゴン)数
+		D3DPT_TRIANGLESTRIP,	// プリミティブの種類
+		0,						// 描画する最初の頂点インデックス
+		2);						// プリミティブ(ポリゴン)数
 }
 
 //--------------------------------------------------
@@ -179,8 +182,8 @@ void DrawFade(void)
 //--------------------------------------------------
 void StartFadeOut(void)
 {
-	s_fade = FADE_OUT;		// フェードアウト状態に
-	s_fAlpha = 0.0f;		// 黒いポリゴン(不透明)にしておく
+	s_fade = FADE_OUT;	// フェードアウト状態に
+	s_fAlpha = 0.0f;	// 黒いポリゴン(不透明)にしておく
 }
 
 //--------------------------------------------------

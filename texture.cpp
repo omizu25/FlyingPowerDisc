@@ -16,7 +16,9 @@
 //==================================================
 // 定数
 //==================================================
-static const char *s_FileName[] =
+namespace
+{
+const char *s_FileName[] =
 {// テクスチャのパス
 	"data/TEXTURE/BG.png",
 	"data/TEXTURE/Disc.png",
@@ -33,13 +35,17 @@ static const char *s_FileName[] =
 	"data/TEXTURE/Select_Right.png",
 	"data/TEXTURE/Number_0To9",
 };
+}// namespaceはここまで
 
 static_assert(sizeof(s_FileName) / sizeof(s_FileName[0]) == TEXTURE_MAX, "aho");
 
 //==================================================
 // スタティック変数
 //==================================================
-static LPDIRECT3DTEXTURE9 s_pTexture[TEXTURE_MAX];
+namespace
+{
+LPDIRECT3DTEXTURE9 s_pTexture[TEXTURE_MAX];
+}// namespaceはここまで
 
 //--------------------------------------------------
 // 読み込み

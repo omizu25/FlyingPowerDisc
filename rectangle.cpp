@@ -19,25 +19,25 @@
 //==================================================
 namespace
 {
-	const int		MAX_RECTANGLE = 1024;		// 矩形の最大数
-	const int		NUM_VERTEX = 4;				// 頂点の数
-	const int		NUM_POLYGON = 2;			// ポリゴンの数
-}
+const int	MAX_RECTANGLE = 1024;	// 矩形の最大数
+const int	NUM_VERTEX = 4;			// 頂点の数
+const int	NUM_POLYGON = 2;		// ポリゴンの数
 
-//==================================================
-// 構造体
-//==================================================
 typedef struct
 {
-	LPDIRECT3DTEXTURE9			pTexture;		// テクスチャ
-	LPDIRECT3DVERTEXBUFFER9		pVtxBuff;		// 頂点バッファ
-	bool						bUse;			// 使用しているかどうか
+	LPDIRECT3DTEXTURE9		pTexture;	// テクスチャ
+	LPDIRECT3DVERTEXBUFFER9	pVtxBuff;	// 頂点バッファ
+	bool					bUse;		// 使用しているかどうか
 }MyRectangle;
+}// namespaceはここまで
 
 //==================================================
 // スタティック変数
 //==================================================
-MyRectangle		s_aRectangle[MAX_RECTANGLE];		// 矩形の情報
+namespace
+{
+MyRectangle	s_aRectangle[MAX_RECTANGLE];	// 矩形の情報
+}
 
 //--------------------------------------------------
 // 初期化

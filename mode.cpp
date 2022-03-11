@@ -19,8 +19,19 @@
 //==================================================
 // スタティック変数
 //==================================================
-static MODE		s_mode = MODE_NONE;			// 現在のモード
-static MODE		s_modeNext = MODE_NONE;		// 次のモード
+namespace
+{
+MODE	s_mode = MODE_NONE;		// 現在のモード
+MODE	s_modeNext = MODE_NONE;	// 次のモード
+}// namesapceはここまで
+
+//--------------------------------------------------
+// 初期化
+//--------------------------------------------------
+void InitMode(void)
+{
+
+}
 
 //--------------------------------------------------
 // 終了
@@ -44,19 +55,19 @@ void UpdateMode(void)
 {
 	switch (s_mode)
 	{// どのモード？
-	case MODE_TITLE:		// タイトル
+	case MODE_TITLE:	// タイトル
 		UpdateTitle();
 		break;
 
-	case MODE_MAP:			// マップ
+	case MODE_MAP:		// マップ
 		break;
 
-	case MODE_RULE:			// ルール
+	case MODE_RULE:		// ルール
 		//ルール選択画面の更新
 		UpdateRule();
 		break;
 
-	case MODE_GAME:			// ゲーム
+	case MODE_GAME:		// ゲーム
 		UpdateGame();
 		break;
 
@@ -77,19 +88,19 @@ void DrawMode(void)
 {
 	switch (s_mode)
 	{// どのモード？
-	case MODE_TITLE:		// タイトル
+	case MODE_TITLE:	// タイトル
 		DrawTitle();
 		break;
 
-	case MODE_MAP:			// マップ
+	case MODE_MAP:		// マップ
 		break;
 
-	case MODE_RULE:			// ルール
+	case MODE_RULE:		// ルール
 		//ルール選択画面の描画
 		DrawRule();
 		break;
 
-	case MODE_GAME:			// ゲーム
+	case MODE_GAME:		// ゲーム
 		DrawGame();
 		break;
 
@@ -125,19 +136,19 @@ void SetMode(void)
 
 	switch (s_mode)
 	{// 現在のモードの終了
-	case MODE_TITLE:		// タイトル
+	case MODE_TITLE:	// タイトル
 		UninitTitle();
 		break;
 
-	case MODE_MAP:			// マップ
+	case MODE_MAP:		// マップ
 		break;
 
-	case MODE_RULE:			// ルール
+	case MODE_RULE:		// ルール
 		//ルール選択画面の終了
 		UninitRule();
 		break;
 
-	case MODE_GAME:			// ゲーム
+	case MODE_GAME:		// ゲーム
 		UninitGame();
 		break;
 
@@ -152,14 +163,14 @@ void SetMode(void)
 
 	switch (s_modeNext)
 	{// 次のモードの初期化
-	case MODE_TITLE:		// タイトル
+	case MODE_TITLE:	// タイトル
 		InitTitle();
 		break;
 
-	case MODE_MAP:			// マップ
+	case MODE_MAP:		// マップ
 		break;
 
-	case MODE_RULE:			// ルール
+	case MODE_RULE:		// ルール
 		//ルール選択画面の初期化
 		InitRule();
 
@@ -169,7 +180,7 @@ void SetMode(void)
 		SetRule(D3DXVECTOR3(400.0f, 550.0f, 0.0f));
 		break;
 
-	case MODE_GAME:			// ゲーム
+	case MODE_GAME:		// ゲーム
 		InitGame();
 		break;
 
@@ -179,7 +190,7 @@ void SetMode(void)
 		break;
 	}
 
-	s_mode = s_modeNext;		// 現在の画面(モード)を切り替える
+	s_mode = s_modeNext;	// 現在の画面(モード)を切り替える
 	s_modeNext = MODE_NONE;
 }
 
