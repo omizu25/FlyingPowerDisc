@@ -69,7 +69,7 @@ void InitDisc(void)
 	s_disc.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// ‹éŒ`‚Ìİ’è
-	s_disc.nIdx = SetRectangle(GetTexture(TEXTURE_Disc));
+	s_disc.nIdx = SetRectangle(TEXTURE_Disc);
 
 	// ‹éŒ`‚Ì‰ñ“]‚·‚éˆÊ’u‚Ìİ’è
 	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);

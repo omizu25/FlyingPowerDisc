@@ -31,6 +31,7 @@ static const char *s_FileName[] =
 	"data/TEXTURE/UI001.png",
 	"data/TEXTURE/Select_Left.png",
 	"data/TEXTURE/Select_Right.png",
+	"data/TEXTURE/Number_0To9",
 };
 
 static_assert(sizeof(s_FileName) / sizeof(s_FileName[0]) == TEXTURE_MAX, "aho");
@@ -77,6 +78,11 @@ void UninitTexture(void)
 //--------------------------------------------------
 LPDIRECT3DTEXTURE9 GetTexture(TEXTURE texture)
 {
+	if (texture == TEXTURE_NONE)
+	{// テクスチャを使用しない
+		return NULL;
+	}
+
 	assert(texture >= 0 && texture < TEXTURE_MAX);
 
 	return s_pTexture[texture];

@@ -187,6 +187,8 @@ void DrawGame(void)
 //--------------------------------------------------
 void SetGameState(GAMESTATE state)
 {
+	assert(state >= 0 && state < GAMESTATE_MAX);
+
 	s_gameState = state;
 	s_nCounterState = 0;
 }

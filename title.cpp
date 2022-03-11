@@ -92,17 +92,17 @@ void InitTitle(void)
 	s_nSelectMenu = 0;
 
 	// 矩形の設定
-	s_nIdxBG = SetRectangle(GetTexture(TEXTURE_BG));
+	s_nIdxBG = SetRectangle(TEXTURE_BG);
 
 	// 矩形の設定
 	for (int i = 0; i < MAX_LIGHT; i++)
 	{
 		Light *pLight = &s_light[i];
-		pLight->nIdx = SetRectangle(GetTexture(TEXTURE_TitleLight_red));
+		pLight->nIdx = SetRectangle(TEXTURE_TitleLight_red);
 	}
 
 	// 矩形の設定
-	s_nIdx = SetRectangle(GetTexture(TEXTURE_Title_blue));
+	s_nIdx = SetRectangle(TEXTURE_Title_blue);
 
 	{// 背景
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
@@ -166,13 +166,13 @@ void InitTitle(void)
 	menu.fHeight = MENU_HEIGHT;
 	menu.bSort = true;
 
-	menu.pTexture[MENU_GAME] = GetTexture(TEXTURE_Game_Start);
-	menu.pTexture[MENU_RULE] = menu.pTexture[MENU_GAME];
+	menu.texture[MENU_GAME] = TEXTURE_Game_Start;
+	menu.texture[MENU_RULE] = menu.texture[MENU_GAME];
 
 	FrameArgument Frame;
 	Frame.bUse = true;
 	Frame.col = GetColor(COLOR_WHITE);
-	Frame.pTexture = GetTexture(TEXTURE_Frame);
+	Frame.texture = TEXTURE_Frame;
 	
 	// メニューの設定
 	s_nIdxUseMenu = SetMenu(menu, Frame);

@@ -25,7 +25,9 @@ typedef enum
 	TEXTURE_UI001,
 	TEXTURE_Select_Left,
 	TEXTURE_Select_Right,
+	TEXTURE_Number_0To9,
 	TEXTURE_MAX,
+	TEXTURE_NONE,
 }TEXTURE;
 
 //==================================================

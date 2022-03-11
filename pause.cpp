@@ -105,14 +105,14 @@ void SetPause(void)
 	menu.fHeight = MENU_HEIGHT;
 	menu.bSort = true;
 
-	menu.pTexture[MENU_GAME] = GetTexture(TEXTURE_Back_to_game);
-	menu.pTexture[MENU_RETRY] = GetTexture(TEXTURE_Retry);
-	menu.pTexture[MENU_TITLE] = GetTexture(TEXTURE_Back_to_title);
+	menu.texture[MENU_GAME] = TEXTURE_Back_to_game;
+	menu.texture[MENU_RETRY] = TEXTURE_Retry;
+	menu.texture[MENU_TITLE] = TEXTURE_Back_to_title;
 	
 	FrameArgument Frame;
 	Frame.bUse = true;
 	Frame.col = FRAME_COLOR;
-	Frame.pTexture = NULL;
+	Frame.texture = TEXTURE_NONE;
 
 	// ÉÅÉjÉÖÅ[ÇÃê›íË
 	s_nIdxMenu = SetMenu(menu, Frame);

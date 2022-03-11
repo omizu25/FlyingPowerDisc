@@ -146,14 +146,11 @@ void DrawMenu(void)
 //--------------------------------------------------
 int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 {
-	assert(menu.nNumUse < MAX_OPTION);
-
-	int nIdx = 0;
-	Menu *pMenu = nullptr;
-
-	for (nIdx = 0; nIdx < MAX_MENU; nIdx++)
+	assert(menu.nNumUse >= 0 && menu.nNumUse < MAX_OPTION);
+	
+	for (int i = 0; i < MAX_MENU; i++)
 	{
-		pMenu = &s_aMenu[nIdx];
+		Menu *pMenu = &s_aMenu[i];
 
 		if (pMenu->bUse)
 		{// 使用している
@@ -183,13 +180,13 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 
 		pMenu->bUse = true;
 
-		s_nIdxMenu = nIdx;
+		s_nIdxMenu = i;
 		s_nIdxOption = 0;
 
 		if (Frame.bUse)
 		{// 枠がいる
 			// 矩形の設定
-			pMenu->nIdx = SetRectangle(Frame.pTexture);
+			pMenu->nIdx = SetRectangle(Frame.texture);
 
 			fPosX = menu.fLeft + (pMenu->fWidth * 0.5f);
 			fPosY = menu.fTop + (pMenu->fHeight * 0.5f);
@@ -203,39 +200,40 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 			SetColorRectangle(pMenu->nIdx, Frame.col);
 		}
 
-		break;
+		for (int j = 0; j < pMenu->nNumUse; j++)
+		{
+			Option *pOption = &pMenu->Option[j];
+
+			if (menu.bSort)
+			{// 縦
+				pOption->pos = D3DXVECTOR3(pMenu->pos.x, menu.fTop + (pMenu->fInterval * (j + 1)), 0.0f);
+			}
+			else
+			{// 横
+				pOption->pos = D3DXVECTOR3(menu.fLeft + (pMenu->fInterval * (j + 1)), pMenu->pos.y, 0.0f);
+			}
+
+			pOption->col = GetColor(COLOR_WHITE);
+			pOption->fWidth = menu.fWidth;
+			pOption->fHeight = menu.fHeight;
+
+			// 矩形の設定
+			pOption->nIdx = SetRectangle(menu.texture[j]);
+
+			D3DXVECTOR3 size = D3DXVECTOR3(menu.fWidth, menu.fHeight, 0.0f);
+
+			// 矩形の位置の設定
+			SetPosRectangle(pOption->nIdx, pOption->pos, size);
+
+			// 矩形の色の設定
+			SetColorRectangle(pOption->nIdx, pOption->col);
+		}
+
+		return i;
 	}
 
-	for (int j = 0; j < pMenu->nNumUse; j++)
-	{
-		Option *pOption = &pMenu->Option[j];
-
-		if (menu.bSort)
-		{// 縦
-			pOption->pos = D3DXVECTOR3(pMenu->pos.x, menu.fTop + (pMenu->fInterval * (j + 1)), 0.0f);
-		}
-		else
-		{// 横
-			pOption->pos = D3DXVECTOR3(menu.fLeft + (pMenu->fInterval * (j + 1)), pMenu->pos.y, 0.0f);
-		}
-		
-		pOption->col = GetColor(COLOR_WHITE);
-		pOption->fWidth = menu.fWidth;
-		pOption->fHeight = menu.fHeight;
-
-		// 矩形の設定
-		pOption->nIdx = SetRectangle(menu.pTexture[j]);
-
-		D3DXVECTOR3 size = D3DXVECTOR3(menu.fWidth, menu.fHeight, 0.0f);
-
-		// 矩形の位置の設定
-		SetPosRectangle(pOption->nIdx, pOption->pos, size);
-
-		// 矩形の色の設定
-		SetColorRectangle(pOption->nIdx, pOption->col);
-	}
-
-	return nIdx;
+	assert(false);
+	return -1;
 }
 
 //--------------------------------------------------
@@ -254,6 +252,8 @@ void InitColorOption(void)
 //--------------------------------------------------
 void ChangeOption(int nIdx)
 {
+	assert(nIdx >= 0 && nIdx < MAX_OPTION);
+
 	s_nIdxOption = nIdx;
 }
 
@@ -270,6 +270,8 @@ void DecisionOption(void)
 //--------------------------------------------------
 void ResetMenu(int nIdx)
 {
+	assert(nIdx >= 0 && nIdx < MAX_MENU);
+
 	s_nIdxMenu = 0;
 	s_nIdxOption = 0;
 	s_nAlphaTime = 0;

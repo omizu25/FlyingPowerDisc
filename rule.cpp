@@ -22,7 +22,7 @@
 #define HALF_FLASH	(MAX_FLASH / 2)		//点滅の切り替え時間
 
 //スタティック変数
-static LPDIRECT3DTEXTURE9		s_pTexture[MAX_TEXTURE] = {};	//テクスチャへのポインタ
+static TEXTURE		s_Texture[MAX_TEXTURE] = {};	//テクスチャへのポインタ
 static Rule s_Rule[MAX_RULE];		//ルール構造体の取得
 static Switch s_Switch[MAX_SWITCH];	//スイッチ構造体の取得
 static int s_nFlashTime;			//点滅の時間
@@ -44,11 +44,11 @@ void InitRule(void)
 	//------------------------------
 	// テクスチャの取得
 	//------------------------------
-	s_pTexture[0] = GetTexture(TEXTURE_Title_blue);			//時間
-	s_pTexture[1] = GetTexture(TEXTURE_TitleLight_red);		//ポイント数
-	s_pTexture[2] = GetTexture(TEXTURE_Disc);				//セット数
-	s_pTexture[3] = GetTexture(TEXTURE_Select_Left);	//左ボタン
-	s_pTexture[4] = GetTexture(TEXTURE_Select_Right);	//右ボタン
+	s_Texture[0] = TEXTURE_Title_blue;			//時間
+	s_Texture[1] = TEXTURE_TitleLight_red;		//ポイント数
+	s_Texture[2] = TEXTURE_Disc;				//セット数
+	s_Texture[3] = TEXTURE_Select_Left;	//左ボタン
+	s_Texture[4] = TEXTURE_Select_Right;	//右ボタン
 
 	//------------------------------
 	//	構造体の初期化
@@ -144,7 +144,7 @@ void SetRule(D3DXVECTOR3 pos)
 			rule->bUse = true;
 
 			// 矩形の設定
-			rule->nIdx = SetRectangle(s_pTexture[nCnt]);
+			rule->nIdx = SetRectangle(s_Texture[nCnt]);
 			
 			D3DXVECTOR3 size = D3DXVECTOR3(rule->fWidth, rule->fHeight, 0.0f);
 
@@ -178,7 +178,7 @@ void SetSwitchLeft(D3DXVECTOR3 pos)
 			Switch->bUse = true;
 
 			// 矩形の設定
-			Switch->nIdx = SetRectangle(s_pTexture[3]);
+			Switch->nIdx = SetRectangle(s_Texture[3]);
 
 			D3DXVECTOR3 size = D3DXVECTOR3(Switch->fWidth, Switch->fHeight, 0.0f);
 
@@ -208,7 +208,7 @@ void SetSwitchRight(D3DXVECTOR3 pos)
 			Switch->bUse = true;
 
 			// 矩形の設定
-			Switch->nIdx = SetRectangle(s_pTexture[4]);
+			Switch->nIdx = SetRectangle(s_Texture[4]);
 
 			D3DXVECTOR3 size = D3DXVECTOR3(Switch->fWidth, Switch->fHeight, 0.0f);
 

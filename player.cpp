@@ -42,7 +42,7 @@ void InitPlayer(void)
 		s_Player[count].fwidth = PLAYERSIZ_X;
 
 		// ãÈå`ÇÃê›íË
-		s_Player[count].nIdx = SetRectangle(s_pTexturePlayer[count]);
+		s_Player[count].nIdx = SetRectangleWithTex(s_pTexturePlayer[count]);
 	}
 	SetPlayer(D3DXVECTOR3((float)0, (float)SCREEN_HEIGHT * 0.5f, 0.0f), 0,true);
 	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT * 0.5f, 0.0f), 1,false);

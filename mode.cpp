@@ -196,5 +196,7 @@ MODE GetMode(void)
 //--------------------------------------------------
 void ChangeMode(MODE modeNext)
 {
+	assert(modeNext >= 0 && modeNext < MODE_MAX);
+
 	s_modeNext = modeNext;
 }

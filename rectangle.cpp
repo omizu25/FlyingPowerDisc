@@ -10,6 +10,7 @@
 //==================================================
 #include "rectangle.h"
 #include "color.h"
+#include "texture.h"
 
 #include <assert.h>
 
@@ -96,7 +97,16 @@ void DrawRectangle(void)
 //--------------------------------------------------
 // 設定
 //--------------------------------------------------
-int SetRectangle(LPDIRECT3DTEXTURE9 pTexture)
+int SetRectangle(TEXTURE texture)
+{
+	// 設定 [ テクスチャあり ]
+	return SetRectangleWithTex(GetTexture(texture));
+}
+
+//--------------------------------------------------
+// 設定 [ テクスチャあり ]
+//--------------------------------------------------
+int SetRectangleWithTex(LPDIRECT3DTEXTURE9 pTexture)
 {
 	for (int i = 0; i < MAX_RECTANGLE; i++)
 	{
