@@ -220,6 +220,10 @@ void FlashTexture(int nNumber)
 		SetColorRectangle(s_Rule[nNumber].nIdx, GetColor(COLOR_WHITE));
 	}
 
+	//選択ボタンの色の初期化
+	SetColorRectangle(s_Switch[nNumber].nIdx, GetColor(COLOR_WHITE));
+	SetColorRectangle(s_Switch[nNumber + 3].nIdx, GetColor(COLOR_WHITE));
+
 	//----------------
 	// 左選択
 	//----------------
@@ -240,7 +244,7 @@ void FlashTexture(int nNumber)
 	//----------------
 	// 右選択
 	//----------------
-	if (GetKeyboardTrigger(DIK_A))
+	if (GetKeyboardTrigger(DIK_D))
 	{
 		if (s_nTime >= HALF_FLASH)
 		{
