@@ -85,16 +85,7 @@ void UpdatePlayer(void)
 	{
 		Player *pPlayer = &s_Player[count];
 
-		CollisionWall(&s_Player[1].pos, &s_Player[1].posOld);
-
-		/*CalcParticlePlaneAfterPos(
-			&s_Player[count].pos,
-			&s_Player[count].move,
-			1.1f,
-			1.2f,
-			&s_Player[count].pos,
-			&s_Player[count].move
-		);*/
+		CollisionWall(&s_Player[1].pos, &s_Player[1].posOld, &s_Player[1].move);
 
 		//移動量を更新(減衰させる)
 		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  

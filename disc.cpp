@@ -137,6 +137,7 @@ static void UpdateStart(void)
 	//–Ú“I‚ÌˆÚ“®•ûŒü(Šp“x)
 	fRotDest = atan2f(pPlayer->pos.x - s_disc.pos.x, pPlayer->pos.y - s_disc.pos.y);
 
+
 	fRotDiff = fRotDest - fRotMove;		//–Ú“I‚ÌˆÚ“®•ûŒü‚Ü‚Å‚Ì·•ª
 
 	if (fRotDiff >= D3DX_PI)
@@ -223,7 +224,7 @@ static void Reflect(void)
 	else if (s_disc.pos.x <= fRadius)
 	{// ¶
 		// ƒQ[ƒ€‚Ìó‘Ô‚ÌÝ’è
-		SetGameState(GAMESTART_RESET);
+		//SetGameState(GAMESTART_RESET);
 	}
 }
 
