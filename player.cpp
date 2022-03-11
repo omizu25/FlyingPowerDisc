@@ -85,8 +85,10 @@ void UpdatePlayer(void)
 	{
 		Player *pPlayer = &s_Player[count];
 
-		CollisionWall(&s_Player[1].pos, &s_Player[1].posOld, &s_Player[1].move);
+		CollisionWall(&s_Player[1].pos, &s_Player[1].posOld);
 
+
+		CollisionWall(&s_Player[0].pos, &s_Player[0].posOld);
 		//移動量を更新(減衰させる)
 		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  
 		s_Player[count].move.y += (0.0f - s_Player[count].move.y)*0.2f;//（目的の値-現在の値）＊減衰係数

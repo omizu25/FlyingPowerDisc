@@ -10,16 +10,16 @@
 #include"sound.h"
 #include <stdio.h>
 
-#define MAXWALL			(1)//登場最大数
+#define MAXWALL			(2)//登場最大数
 #define MAXWALLTYPE		(4)//Type最大数
 #define MOVESPEED		(5.0f)
-#define WALLWIDE		(100.0f)
+#define WALLWIDE		(80.0f)
 //スタティック変数///スタティックをヘッタに使うなよ？
 
 static LPDIRECT3DTEXTURE9 s_pTextureWall[MAXWALLTYPE] = {}; //テクスチャのポインタ
 static LPDIRECT3DVERTEXBUFFER9 s_pVtxBuffWall = NULL; //頂点バッファの設定
 static D3DXVECTOR3	s_rotWall;	//向き
-
+static WALL Type[MAXWALL];
 //計算用関数
 void SetNormalpos2d(VERTEX_2D *pVtx, float XUP, float XDW, float YUP, float YDW);
 float Vec2Cross(D3DXVECTOR3* v1, D3DXVECTOR3* v2);
@@ -51,14 +51,16 @@ void InitWall(void)
 	for (int count = 0; count< MAXWALL; count++,pVtx+=4)
 	{
 		SetNormalpos2d(pVtx, 0.0f, SCREEN_WIDTH, 200.0f, 200.0f + WALLWIDE);
-	/*	if (count == 0)
+		if (count == 0)
 		{
 			SetNormalpos2d(pVtx, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT - WALLWIDE, SCREEN_HEIGHT);
+			Type[count] = WALL_UP;
 		}
 		if (count == 1)
 		{
 			SetNormalpos2d(pVtx, 0.0f, SCREEN_WIDTH, 0.0f , 0.0f+ WALLWIDE);
-		}*/
+			Type[count] = WALL_DOWN;
+		}
 
 		//RHWの設定
 		pVtx[0].rhw = 1.0f;
@@ -157,7 +159,7 @@ void DrawWall(void)
 //----------------------------
 //Wall動き
 //----------------------------
-bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *move)
+bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld)
 {
 	VERTEX_2D*pVtx; //頂点へのポインタ
 	s_pVtxBuffWall->Lock(0, 0, (void**)&pVtx, 0);
@@ -169,26 +171,50 @@ bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *move)
 
 			//V1 move
 			D3DXVECTOR3 vecMove = *pPos - *pPosOld;
+			D3DXVECTOR3 vecWall;
+			D3DXVECTOR3 vecPos;
+			if (Type[count] == WALL_UP)
+			{
+				//ベクトルS2 V2
+				vecWall = D3DXVECTOR3(pVtx[1].pos) - D3DXVECTOR3(pVtx[0].pos) + (vecMove);
 
-			//ベクトルS2 V2
-			D3DXVECTOR3 vecWall = D3DXVECTOR3(pVtx[1].pos) - D3DXVECTOR3(pVtx[0].pos) + (vecMove);
 
-			//ベクトル現在のPOSと始点までの距離
-			D3DXVECTOR3 vecPos = *pPos - D3DXVECTOR3(pVtx[0].pos);
+				//ベクトル現在のPOSと始点までの距離
+				vecPos = *pPos - D3DXVECTOR3(pVtx[0].pos);
+			}
+			else
+			{
+				//ベクトルS2 V2
+				vecWall = D3DXVECTOR3(pVtx[2].pos) - D3DXVECTOR3(pVtx[3].pos) + (vecMove);
 
+
+				//ベクトル現在のPOSと始点までの距離
+				vecPos = *pPos - D3DXVECTOR3(pVtx[3].pos);
+			}
 			//外積計算
 			float vecLine = Vec2Cross(&vecPos, &vecWall);
 
 			if (vecLine <= 0.0f)
 			{
 				bIsLanding = true;
+				D3DXVECTOR3 vecOld;
+				D3DXVECTOR3 vecV3;
+				if (Type[count] == WALL_UP)
+				{
+					//ベクトルV
+					vecOld = D3DXVECTOR3(pVtx[0].pos) - *pPosOld;
 
-				//ベクトルV
-				D3DXVECTOR3 vecOld = D3DXVECTOR3(pVtx[0].pos) - *pPosOld;
+					//V3 
+					vecV3 = D3DXVECTOR3(pVtx[0].pos) - D3DXVECTOR3(pVtx[3].pos);
+				}
+				else
+				{
+					//ベクトルV
+					vecOld = D3DXVECTOR3(pVtx[3].pos) - *pPosOld;
 
-				//V3 
-				D3DXVECTOR3 vecV3 = D3DXVECTOR3(pVtx[0].pos) - D3DXVECTOR3(pVtx[3].pos);
-
+					//V3 
+					vecV3 = D3DXVECTOR3(pVtx[3].pos) - D3DXVECTOR3(pVtx[1].pos);
+				}
 				//法線
 				D3DXVECTOR3 vecB;
 
@@ -235,8 +261,10 @@ bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *move)
 				}
 				else
 				{//交差してるとき
-					pPos->x += (vecMove.x) + (vecC.x*10.0f);
-					pPos->y += (vecMove.y) + (vecC.y*10.0f);
+					pPos->x = (pPosOld->x + vecMove.x*t1) + (vecC.x*5.5f);
+					pPos->y = (pPosOld->y - vecMove.y*t1) - (vecC.y*5.5f);
+					
+					//あとここでMove反転させればいい//まかせたかつき
 					//頂点カラーの設定
 					pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 					pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
