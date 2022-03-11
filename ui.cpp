@@ -35,10 +35,10 @@ void InitUi(void)
 	D3DXCreateTextureFromFile(pDevice,
 		"data\\TEXTURE\\UI001.png",
 		&g_pTextureUi[1]);
-	////テクスチャの読み込み
-	//D3DXCreateTextureFromFile(pDevice,
-	//	"data\\TEXTURE\\Ui004.jpg",
-	//	&g_pTextureUi[2]);
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Ui002.jpg",
+		&g_pTextureUi[2]);
 	////テクスチャの読み込み
 	//D3DXCreateTextureFromFile(pDevice,
 	//	"data\\TEXTURE\\Ui003.jpg",
@@ -47,10 +47,13 @@ void InitUi(void)
 	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
 	{
 		g_aUi[nCntUi].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		g_aUi[nCntUi].scale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		g_aUi[nCntUi].nCntTime = 0.0f;
 		g_aUi[nCntUi].fHeight = 0.0f;
 		g_aUi[nCntUi].fWidth = 0.0f;
 		g_aUi[nCntUi].nType = 0;
-		g_aUi[nCntUi].bUse = false;	//使用していない状態にする
+		g_aUi[nCntUi].bUse = false;		//使用していない状態にする
+		g_aUi[nCntUi].bSwitch = false;	//消えていく状態にする
 	}
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_UI,
@@ -61,7 +64,7 @@ void InitUi(void)
 		NULL);
 
 	VERTEX_2D * pVtx;		//頂点情報へのポインタ
-							//頂点バッファをロックし、頂点情報へのポインタを取得
+	//頂点バッファをロックし、頂点情報へのポインタを取得
 	g_pVtxBuffUi->Lock(0, 0, (void**)&pVtx, 0);
 
 	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
@@ -115,7 +118,64 @@ void UninitUi(void)
 //====================================
 void UpdateUi(void)
 {
+	VERTEX_2D * pVtx;		//頂点情報へのポインタ
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	g_pVtxBuffUi->Lock(0, 0, (void**)&pVtx, 0);
+	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
+	{
+		//種類ごとの動き
+		if (g_aUi[nCntUi].nType == 2 && g_aUi[nCntUi].bSwitch == false)
+		{//出てくる処理
+			g_aUi[nCntUi].scale.x += 0.01f;
+			//拡大率の調整
+			if (g_aUi[nCntUi].scale.x > 1.0f)
+			{
+				g_aUi[nCntUi].scale.x = 1.0f;
+				g_aUi[nCntUi].nCntTime++;
+				if (g_aUi[nCntUi].nCntTime == 120)
+				{
+					g_aUi[nCntUi].bSwitch = true;
+				}
+			}
+		}
+		else if (g_aUi[nCntUi].nType == 2 && g_aUi[nCntUi].bSwitch)
+		{//消える処理
+			g_aUi[nCntUi].scale.x -= 0.01f;
+		}
+		//拡大率の調整
+		if (g_aUi[nCntUi].scale.x > 1.0f)
+		{
+			g_aUi[nCntUi].scale.x = 1.0f;
+			g_aUi[nCntUi].bSwitch = true;
+		}
+		else if(g_aUi[nCntUi].scale.y > 1.0f)
+		{
+			g_aUi[nCntUi].scale.y = 1.0f;
+			g_aUi[nCntUi].bSwitch = true;
+		}
+		if (g_aUi[nCntUi].scale.x < 0.0f)
+		{
+			g_aUi[nCntUi].scale.x = 0.0f;
+		}
+		else if (g_aUi[nCntUi].scale.y < 0.0f)
+		{
+			g_aUi[nCntUi].scale.y = 0.0f;
+		}
+		//頂点座標の設定
+		pVtx[0].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+		//頂点カラーの設定
+		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
 
+		pVtx += 4;
+	}
+	//頂点バッファをアンロックする
+	g_pVtxBuffUi->Unlock();
 }
 //====================================
 //UIの描画処理
@@ -130,7 +190,7 @@ void DrawUi(void)
 	pDevice->SetFVF(FVF_VERTEX_2D);
 	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
 	{
-		if (g_aUi[nCntUi].bUse == true)
+		if (g_aUi[nCntUi].bUse)
 		{//UIが使用されている
 		 //テクスチャの設定
 			pDevice->SetTexture(0, g_pTextureUi[g_aUi[nCntUi].nType]);
@@ -142,7 +202,7 @@ void DrawUi(void)
 //====================================
 //UIの設定処理
 //====================================
-void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType)
+void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType, D3DXVECTOR3 scale)
 {
 	VERTEX_2D * pVtx;		//頂点情報へのポインタ
 	//頂点バッファをロックし、頂点情報へのポインタを取得
@@ -156,11 +216,12 @@ void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType)
 			g_aUi[nCntUi].fWidth = fWidth;
 			g_aUi[nCntUi].fHeight = fHeight;
 			g_aUi[nCntUi].nType = nType;
-			//頂点座標の更新
-			pVtx[0].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2, g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2, 0.0f);
-			pVtx[1].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2, g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2, 0.0f);
-			pVtx[2].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2, g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2, 0.0f);
-			pVtx[3].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2, g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2, 0.0f);
+			g_aUi[nCntUi].scale = scale;
+			//頂点座標の設定
+			pVtx[0].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
 
 			g_aUi[nCntUi].bUse = true;		//使用している状態
 			break;

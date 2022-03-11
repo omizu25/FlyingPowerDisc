@@ -14,10 +14,13 @@
 typedef struct
 {
 	D3DXVECTOR3 pos;	//位置
+	D3DXVECTOR3 scale;	//拡大率
+	float nCntTime;		//出現時間
 	float fWidth;		//幅
 	float fHeight;		//高さ
 	int nType;			//種類
 	bool bUse;			//使用しているかどうか
+	bool bSwitch;		//出てくるか消えていくか
 }Ui;
 //====================================
 //プロトタイプ宣言
@@ -26,8 +29,7 @@ void InitUi(void);
 void UninitUi(void);
 void UpdateUi(void);
 void DrawUi(void);
-void DeleteUi(int nCntUi);
-void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType);
+void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType, D3DXVECTOR3 scale);
 Ui * GetUi(void);
 
 #endif
