@@ -164,9 +164,9 @@ void SetMode(void)
 		InitRule();
 
 		//ÉãÅ[ÉãëIëâÊñ ÇÃê›íË
-		SetRule(D3DXVECTOR3(SCREEN_WIDTH / 2, 100.0f, 0.0f));
-		SetRule(D3DXVECTOR3(SCREEN_WIDTH / 2, 300.0f, 0.0f));
-		SetRule(D3DXVECTOR3(SCREEN_WIDTH / 2, 500.0f, 0.0f));
+		SetRule(D3DXVECTOR3(400.0f, 150.0f, 0.0f));
+		SetRule(D3DXVECTOR3(400.0f, 350.0f, 0.0f));
+		SetRule(D3DXVECTOR3(400.0f, 550.0f, 0.0f));
 		break;
 
 	case MODE_GAME:			// ÉQÅ[ÉÄ

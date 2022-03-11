@@ -15,7 +15,7 @@ void InitWall(void);
 void UninitWall(void);
 void UpdateWall(void);
 void DrawWall(void);
-bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld);
+bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *move);
 bool CalcParticlePlaneAfterPos(
 	D3DXVECTOR3 *pColliPos,
 	D3DXVECTOR3 *pVelo,

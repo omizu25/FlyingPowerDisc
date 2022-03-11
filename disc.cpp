@@ -19,13 +19,16 @@
 #include <assert.h>
 
 //==================================================
-// マクロ定義
+// 定数
 //==================================================
-#define DISC_SIZE			(75.0f)										// ディスクのサイズ
-#define DISC_ROT_SPEED		(-0.25f)									// ディスクの回転速度
-#define MAX_MOVE			(5.0f)										// 移動量の最大値
-#define START_POS_X			(SCREEN_WIDTH * 0.5f)						// ディスクの始まりのXの位置
-#define START_POS_Y			(SCREEN_HEIGHT - (DISC_SIZE * 0.5f))		// ディスクの始まりのYの位置
+namespace
+{
+	const float DISC_SIZE = 75.0f;										// ディスクのサイズ
+	const float DISC_ROT_SPEED = -0.25f;								// ディスクの回転速度
+	const float MAX_MOVE = 5.0f;										// 移動量の最大値
+	const float START_POS_X = SCREEN_WIDTH * 0.5f;						// ディスクの始まりのXの位置
+	const float START_POS_Y = SCREEN_HEIGHT - (DISC_SIZE * 0.5f);		// ディスクの始まりのYの位置
+}
 
 //==================================================
 // 構造体
@@ -137,6 +140,7 @@ static void UpdateStart(void)
 	//目的の移動方向(角度)
 	fRotDest = atan2f(pPlayer->pos.x - s_disc.pos.x, pPlayer->pos.y - s_disc.pos.y);
 
+
 	fRotDiff = fRotDest - fRotMove;		//目的の移動方向までの差分
 
 	if (fRotDiff >= D3DX_PI)
@@ -223,7 +227,7 @@ static void Reflect(void)
 	else if (s_disc.pos.x <= fRadius)
 	{// 左
 		// ゲームの状態の設定
-		SetGameState(GAMESTART_RESET);
+		//SetGameState(GAMESTART_RESET);
 	}
 }
 
