@@ -29,6 +29,8 @@ static const char *s_FileName[] =
 	"data/TEXTURE/Back_to_title.png",
 	"data/TEXTURE/UI000.png",
 	"data/TEXTURE/UI001.png",
+	"data/TEXTURE/Select_Left.png",
+	"data/TEXTURE/Select_Right.png",
 };
 
 static_assert(sizeof(s_FileName) / sizeof(s_FileName[0]) == TEXTURE_MAX, "aho");
