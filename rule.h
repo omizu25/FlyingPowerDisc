@@ -39,6 +39,8 @@ void SetRule(D3DXVECTOR3 pos);
 void SetSwitchLeft(D3DXVECTOR3 pos);
 void SetSwitchRight(D3DXVECTOR3 pos);
 void FlashTexture(int nNumber);
+void AddRule(int nNumber);
+void SubRule(int nNumber);
 int ChangeSelect(void);
 
 #endif

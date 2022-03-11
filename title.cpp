@@ -70,7 +70,7 @@ typedef struct
 static int			s_nIdxBG;				// 背景の矩形のインデックス
 static int			s_nIdx;					// 矩形のインデックス
 static Light		s_light[MAX_LIGHT];		// 後光の情報
-static int			s_nTime;				// 時間
+static int			s_nFlashTime;				// 時間
 static int			s_nSelectMenu;			// 選ばれているメニュー
 static int			s_nIdxUseMenu;			// 使っているメニューの番号
 
@@ -88,7 +88,7 @@ void InitTitle(void)
 	// 矩形の初期化
 	InitRectangle();
 
-	s_nTime = 0;
+	s_nFlashTime = 0;
 	s_nSelectMenu = 0;
 
 	// 矩形の設定
@@ -229,10 +229,10 @@ void DrawTitle(void)
 //--------------------------------------------------
 static void UpdateLight(void)
 {
-	s_nTime++;
+	s_nFlashTime++;
 
 	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
-	float fCurve = sinf((s_nTime * CHANGE_SPEED) * (D3DX_PI * 2.0f));
+	float fCurve = sinf((s_nFlashTime * CHANGE_SPEED) * (D3DX_PI * 2.0f));
 
 	for (int i = 0; i < MAX_LIGHT; i++)
 	{
