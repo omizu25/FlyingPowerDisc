@@ -25,8 +25,13 @@
 static LPDIRECT3DTEXTURE9		s_pTexture[MAX_TEXTURE] = {};	//テクスチャへのポインタ
 static Rule s_Rule[MAX_RULE];		//ルール構造体の取得
 static Switch s_Switch[MAX_SWITCH];	//スイッチ構造体の取得
-static int s_nTime;					//点滅の時間
+static int s_nFlashTime;			//点滅の時間
 static int s_nSelect;				//選択中の番号
+
+//ルール選択用
+static int s_nMaxTime = 60;	//時間
+static int s_MaxPoint = 21;	//ポイント数
+static int s_MaxSet = 2;	//セット数
 
 //============================
 // ルール選択画面の初期化
@@ -88,11 +93,23 @@ void UninitRule(void)
 //============================
 void UpdateRule(void)
 {
-	s_nTime++;				//タイムの加算
-	s_nTime %= MAX_FLASH;	//タイムの初期化
+	s_nFlashTime++;				//タイムの加算
+	s_nFlashTime %= MAX_FLASH;	//タイムの初期化
 
 	//選択番号の切り替え
 	int nNumber = ChangeSelect();
+
+	if (GetKeyboardTrigger(DIK_A))
+	{//Aキーが押されたとき
+	//数値の減算
+		SubRule(nNumber);
+	}
+
+	if (GetKeyboardTrigger(DIK_D))
+	{//Dキーが押されたとき
+	 //数値の加算
+		AddRule(nNumber);
+	}
 
 	//テクスチャの点滅
 	FlashTexture(nNumber);
@@ -153,7 +170,7 @@ void SetSwitchLeft(D3DXVECTOR3 pos)
 		if (Switch->bUse == false)
 		{//使用していないなら
 			//構造体の設定
-			Switch->pos = D3DXVECTOR3(pos.x + 400.0f, pos.y, pos.z);
+			Switch->pos = D3DXVECTOR3(pos.x + 300.0f, pos.y, pos.z);
 			Switch->fWidth = 100.0f;
 			Switch->fHeight = 100.0f;
 			Switch->bUse = true;
@@ -209,7 +226,7 @@ void FlashTexture(int nNumber)
 	//------------------------------
 	// 項目のテクスチャ
 	//------------------------------
-	if (s_nTime >= HALF_FLASH)
+	if (s_nFlashTime >= HALF_FLASH)
 	{
 		// 矩形の色の設定
 		SetColorRectangle(s_Rule[nNumber].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
@@ -224,12 +241,12 @@ void FlashTexture(int nNumber)
 	SetColorRectangle(s_Switch[nNumber].nIdx, GetColor(COLOR_WHITE));
 	SetColorRectangle(s_Switch[nNumber + 3].nIdx, GetColor(COLOR_WHITE));
 
-	//----------------
+	//------------------------------
 	// 左選択
-	//----------------
+	//------------------------------
 	if (GetKeyboardTrigger(DIK_A))
-	{
-		if (s_nTime >= HALF_FLASH)
+	{//Aキーが押されたとき
+		if (s_nFlashTime >= HALF_FLASH)
 		{
 			// 矩形の色の設定
 			SetColorRectangle(s_Switch[nNumber].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
@@ -241,12 +258,12 @@ void FlashTexture(int nNumber)
 		}
 	}
 
-	//----------------
+	//------------------------------
 	// 右選択
-	//----------------
+	//------------------------------
 	if (GetKeyboardTrigger(DIK_D))
-	{
-		if (s_nTime >= HALF_FLASH)
+	{//Dキーが押されたとき
+		if (s_nFlashTime >= HALF_FLASH)
 		{
 			// 矩形の色の設定
 			SetColorRectangle(s_Switch[nNumber + 3].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
@@ -255,6 +272,62 @@ void FlashTexture(int nNumber)
 		{
 			// 矩形の色の設定
 			SetColorRectangle(s_Switch[nNumber + 3].nIdx, GetColor(COLOR_WHITE));
+		}
+	}
+}
+
+//============================
+// 数値の加算
+//============================
+void AddRule(int nNumber)
+{
+	if (nNumber == 0)
+	{
+		if (s_nMaxTime <= 60)
+		{
+			s_nMaxTime += 30;	//時間の減少
+		}
+	}
+	else if (nNumber == 1)
+	{
+		if (s_MaxPoint <= 21)
+		{
+			s_MaxPoint += 3;	//ポイントの減少
+		}
+	}
+	else if (nNumber == 2)
+	{
+		if (s_MaxPoint <= 2)
+		{
+			s_MaxSet += 1;	//セット数の減少
+		}
+	}
+}
+
+//============================
+// 数値の減算
+//============================
+void SubRule(int nNumber)
+{
+	if (nNumber == 0)
+	{
+		if (s_nMaxTime >= 60)
+		{
+			s_nMaxTime -= 30;	//時間の減少
+		}
+	}
+	else if (nNumber == 1)
+	{
+		if (s_MaxPoint >= 21)
+		{
+			s_MaxPoint -= 3;	//ポイントの減少
+		}
+	}
+	else if (nNumber == 2)
+	{
+		if (s_MaxPoint >= 2)
+		{
+			s_MaxSet -= 1;	//セット数の減少
 		}
 	}
 }
