@@ -14,11 +14,14 @@
 #include <assert.h>
 
 //==================================================
-// マクロ定義
+// 定義
 //==================================================
-#define MAX_RECTANGLE		(1024)		// 矩形の最大数
-#define NUM_VERTEX			(4)			// 頂点の数
-#define NUM_POLYGON			(2)			// ポリゴンの数
+namespace
+{
+	const int		MAX_RECTANGLE = 1024;		// 矩形の最大数
+	const int		NUM_VERTEX = 4;				// 頂点の数
+	const int		NUM_POLYGON = 2;			// ポリゴンの数
+}
 
 //==================================================
 // 構造体

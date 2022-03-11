@@ -22,22 +22,25 @@
 #include <assert.h>
 
 //==================================================
-// マクロ定義
+// 定義
 //==================================================
-#define MAX_LIGHT			(2)				// 後光の最大数
-#define TITLE_POS_Y			(200.0f)		// タイトルのYの位置
-#define TITLE_WIDTH			(900.0f)		// タイトルの幅
-#define TITLE_HEIGHT		(200.0f)		// タイトルの高さ
-#define LIGHT_WIDTH			(560.0f)		// ライトの幅
-#define LIGHT_HEIGHT		(560.0f)		// ライトの高さ
-#define CHANGE_SPEED		(0.005f)		// 収縮の速度
-#define CHANGE_AMOUNT		(0.1f)			// 変化量
-#define MEDIAN_LENGTH		(0.95f)			// 長さの中央値
-#define MAX_ROTATION		(0.003f)		// 回転の最大値
-#define DECREASE_SIZE		(0.6f)			// サイズの減少割合
-#define DECREASE_SPEED		(0.5f)			// 速度の減少割合
-#define MENU_WIDTH			(540.0f)		// メニューの幅
-#define MENU_HEIGHT			(150.0f)		// メニューの高さ
+namespace
+{
+	const int		MAX_LIGHT = 2;				// 後光の最大数
+	const float		TITLE_POS_Y = 200.0f;		// タイトルのYの位置
+	const float		TITLE_WIDTH = 900.0f;		// タイトルの幅
+	const float		TITLE_HEIGHT = 200.0f;		// タイトルの高さ
+	const float		LIGHT_WIDTH = 560.0f;		// ライトの幅
+	const float		LIGHT_HEIGHT = 560.0f;		// ライトの高さ
+	const float		CHANGE_SPEED = 0.005f;		// 収縮の速度
+	const float		CHANGE_AMOUNT = 0.1f;		// 変化量
+	const float		MEDIAN_LENGTH = 0.95f;		// 長さの中央値
+	const float		MAX_ROTATION = 0.003f;		// 回転の最大値
+	const float		DECREASE_SIZE = 0.6f;		// サイズの減少割合
+	const float		DECREASE_SPEED = 0.5f;		// 速度の減少割合
+	const float		MENU_WIDTH = 540.0f;		// メニューの幅
+	const float		MENU_HEIGHT = 150.0f;		// メニューの高さ
+}
 
 //==================================================
 // 列挙型

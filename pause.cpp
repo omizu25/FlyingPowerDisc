@@ -21,14 +21,20 @@
 //==================================================
 // マクロ定義
 //==================================================
-#define MENU_WIDTH		(500.0f)								// メニューの幅
-#define MENU_HEIGHT		(150.0f)								// メニューの高さ
-#define MENU_LEFT		(SCREEN_WIDTH * 0.25f)					// メニューの左端
-#define MENU_RIGHT		(SCREEN_WIDTH * 0.75f)					// メニューの右端
-#define MENU_TOP		(SCREEN_HEIGHT * 0.1f)					// メニューの上端
-#define MENU_BOTTOM		(SCREEN_HEIGHT * 0.9f)					// メニューの下端
-#define BG_COLOR		(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f))		// 背景の色
-#define FRAME_COLOR		(D3DXCOLOR(0.5f, 1.0f, 0.5f, 1.0f))		// フレームの色
+//==================================================
+// 定義
+//==================================================
+namespace
+{
+	const float			MENU_WIDTH = 500.0f;						// メニューの幅
+	const float			MENU_HEIGHT = 150.0f;						// メニューの高さ
+	const float			MENU_LEFT = SCREEN_WIDTH * 0.25f;			// メニューの左端
+	const float			MENU_RIGHT = SCREEN_WIDTH * 0.75f;			// メニューの右端
+	const float			MENU_TOP = SCREEN_HEIGHT * 0.1f;			// メニューの上端
+	const float			MENU_BOTTOM = SCREEN_HEIGHT * 0.9f;			// メニューの下端
+	const D3DXCOLOR		BG_COLOR(0.0f, 0.0f, 0.0f, 0.6f);			// 背景の色
+	const D3DXCOLOR		FRAME_COLOR(0.5f, 1.0f, 0.5f, 1.0f);		// フレームの色
+}
 
 //==================================================
 // 列挙型

@@ -18,26 +18,26 @@
 //==================================================
 namespace
 {
-	const D3DXCOLOR s_COLOR_RED(1.0f, 0.0f, 0.0f, 1.0f);			// 赤
-	const D3DXCOLOR s_COLOR_GREEN(0.0f, 1.0f, 0.0f, 1.0f);			// 緑
-	const D3DXCOLOR s_COLOR_BLUE(0.0f, 0.0f, 1.0f, 1.0f);			// 青
-	const D3DXCOLOR s_COLOR_YELLOW(1.0f, 1.0f, 0.0f, 1.0f);			// 黄色
-	const D3DXCOLOR s_COLOR_PURPLE(1.0f, 0.0f, 1.0f, 1.0f);			// 紫
-	const D3DXCOLOR s_COLOR_LIGHTBLUE(0.0f, 1.0f, 1.0f, 1.0f);		// 水色
-	const D3DXCOLOR s_COLOR_WHITE(1.0f, 1.0f, 1.0f, 1.0f);			// 白
-	const D3DXCOLOR s_COLOR_BLACK(0.0f, 0.0f, 0.0f, 1.0f);			// 黒
+	const D3DXCOLOR		RED(1.0f, 0.0f, 0.0f, 1.0f);			// 赤
+	const D3DXCOLOR		GREEN(0.0f, 1.0f, 0.0f, 1.0f);			// 緑
+	const D3DXCOLOR		BLUE(0.0f, 0.0f, 1.0f, 1.0f);			// 青
+	const D3DXCOLOR		YELLOW(1.0f, 1.0f, 0.0f, 1.0f);			// 黄色
+	const D3DXCOLOR		PURPLE(1.0f, 0.0f, 1.0f, 1.0f);			// 紫
+	const D3DXCOLOR		LIGHTBLUE(0.0f, 1.0f, 1.0f, 1.0f);		// 水色
+	const D3DXCOLOR		WHITE(1.0f, 1.0f, 1.0f, 1.0f);			// 白
+	const D3DXCOLOR		BLACK(0.0f, 0.0f, 0.0f, 1.0f);			// 黒
 }
 
 static const D3DXCOLOR* s_Colors[] =
 {// 色の配列
-	&s_COLOR_RED,
-	&s_COLOR_GREEN,
-	&s_COLOR_BLUE,
-	&s_COLOR_YELLOW,
-	&s_COLOR_PURPLE,
-	&s_COLOR_LIGHTBLUE,
-	&s_COLOR_WHITE,
-	&s_COLOR_BLACK
+	&RED,
+	&GREEN,
+	&BLUE,
+	&YELLOW,
+	&PURPLE,
+	&LIGHTBLUE,
+	&WHITE,
+	&BLACK
 };
 
 static_assert(sizeof(s_Colors) / sizeof(s_Colors[0]) == COLOR_MAX, "aho");

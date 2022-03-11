@@ -18,12 +18,15 @@
 #include <assert.h>
 
 //==================================================
-// マクロ定義
+// 定義
 //==================================================
-#define MAX_MENU					(16)		// メニューの最大数
-#define NORMAL_BLINK_SPEED			(0.01f)		// 通常時の点滅速度
-#define DECISION_BLINK_SPEED		(0.1f)		// 決定時の点滅速度
-#define MIN_ALPHA					(0.6f)		// α値の最小値
+namespace
+{
+	const int		MAX_MENU = 16;						// メニューの最大数
+	const float		NORMAL_BLINK_SPEED = 0.01f;			// 通常時の点滅速度
+	const float		DECISION_BLINK_SPEED = 0.1f;		// 決定時の点滅速度
+	const float		MIN_ALPHA = 0.6f;					// α値の最小値
+}
 
 //==================================================
 // 構造体

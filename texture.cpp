@@ -17,7 +17,7 @@
 // 定数
 //==================================================
 static const char *s_FileName[] =
-{// 色の配列
+{// テクスチャのパス
 	"data/TEXTURE/BG.png",
 	"data/TEXTURE/Disc.png",
 	"data/TEXTURE/Frame.png",
