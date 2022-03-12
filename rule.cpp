@@ -195,7 +195,10 @@ void SetRule(D3DXVECTOR3 pos)
 			SetSwitchLeft(rule->pos);	//左
 			SetSwitchRight(rule->pos);	//右
 
-			D3DXVECTOR3 posNumber = pos + D3DXVECTOR3(450.0f, 0.0f, 0.0f);
+			// 桁数
+			int nDigit = DigitNumber(s_nOption[nCnt]);
+
+			D3DXVECTOR3 posNumber = pos + D3DXVECTOR3(450.0f + (NUMBER_WIDTH * (nDigit * 0.5f)), 0.0f, 0.0f);
 			D3DXVECTOR3 sizeNumber = D3DXVECTOR3(NUMBER_WIDTH, NUMBER_HEIGHT, 0.0f);
 
 			// 数の設定
@@ -340,16 +343,19 @@ void AddRule(int nNumber)
 	{
 		if (s_nOption[nNumber] < MAX_POINT)
 		{
-			s_nOption[nNumber] += CHANGE_TIME;	//ポイントの増加
+			s_nOption[nNumber] += CHANGE_POINT;	//ポイントの増加
 		}
 	}
 	else if (nNumber == 2)
 	{
 		if (s_nOption[nNumber] < MAX_SET)
 		{
-			s_nOption[nNumber] += CHANGE_TIME;	//セット数の増加
+			s_nOption[nNumber] += CHANGE_SET;	//セット数の増加
 		}
 	}
+
+	// 数の変更
+	ChangeNumber(s_nIdx[nNumber], s_nOption[nNumber]);
 }
 
 //============================
@@ -368,16 +374,19 @@ void SubRule(int nNumber)
 	{
 		if (s_nOption[nNumber] > MIN_POINT)
 		{
-			s_nOption[nNumber] -= CHANGE_TIME;	//ポイントの減少
+			s_nOption[nNumber] -= CHANGE_POINT;	//ポイントの減少
 		}
 	}
 	else if (nNumber == 2)
 	{
 		if (s_nOption[nNumber] > MIN_SET)
 		{
-			s_nOption[nNumber] -= CHANGE_TIME;	//セット数の減少
+			s_nOption[nNumber] -= CHANGE_SET;	//セット数の減少
 		}
 	}
+
+	// 数の変更
+	ChangeNumber(s_nIdx[nNumber], s_nOption[nNumber]);
 }
 
 //============================

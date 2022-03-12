@@ -54,4 +54,11 @@ void ChangeNumber(int nIdx, int nNumber);
 //--------------------------------------------------
 void StopUseNumber(int nIdx);
 
+//--------------------------------------------------
+// Œ…”
+// ˆø”  : int nNumber / ”
+// •Ô’l  : int / Œ…”
+//--------------------------------------------------
+int DigitNumber(int nNumber);
+
 #endif // !_NUMBER_H_

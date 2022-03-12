@@ -39,6 +39,7 @@ typedef struct
 namespace
 {
 Number	s_Number[MAX_NUMBER];	// 数の情報
+int		s_nDigit;				// 桁数計算用
 }// namesapceはここまで
 
  //==================================================
@@ -57,6 +58,8 @@ void InitNumber(void)
 {
 	// メモリのクリア
 	memset(&s_Number, NULL, sizeof(s_Number));
+
+	s_nDigit = 0;
 }
 
 //--------------------------------------------------
@@ -115,31 +118,15 @@ int SetNumber(const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size, const D3DXCOLOR &
 
 		/*↓ 使用していない ↓*/
 
+		// 桁数
+		pNumber->nDigit = DigitNumber(nNumber);
+
 		int nSaveNumber = nNumber;
-
-		while (1)
-		{// 無限ループ
-			if (nSaveNumber >= 10)
-			{// 2桁以上
-				nSaveNumber /= 10;
-				pNumber->nDigit++;
-			}
-			else
-			{// 1桁
-				pNumber->nDigit++;
-
-				if (pNumber->nDigit > MAX_DIGIT)
-				{// 指定の値より大きい
-					pNumber->nDigit = MAX_DIGIT;
-				}
-				break;
-			}
-		}
 
 		for (int j = 0; j < pNumber->nDigit; j++)
 		{// 一桁ずつに分ける
-			pNumber->nNumber[j] = nNumber % 10;
-			nNumber /= 10;
+			pNumber->nNumber[j] = nSaveNumber % 10;
+			nSaveNumber /= 10;
 		}
 
 		// 一桁ずつの設定
@@ -170,11 +157,23 @@ void ChangeNumber(int nIdx, int nNumber)
 
 	/*↓ 使用している ↓*/
 
+	// 桁数
+	pNumber->nDigit = DigitNumber(nNumber);
+
+	int nSaveNumber = nNumber;
+
+	for (int j = 0; j < pNumber->nDigit; j++)
+	{// 一桁ずつに分ける
+		pNumber->nNumber[j] = nSaveNumber % 10;
+		nSaveNumber /= 10;
+	}
+
 	float fDivide = 1.0f / TEX_DIVIDE;
-	float fTex = fDivide * nNumber;
 
 	for (int i = 0; i < pNumber->nDigit; i++)
 	{
+		float fTex = fDivide * pNumber->nNumber[i];
+
 		// 矩形のテクスチャ座標の設定
 		SetTexRectangle(pNumber->nIdx[i], D3DXVECTOR2(fTex, fTex + fDivide), D3DXVECTOR2(0.0f, 1.0f));
 	}
@@ -196,6 +195,36 @@ void StopUseNumber(int nIdx)
 		// 使うのを止める
 		StopUseRectangle(pNumber->nIdx[i]);
 	}
+}
+
+//--------------------------------------------------
+// 桁数
+//--------------------------------------------------
+int DigitNumber(int nNumber)
+{
+	s_nDigit = 0;
+	int nSaveNumber = nNumber;
+
+	while (1)
+	{// 無限ループ
+		if (nSaveNumber >= 10)
+		{// 2桁以上
+			nSaveNumber /= 10;
+			s_nDigit++;
+		}
+		else
+		{// 1桁
+			s_nDigit++;
+
+			if (s_nDigit > MAX_DIGIT)
+			{// 指定の値より大きい
+				s_nDigit = MAX_DIGIT;
+			}
+			break;
+		}
+	}
+
+	return s_nDigit;
 }
 
 namespace
