@@ -157,7 +157,7 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 		s_Player[count].Pow = s_PlayerType[nType].Pow;
 		s_Player[count].fheight = PLAYERSIZ_Y;
 		s_Player[count].fwidth = PLAYERSIZ_X;
-	
+		s_Player[count].have = false;
 		if (light)
 		{
 			D3DXVECTOR2 texU(1.0f, 0.0f);
@@ -236,7 +236,7 @@ void LoadFile(char *Filename)
 
 	//ファイルを開く
 	pFile = fopen(Filename, "r");
-	int nCnt = 0;
+	int number = 0;
 
 	if (pFile != NULL)
 	{//ファイルが開いた場合
@@ -282,16 +282,16 @@ void LoadFile(char *Filename)
 					if (strcmp(&s_aString[0], "ATTACKPOW") == 0)
 					{
 						fscanf(pFile, "%s", &s_aString[0]);//＝読み込むやつ
-						fscanf(pFile, "%f", &s_PlayerType[nCnt].Pow);
+						fscanf(pFile, "%f", &s_PlayerType[number].Pow);
 					}
 					if (strcmp(&s_aString[0], "MOVESPEED") == 0)
 					{
 						fscanf(pFile, "%s", &s_aString[0]);//＝読み込むやつ
-						fscanf(pFile, "%f", &s_PlayerType[nCnt].Speed);
+						fscanf(pFile, "%f", &s_PlayerType[number].Speed);
 					}
 					if (strcmp(&s_aString[0], "ENDSET") == 0)
 					{
-						nCnt++;
+						number++;
 						break;
 					}
 				}
@@ -327,7 +327,7 @@ void MovePlayer(void)
 	}
 	if (GetKeyboardPress(DIK_SPACE))
 	{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
-		
+		s_Player[0].have = false;
 	}
 	//---------------------------------------
 	//２体目の行動
@@ -350,11 +350,40 @@ void MovePlayer(void)
 	}
 	if (GetKeyboardPress(DIK_RETURN))
 	{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
-
+		s_Player[0].have = false;
 	}
 
 }
+bool CollisionPlayer(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, float Size, int number)
+{
+	bool bIsLanding = false;
 
+	/*	float vecA = ;
+		float vecB;*/
+	if (pPos->y + Size / 2 > s_Player[number].pos.y + PLAYERSIZ_Y/2,
+		pPos->y - Size / 2 < s_Player[number].pos.y + PLAYERSIZ_Y / 2)
+	{
+
+		if (pPos->x + Size / 2 > s_Player[number].pos.x - PLAYERSIZ_X / 2
+			&& pPosOld->x + Size / 2 <= s_Player[number].pos.x + PLAYERSIZ_X / 2)
+		{//ブロックの座標と座標が重なり合ったら//通常モード//左
+			pPos->x = s_Player[number].pos.x;
+			pPos->y = s_Player[number].pos.y;
+			bIsLanding = true;
+			s_Player[number].have = true;
+		}
+		if (pPos->x - Size / 2 < s_Player[number].pos.x + PLAYERSIZ_X / 2
+			&& pPosOld->x - Size / 2 >= s_Player[number].pos.x - PLAYERSIZ_X / 2)
+		{//ブロックの座標と座標が重なり合ったら//通常モード//右
+			pPos->x = s_Player[number].pos.x;
+			pPos->y = s_Player[number].pos.y;
+			bIsLanding = true;
+			s_Player[number].have = true;
+		}
+	}
+
+	return bIsLanding;
+}
 
 //----------------------------
 //Player情報を取得
@@ -363,3 +392,4 @@ Player* GetPlayer(void)
 {
 	return s_Player;
 }
+
