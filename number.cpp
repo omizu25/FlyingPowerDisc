@@ -26,10 +26,13 @@ const int	TEX_DIVIDE = 10;	// テクスチャの分割数
 
 typedef struct
 {
-	int		nNumber[MAX_DIGIT];	// 数
-	int		nDigit;				// 桁数
-	int		nIdx[MAX_DIGIT];	// 矩形のインデックス
-	bool	bUse;				// 使用しているかどうか
+	D3DXVECTOR3	pos;				// 位置
+	D3DXVECTOR3	size;				// サイズ
+	D3DXCOLOR	col;				// 色
+	int			nNumber[MAX_DIGIT];	// 数
+	int			nDigit;				// 桁数
+	int			nIdx[MAX_DIGIT];	// 矩形のインデックス
+	bool		bUse;				// 使用しているかどうか
 }Number;
 }// namesapceはここまで
 
@@ -47,7 +50,8 @@ int		s_nDigit;				// 桁数計算用
  //==================================================
 namespace
 {
-void SetOneDigitNumber(Number *pNumber, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size, const D3DXCOLOR &col);
+void OneDivideNumber(Number *pNumber, int nNumber);
+void SetOneDigitNumber(Number *pNumber, int nDigit);
 }// namespaceはここまで
 
 
@@ -118,19 +122,21 @@ int SetNumber(const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size, const D3DXCOLOR &
 
 		/*↓ 使用していない ↓*/
 
+		pNumber->pos = pos;
+		pNumber->size = size;
+		pNumber->col = col;
+
 		// 桁数
 		pNumber->nDigit = DigitNumber(nNumber);
 
-		int nSaveNumber = nNumber;
+		// 一桁ずつに分ける
+		OneDivideNumber(pNumber, nNumber);
 
 		for (int j = 0; j < pNumber->nDigit; j++)
-		{// 一桁ずつに分ける
-			pNumber->nNumber[j] = nSaveNumber % 10;
-			nSaveNumber /= 10;
+		{
+			// 一桁ずつの設定
+			SetOneDigitNumber(pNumber, j);
 		}
-
-		// 一桁ずつの設定
-		SetOneDigitNumber(pNumber, pos, size, col);
 
 		pNumber->bUse = true;
 
@@ -157,15 +163,30 @@ void ChangeNumber(int nIdx, int nNumber)
 
 	/*↓ 使用している ↓*/
 
-	// 桁数
-	pNumber->nDigit = DigitNumber(nNumber);
+	if (pNumber->nDigit != DigitNumber(nNumber))
+	{// 桁数が違う
+		for (int i = 0; i < pNumber->nDigit; i++)
+		{
+			// 使うのを止める
+			StopUseRectangle(pNumber->nIdx[i]);
+		}
 
-	int nSaveNumber = nNumber;
+		// 桁数
+		pNumber->nDigit = DigitNumber(nNumber);
 
-	for (int j = 0; j < pNumber->nDigit; j++)
-	{// 一桁ずつに分ける
-		pNumber->nNumber[j] = nSaveNumber % 10;
-		nSaveNumber /= 10;
+		// 一桁ずつに分ける
+		OneDivideNumber(pNumber, nNumber);
+
+		for (int i = 0; i < pNumber->nDigit; i++)
+		{
+			// 一桁ずつの設定
+			SetOneDigitNumber(pNumber, i);
+		}
+	}
+	else
+	{// 桁数が同じ
+		// 一桁ずつに分ける
+		OneDivideNumber(pNumber, nNumber);
 	}
 
 	float fDivide = 1.0f / TEX_DIVIDE;
@@ -230,28 +251,39 @@ int DigitNumber(int nNumber)
 namespace
 {
 //--------------------------------------------------
+// 一桁ずつに分ける
+//--------------------------------------------------
+void OneDivideNumber(Number *pNumber, int nNumber)
+{
+	int nSaveNumber = nNumber;
+
+	for (int i = 0; i < pNumber->nDigit; i++)
+	{// 一桁ずつに分ける
+		pNumber->nNumber[i] = nSaveNumber % 10;
+		nSaveNumber /= 10;
+	}
+}
+
+//--------------------------------------------------
 // 一桁ずつの設定
 //--------------------------------------------------
-void SetOneDigitNumber(Number *pNumber, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size, const D3DXCOLOR &col)
+void SetOneDigitNumber(Number *pNumber, int nDigit)
 {
-	for (int i = 0; i < pNumber->nDigit; i++)
-	{
-		// 矩形の設定
-		pNumber->nIdx[i] = SetRectangle(TEXTURE_Number_0To9);
+	// 矩形の設定
+	pNumber->nIdx[nDigit] = SetRectangle(TEXTURE_Number_0To9);
 
-		float fInterval = (size.x * i) + (size.x * 0.5f);
+	float fInterval = (pNumber->size.x * nDigit) + (pNumber->size.x * 0.5f);
 
-		// 矩形の位置の設定
-		SetPosRectangle(pNumber->nIdx[i], pos + D3DXVECTOR3(-fInterval, 0.0f, 0.0f), size);
+	// 矩形の位置の設定
+	SetPosRectangle(pNumber->nIdx[nDigit], pNumber->pos + D3DXVECTOR3(-fInterval, 0.0f, 0.0f), pNumber->size);
 
-		// 矩形の色の設定
-		SetColorRectangle(pNumber->nIdx[i], col);
+	// 矩形の色の設定
+	SetColorRectangle(pNumber->nIdx[nDigit], pNumber->col);
 
-		float fDivide = 1.0f / TEX_DIVIDE;
-		float fTex = fDivide * pNumber->nNumber[i];
+	float fDivide = 1.0f / TEX_DIVIDE;
+	float fTex = fDivide * pNumber->nNumber[nDigit];
 
-		// 矩形のテクスチャ座標の設定
-		SetTexRectangle(pNumber->nIdx[i], D3DXVECTOR2(fTex, fTex + fDivide), D3DXVECTOR2(0.0f, 1.0f));
-	}
+	// 矩形のテクスチャ座標の設定
+	SetTexRectangle(pNumber->nIdx[nDigit], D3DXVECTOR2(fTex, fTex + fDivide), D3DXVECTOR2(0.0f, 1.0f));
 }
 }// namespaceはここまで
