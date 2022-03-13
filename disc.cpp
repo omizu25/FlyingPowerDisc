@@ -32,6 +32,7 @@ const float	START_POS_Y = SCREEN_HEIGHT - (DISC_SIZE * 0.5f);	// ƒfƒBƒXƒN‚Ìn‚Ü‚
 typedef struct
 {
 	D3DXVECTOR3	pos;	// ˆÊ’u
+	D3DXVECTOR3 posOld; //‰ß‹À•W
 	D3DXVECTOR3	rot;	// Œü‚«
 	D3DXVECTOR3	move;	// ˆÚ“®—Ê
 	int			nIdx;	// ‹éŒ`‚ÌƒCƒ“ƒfƒbƒNƒX
@@ -177,8 +178,17 @@ void UpdateNormal(void)
 	// Šp“x‚Ì³‹K‰»
 	NormalizeAngle(&s_disc.rot.z);
 
-	// ˆÊ’u‚ÌXV
-	s_disc.pos += s_disc.move;
+	//Player‚Æ‹Ê‚Ì“–‚½‚è”»’è
+	bool have = CollisionPlayer(&s_disc.pos, &s_disc.posOld, DISC_SIZE,0);
+
+	//‰ß‹À•W‹L˜^
+	s_disc.pos += s_disc.posOld;
+	
+	if (!have)
+	{
+		// ˆÊ’u‚ÌXV
+		s_disc.pos += s_disc.move;
+	}
 
 	Collision();
 
