@@ -10,10 +10,6 @@
 #include"sound.h"
 #include <stdio.h>
 
-#define MAXWALL			(2)//登場最大数
-#define MAXWALLTYPE		(4)//Type最大数
-#define MOVESPEED		(5.0f)
-#define WALLWIDE		(80.0f)
 //スタティック変数///スタティックをヘッタに使うなよ？
 
 static LPDIRECT3DTEXTURE9 s_pTextureWall[MAXWALLTYPE] = {}; //テクスチャのポインタ

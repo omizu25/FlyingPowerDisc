@@ -36,12 +36,14 @@ typedef struct
 	int nLife;					//寿命
 	int nType;					//タイプ
 	int nIdx;					// 矩形のインデックス
+	int havecount;				//もってる時間
 	float fheight;				//高さ
 	float fwidth;				//幅
 	float Pow;					//パワー
 	float Speed;				//スピード
 	bool bUse;					//使用してるかどうか
 	bool have;					//持ってるかどうか
+	bool dive;					//タックル判定
 }Player;
 
 //プロトタイプ宣言
