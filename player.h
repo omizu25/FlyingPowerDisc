@@ -5,6 +5,7 @@
 #define _PLAYE_H_
 
 #include"main.h"
+#include"disc.h"
 
 #define PLAYERMOVE (50)  //ループの幅
 #define PLAYERSIZ_X (100)//サイズ
@@ -39,7 +40,6 @@ typedef struct
 	float fwidth;				//幅
 	float Pow;					//パワー
 	float Speed;				//スピード
-	bool bHave;					// ディスクを持っているかどうか
 	bool bUse;					//使用してるかどうか
 	bool have;					//持ってるかどうか
 }Player;
@@ -50,7 +50,7 @@ void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
 void SetPlayer(D3DXVECTOR3 pos, int nType, bool light);
-bool CollisionPlayer(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, float Size,int number);
+bool CollisionPlayer(Disc *pDisc, float Size,int number);
 
 void MovePlayer(void);
 void SetUp(VERTEX_2D *pVtx,

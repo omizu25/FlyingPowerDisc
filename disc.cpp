@@ -28,17 +28,6 @@ const float	DISC_ROT_SPEED = -0.25f;							// ディスクの回転速度
 const float	MAX_MOVE = 5.0f;									// 移動量の最大値
 const float	START_POS_X = SCREEN_WIDTH * 0.5f;					// ディスクの始まりのXの位置
 const float	START_POS_Y = SCREEN_HEIGHT - (DISC_SIZE * 0.5f);	// ディスクの始まりのYの位置
-
-typedef struct
-{
-	D3DXVECTOR3	pos;	// 位置
-	D3DXVECTOR3 posOld; //過去座標
-	D3DXVECTOR3	rot;	// 向き
-	D3DXVECTOR3	move;	// 移動量
-	int			nIdx;	// 矩形のインデックス
-	int			nThrow;	// 何番目のプレイヤーが投げたか
-	bool		bHave;	// プレイヤーが持っているかどうか
-}Disc;
 }// namespaceはここまで
 
 //==================================================
@@ -59,7 +48,6 @@ void UpdateStart(void);
 void UpdateReset(void);
 void UpdateNormal(void);
 void Reflect(void);
-void Collision(void);
 void NormalizeAngle(float *pAngle);
 }// namespaceはここまで
 
@@ -73,7 +61,7 @@ void InitDisc(void)
 	s_disc.pos = D3DXVECTOR3(START_POS_X, START_POS_Y, 0.0f);
 	s_disc.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_disc.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_disc.nThrow = 0;
+	s_disc.nThrow = s_nPossPlayer ^ 1;
 	s_disc.bHave = false;
 
 	// 矩形の設定
@@ -107,7 +95,7 @@ void UpdateDisc(void)
 		UpdateNormal();
 		break;
 
-	case GAMESTART_RESET:	// リセット状態
+	case GAMESTATE_RESET:	// リセット状態
 		UpdateReset();
 		break;
 
@@ -129,6 +117,14 @@ void UpdateDisc(void)
 void DrawDisc(void)
 {
 	/* 矩形で描画してます */
+}
+
+//--------------------------------------------------
+// 取得
+//--------------------------------------------------
+Disc *GetDisc(void)
+{
+	return &s_disc;
 }
 
 //==================================================
@@ -165,6 +161,26 @@ void UpdateStart(void)
 
 	s_disc.move.x = sinf(fRotMove) * MAX_MOVE;
 	s_disc.move.y = cosf(fRotMove) * MAX_MOVE;
+
+	// 回転
+	s_disc.rot.z += DISC_ROT_SPEED;
+
+	// 角度の正規化
+	NormalizeAngle(&s_disc.rot.z);
+
+	// 位置の更新
+	s_disc.pos += s_disc.move;
+
+	// 矩形の回転する位置の設定
+	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);
+
+	if (CollisionPlayer(&s_disc, DISC_SIZE, s_disc.nThrow ^ 1))
+	{// プレイヤーとディスクの当たり判定
+		// ゲームの状態の設定
+		SetGameState(GAMESTATE_NORMAL);
+
+		s_nPossPlayer = s_nPossPlayer ^ 1;
+	}
 }
 
 //--------------------------------------------------
@@ -172,25 +188,24 @@ void UpdateStart(void)
 //--------------------------------------------------
 void UpdateNormal(void)
 {
+	if (s_disc.bHave)
+	{// プレイヤーが持っている
+		return;
+	}
+
+	/*↓ プレイヤーが持ってない ↓*/
+
 	// 回転
 	s_disc.rot.z += DISC_ROT_SPEED;
 
 	// 角度の正規化
 	NormalizeAngle(&s_disc.rot.z);
 
-	//Playerと玉の当たり判定
-	bool have = CollisionPlayer(&s_disc.pos, &s_disc.posOld, DISC_SIZE,0);
+	// 位置の更新
+	s_disc.pos += s_disc.move;
 
-	//過去座標記録
-	s_disc.pos += s_disc.posOld;
-	
-	if (!have)
-	{
-		// 位置の更新
-		s_disc.pos += s_disc.move;
-	}
-
-	Collision();
+	// プレイヤーとディスクの当たり判定
+	CollisionPlayer(&s_disc, DISC_SIZE, s_disc.nThrow ^ 1);
 
 	// 反射
 	Reflect();
@@ -210,6 +225,9 @@ void UpdateReset(void)
 
 	// 矩形の回転する位置の設定
 	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);
+
+	// ゲームの状態の設定
+	SetGameState(GAMESTATE_START);
 }
 
 //--------------------------------------------------
@@ -233,52 +251,17 @@ void Reflect(void)
 	if (s_disc.pos.x >= SCREEN_WIDTH - fRadius)
 	{// 右
 		// ゲームの状態の設定
-		SetGameState(GAMESTART_RESET);
+		SetGameState(GAMESTATE_RESET);
+		s_nPossPlayer = 0;
+		s_disc.nThrow = s_nPossPlayer ^ 1;
 	}
 	else if (s_disc.pos.x <= fRadius)
 	{// 左
 		// ゲームの状態の設定
-		//SetGameState(GAMESTART_RESET);
+		SetGameState(GAMESTATE_RESET);
+		s_nPossPlayer = 1;
+		s_disc.nThrow = s_nPossPlayer ^ 1;
 	}
-}
-
-//--------------------------------------------------
-// 当たり判定
-//--------------------------------------------------
-void Collision(void)
-{
-	if (s_disc.bHave)
-	{// プレイヤーが持っている
-		return;
-	}
-
-	Player *pPlayer = GetPlayer();
-
-	for (int i = 0; i < MAXPLAYER; i++)
-	{
-		if (!pPlayer->bUse || pPlayer->bHave)
-		{// 使用されていない、ディスクを持っている
-			continue;
-		}
-
-		float fDiscSize = DISC_SIZE * 0.5f;
-		float fHeight = (fDiscSize + (pPlayer->fheight * 0.5f));
-		float fWidth = (fDiscSize + (pPlayer->fwidth * 0.5f));
-
-		if ((s_disc.pos.y <= (pPlayer->pos.y + fHeight)) &&
-			(s_disc.pos.y >= (pPlayer->pos.y - fHeight)) &&
-			(s_disc.pos.x <= (pPlayer->pos.x + fWidth)) &&
-			(s_disc.pos.x >= (pPlayer->pos.x - fWidth)))
-		{// プレイヤーにディスクが当たった時
-			pPlayer->bHave = true;
-			s_disc.bHave = true;
-			s_disc.nThrow = i;
-
-			break;
-		}
-	}
-
-	s_disc.bHave = false;
 }
 
 //--------------------------------------------------

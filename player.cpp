@@ -40,7 +40,7 @@ void InitPlayer(void)
 		s_Player[count].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_Player[count].nLife = 5;
 		s_Player[count].Speed = 0;
-		s_Player[count].bHave = false;
+		s_Player[count].have = false;
 		s_Player[count].bUse = false;
 		s_Player[count].fheight = PLAYERSIZ_Y;
 		s_Player[count].fwidth = PLAYERSIZ_X;
@@ -92,7 +92,7 @@ void UpdatePlayer(void)
 		UpdateNormal();
 		break;
 
-	case GAMESTART_RESET:	// リセット状態
+	case GAMESTATE_RESET:	// リセット状態
 
 		break;
 
@@ -288,77 +288,111 @@ void MovePlayer(void)
 	//---------------------------------------
 	//１体目の行動
 	//----------------------------------------
-	if (GetKeyboardPress(DIK_W))
-	{
-		s_Player[0].move.y = -s_Player[0].Speed;
+	if (!s_Player[0].have)
+	{// ディスクを持っていない
+		if (GetKeyboardPress(DIK_W))
+		{
+			s_Player[0].move.y = -s_Player[0].Speed;
+		}
+		if (GetKeyboardPress(DIK_A))
+		{
+			s_Player[0].move.x = -s_Player[0].Speed;
+		}
+		if (GetKeyboardPress(DIK_S))
+		{
+			s_Player[0].move.y = s_Player[0].Speed;
+		}
+		if (GetKeyboardPress(DIK_D))
+		{
+			s_Player[0].move.x = s_Player[0].Speed;
+		}
 	}
-	if (GetKeyboardPress(DIK_A))
-	{
-		s_Player[0].move.x = -s_Player[0].Speed;
+	else
+	{// ディスクを持っている
+		if (GetKeyboardPress(DIK_SPACE))
+		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
+			s_Player[0].have = false;
+
+			Disc *pDisc = GetDisc();
+
+			pDisc->nThrow = 0;
+			pDisc->move = D3DXVECTOR3(5.0f, 0.0f, 0.0f);
+			pDisc->bHave = false;
+		}
 	}
-	if (GetKeyboardPress(DIK_S))
-	{
-		s_Player[0].move.y = s_Player[0].Speed;
-	}
-	if (GetKeyboardPress(DIK_D))
-	{
-		s_Player[0].move.x = s_Player[0].Speed;
-	}
-	if (GetKeyboardPress(DIK_SPACE))
-	{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
-		s_Player[0].have = false;
-	}
+
 	//---------------------------------------
 	//２体目の行動
 	//----------------------------------------
-	if (GetKeyboardPress(DIK_UP))
-	{
-		s_Player[1].move.y = -s_Player[1].Speed;
+	if (!s_Player[1].have)
+	{// ディスクを持っていない
+		if (GetKeyboardPress(DIK_UP))
+		{
+			s_Player[1].move.y = -s_Player[1].Speed;
+		}
+		if (GetKeyboardPress(DIK_LEFT))
+		{
+			s_Player[1].move.x = -s_Player[1].Speed;
+		}
+		if (GetKeyboardPress(DIK_DOWN))
+		{
+			s_Player[1].move.y = s_Player[1].Speed;
+		}
+		if (GetKeyboardPress(DIK_RIGHT))
+		{
+			s_Player[1].move.x = s_Player[1].Speed;
+		}
 	}
-	if (GetKeyboardPress(DIK_LEFT))
-	{
-		s_Player[1].move.x = -s_Player[1].Speed;
-	}
-	if (GetKeyboardPress(DIK_DOWN))
-	{
-		s_Player[1].move.y = s_Player[1].Speed;
-	}
-	if (GetKeyboardPress(DIK_RIGHT))
-	{
-		s_Player[1].move.x = s_Player[1].Speed;
-	}
-	if (GetKeyboardPress(DIK_RETURN))
-	{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
-		s_Player[0].have = false;
+	else
+	{// ディスクを持っている
+		if (GetKeyboardPress(DIK_RETURN))
+		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
+			s_Player[1].have = false;
+			Disc *pDisc = GetDisc();
+
+			pDisc->nThrow = 1;
+			pDisc->move = D3DXVECTOR3(-5.0f, 0.0f, 0.0f);
+			pDisc->bHave = false;
+		}
 	}
 
 }
-bool CollisionPlayer(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, float Size, int number)
+bool CollisionPlayer(Disc *pDisc, float Size, int number)
 {
 	bool bIsLanding = false;
+	Player *pPlayer = &s_Player[number];
 
-	/*	float vecA = ;
-		float vecB;*/
-	if (pPos->y + Size / 2 > s_Player[number].pos.y + PLAYERSIZ_Y/2,
-		pPos->y - Size / 2 < s_Player[number].pos.y + PLAYERSIZ_Y / 2)
-	{
+	float fDiscSize = Size * 0.0f;
+	float fHeight = (fDiscSize + (PLAYERSIZ_Y * 0.5f));
+	float fWidth = (fDiscSize + (PLAYERSIZ_X * 0.5f));
 
-		if (pPos->x + Size / 2 > s_Player[number].pos.x - PLAYERSIZ_X / 2
-			&& pPosOld->x + Size / 2 <= s_Player[number].pos.x + PLAYERSIZ_X / 2)
-		{//ブロックの座標と座標が重なり合ったら//通常モード//左
-			pPos->x = s_Player[number].pos.x;
-			pPos->y = s_Player[number].pos.y;
-			bIsLanding = true;
-			s_Player[number].have = true;
+	if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
+		(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
+		(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
+		(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
+	{// プレイヤーにディスクが当たった時
+		switch (number)
+		{
+		case 0:
+			pDisc->pos.x = s_Player[number].pos.x + fWidth;
+			break;
+
+		case 1:
+			pDisc->pos.x = s_Player[number].pos.x - fWidth;
+			break;
+
+		default:
+			assert(false);
+			break;
 		}
-		if (pPos->x - Size / 2 < s_Player[number].pos.x + PLAYERSIZ_X / 2
-			&& pPosOld->x - Size / 2 >= s_Player[number].pos.x - PLAYERSIZ_X / 2)
-		{//ブロックの座標と座標が重なり合ったら//通常モード//右
-			pPos->x = s_Player[number].pos.x;
-			pPos->y = s_Player[number].pos.y;
-			bIsLanding = true;
-			s_Player[number].have = true;
-		}
+		pDisc->pos.y = s_Player[number].pos.y;
+		pDisc->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		pDisc->bHave = true;
+
+		s_Player[number].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		s_Player[number].have = true;
+
+		bIsLanding = true;
 	}
 
 	return bIsLanding;

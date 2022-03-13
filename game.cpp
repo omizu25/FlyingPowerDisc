@@ -133,40 +133,13 @@ void UpdateGame(void)
 	// ディスクの更新
 	UpdateDisc();
 
-	switch (s_gameState)
-	{
-	case GAMESTATE_START:	// 開始状態
-		s_gameState = GAMESTATE_NORMAL;
-		break;
+	//UIの更新(まだ何もしてない)
+	UpdateUi();
 
-	case GAMESTATE_NORMAL:	// 通常状態
-		
-		UpdateWall();
-		// プレイヤーの更新
-		UpdatePlayer();
-		
-		//UIの更新(まだ何もしてない)
-		UpdateUi();
+	UpdateWall();
 
-		break;
-
-	case GAMESTART_RESET:	// リセット状態
-
-		break;
-
-	case GAMESTATE_END:		// 終了状態
-
-		break;
-
-	case GAMESTATE_RESULT:	// リザルト状態
-
-		break;
-
-	case GAMESTATE_NONE:	// 何もしていない状態
-	default:
-		assert(false);
-		break;
-	}
+	// プレイヤーの更新
+	UpdatePlayer();
 }
 
 //--------------------------------------------------

@@ -15,7 +15,7 @@ typedef enum
 	GAMESTATE_NONE = 0,	// 何もしていない状態
 	GAMESTATE_START,	// 開始状態
 	GAMESTATE_NORMAL,	// 通常状態
-	GAMESTART_RESET,	// リセット状態
+	GAMESTATE_RESET,	// リセット状態
 	GAMESTATE_END,		// 終了状態
 	GAMESTATE_RESULT,	// リザルト状態
 	GAMESTATE_MAX
