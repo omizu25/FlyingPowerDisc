@@ -9,7 +9,7 @@
 #define PLAYERMOVE (50)  //ループの幅
 #define PLAYERSIZ_X (100)//サイズ
 #define PLAYERSIZ_Y (100)//サイズ
-
+#define MAXPLAYER (2)//登場最大数
 
 typedef enum
 {
@@ -39,6 +39,7 @@ typedef struct
 	float fwidth;				//幅
 	float Pow;					//パワー
 	float Speed;				//スピード
+	bool bHave;					// ディスクを持っているかどうか
 	bool bUse;					//使用してるかどうか
 }Player;
 

@@ -10,9 +10,10 @@
 #include "sound.h"
 #include "rectangle.h"
 #include "wall.h"
+#include "game.h"
 #include <stdio.h>
+#include <assert.h>
 
-#define MAXPLAYER (2)//登場最大数
 #define MAXPLAYERTYPE (4)//Type最大数
 #define MOVESPEED (5.0f)
 //スタティック変数///スタティックをヘッタに使うなよ？
@@ -21,6 +22,8 @@ static LPDIRECT3DTEXTURE9 s_pTexturePlayer[MAXPLAYERTYPE] = {}; //テクスチャのポ
 static Player s_Player[MAXPLAYER];//プレイヤー構造体取得
 static Player s_PlayerType[MAXPLAYERTYPE];//プレイヤーのTypeを保存する
 
+// プロトタイプ宣言
+static void UpdateNormal(void);
 
 //=======================
 //プレイヤーの初期化設定
@@ -37,6 +40,7 @@ void InitPlayer(void)
 		s_Player[count].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_Player[count].nLife = 5;
 		s_Player[count].Speed = 0;
+		s_Player[count].bHave = false;
 		s_Player[count].bUse = false;
 		s_Player[count].fheight = PLAYERSIZ_Y;
 		s_Player[count].fwidth = PLAYERSIZ_X;
@@ -79,55 +83,31 @@ void UninitPlayer(void)
 //===================
 void UpdatePlayer(void)
 {
-	MovePlayer();
-
-	for (int count = 0; count < MAXPLAYER; count++)
+	switch (GetGameState())
 	{
-		Player *pPlayer = &s_Player[count];
+	case GAMESTATE_START:	// 開始状態
+		break;
 
-		CollisionWall(&s_Player[1].pos, &s_Player[1].posOld);
+	case GAMESTATE_NORMAL:	// 通常状態
+		UpdateNormal();
+		break;
 
+	case GAMESTART_RESET:	// リセット状態
 
-		CollisionWall(&s_Player[0].pos, &s_Player[0].posOld);
-		//移動量を更新(減衰させる)
-		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  
-		s_Player[count].move.y += (0.0f - s_Player[count].move.y)*0.2f;//（目的の値-現在の値）＊減衰係数
+		break;
 
-			//前回の位置の保存
-		s_Player[count].posOld = s_Player[count].pos;
-		//更新
-		s_Player[count].pos.x += s_Player[count].move.x;
-		s_Player[count].pos.y += s_Player[count].move.y;
+	case GAMESTATE_END:		// 終了状態
 
-		//壁---------------------------------------------------
-		if (s_Player[count].pos.x <= 0.0f + pPlayer->fwidth / 2.0f)
-		{//横壁（左）
-			s_Player[count].pos.x = 0.0f + pPlayer->fwidth / 2.0f;
-		}
-		else if (s_Player[count].pos.x >= SCREEN_WIDTH - pPlayer->fwidth / 2.0f)
-		{//横壁（右）
-			s_Player[count].pos.x = SCREEN_WIDTH - pPlayer->fwidth / 2.0f;
-		}
-		if (s_Player[count].pos.y <= 0.0f + pPlayer->fheight / 2.0f)
-		{//上壁　
-			s_Player[count].pos.y = 0.0f + pPlayer->fheight / 2.0f;
-		}
-		if (s_Player[count].pos.y >= SCREEN_HEIGHT - pPlayer->fheight / 2.0f)
-		{//下壁
-			s_Player[count].pos.y = SCREEN_HEIGHT - pPlayer->fheight / 2.0f;
-		}
-		//真ん中ライン
-		if (s_Player[0].pos.x >= SCREEN_WIDTH* 0.5f - pPlayer->fwidth / 2.0f)
-		{
-			s_Player[0].pos.x = SCREEN_WIDTH* 0.5f - pPlayer->fwidth / 2.0f;
-		}
-		if (s_Player[1].pos.x <= SCREEN_WIDTH * 0.5f + pPlayer->fwidth / 2.0f)
-		{
-			s_Player[1].pos.x = SCREEN_WIDTH * 0.5f + pPlayer->fwidth / 2.0f;
-		}
+		break;
 
-		// 矩形の回転する位置の設定
-		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
+	case GAMESTATE_RESULT:	// リザルト状態
+
+		break;
+
+	case GAMESTATE_NONE:	// 何もしていない状態
+	default:
+		assert(false);
+		break;
 	}
 }
 //===================
@@ -362,4 +342,61 @@ void MovePlayer(void)
 Player* GetPlayer(void)
 {
 	return s_Player;
+}
+
+//----------------------------
+// 通常状態の更新
+//----------------------------
+static void UpdateNormal(void)
+{
+	MovePlayer();
+
+	for (int count = 0; count < MAXPLAYER; count++)
+	{
+		Player *pPlayer = &s_Player[count];
+
+		CollisionWall(&s_Player[1].pos, &s_Player[1].posOld);
+
+
+		CollisionWall(&s_Player[0].pos, &s_Player[0].posOld);
+		//移動量を更新(減衰させる)
+		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  
+		s_Player[count].move.y += (0.0f - s_Player[count].move.y)*0.2f;//（目的の値-現在の値）＊減衰係数
+
+			//前回の位置の保存
+		s_Player[count].posOld = s_Player[count].pos;
+		//更新
+		s_Player[count].pos.x += s_Player[count].move.x;
+		s_Player[count].pos.y += s_Player[count].move.y;
+
+		//壁---------------------------------------------------
+		if (s_Player[count].pos.x <= 0.0f + pPlayer->fwidth / 2.0f)
+		{//横壁（左）
+			s_Player[count].pos.x = 0.0f + pPlayer->fwidth / 2.0f;
+		}
+		else if (s_Player[count].pos.x >= SCREEN_WIDTH - pPlayer->fwidth / 2.0f)
+		{//横壁（右）
+			s_Player[count].pos.x = SCREEN_WIDTH - pPlayer->fwidth / 2.0f;
+		}
+		if (s_Player[count].pos.y <= 0.0f + pPlayer->fheight / 2.0f)
+		{//上壁　
+			s_Player[count].pos.y = 0.0f + pPlayer->fheight / 2.0f;
+		}
+		if (s_Player[count].pos.y >= SCREEN_HEIGHT - pPlayer->fheight / 2.0f)
+		{//下壁
+			s_Player[count].pos.y = SCREEN_HEIGHT - pPlayer->fheight / 2.0f;
+		}
+		//真ん中ライン
+		if (s_Player[0].pos.x >= SCREEN_WIDTH* 0.5f - pPlayer->fwidth / 2.0f)
+		{
+			s_Player[0].pos.x = SCREEN_WIDTH* 0.5f - pPlayer->fwidth / 2.0f;
+		}
+		if (s_Player[1].pos.x <= SCREEN_WIDTH * 0.5f + pPlayer->fwidth / 2.0f)
+		{
+			s_Player[1].pos.x = SCREEN_WIDTH * 0.5f + pPlayer->fwidth / 2.0f;
+		}
+
+		// 矩形の回転する位置の設定
+		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
+	}
 }
