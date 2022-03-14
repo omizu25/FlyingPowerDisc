@@ -293,7 +293,8 @@ void LoadFile(char *Filename)
 //----------------------------
 void MovePlayer(void)
 {
-	
+
+	Disc *pDisc = GetDisc();
 	//---------------------------------------
 	//１体目の行動
 	//----------------------------------------
@@ -320,14 +321,13 @@ void MovePlayer(void)
 			s_Player[0].pos.x += s_Player[0].Speed*5;
 			s_Player[0].dive = true;
 		}
-		if (s_Player[0].dive == true)
+		if (s_Player[0].dive == true && pDisc->nThrow == 1)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[0];
 
 			float fHeight = ((PLAYERSIZ_Y * 0.5f));
 			float fWidth = ((PLAYERSIZ_X * 0.5f));
 
-			Disc *pDisc = GetDisc();
 			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
 				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
@@ -377,19 +377,19 @@ void MovePlayer(void)
 			s_Player[1].pos.x -= s_Player[1].Speed * 5;
 			s_Player[1].dive = true;
 		}
-		if (s_Player[1].dive == true)
+		if (s_Player[1].dive == true && pDisc->nThrow == 0)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[1];
 
 			float fHeight = ((PLAYERSIZ_Y * 0.5f));
 			float fWidth = ((PLAYERSIZ_X * 0.5f));
 
-			Disc *pDisc = GetDisc();
 			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
 				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
 				(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
 			{// プレイヤーにディスクが当たった時
+
 				pDisc->nThrow = 1;
 				s_Player[1].dive = false;
 				pDisc->move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f)*s_Player[1].Pow * 3;
