@@ -39,6 +39,8 @@ const char *s_FileName[] =
 	"data/TEXTURE/Select_Set.png",
 	"data/TEXTURE/Select_BG.png",
 	"data/TEXTURE/Game_BG.png",
+	"data/TEXTURE/Map_Title.png",
+	"data/TEXTURE/Rule_Title.png",
 };
 }// namespace‚Í‚±‚±‚Ü‚Å
 
