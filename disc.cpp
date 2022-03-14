@@ -15,7 +15,7 @@
 #include "game.h"
 #include "player.h"
 #include "texture.h"
-
+#include "effect.h"
 #include <assert.h>
 
 //==================================================
@@ -170,7 +170,7 @@ void UpdateStart(void)
 
 	// 位置の更新
 	s_disc.pos += s_disc.move;
-
+	
 	// 矩形の回転する位置の設定
 	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);
 
@@ -203,6 +203,11 @@ void UpdateNormal(void)
 
 	// 位置の更新
 	s_disc.pos += s_disc.move;
+	
+	//------------------------
+	//このまま使うと変だから一定間隔で使うといいかも
+	//------------------------
+	SetEffect(D3DXVECTOR3(s_disc.pos.x, s_disc.pos.y, s_disc.pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SPIN, 30, 100.0f);
 
 	// プレイヤーとディスクの当たり判定
 	CollisionPlayer(&s_disc, DISC_SIZE, s_disc.nThrow ^ 1);

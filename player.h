@@ -8,8 +8,8 @@
 #include"disc.h"
 
 #define PLAYERMOVE (50)  //ループの幅
-#define PLAYERSIZ_X (100)//サイズ
-#define PLAYERSIZ_Y (100)//サイズ
+#define PLAYERSIZE_X (100)//サイズ
+#define PLAYERSIZE_Y (100)//サイズ
 #define MAXPLAYER (2)//登場最大数
 
 typedef enum
@@ -36,14 +36,16 @@ typedef struct
 	int nLife;					//寿命
 	int nType;					//タイプ
 	int nIdx;					// 矩形のインデックス
-	int havecount;				//もってる時間
+	int nSkillCount;
+	int nHaveCount;				//もってる時間
 	float fheight;				//高さ
 	float fwidth;				//幅
 	float Pow;					//パワー
 	float Speed;				//スピード
 	bool bUse;					//使用してるかどうか
-	bool have;					//持ってるかどうか
-	bool dive;					//タックル判定
+	bool bHave;					//持ってるかどうか
+	bool bDive;					//タックル判定
+	bool bSkill;					//必殺技使えるか使えないか
 }Player;
 
 //プロトタイプ宣言
@@ -55,13 +57,6 @@ void SetPlayer(D3DXVECTOR3 pos, int nType, bool light);
 bool CollisionPlayer(Disc *pDisc, float Size,int number);
 
 void MovePlayer(void);
-void SetUp(VERTEX_2D *pVtx,
-	float posx,		//中心点ｘ
-	float posy,		//中心点ｙ
-	float rotPlayer,		//プレイヤー回転
-	float fAngleAttack 		//対角線角度
-	, float fLengthAttack);	//対角線ノ長さ
-void SetTex2d(VERTEX_2D *pVtx, float left, float right, float top, float down);
 void LoadFile(char *Filename);
 Player* GetPlayer(void);
 #endif
