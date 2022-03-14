@@ -66,10 +66,10 @@ static Switch s_Switch[MAX_SWITCH];	//スイッチ構造体の取得
 static BG s_BG;						//背景構造体の取得
 
 //値
-static int s_nFlashTime;			//点滅の時間
-static int s_nSelect;				//選択中の番号
-static int s_nOption[OPTION_MAX];	// 選択肢の値
-static int s_nNumberIdx[OPTION_MAX];		// 選択肢の値のインデックス
+static int s_nFlashTime;				//点滅の時間
+static int s_nSelect;					//選択中の番号
+static int s_nOption[OPTION_MAX];		// 選択肢の値
+static int s_nNumberIdx[OPTION_MAX];	// 選択肢の値のインデックス
 
 //============================
 // ルール選択画面の初期化
@@ -288,7 +288,7 @@ void SetBG(D3DXVECTOR3 pos)
 {
 	if (s_BG.bUse == false)
 	{//使用していないなら
-	 //構造体の設定
+		 //構造体の設定
 		s_BG.pos = pos;
 		s_BG.fWidth = SCREEN_WIDTH;
 		s_BG.fHeight = SCREEN_HEIGHT;
