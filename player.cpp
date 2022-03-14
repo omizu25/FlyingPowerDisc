@@ -16,14 +16,20 @@
 
 #define MAXPLAYERTYPE (4)//Type最大数
 #define MOVESPEED (5.0f)
+#define DEAD_ZONE	(0.1f)	// スティックの遊び
 //スタティック変数///スタティックをヘッタに使うなよ？
 
 static LPDIRECT3DTEXTURE9 s_pTexturePlayer[MAXPLAYERTYPE] = {}; //テクスチャのポインタ
 static Player s_Player[MAXPLAYER];//プレイヤー構造体取得
 static Player s_PlayerType[MAXPLAYERTYPE];//プレイヤーのTypeを保存する
+static bool	s_bKeyBoardWASD;			// WASDのキーボード入力があるかどうか
+static bool	s_bKeyBoardArrow;			// やじるしのキーボード入力があるかどうか
+static bool	s_bJoyPad[MAXPLAYER];		// ジョイパッド入力があるかどうか
+static bool	s_bStickLeft[MAXPLAYER];	// 左スティック入力があるかどうか
 
-// プロトタイプ宣言
+// スタティック関数プロトタイプ宣言
 static void UpdateNormal(void);
+static void InputMove(void);
 
 //=======================
 //プレイヤーの初期化設定
@@ -293,41 +299,28 @@ void LoadFile(char *Filename)
 //----------------------------
 void MovePlayer(void)
 {
-	
+	// 移動の入力があるかないか
+	InputMove();
+
+	Disc *pDisc = GetDisc();
+
 	//---------------------------------------
 	//１体目の行動
 	//----------------------------------------
 	if (!s_Player[0].have)
 	{// ディスクを持っていない
-		if (GetKeyboardPress(DIK_W))
-		{
-			s_Player[0].move.y = -s_Player[0].Speed;
-		}
-		if (GetKeyboardPress(DIK_A))
-		{
-			s_Player[0].move.x = -s_Player[0].Speed;
-		}
-		if (GetKeyboardPress(DIK_S))
-		{
-			s_Player[0].move.y = s_Player[0].Speed;
-		}
-		if (GetKeyboardPress(DIK_D))
-		{
-			s_Player[0].move.x = s_Player[0].Speed;
-		}
-		if (GetKeyboardTrigger(DIK_C))
+		if (GetKeyboardTrigger(DIK_C) || GetJoypadIdxPress(JOYKEY_A, 0))
 		{//タックル
-			s_Player[0].pos.x += s_Player[0].Speed*5;
+			s_Player[0].pos.x += s_Player[0].Speed * 5;
 			s_Player[0].dive = true;
 		}
-		if (s_Player[0].dive == true)
+		else if (s_Player[0].dive == true && pDisc->nThrow == 1)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[0];
 
 			float fHeight = ((PLAYERSIZ_Y * 0.5f));
 			float fWidth = ((PLAYERSIZ_X * 0.5f));
 
-			Disc *pDisc = GetDisc();
 			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
 				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
@@ -335,16 +328,79 @@ void MovePlayer(void)
 			{// プレイヤーにディスクが当たった時
 				pDisc->nThrow = 0;
 				s_Player[0].dive = false;
-				pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow*3;
+				pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow * 3;
 			}
+		}
+		else if (s_bKeyBoardWASD)
+		{// キーボード
+			D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+			if (GetKeyboardPress(DIK_A))
+			{// キーが押された
+				vec.x -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_D))
+			{// キーが押された
+				vec.x += 1.0f;
+			}
+			if (GetKeyboardPress(DIK_W))
+			{// キーが押された
+				vec.y -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_S))
+			{// キーが押された
+				vec.y += 1.0f;
+			}
+
+			// ベクトルの正規化
+			D3DXVec3Normalize(&vec, &vec);
+
+			s_Player[0].move = vec * s_Player[0].Speed;
+		}
+		else if (s_bJoyPad[0])
+		{// ジョイパッド
+			D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+			if (GetJoypadIdxPress(JOYKEY_LEFT, 0))
+			{// ボタンが押された
+				vec.x -= 1.0f;
+			}
+			if (GetJoypadIdxPress(JOYKEY_RIGHT, 0))
+			{// ボタンが押された
+				vec.x += 1.0f;
+			}
+			if (GetJoypadIdxPress(JOYKEY_UP, 0))
+			{// ボタンが押された
+				vec.y -= 1.0f;
+			}
+			if (GetJoypadIdxPress(JOYKEY_DOWN, 0))
+			{// ボタンが押された
+				vec.y += 1.0f;
+			}
+
+			// ベクトルの正規化
+			D3DXVec3Normalize(&vec, &vec);
+
+			s_Player[0].move = vec * s_Player[0].Speed;
+		}
+		else if (s_bStickLeft[0])
+		{// 左スティック
+			D3DXVECTOR3 stick = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+			stick.x = GetJoypadStick(JOYKEY_LEFT_STICK, 0).x;
+			stick.y = GetJoypadStick(JOYKEY_LEFT_STICK, 0).y;
+
+			// ベクトルの正規化
+			D3DXVec3Normalize(&stick, &stick);
+
+			s_Player[0].move = stick * s_Player[0].Speed;
 		}
 	}
 	else
 	{// ディスクを持っている
-		if (GetKeyboardPress(DIK_SPACE))
+		if (GetKeyboardPress(DIK_SPACE) || GetJoypadIdxPress(JOYKEY_A, 0))
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[0].have = false;
-			Disc *pDisc = GetDisc();
 			pDisc->nThrow = 0;
 			pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow;
 			pDisc->bHave = false;
@@ -356,58 +412,104 @@ void MovePlayer(void)
 	//----------------------------------------
 	if (!s_Player[1].have)
 	{// ディスクを持っていない
-		if (GetKeyboardPress(DIK_UP))
-		{
-			s_Player[1].move.y = -s_Player[1].Speed;
-		}
-		if (GetKeyboardPress(DIK_LEFT))
-		{
-			s_Player[1].move.x = -s_Player[1].Speed;
-		}
-		if (GetKeyboardPress(DIK_DOWN))
-		{
-			s_Player[1].move.y = s_Player[1].Speed;
-		}
-		if (GetKeyboardPress(DIK_RIGHT))
-		{
-			s_Player[1].move.x = s_Player[1].Speed;
-		}
-		if (GetKeyboardTrigger(DIK_L))
+		if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxPress(JOYKEY_A, 1))
 		{//タックル
 			s_Player[1].pos.x -= s_Player[1].Speed * 5;
 			s_Player[1].dive = true;
 		}
-		if (s_Player[1].dive == true)
+		else if (s_Player[1].dive == true && pDisc->nThrow == 0)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[1];
 
 			float fHeight = ((PLAYERSIZ_Y * 0.5f));
 			float fWidth = ((PLAYERSIZ_X * 0.5f));
 
-			Disc *pDisc = GetDisc();
 			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
 				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
 				(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
 			{// プレイヤーにディスクが当たった時
+
 				pDisc->nThrow = 1;
 				s_Player[1].dive = false;
 				pDisc->move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f)*s_Player[1].Pow * 3;
 			}
 		}
+		else if (s_bKeyBoardArrow)
+		{// キーボード
+			D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+			if (GetKeyboardPress(DIK_LEFT))
+			{// キーが押された
+				vec.x -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_RIGHT))
+			{// キーが押された
+				vec.x += 1.0f;
+			}
+			if (GetKeyboardPress(DIK_UP))
+			{// キーが押された
+				vec.y -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_DOWN))
+			{// キーが押された
+				vec.y += 1.0f;
+			}
+
+			// ベクトルの正規化
+			D3DXVec3Normalize(&vec, &vec);
+
+			s_Player[1].move = vec * s_Player[1].Speed;
+		}
+		else if (s_bJoyPad[1])
+		{// ジョイパッド
+			D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+			if (GetJoypadIdxPress(JOYKEY_LEFT, 1))
+			{// ボタンが押された
+				vec.x -= 1.0f;
+			}
+			if (GetJoypadIdxPress(JOYKEY_RIGHT, 1))
+			{// ボタンが押された
+				vec.x += 1.0f;
+			}
+			if (GetJoypadIdxPress(JOYKEY_UP, 1))
+			{// ボタンが押された
+				vec.y -= 1.0f;
+			}
+			if (GetJoypadIdxPress(JOYKEY_DOWN, 1))
+			{// ボタンが押された
+				vec.y += 1.0f;
+			}
+
+			// ベクトルの正規化
+			D3DXVec3Normalize(&vec, &vec);
+
+			s_Player[1].move = vec * s_Player[1].Speed;
+		}
+		else if (s_bStickLeft[1])
+		{// 左スティック
+			D3DXVECTOR3 stick = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+			stick.x = GetJoypadStick(JOYKEY_LEFT_STICK, 1).x;
+			stick.y = GetJoypadStick(JOYKEY_LEFT_STICK, 1).y;
+
+			// ベクトルの正規化
+			D3DXVec3Normalize(&stick, &stick);
+
+			s_Player[1].move = stick * s_Player[1].Speed;
+		}
 	}
 	else
 	{// ディスクを持っている
-		if (GetKeyboardPress(DIK_RETURN))
+		if (GetKeyboardPress(DIK_RETURN) || GetJoypadIdxPress(JOYKEY_A, 1))
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[1].have = false;
-			Disc *pDisc = GetDisc();
 			pDisc->nThrow = 1;
 			pDisc->move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f) * s_Player[1].Pow;
 			pDisc->bHave = false;
 		}
 	}
-
 }
 
 //----------------------------
@@ -512,5 +614,49 @@ static void UpdateNormal(void)
 
 		// 矩形の回転する位置の設定
 		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
+	}
+}
+
+//----------------------------
+// 移動の入力があるかないか
+//----------------------------
+static void InputMove(void)
+{
+	s_bKeyBoardWASD = false;
+	s_bKeyBoardArrow = false;
+
+	for (int i = 0; i < MAXPLAYER; i++)
+	{
+		s_bJoyPad[i] = false;
+		s_bStickLeft[i] = false;
+	}
+
+	if (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_D) ||
+		GetKeyboardPress(DIK_W) || GetKeyboardPress(DIK_S))
+	{// キーが押された
+		s_bKeyBoardWASD = true;
+	}
+
+	if (GetKeyboardPress(DIK_LEFT) || GetKeyboardPress(DIK_RIGHT) ||
+		GetKeyboardPress(DIK_UP) || GetKeyboardPress(DIK_DOWN))
+	{// キーが押された
+		s_bKeyBoardArrow = true;
+	}
+
+	for (int i = 0; i < MAXPLAYER; i++)
+	{
+		if (GetJoypadIdxPress(JOYKEY_LEFT, i) || GetJoypadIdxPress(JOYKEY_RIGHT, i) ||
+			GetJoypadIdxPress(JOYKEY_UP, i) || GetJoypadIdxPress(JOYKEY_DOWN, i))
+		{// ボタンが押された
+			s_bJoyPad[i] = true;
+		}
+
+		if (GetJoypadStick(JOYKEY_LEFT_STICK, i).x > DEAD_ZONE ||
+			GetJoypadStick(JOYKEY_LEFT_STICK, i).x < -DEAD_ZONE ||
+			GetJoypadStick(JOYKEY_LEFT_STICK, i).y > DEAD_ZONE ||
+			GetJoypadStick(JOYKEY_LEFT_STICK, i).y < -DEAD_ZONE)
+		{// 左スティックが傾いた
+			s_bStickLeft[i] = true;
+		}
 	}
 }

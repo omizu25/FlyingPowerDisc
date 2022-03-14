@@ -5,7 +5,9 @@
 //
 //================================
 
-//インクルード
+//------------------------------
+// インクルード
+//------------------------------
 #include "rule.h"
 #include "main.h"
 #include "rectangle.h"
@@ -43,22 +45,31 @@ typedef enum
 }OPTION;
 }// namespaceはここまで
 
-//マクロ定義
+//------------------------------
+// マクロ定義
+//------------------------------
 #define MAX_RULE	(3)					//ルールの最大数
 #define MAX_SWITCH	(6)					//スイッチの最大数
 #define HALF_SWITCH	(MAX_SWITCH / 2)	//スイッチの半分
-#define MAX_TEXTURE	(5)					//テクスチャの最大数
+#define MAX_TEXTURE	(6)					//テクスチャの最大数
 #define MAX_FLASH	(80)				//点滅の往復時間
 #define HALF_FLASH	(MAX_FLASH / 2)		//点滅の切り替え時間
 
-//スタティック変数
+//------------------------------
+// スタティック変数
+//------------------------------
 static TEXTURE		s_Texture[MAX_TEXTURE] = {};	//テクスチャへのポインタ
+
+//構造体
 static Rule s_Rule[MAX_RULE];		//ルール構造体の取得
 static Switch s_Switch[MAX_SWITCH];	//スイッチ構造体の取得
-static int s_nFlashTime;			//点滅の時間
-static int s_nSelect;				//選択中の番号
-static int s_nOption[OPTION_MAX];	// 選択肢の値
-static int s_nIdx[OPTION_MAX];		// 選択肢の値のインデックス
+static BG s_BG;						//背景構造体の取得
+
+//値
+static int s_nFlashTime;				//点滅の時間
+static int s_nSelect;					//選択中の番号
+static int s_nOption[OPTION_MAX];		// 選択肢の値
+static int s_nNumberIdx[OPTION_MAX];	// 選択肢の値のインデックス
 
 //============================
 // ルール選択画面の初期化
@@ -71,11 +82,12 @@ void InitRule(void)
 	//------------------------------
 	// テクスチャの取得
 	//------------------------------
-	s_Texture[0] = TEXTURE_Title_blue;			//時間
-	s_Texture[1] = TEXTURE_TitleLight_red;		//ポイント数
-	s_Texture[2] = TEXTURE_Disc;				//セット数
-	s_Texture[3] = TEXTURE_Select_Left;	//左ボタン
-	s_Texture[4] = TEXTURE_Select_Right;	//右ボタン
+	s_Texture[0] = TEXTURE_Select_Time;			//時間
+	s_Texture[1] = TEXTURE_Select_Point;		//ポイント数
+	s_Texture[2] = TEXTURE_Select_Set;			//セット数
+	s_Texture[3] = TEXTURE_Select_Left;			//左ボタン
+	s_Texture[4] = TEXTURE_Select_Right;		//右ボタン
+	s_Texture[5] = TEXTURE_Select_BG;			//背景
 
 	//------------------------------
 	//	構造体の初期化
@@ -138,13 +150,13 @@ void UpdateRule(void)
 	//選択番号の切り替え
 	int nNumber = ChangeSelect();
 
-	if (GetKeyboardTrigger(DIK_A))
+	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT))
 	{//Aキーが押されたとき
 	//数値の減算
 		SubRule(nNumber);
 	}
 
-	if (GetKeyboardTrigger(DIK_D))
+	if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
 	{//Dキーが押されたとき
 	 //数値の加算
 		AddRule(nNumber);
@@ -179,7 +191,7 @@ void SetRule(D3DXVECTOR3 pos)
 		{//使用していないなら
 			//構造体の設定
 			rule->pos = pos;
-			rule->fWidth = 200.0f;
+			rule->fWidth = 400.0f;
 			rule->fHeight = 100.0f;
 			rule->bUse = true;
 
@@ -202,7 +214,7 @@ void SetRule(D3DXVECTOR3 pos)
 			D3DXVECTOR3 sizeNumber = D3DXVECTOR3(NUMBER_WIDTH, NUMBER_HEIGHT, 0.0f);
 
 			// 数の設定
-			s_nIdx[nCnt] = SetNumber(posNumber, sizeNumber, GetColor(COLOR_RED), s_nOption[nCnt]);
+			s_nNumberIdx[nCnt] = SetNumber(posNumber, sizeNumber, GetColor(COLOR_RED), s_nOption[nCnt]);
 
 			break;
 		}
@@ -270,6 +282,29 @@ void SetSwitchRight(D3DXVECTOR3 pos)
 }
 
 //============================
+// 背景の設定
+//============================
+void SetBG(D3DXVECTOR3 pos)
+{
+	if (s_BG.bUse == false)
+	{//使用していないなら
+		 //構造体の設定
+		s_BG.pos = pos;
+		s_BG.fWidth = SCREEN_WIDTH;
+		s_BG.fHeight = SCREEN_HEIGHT;
+		s_BG.bUse = true;
+
+		// 矩形の設定
+		s_BG.nIdx = SetRectangle(s_Texture[5]);
+
+		D3DXVECTOR3 size = D3DXVECTOR3(s_BG.fWidth, s_BG.fHeight, 0.0f);
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_BG.nIdx, pos, size);
+	}
+}
+
+//============================
 // テクスチャの点滅
 //============================
 void FlashTexture(int nNumber)
@@ -295,7 +330,7 @@ void FlashTexture(int nNumber)
 	//------------------------------
 	// 左選択
 	//------------------------------
-	if (GetKeyboardTrigger(DIK_A))
+	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT))
 	{//Aキーが押されたとき
 		if (s_nFlashTime >= HALF_FLASH)
 		{
@@ -312,7 +347,7 @@ void FlashTexture(int nNumber)
 	//------------------------------
 	// 右選択
 	//------------------------------
-	if (GetKeyboardTrigger(DIK_D))
+	if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
 	{//Dキーが押されたとき
 		if (s_nFlashTime >= HALF_FLASH)
 		{
@@ -355,7 +390,7 @@ void AddRule(int nNumber)
 	}
 
 	// 数の変更
-	ChangeNumber(s_nIdx[nNumber], s_nOption[nNumber]);
+	ChangeNumber(s_nNumberIdx[nNumber], s_nOption[nNumber]);
 }
 
 //============================
@@ -386,7 +421,7 @@ void SubRule(int nNumber)
 	}
 
 	// 数の変更
-	ChangeNumber(s_nIdx[nNumber], s_nOption[nNumber]);
+	ChangeNumber(s_nNumberIdx[nNumber], s_nOption[nNumber]);
 }
 
 //============================
@@ -397,14 +432,14 @@ int ChangeSelect(void)
 	// 矩形の色の設定
 	SetColorRectangle(s_Rule[s_nSelect].nIdx, GetColor(COLOR_WHITE));
 
-	if (GetKeyboardTrigger(DIK_W))
+	if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP))
 	{//Wキーが押されたとき
 		if (s_nSelect >= 1 && s_nSelect <= MAX_RULE)
 		{//0未満にならないなら
 			s_nSelect--;
 		}
 	}
-	else if (GetKeyboardTrigger(DIK_S))
+	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
 	{//Sキーが押されたとき
 		if (s_nSelect >= 0 && s_nSelect < (MAX_RULE - 1))
 		{//最大数を超えならないなら

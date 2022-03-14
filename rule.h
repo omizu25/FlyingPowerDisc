@@ -10,6 +10,16 @@
 //インクルード
 #include "main.h"
 
+//背景構造体の定義
+typedef struct
+{
+	D3DXVECTOR3 pos;	//位置
+	float fWidth;		//幅
+	float fHeight;		//高さ
+	bool bUse;			//使用しているか
+	int	nIdx;			// 矩形のインデックス
+}BG;
+
 //スイッチ構造体の定義
 typedef struct
 {
@@ -38,6 +48,7 @@ void DrawRule(void);
 void SetRule(D3DXVECTOR3 pos);
 void SetSwitchLeft(D3DXVECTOR3 pos);
 void SetSwitchRight(D3DXVECTOR3 pos);
+void SetBG(D3DXVECTOR3 pos);
 void FlashTexture(int nNumber);
 void AddRule(int nNumber);
 void SubRule(int nNumber);
