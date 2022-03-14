@@ -14,7 +14,7 @@
 //グローバル変数
 //====================================
 LPDIRECT3DTEXTURE9 g_pTextureUi[NUM_UI] = {};	//テクスチャへのポインタ
-LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffUi = NULL;		//頂点バッファへのポインタ
+LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffUi = NULL;	//頂点バッファへのポインタ
 Ui g_aUi[MAX_UI];		//UIの情報
 //====================================
 //メイン関数
@@ -123,7 +123,7 @@ void UpdateUi(void)
 	g_pVtxBuffUi->Lock(0, 0, (void**)&pVtx, 0);
 	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
 	{
-		//種類ごとの動き
+		//種類ごとの動き(2)
 		if (g_aUi[nCntUi].nType == 2 && g_aUi[nCntUi].bSwitch == false)
 		{//出てくる処理
 			g_aUi[nCntUi].scale.x += 0.01f;
@@ -142,6 +142,26 @@ void UpdateUi(void)
 		{//消える処理
 			g_aUi[nCntUi].scale.x -= 0.01f;
 		}
+
+		//種類ごとの動き(3)
+		if (g_aUi[nCntUi].nType == 3 && g_aUi[nCntUi].bSwitch == false)
+		{//出てくる処理
+			g_aUi[nCntUi].scale.x -= 0.01f;
+			//拡大率の調整
+			if (g_aUi[nCntUi].scale.x < -1.0f)
+			{
+				g_aUi[nCntUi].scale.x = -1.0f;
+				g_aUi[nCntUi].nCntTime++;
+				if (g_aUi[nCntUi].nCntTime == 120)
+				{
+					g_aUi[nCntUi].bSwitch = true;
+				}
+			}
+		}
+		else if (g_aUi[nCntUi].nType == 3 && g_aUi[nCntUi].bSwitch)
+		{//消える処理
+			g_aUi[nCntUi].scale.x += 0.01f;
+		}
 		//拡大率の調整
 		if (g_aUi[nCntUi].scale.x > 1.0f)
 		{
@@ -153,24 +173,55 @@ void UpdateUi(void)
 			g_aUi[nCntUi].scale.y = 1.0f;
 			g_aUi[nCntUi].bSwitch = true;
 		}
-		if (g_aUi[nCntUi].scale.x < 0.0f)
+		if (g_aUi[nCntUi].scale.x < -1.0f)
 		{
-			g_aUi[nCntUi].scale.x = 0.0f;
+			g_aUi[nCntUi].scale.x = -1.0f;
 		}
-		else if (g_aUi[nCntUi].scale.y < 0.0f)
+		else if (g_aUi[nCntUi].scale.y < -1.0f)
 		{
-			g_aUi[nCntUi].scale.y = 0.0f;
+			g_aUi[nCntUi].scale.y = -1.0f;
 		}
-		//頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
-		//頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
-		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
-		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
-		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+		if (g_aUi[nCntUi].nType == 2)
+		{
+			//頂点座標の設定
+			pVtx[0].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2), (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x + (g_aUi[nCntUi].fWidth / 2 * g_aUi[nCntUi].scale.x), (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2), (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x + (g_aUi[nCntUi].fWidth / 2 * g_aUi[nCntUi].scale.x), (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+		}
+		else if (g_aUi[nCntUi].nType == 3)
+		{
+			//頂点座標の設定
+			pVtx[0].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x - (g_aUi[nCntUi].fWidth / 2 * -g_aUi[nCntUi].scale.x), (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth  / 2, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x - (g_aUi[nCntUi].fWidth / 2 * -g_aUi[nCntUi].scale.x), (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth  / 2 , (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
+		}
+		
+		if (g_aUi[nCntUi].nType == 2)
+		{
+			//頂点カラーの設定
+			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+			pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+			pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+			pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+		}
+		else if (g_aUi[nCntUi].nType == 3)
+		{
+			//頂点カラーの設定
+			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * -g_aUi[nCntUi].scale.x);
+			pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * -g_aUi[nCntUi].scale.x);
+			pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * -g_aUi[nCntUi].scale.x);
+			pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * -g_aUi[nCntUi].scale.x);
+		}
+		else
+		{
+			//頂点カラーの設定
+			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+			pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+			pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+			pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+		}
 
 		pVtx += 4;
 	}
