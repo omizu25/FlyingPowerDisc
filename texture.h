@@ -30,6 +30,7 @@ typedef enum
 	TEXTURE_Select_Point,
 	TEXTURE_Select_Set,
 	TEXTURE_Select_BG,
+	TEXTURE_GAME_BG,
 	TEXTURE_MAX,
 	TEXTURE_NONE,
 }TEXTURE;
