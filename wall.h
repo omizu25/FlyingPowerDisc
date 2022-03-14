@@ -9,8 +9,10 @@
 #define WALLMOVE (50)  //ループの幅
 #define WALLSIZ_X (100)//サイズ
 #define WALLSIZ_Y (100)//サイズ
-
-
+#define MAXWALL			(2)//登場最大数
+#define MAXWALLTYPE		(4)//Type最大数
+#define MOVESPEED		(5.0f)
+#define WALLWIDE		(80.0f)
 
 typedef enum
 {

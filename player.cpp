@@ -42,6 +42,7 @@ void InitPlayer(void)
 		s_Player[count].Speed = 0;
 		s_Player[count].have = false;
 		s_Player[count].bUse = false;
+		s_Player[count].dive = false;
 		s_Player[count].fheight = PLAYERSIZ_Y;
 		s_Player[count].fwidth = PLAYERSIZ_X;
 
@@ -115,6 +116,10 @@ void UpdatePlayer(void)
 void DrawPlayer(void)
 {
 }
+
+//===================
+//セット
+//===================
 void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 {
 	for (int count = 0; count< MAXPLAYER; count++)
@@ -204,7 +209,9 @@ void SetTex2d(VERTEX_2D *pVtx, float left, float right, float top, float down)
 
 }
 #endif
-
+//----------------------------
+//Playerのステータス読み込み
+//----------------------------
 void LoadFile(char *Filename)
 {
 	char	s_aString[256];//
@@ -280,11 +287,14 @@ void LoadFile(char *Filename)
 		fclose(pFile);
 	}
 }
+
 //----------------------------
 //Player動き
 //----------------------------
 void MovePlayer(void)
 {
+
+	Disc *pDisc = GetDisc();
 	//---------------------------------------
 	//１体目の行動
 	//----------------------------------------
@@ -306,17 +316,37 @@ void MovePlayer(void)
 		{
 			s_Player[0].move.x = s_Player[0].Speed;
 		}
+		if (GetKeyboardTrigger(DIK_C))
+		{//タックル
+			s_Player[0].pos.x += s_Player[0].Speed*5;
+			s_Player[0].dive = true;
+		}
+		if (s_Player[0].dive == true && pDisc->nThrow == 1)
+		{//タックル適用時
+			Player *pPlayer = &s_Player[0];
+
+			float fHeight = ((PLAYERSIZ_Y * 0.5f));
+			float fWidth = ((PLAYERSIZ_X * 0.5f));
+
+			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
+				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
+				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
+				(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
+			{// プレイヤーにディスクが当たった時
+				pDisc->nThrow = 0;
+				s_Player[0].dive = false;
+				pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow*3;
+			}
+		}
 	}
 	else
 	{// ディスクを持っている
 		if (GetKeyboardPress(DIK_SPACE))
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[0].have = false;
-
 			Disc *pDisc = GetDisc();
-
 			pDisc->nThrow = 0;
-			pDisc->move = D3DXVECTOR3(5.0f, 0.0f, 0.0f);
+			pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow;
 			pDisc->bHave = false;
 		}
 	}
@@ -342,6 +372,29 @@ void MovePlayer(void)
 		{
 			s_Player[1].move.x = s_Player[1].Speed;
 		}
+		if (GetKeyboardTrigger(DIK_L))
+		{//タックル
+			s_Player[1].pos.x -= s_Player[1].Speed * 5;
+			s_Player[1].dive = true;
+		}
+		if (s_Player[1].dive == true && pDisc->nThrow == 0)
+		{//タックル適用時
+			Player *pPlayer = &s_Player[1];
+
+			float fHeight = ((PLAYERSIZ_Y * 0.5f));
+			float fWidth = ((PLAYERSIZ_X * 0.5f));
+
+			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
+				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
+				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
+				(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
+			{// プレイヤーにディスクが当たった時
+
+				pDisc->nThrow = 1;
+				s_Player[1].dive = false;
+				pDisc->move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f)*s_Player[1].Pow * 3;
+			}
+		}
 	}
 	else
 	{// ディスクを持っている
@@ -349,14 +402,17 @@ void MovePlayer(void)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[1].have = false;
 			Disc *pDisc = GetDisc();
-
 			pDisc->nThrow = 1;
-			pDisc->move = D3DXVECTOR3(-5.0f, 0.0f, 0.0f);
+			pDisc->move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f) * s_Player[1].Pow;
 			pDisc->bHave = false;
 		}
 	}
 
 }
+
+//----------------------------
+//Player当たり判定
+//----------------------------
 bool CollisionPlayer(Disc *pDisc, float Size, int number)
 {
 	bool bIsLanding = false;
@@ -378,6 +434,7 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 			break;
 
 		case 1:
+
 			pDisc->pos.x = s_Player[number].pos.x - fWidth;
 			break;
 
@@ -388,10 +445,9 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 		pDisc->pos.y = s_Player[number].pos.y;
 		pDisc->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		pDisc->bHave = true;
-
 		s_Player[number].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_Player[number].have = true;
-
+	
 		bIsLanding = true;
 	}
 
@@ -417,10 +473,6 @@ static void UpdateNormal(void)
 	{
 		Player *pPlayer = &s_Player[count];
 
-		CollisionWall(&s_Player[1].pos, &s_Player[1].posOld);
-
-
-		CollisionWall(&s_Player[0].pos, &s_Player[0].posOld);
 		//移動量を更新(減衰させる)
 		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  
 		s_Player[count].move.y += (0.0f - s_Player[count].move.y)*0.2f;//（目的の値-現在の値）＊減衰係数
@@ -440,13 +492,13 @@ static void UpdateNormal(void)
 		{//横壁（右）
 			s_Player[count].pos.x = SCREEN_WIDTH - pPlayer->fwidth / 2.0f;
 		}
-		if (s_Player[count].pos.y <= 0.0f + pPlayer->fheight / 2.0f)
+		if (s_Player[count].pos.y <= 0.0f + pPlayer->fheight / 2.0f+ WALLSIZ_Y /2)
 		{//上壁　
-			s_Player[count].pos.y = 0.0f + pPlayer->fheight / 2.0f;
+			s_Player[count].pos.y = 0.0f + pPlayer->fheight / 2.0f + WALLSIZ_Y / 2;
 		}
-		if (s_Player[count].pos.y >= SCREEN_HEIGHT - pPlayer->fheight / 2.0f)
+		if (s_Player[count].pos.y >= SCREEN_HEIGHT - pPlayer->fheight / 2.0f - WALLSIZ_Y / 2)
 		{//下壁
-			s_Player[count].pos.y = SCREEN_HEIGHT - pPlayer->fheight / 2.0f;
+			s_Player[count].pos.y = SCREEN_HEIGHT - pPlayer->fheight / 2.0f - WALLSIZ_Y / 2;
 		}
 		//真ん中ライン
 		if (s_Player[0].pos.x >= SCREEN_WIDTH* 0.5f - pPlayer->fwidth / 2.0f)
