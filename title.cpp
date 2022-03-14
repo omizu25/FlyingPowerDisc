@@ -45,6 +45,7 @@ typedef enum
 {
 	MENU_GAME = 0,	// ゲーム
 	MENU_RULE,		// ルール
+	MENU_RULE1,		// ルール
 	MENU_MAX
 }MENU;
 
@@ -169,6 +170,7 @@ void InitTitle(void)
 
 		menu.texture[MENU_GAME] = TEXTURE_Game_Start;
 		menu.texture[MENU_RULE] = menu.texture[MENU_GAME];
+		menu.texture[MENU_RULE1] = menu.texture[MENU_GAME];
 
 		FrameArgument Frame;
 		Frame.bUse = true;
@@ -270,7 +272,7 @@ void Input(void)
 		return;
 	}
 
-	if (GetKeyboardTrigger(DIK_W))
+	if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP))
 	{// Wキーが押されたかどうか
 		// 選択肢の色の初期化
 		InitColorOption();
@@ -281,7 +283,7 @@ void Input(void)
 		ChangeOption(s_nSelectMenu);
 
 	}
-	else if (GetKeyboardTrigger(DIK_S))
+	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
 	{// Sキーが押されたかどうか
 		// 選択肢の色の初期化
 		InitColorOption();

@@ -150,13 +150,13 @@ void UpdateRule(void)
 	//選択番号の切り替え
 	int nNumber = ChangeSelect();
 
-	if (GetKeyboardTrigger(DIK_A))
+	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT))
 	{//Aキーが押されたとき
 	//数値の減算
 		SubRule(nNumber);
 	}
 
-	if (GetKeyboardTrigger(DIK_D))
+	if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
 	{//Dキーが押されたとき
 	 //数値の加算
 		AddRule(nNumber);
@@ -330,7 +330,7 @@ void FlashTexture(int nNumber)
 	//------------------------------
 	// 左選択
 	//------------------------------
-	if (GetKeyboardTrigger(DIK_A))
+	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT))
 	{//Aキーが押されたとき
 		if (s_nFlashTime >= HALF_FLASH)
 		{
@@ -347,7 +347,7 @@ void FlashTexture(int nNumber)
 	//------------------------------
 	// 右選択
 	//------------------------------
-	if (GetKeyboardTrigger(DIK_D))
+	if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
 	{//Dキーが押されたとき
 		if (s_nFlashTime >= HALF_FLASH)
 		{
@@ -432,14 +432,14 @@ int ChangeSelect(void)
 	// 矩形の色の設定
 	SetColorRectangle(s_Rule[s_nSelect].nIdx, GetColor(COLOR_WHITE));
 
-	if (GetKeyboardTrigger(DIK_W))
+	if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP))
 	{//Wキーが押されたとき
 		if (s_nSelect >= 1 && s_nSelect <= MAX_RULE)
 		{//0未満にならないなら
 			s_nSelect--;
 		}
 	}
-	else if (GetKeyboardTrigger(DIK_S))
+	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
 	{//Sキーが押されたとき
 		if (s_nSelect >= 0 && s_nSelect < (MAX_RULE - 1))
 		{//最大数を超えならないなら
