@@ -26,9 +26,9 @@ const char *s_FileName[] =
 	"data/TEXTURE/Title_blue.png",
 	"data/TEXTURE/TitleLight_red.png",
 	"data/TEXTURE/Game_Start.png",
-	"data/TEXTURE/Back_to_game.png",
-	"data/TEXTURE/Retry.png",
-	"data/TEXTURE/Back_to_title.png",
+	"data/TEXTURE/Pose_Title.png",
+	"data/TEXTURE/Pose_Resume.png",
+	"data/TEXTURE/Pose_Quit.png",
 	"data/TEXTURE/UI000.png",
 	"data/TEXTURE/UI001.png",
 	"data/TEXTURE/Select_Left.png",
@@ -38,6 +38,7 @@ const char *s_FileName[] =
 	"data/TEXTURE/Select_Point.png",
 	"data/TEXTURE/Select_Set.png",
 	"data/TEXTURE/Select_BG.png",
+	"data/TEXTURE/Game_BG.png",
 };
 }// namespace‚Í‚±‚±‚Ü‚Å
 
