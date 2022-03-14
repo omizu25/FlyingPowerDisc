@@ -8,8 +8,9 @@
 //====================================
 //マクロ定義
 //====================================
-#define MAX_UI		(128)			//UIの最大数
-#define NUM_UI		(4)				//UIの種類
+#define MAX_UI		128				//UIの最大数
+#define NUM_UI		10				//UIの種類
+#define MAX_TIME	60				//出ている時間
 //====================================
 //グローバル変数
 //====================================
@@ -37,12 +38,16 @@ void InitUi(void)
 		&g_pTextureUi[1]);
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\Ui002.jpg",
+		"data\\TEXTURE\\UI000.png",
 		&g_pTextureUi[2]);
-	////テクスチャの読み込み
-	//D3DXCreateTextureFromFile(pDevice,
-	//	"data\\TEXTURE\\Ui003.jpg",
-	//	&g_pTextureUi[3]);
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\UI000.png",
+		&g_pTextureUi[3]);
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\UI001.png",
+		&g_pTextureUi[4]);
 	//UIの情報の初期化
 	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
 	{
@@ -123,7 +128,7 @@ void UpdateUi(void)
 	g_pVtxBuffUi->Lock(0, 0, (void**)&pVtx, 0);
 	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
 	{
-		//種類ごとの動き(2)
+		//種類ごとの動き(左から出る)
 		if (g_aUi[nCntUi].nType == 2 && g_aUi[nCntUi].bSwitch == false)
 		{//出てくる処理
 			g_aUi[nCntUi].scale.x += 0.01f;
@@ -132,7 +137,7 @@ void UpdateUi(void)
 			{
 				g_aUi[nCntUi].scale.x = 1.0f;
 				g_aUi[nCntUi].nCntTime++;
-				if (g_aUi[nCntUi].nCntTime == 120)
+				if (g_aUi[nCntUi].nCntTime == MAX_TIME)
 				{
 					g_aUi[nCntUi].bSwitch = true;
 				}
@@ -143,7 +148,7 @@ void UpdateUi(void)
 			g_aUi[nCntUi].scale.x -= 0.01f;
 		}
 
-		//種類ごとの動き(3)
+		//種類ごとの動き(右から出る)
 		if (g_aUi[nCntUi].nType == 3 && g_aUi[nCntUi].bSwitch == false)
 		{//出てくる処理
 			g_aUi[nCntUi].scale.x -= 0.01f;
@@ -152,7 +157,7 @@ void UpdateUi(void)
 			{
 				g_aUi[nCntUi].scale.x = -1.0f;
 				g_aUi[nCntUi].nCntTime++;
-				if (g_aUi[nCntUi].nCntTime == 120)
+				if (g_aUi[nCntUi].nCntTime == MAX_TIME)
 				{
 					g_aUi[nCntUi].bSwitch = true;
 				}
@@ -162,6 +167,27 @@ void UpdateUi(void)
 		{//消える処理
 			g_aUi[nCntUi].scale.x += 0.01f;
 		}
+
+		//種類ごとの動き(上下に伸びる)
+		if (g_aUi[nCntUi].nType == 4 && g_aUi[nCntUi].bSwitch == false)
+		{//出てくる処理
+			g_aUi[nCntUi].scale.y += 0.01f;
+			//拡大率の調整
+			if (g_aUi[nCntUi].scale.y > 1.0f)
+			{
+				g_aUi[nCntUi].scale.y = 1.0f;
+				g_aUi[nCntUi].nCntTime++;
+				if (g_aUi[nCntUi].nCntTime == MAX_TIME)
+				{
+					g_aUi[nCntUi].bSwitch = true;
+				}
+			}
+		}
+		else if (g_aUi[nCntUi].nType == 4 && g_aUi[nCntUi].bSwitch)
+		{//消える処理
+			g_aUi[nCntUi].scale.y -= 0.01f;
+		}
+
 		//拡大率の調整
 		if (g_aUi[nCntUi].scale.x > 1.0f)
 		{
@@ -181,6 +207,7 @@ void UpdateUi(void)
 		{
 			g_aUi[nCntUi].scale.y = -1.0f;
 		}
+
 		if (g_aUi[nCntUi].nType == 2)
 		{
 			//頂点座標の設定
@@ -197,16 +224,15 @@ void UpdateUi(void)
 			pVtx[2].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x - (g_aUi[nCntUi].fWidth / 2 * -g_aUi[nCntUi].scale.x), (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
 			pVtx[3].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth  / 2 , (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
 		}
-		
-		if (g_aUi[nCntUi].nType == 2)
+		else if (g_aUi[nCntUi].nType == 4)
 		{
-			//頂点カラーの設定
-			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
-			pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
-			pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
-			pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * g_aUi[nCntUi].scale.x);
+			//頂点座標の設定
+			pVtx[0].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2),							g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2 * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x + (g_aUi[nCntUi].fWidth / 2 * g_aUi[nCntUi].scale.x), g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2 * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2),							g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2 * g_aUi[nCntUi].scale.y, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(g_aUi[nCntUi].pos.x + (g_aUi[nCntUi].fWidth / 2 * g_aUi[nCntUi].scale.x), g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2 * g_aUi[nCntUi].scale.y, 0.0f);
 		}
-		else if (g_aUi[nCntUi].nType == 3)
+		if (g_aUi[nCntUi].nType == 3)
 		{
 			//頂点カラーの設定
 			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f * -g_aUi[nCntUi].scale.x);
