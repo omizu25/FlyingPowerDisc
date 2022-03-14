@@ -26,6 +26,10 @@ typedef enum
 	TEXTURE_Select_Left,
 	TEXTURE_Select_Right,
 	TEXTURE_Number_0To9,
+	TEXTURE_Select_Time,
+	TEXTURE_Select_Point,
+	TEXTURE_Select_Set,
+	TEXTURE_Select_BG,
 	TEXTURE_MAX,
 	TEXTURE_NONE,
 }TEXTURE;

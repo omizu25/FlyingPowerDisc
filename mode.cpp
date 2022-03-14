@@ -175,6 +175,7 @@ void SetMode(void)
 		InitRule();
 
 		//ƒ‹[ƒ‹‘I‘ð‰æ–Ê‚ÌÝ’è
+		SetBG(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 		SetRule(D3DXVECTOR3(400.0f, 150.0f, 0.0f));
 		SetRule(D3DXVECTOR3(400.0f, 350.0f, 0.0f));
 		SetRule(D3DXVECTOR3(400.0f, 550.0f, 0.0f));

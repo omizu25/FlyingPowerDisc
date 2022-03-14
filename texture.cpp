@@ -34,6 +34,10 @@ const char *s_FileName[] =
 	"data/TEXTURE/Select_Left.png",
 	"data/TEXTURE/Select_Right.png",
 	"data/TEXTURE/Number_0To9.png",
+	"data/TEXTURE/Select_Time.png",
+	"data/TEXTURE/Select_Point.png",
+	"data/TEXTURE/Select_Set.png",
+	"data/TEXTURE/Select_BG.png",
 };
 }// namespace‚Í‚±‚±‚Ü‚Å
 
