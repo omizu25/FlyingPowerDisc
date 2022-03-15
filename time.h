@@ -18,6 +18,7 @@ void UpdateTime(void);
 void DrawTime(void);
 void SetTime(int nScore);
 void AddTime(int nValue);
+int GetTime(void);
 
 #endif
 #pragma once

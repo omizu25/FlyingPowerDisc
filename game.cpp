@@ -21,6 +21,8 @@
 #include "menu.h"
 #include "wall.h"
 #include "effect.h"
+#include "time.h"
+#include "rule.h"
 #include <assert.h>
 
 //==================================================
@@ -38,6 +40,9 @@ bool		s_bPause = false;				// ポーズ中かどうか [してる  : true してない  : false
 //--------------------------------------------------
 void InitGame(void)
 {
+	//タイム初期化
+	InitTime();
+
 	//かべ初期化
 	InitWall();
 
@@ -62,19 +67,22 @@ void InitGame(void)
 	// メニューの初期化
 	InitMenu();
 
-	//UIの配置			置く座標			横幅	縦幅	タイプ			拡大率とフェード
-	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0, D3DXVECTOR3(1.0f, 1.0f, 0.0f));	
-	SetUi(D3DXVECTOR3 (SCREEN_WIDTH - 50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 1, D3DXVECTOR3(1.0f, 1.0f, 0.0f));
-
-	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 100.0f, 0.0f), 200.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 300.0f, 0.0f), 200.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 500.0f, 0.0f), 200.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-
-	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 100.0f, 0.0f), 200.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 300.0f, 0.0f), 200.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 500.0f, 0.0f), 200.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-
-	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), 400.0f, 100.0f,4, D3DXVECTOR3(1.0f, 0.0f, 0.0f));
+	//UIの配置			置く座標			横幅	縦幅	タイプ			拡大率とフェード	テクスチャの種類
+	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0, D3DXVECTOR3(1.0f, 1.0f, 0.0f),0);	
+	SetUi(D3DXVECTOR3 (SCREEN_WIDTH - 50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 1, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1);
+	//右から出てくるやつ
+	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 100.0f, 0.0f), 150.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
+	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 300.0f, 0.0f), 150.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f),2);
+	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 500.0f, 0.0f), 150.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
+	//左から出てくるやつ																				
+	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 100.0f, 0.0f), 150.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
+	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 300.0f, 0.0f), 150.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f),2);
+	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 500.0f, 0.0f), 150.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
+	//セット数																							
+	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), 400.0f, 100.0f,4, D3DXVECTOR3(1.0f, 0.0f, 0.0f),4);
+	//選択した時間を表示
+	//SetTime(GetTimeRule());
+	SetTime(99);
 
 	s_gameState = GAMESTATE_START;	// 開始状態に設定
 
@@ -90,6 +98,9 @@ void UninitGame(void)
 {
 	// サウンドの停止
 	StopSound();
+
+	//タイムの終了
+	UninitTime();
 
 	//かべの終了
 	UninitWall();
@@ -157,6 +168,9 @@ void UpdateGame(void)
 	//かべの更新
 	UpdateWall();
 
+	//タイムの更新
+	UpdateTime();
+
 	// プレイヤーの更新
 	UpdatePlayer();
 }
@@ -167,16 +181,19 @@ void UpdateGame(void)
 void DrawGame(void)
 {
 	//かべの描画
-	DrawWall();
-	
-	//UIの描画
-	DrawUi();
+	//DrawWall();
 
 	//エフェクト更新
 	DrawEffect();
 
 	// 矩形の描画
 	DrawRectangle();
+
+	//タイムの描画
+	DrawTime();
+
+	//UIの描画
+	DrawUi();
 }
 
 //--------------------------------------------------
