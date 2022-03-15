@@ -69,18 +69,18 @@ void InitGame(void)
 	//UIの配置			置く座標			横幅	縦幅	タイプ			拡大率とフェード
 	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0, D3DXVECTOR3(1.0f, 1.0f, 0.0f));	
 	SetUi(D3DXVECTOR3 (SCREEN_WIDTH - 50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 1, D3DXVECTOR3(1.0f, 1.0f, 0.0f));
-
+	//右から出てくるやつ
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 100.0f, 0.0f), 200.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 300.0f, 0.0f), 200.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 500.0f, 0.0f), 200.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-
+	//左から出てくるやつ
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 100.0f, 0.0f), 200.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 300.0f, 0.0f), 200.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 500.0f, 0.0f), 200.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-
+	//セット数
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), 400.0f, 100.0f,4, D3DXVECTOR3(1.0f, 0.0f, 0.0f));
 
-	SetTime(60);
+	SetTime(90);
 
 	s_gameState = GAMESTATE_START;	// 開始状態に設定
 
@@ -178,20 +178,20 @@ void UpdateGame(void)
 //--------------------------------------------------
 void DrawGame(void)
 {
-	//UIの描画
-	DrawUi();
-
-	//タイムの描画
-	DrawTime();
-
 	//かべの描画
-	DrawWall();
+	//DrawWall();
 
 	//エフェクト更新
 	DrawEffect();
 
 	// 矩形の描画
 	DrawRectangle();
+
+	//タイムの描画
+	DrawTime();
+
+	//UIの描画
+	DrawUi();
 }
 
 //--------------------------------------------------

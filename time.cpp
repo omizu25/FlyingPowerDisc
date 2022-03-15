@@ -28,11 +28,11 @@ void InitTime(void)
 
 	//テクスチャ読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\number000.png",
+		"data\\TEXTURE\\Number_0To9.png",
 		&g_pTextureTime);
 
 	// スコアの情報の初期化
-	g_posTime = D3DXVECTOR3(800.0f, 50.0f, 0.0f);
+	g_posTime = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 50.0f, 0.0f);
 	g_nTime = 0;
 	g_TimenCnt = 100;
 	// 頂点バッファの生成
@@ -112,9 +112,9 @@ void UpdateTime(void)
 		g_nTime--;
 	}
 
-	nNumber[0] = g_nTime % 1000 / 100;
-	nNumber[1] = g_nTime % 100 / 10;
-	nNumber[2] = g_nTime % 10 / 1;
+	//nNumber[0] = g_nTime % 1000 / 100;
+	nNumber[0] = g_nTime % 100 / 10;
+	nNumber[1] = g_nTime % 10 / 1;
 
 	//頂点バッファをロックし頂点情報へのポインタを取得
 	g_pVtxBuffTime->Lock(0, 0, (void**)&pVtx, 0);
@@ -173,9 +173,9 @@ void SetTime(int nTime)
 
 	g_nTime = nTime;
 
-	nNumber[0] = g_nTime % 1000 / 100;
-	nNumber[1] = g_nTime % 100 / 10;
-	nNumber[2] = g_nTime % 10 / 1;
+	//nNumber[0] = g_nTime % 1000 / 100;
+	nNumber[0] = g_nTime % 100 / 10;
+	nNumber[1] = g_nTime % 10 / 1;
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	g_pVtxBuffTime->Lock(0, 0, (void**)&pVtx, 0);
@@ -203,9 +203,9 @@ void AddTime(int nValue)
 
 	g_nTime -= nValue;
 
-	nNumber[0] = g_nTime % 1000 / 100;
-	nNumber[1] = g_nTime % 100 / 10;
-	nNumber[2] = g_nTime % 10 / 1;
+	//nNumber[0] = g_nTime % 1000 / 100;
+	nNumber[0] = g_nTime % 100 / 10;
+	nNumber[1] = g_nTime % 10 / 1;
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	g_pVtxBuffTime->Lock(0, 0, (void**)&pVtx, 0);
