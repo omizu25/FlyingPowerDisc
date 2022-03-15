@@ -230,9 +230,6 @@ void UpdateReset(void)
 
 	// ‹éŒ`‚Ì‰ñ“]‚·‚éˆÊ’u‚Ìİ’è
 	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);
-
-	// ƒQ[ƒ€‚Ìó‘Ô‚Ìİ’è
-	SetGameState(GAMESTATE_START);
 }
 
 //--------------------------------------------------
