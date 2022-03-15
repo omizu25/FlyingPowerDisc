@@ -20,27 +20,36 @@ namespace
 {
 const char *s_FileName[] =
 {// テクスチャのパス
-	"data/TEXTURE/BG.png",
-	"data/TEXTURE/Disc.png",
-	"data/TEXTURE/Frame.png",
-	"data/TEXTURE/Title_blue.png",
-	"data/TEXTURE/TitleLight_red.png",
-	"data/TEXTURE/Game_Start.png",
-	"data/TEXTURE/Pose_Title.png",
-	"data/TEXTURE/Pose_Resume.png",
-	"data/TEXTURE/Pose_Quit.png",
-	"data/TEXTURE/UI000.png",
-	"data/TEXTURE/UI001.png",
-	"data/TEXTURE/Select_Left.png",
-	"data/TEXTURE/Select_Right.png",
-	"data/TEXTURE/Number_0To9.png",
-	"data/TEXTURE/Select_Time.png",
-	"data/TEXTURE/Select_Point.png",
-	"data/TEXTURE/Select_Set.png",
-	"data/TEXTURE/Select_BG.png",
-	"data/TEXTURE/Game_BG.png",
-	"data/TEXTURE/Map_Title.png",
-	"data/TEXTURE/Rule_Title.png",
+	//タイトル
+	"data/TEXTURE/TITLE/BG.png",			//タイトル画面の背景
+	"data/TEXTURE/TITLE/Frame.png",			//タイトル画面の枠
+	"data/TEXTURE/TITLE/Title_blue.png",	//タイトルロゴ
+	"data/TEXTURE/TITLE/TitleLight_red.png",//タイトルロゴの後光
+	"data/TEXTURE/TITLE/Game_Start.png",	//ゲームスタートの文字
+
+	//セレクト
+	"data/TEXTURE/SELECT/Select_Left.png",	//左ボタン
+	"data/TEXTURE/SELECT/Select_Right.png",	//右ボタン
+	"data/TEXTURE/SELECT/Select_Time.png",	//制限時間
+	"data/TEXTURE/SELECT/Select_Point.png",	//ポイント数
+	"data/TEXTURE/SELECT/Select_Set.png",	//セット数
+	"data/TEXTURE/SELECT/Select_BG.png",	//セレクト画面の背景
+	"data/TEXTURE/SELECT/Map_Title.png",	//マップ選択
+	"data/TEXTURE/SELECT/Rule_Title.png",	//ルール選択
+	
+	//ゲーム
+	"data/TEXTURE/GAME/Disc.png",			//ディスク
+	"data/TEXTURE/GAME/Game_BG.png",		//ゲーム画面の背景
+	"data/TEXTURE/UI/UI000.png",			//UI-0
+	"data/TEXTURE/UI/UI001.png",			//UI-1
+
+	//ポーズ
+	"data/TEXTURE/POSE/Pose_Title.png",		//ポーズ画面のタイトル
+	"data/TEXTURE/POSE/Pose_Resume.png",	//再開
+	"data/TEXTURE/POSE/Pose_Quit.png",		//終了
+
+	//その他
+	"data/TEXTURE/Number_0To9.png",			//数字
 };
 }// namespaceはここまで
 
