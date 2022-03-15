@@ -38,15 +38,15 @@ void InitUi(void)
 		&g_pTextureUi[1]);
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\GAME\\Number_Yellow.png",
+		"data\\TEXTURE\\GAME\\FivePoints.png",
 		&g_pTextureUi[2]);
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\GAME\\Number_Yellow.png",
+		"data\\TEXTURE\\GAME\\ThreePoints.png",
 		&g_pTextureUi[3]);
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\GAME\\Number_Yellow.png",
+		"data\\TEXTURE\\UI\\UI001.png",
 		&g_pTextureUi[4]);
 	//UIの情報の初期化
 	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
@@ -270,7 +270,7 @@ void DrawUi(void)
 		if (g_aUi[nCntUi].bUse)
 		{//UIが使用されている
 		 //テクスチャの設定
-			pDevice->SetTexture(0, g_pTextureUi[g_aUi[nCntUi].nType]);
+			pDevice->SetTexture(0, g_pTextureUi[g_aUi[nCntUi].nTexture]);
 			//ポリゴンの描画
 			pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, nCntUi * 4, 2);	//プリミティブ(ポリゴン)数
 		}
@@ -279,7 +279,7 @@ void DrawUi(void)
 //====================================
 //UIの設定処理
 //====================================
-void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType, D3DXVECTOR3 scale)
+void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType, D3DXVECTOR3 scale,int nTexture)
 {
 	VERTEX_2D * pVtx;		//頂点情報へのポインタ
 	//頂点バッファをロックし、頂点情報へのポインタを取得
@@ -294,6 +294,7 @@ void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType, D3DXVECTOR3 
 			g_aUi[nCntUi].fHeight = fHeight;
 			g_aUi[nCntUi].nType = nType;
 			g_aUi[nCntUi].scale = scale;
+			g_aUi[nCntUi].nTexture = nTexture;
 			//頂点座標の設定
 			pVtx[0].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
 			pVtx[1].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);

@@ -28,7 +28,7 @@ void InitTime(void)
 
 	//テクスチャ読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\GAME\\Number_Yellow.png",
+		"data\\TEXTURE\\Number_0To9.png",
 		&g_pTextureTime);
 
 	// スコアの情報の初期化
@@ -223,10 +223,4 @@ void AddTime(int nValue)
 	}
 	//頂点バッファをアンロック
 	g_pVtxBuffTime->Unlock();
-}
-
-//スコアの
-int GetTime(void)
-{
-	return g_nTime;
 }
