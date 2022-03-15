@@ -37,6 +37,7 @@ typedef struct
 	int nType;					//タイプ
 	int nIdx;					// 矩形のインデックス
 	int nSkillCount;
+	int nDiveCount;				//タックルの硬直時間
 	int nHaveCount;				//もってる時間
 	float fheight;				//高さ
 	float fwidth;				//幅
