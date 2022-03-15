@@ -18,6 +18,7 @@
 #define MAXPLAYERTYPE (4)//Type最大数
 #define MOVESPEED (5.0f)
 #define DEAD_ZONE	(0.1f)	// スティックの遊び
+#define MAX_DIVECOUNT (15)	//ダイブの硬直時間
 //スタティック変数///スタティックをヘッタに使うなよ？
 
 static LPDIRECT3DTEXTURE9 s_pTexturePlayer[MAXPLAYERTYPE] = {}; //テクスチャのポインタ
@@ -53,6 +54,7 @@ void InitPlayer(void)
 		s_Player[count].fheight = PLAYERSIZE_Y;
 		s_Player[count].fwidth = PLAYERSIZE_X;
 		s_Player[count].nSkillCount = 0;
+		s_Player[count].nDiveCount = 0;
 		s_Player[count].nHaveCount = 0;
 		// 矩形の設定
 		s_Player[count].nIdx = SetRectangleWithTex(s_pTexturePlayer[count]);
@@ -269,11 +271,7 @@ void MovePlayer(void)
 	//----------------------------------------
 	if (!s_Player[0].bHave)
 	{// ディスクを持っていない
-		if (GetKeyboardTrigger(DIK_C) || GetJoypadIdxPress(JOYKEY_A, 0))
-		{//タックル
-			s_Player[0].pos.x += s_Player[0].Speed * 5;
-			s_Player[0].bDive = true;
-		}
+		
 		if (s_Player[0].bDive == true && pDisc->nThrow == 1)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[0];
@@ -289,8 +287,26 @@ void MovePlayer(void)
 				
 				pDisc->nThrow = 0;
 				s_Player[0].bDive = false;
+				s_Player[0].nDiveCount = 0;
 				pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow * 3;
 			}
+		}
+		
+		if (s_Player[0].bDive == true)
+		{
+			s_Player[0].nDiveCount++;
+
+			if (s_Player[0].nDiveCount >= MAX_DIVECOUNT)
+			{
+				s_Player[0].nDiveCount = 0;
+				s_Player[0].bDive = false;
+			}
+		}
+		else if (GetKeyboardTrigger(DIK_C) || GetJoypadIdxPress(JOYKEY_A, 0))
+		{//タックル
+			s_Player[0].pos.x += s_Player[0].Speed * 5;
+			s_Player[0].bDive = true;
+			s_Player[0].nDiveCount = 0;
 		}
 		else if (s_bKeyBoardWASD)
 		{// キーボード
@@ -377,12 +393,7 @@ void MovePlayer(void)
 	//----------------------------------------
 	if (!s_Player[1].bHave)
 	{// ディスクを持っていない
-		if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxPress(JOYKEY_A, 1))
-		{//タックル
-			s_Player[1].pos.x -= s_Player[1].Speed * 5;
-			s_Player[1].bDive = true;
-		}
-		else if (s_Player[1].bDive == true && pDisc->nThrow == 0)
+		if (s_Player[1].bDive == true && pDisc->nThrow == 0)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[1];
 
@@ -397,8 +408,26 @@ void MovePlayer(void)
 
 				pDisc->nThrow = 1;
 				s_Player[1].bDive = false;
+				s_Player[1].nDiveCount = 0;
 				pDisc->move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f)*s_Player[1].Pow * 3;
 			}
+		}
+
+		if (s_Player[1].bDive == true)
+		{
+			s_Player[1].nDiveCount++;
+
+			if (s_Player[1].nDiveCount >= MAX_DIVECOUNT)
+			{
+				s_Player[1].nDiveCount = 0;
+				s_Player[1].bDive = false;
+			}
+		}
+		else if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxPress(JOYKEY_A, 1))
+		{//タックル
+			s_Player[1].pos.x -= s_Player[1].Speed * 5;
+			s_Player[1].bDive = true;
+			s_Player[1].nDiveCount = 0;
 		}
 		else if (s_bKeyBoardArrow)
 		{// キーボード
