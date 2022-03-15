@@ -21,4 +21,3 @@ void AddTime(int nValue);
 int GetTime(void);
 
 #endif
-#pragma once

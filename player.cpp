@@ -12,13 +12,15 @@
 #include "wall.h"
 #include "game.h"
 #include "effect.h"
+#include "utility.h"
 #include <stdio.h>
 #include <assert.h>
 
 #define MAXPLAYERTYPE (4)//Type最大数
 #define MOVESPEED (5.0f)
-#define DEAD_ZONE	(0.1f)	// スティックの遊び
-#define MAX_DIVECOUNT (15)	//ダイブの硬直時間
+#define DEAD_ZONE	(0.1f)		// スティックの遊び
+#define MAX_DIVECOUNT (15)		// ダイブの硬直時間
+#define MAX_RESET_SPEED (5.0f)	// リセット状態の速さ
 //スタティック変数///スタティックをヘッタに使うなよ？
 
 static LPDIRECT3DTEXTURE9 s_pTexturePlayer[MAXPLAYERTYPE] = {}; //テクスチャのポインタ
@@ -31,6 +33,7 @@ static bool	s_bStickLeft[MAXPLAYER];	// 左スティック入力があるかどうか
 
 // スタティック関数プロトタイプ宣言
 static void UpdateNormal(void);
+static void UpdateReset(void);
 static void InputMove(void);
 
 //=======================
@@ -59,8 +62,8 @@ void InitPlayer(void)
 		// 矩形の設定
 		s_Player[count].nIdx = SetRectangleWithTex(s_pTexturePlayer[count]);
 	}
-	SetPlayer(D3DXVECTOR3((float)0, (float)SCREEN_HEIGHT * 0.5f, 0.0f), 0,true);
-	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT * 0.5f, 0.0f), 1,false);
+	SetPlayer(D3DXVECTOR3((float)PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.5f, 0.0f), 0,true);
+	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.5f, 0.0f), 1,false);
 }
 
 //===================
@@ -104,7 +107,7 @@ void UpdatePlayer(void)
 		break;
 
 	case GAMESTATE_RESET:	// リセット状態
-
+		UpdateReset();
 		break;
 
 	case GAMESTATE_END:		// 終了状態
@@ -622,6 +625,51 @@ static void UpdateNormal(void)
 		}
 		// 矩形の回転する位置の設定
 		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
+	}
+}
+
+//----------------------------
+// リセット状態の更新
+//----------------------------
+static void UpdateReset(void)
+{
+	bool bOverlap[MAXPLAYER];
+
+	for (int nPlayerNo = 0; nPlayerNo < MAXPLAYER; nPlayerNo++)
+	{
+		Player *pPlayer = &s_Player[nPlayerNo];
+
+		bOverlap[nPlayerNo] = false;
+
+		D3DXVECTOR3 posDest;
+		
+		switch (nPlayerNo)
+		{
+		case 0:
+			posDest = D3DXVECTOR3(PLAYERSIZE_X, SCREEN_HEIGHT * 0.5f, 0.0f);
+			break;
+
+		case 1:
+			posDest = D3DXVECTOR3(SCREEN_WIDTH - PLAYERSIZE_X, SCREEN_HEIGHT * 0.5f, 0.0f);
+			break;
+		
+		default:
+			posDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			assert(false);
+			break;
+		}
+
+		// ホーミング
+		bOverlap[nPlayerNo] = Homing(&pPlayer->pos, pPlayer->pos, posDest, MAX_RESET_SPEED);
+		
+		// 矩形の回転する位置の設定
+		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
+	}
+
+	if (bOverlap[0] && bOverlap[1])
+	{// どちらも指定の位置
+		// ゲームの状態の設定
+		SetGameState(GAMESTATE_START);
 	}
 }
 
