@@ -292,7 +292,7 @@ void MovePlayer(void)
 				pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow * 3;
 			}
 		}
-		else if (s_bKeyBoardWASD)
+		if (s_bKeyBoardWASD)
 		{// キーボード
 			D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -400,7 +400,7 @@ void MovePlayer(void)
 				pDisc->move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f)*s_Player[1].Pow * 3;
 			}
 		}
-		else if (s_bKeyBoardArrow)
+		if (s_bKeyBoardArrow)
 		{// キーボード
 			D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
