@@ -17,6 +17,7 @@
 #include "texture.h"
 #include "effect.h"
 #include "utility.h"
+#include "score.h"
 
 #include <assert.h>
 
@@ -257,6 +258,9 @@ void Reflect(void)
 		SetGameState(GAMESTATE_RESET);
 		s_nPossPlayer = 1;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
+
+		// ポイント数の加算
+		AddPointScore(0, 3);
 	}
 	else if (s_disc.pos.x <= fRadius)
 	{// 左
@@ -264,6 +268,9 @@ void Reflect(void)
 		SetGameState(GAMESTATE_RESET);
 		s_nPossPlayer = 0;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
+
+		// ポイント数の加算
+		AddPointScore(1, 3);
 	}
 }
 } // namespaceはここまで

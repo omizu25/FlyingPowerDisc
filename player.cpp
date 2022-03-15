@@ -21,6 +21,8 @@
 #define DEAD_ZONE	(0.1f)		// スティックの遊び
 #define MAX_DIVECOUNT (15)		// ダイブの硬直時間
 #define MAX_RESET_SPEED (5.0f)	// リセット状態の速さ
+#define MAX_HAVE_COUNT (120)	// 持ってる時間の最大値
+#define DISC_SPEED (2.0f)		// ディスクの速さ
 //スタティック変数///スタティックをヘッタに使うなよ？
 
 static LPDIRECT3DTEXTURE9 s_pTexturePlayer[MAXPLAYERTYPE] = {}; //テクスチャのポインタ
@@ -291,7 +293,7 @@ void MovePlayer(void)
 				pDisc->nThrow = 0;
 				s_Player[0].bDive = false;
 				s_Player[0].nDiveCount = 0;
-				pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow * 3;
+				pDisc->move = D3DXVECTOR3(DISC_SPEED, 0.0f, 0.0f)*s_Player[0].Pow * 3;
 			}
 		}
 		
@@ -379,13 +381,13 @@ void MovePlayer(void)
 	else
 	{// ディスクを持っている
 		s_Player[0].nHaveCount++;
-		if (GetKeyboardPress(DIK_SPACE) || GetJoypadIdxPress(JOYKEY_A, 0)|| s_Player[0].nHaveCount >= 30)
+		if (GetKeyboardPress(DIK_SPACE) || GetJoypadIdxPress(JOYKEY_A, 0)|| s_Player[0].nHaveCount >= MAX_HAVE_COUNT)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[0].bHave = false;
 			pDisc->nThrow = 0;
 			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[0].nHaveCount / 10;
-			pDisc->move = D3DXVECTOR3(1.0f - Ross*0.1f, 0.0f, 0.0f)*s_Player[0].Pow;
+			pDisc->move = D3DXVECTOR3(DISC_SPEED - Ross*0.1f, 0.0f, 0.0f)*s_Player[0].Pow;
 			pDisc->bHave = false;
 			s_Player[0].nHaveCount = 0;
 		}
@@ -412,7 +414,7 @@ void MovePlayer(void)
 				pDisc->nThrow = 1;
 				s_Player[1].bDive = false;
 				s_Player[1].nDiveCount = 0;
-				pDisc->move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f)*s_Player[1].Pow * 3;
+				pDisc->move = D3DXVECTOR3(-DISC_SPEED, 0.0f, 0.0f)*s_Player[1].Pow * 3;
 			}
 		}
 
@@ -500,13 +502,13 @@ void MovePlayer(void)
 	else
 	{// ディスクを持っている
 		s_Player[1].nHaveCount++;
-		if (GetKeyboardPress(DIK_RETURN) || GetJoypadIdxPress(JOYKEY_A, 1) || s_Player[1].nHaveCount >= 30)
+		if (GetKeyboardPress(DIK_RETURN) || GetJoypadIdxPress(JOYKEY_A, 1) || s_Player[1].nHaveCount >= MAX_HAVE_COUNT)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[1].bHave = false;
 			pDisc->nThrow = 1;
 			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[1].nHaveCount / 10;
-			pDisc->move = D3DXVECTOR3(-1.0f + Ross*0.1f, 0.0f, 0.0f) * s_Player[1].Pow;
+			pDisc->move = D3DXVECTOR3(-DISC_SPEED + Ross*0.1f, 0.0f, 0.0f) * s_Player[1].Pow;
 			pDisc->bHave = false;
 			s_Player[1].nHaveCount = 0;
 		}
