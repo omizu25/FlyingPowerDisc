@@ -35,7 +35,7 @@ typedef struct
 	PLAYESTATE state;			//状態
 	int nLife;					//寿命
 	int nType;					//タイプ
-	int nIdx;					// 矩形のインデックス
+	int nIdx;					//矩形のインデックス
 	int nSkillCount;
 	int nDiveCount;				//タックルの硬直時間
 	int nHaveCount;				//もってる時間

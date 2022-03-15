@@ -23,6 +23,9 @@
 #include "effect.h"
 #include "time.h"
 #include "rule.h"
+#include "number.h"
+#include "score.h"
+
 #include <assert.h>
 
 //==================================================
@@ -43,11 +46,17 @@ void InitGame(void)
 	//タイム初期化
 	InitTime();
 
-	//かべ初期化
-	InitWall();
-
 	// 矩形の初期化
 	InitRectangle();
+
+	// 数の初期化
+	InitNumber();
+
+	// スコアの初期化
+	InitScore();
+
+	//かべ初期化
+	InitWall();
 
 	// ディスクの初期化
 	InitDisc();
@@ -101,6 +110,12 @@ void UninitGame(void)
 
 	//タイムの終了
 	UninitTime();
+
+	// 数の終了
+	UninitNumber();
+
+	// スコアの終了
+	UninitScore();
 
 	//かべの終了
 	UninitWall();
@@ -170,6 +185,9 @@ void UpdateGame(void)
 
 	//タイムの更新
 	UpdateTime();
+
+	// スコアの更新
+	UpdateScore();
 
 	// プレイヤーの更新
 	UpdatePlayer();

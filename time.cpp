@@ -34,7 +34,7 @@ void InitTime(void)
 	// スコアの情報の初期化
 	g_posTime = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 50.0f, 0.0f);
 	g_nTime = 0;
-	g_TimenCnt = 100;
+	g_TimenCnt = 60;
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_TIME,
 		D3DUSAGE_WRITEONLY,
@@ -99,40 +99,13 @@ void UninitTime(void)
 //スコアの
 void UpdateTime(void)
 {
-	//頂点座標へのポインタ
-	VERTEX_2D *pVtx;
-	int nNumber[3];
-	int nCntTime;
-
 	//デクリメントでカウント
 	g_TimenCnt--;
 	if (g_TimenCnt == 0)
 	{
-		g_TimenCnt = 100;
-		g_nTime--;
+		g_TimenCnt = 60;
+		AddTime(-1);
 	}
-
-	//nNumber[0] = g_nTime % 1000 / 100;
-	nNumber[0] = g_nTime % 100 / 10;
-	nNumber[1] = g_nTime % 10 / 1;
-
-	//頂点バッファをロックし頂点情報へのポインタを取得
-	g_pVtxBuffTime->Lock(0, 0, (void**)&pVtx, 0);
-
-	for (nCntTime = 0; nCntTime < MAX_TIME; nCntTime++)
-	{
-
-		//テクスチャの座標設定
-		pVtx[0].tex = D3DXVECTOR2(0.1f * nNumber[nCntTime], 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(0.1f * nNumber[nCntTime] + 0.1f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.1f * nNumber[nCntTime], 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(0.1f * nNumber[nCntTime] + 0.1f, 1.0f);
-
-		pVtx += 4; //頂点ポイントを四つ進む
-
-	}
-	//頂点バッファをアンロック
-	g_pVtxBuffTime->Unlock();
 }
 
 //スコアの
@@ -201,7 +174,7 @@ void AddTime(int nValue)
 	VERTEX_2D*pVtx;
 	int nNumber[2];	//各桁の数字を格納
 
-	g_nTime -= nValue;
+	g_nTime += nValue;
 
 	//nNumber[0] = g_nTime % 1000 / 100;
 	nNumber[0] = g_nTime % 100 / 10;
