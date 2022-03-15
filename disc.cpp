@@ -16,6 +16,8 @@
 #include "player.h"
 #include "texture.h"
 #include "effect.h"
+#include "utility.h"
+
 #include <assert.h>
 
 //==================================================
@@ -48,7 +50,6 @@ void UpdateStart(void);
 void UpdateReset(void);
 void UpdateNormal(void);
 void Reflect(void);
-void NormalizeAngle(float *pAngle);
 }// namespaceはここまで
 
 //--------------------------------------------------
@@ -141,26 +142,26 @@ void UpdateStart(void)
 
 	pPlayer += (s_nPossPlayer * 1);
 
-	float fRotMove, fRotDest, fRotDiff;
+	D3DXVECTOR3 posDest = pPlayer->pos;
 
-	// 現在の移動方向(角度)
-	fRotMove = atan2f(s_disc.move.x, s_disc.move.y);
+	switch (s_nPossPlayer)
+	{
+	case 0:
+		posDest.x += PLAYERSIZE_X * 0.5f;
+		break;
+		
+	case 1:
+		posDest.x += -PLAYERSIZE_X * 0.5f;
+		break;
 
-	// 目的の移動方向(角度)
-	fRotDest = atan2f(pPlayer->pos.x - s_disc.pos.x, pPlayer->pos.y - s_disc.pos.y);
+	default:
+		posDest = pPlayer->pos;
+		assert(false);
+		break;
+	}
 
-	fRotDiff = fRotDest - fRotMove;	// 目的の移動方向までの差分
-
-	// 角度の正規化
-	NormalizeAngle(&fRotDiff);
-
-	fRotMove += fRotDiff;	// 移動方向(角度)の補正
-
-	// 角度の正規化
-	NormalizeAngle(&fRotMove);
-
-	s_disc.move.x = sinf(fRotMove) * MAX_MOVE;
-	s_disc.move.y = cosf(fRotMove) * MAX_MOVE;
+	// ホーミング
+	Homing(&s_disc.pos, s_disc.pos, posDest, MAX_MOVE);
 
 	// 回転
 	s_disc.rot.z += DISC_ROT_SPEED;
@@ -208,10 +209,10 @@ void UpdateNormal(void)
 	//このまま使うと変だから一定間隔で使うといいかも
 	//------------------------
 	SetEffect(D3DXVECTOR3(s_disc.pos.x, s_disc.pos.y, s_disc.pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SPIN, 30, 100.0f);
-
+	
 	// プレイヤーとディスクの当たり判定
 	CollisionPlayer(&s_disc, DISC_SIZE, s_disc.nThrow ^ 1);
-
+	
 	// 反射
 	Reflect();
 
@@ -254,30 +255,15 @@ void Reflect(void)
 	{// 右
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
-		s_nPossPlayer = 0;
+		s_nPossPlayer = 1;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
 	}
 	else if (s_disc.pos.x <= fRadius)
 	{// 左
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
-		s_nPossPlayer = 1;
+		s_nPossPlayer = 0;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
-	}
-}
-
-//--------------------------------------------------
-// 角度の正規化
-//--------------------------------------------------
-void NormalizeAngle(float *pAngle)
-{
-	if (*pAngle >= D3DX_PI)
-	{// 3.14より大きい
-		*pAngle -= D3DX_PI * 2.0f;
-	}
-	else if (*pAngle <= -D3DX_PI)
-	{// -3.14より小さい
-		*pAngle += D3DX_PI * 2.0f;
 	}
 }
 } // namespaceはここまで

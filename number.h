@@ -32,9 +32,9 @@ void DrawNumber(void);
 
 //--------------------------------------------------
 // 設定
-// 引数1  : D3DXVECTOR3 pos / 中心の位置
-// 引数2  : D3DXVECTOR3 size / サイズ
-// 引数3  : D3DXCOLOR col / 色
+// 引数1  : D3DXVECTOR3 &pos / 中心の位置
+// 引数2  : D3DXVECTOR3 &size / サイズ
+// 引数3  : D3DXCOLOR &col / 色
 // 引数4  : int nNumber / 数
 // 引数5  : int nDigit / 桁数
 // 返値  : int / 配列のインデックス

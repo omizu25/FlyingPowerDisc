@@ -12,6 +12,7 @@
 #include "wall.h"
 #include "game.h"
 #include "effect.h"
+#include "utility.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -658,20 +659,9 @@ static void UpdateReset(void)
 			break;
 		}
 
-		D3DXVECTOR3 posNow = pPlayer->pos;
-		D3DXVECTOR3 vecDiff = posDest - posNow;
-		float fLength = D3DXVec3Length(&vecDiff);
-
-		if (fLength <= MAX_RESET_SPEED)
-		{// 速さより長さが小さい時
-			pPlayer->pos = posDest;
-			bOverlap[nPlayerNo] = true;
-		}
-		else
-		{// 速さより長さが大きい時
-			pPlayer->pos += (vecDiff / fLength) * MAX_RESET_SPEED;
-		}
-
+		// ホーミング
+		bOverlap[nPlayerNo] = Homing(&pPlayer->pos, pPlayer->pos, posDest, MAX_RESET_SPEED);
+		
 		// 矩形の回転する位置の設定
 		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
 	}

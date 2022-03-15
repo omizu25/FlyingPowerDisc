@@ -52,16 +52,16 @@ void StopUseRectangle(int nIdx);
 //--------------------------------------------------
 // 位置の設定
 // 引数1  : int nIdx / インデックス
-// 引数2  : D3DXVECTOR3 pos / 中心の位置
-// 引数3  : D3DXVECTOR3 size / サイズ
+// 引数2  : D3DXVECTOR3 &pos / 中心の位置
+// 引数3  : D3DXVECTOR3 &size / サイズ
 //--------------------------------------------------
 void SetPosRectangle(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size);
 
 //--------------------------------------------------
 // 回転する位置の設定
 // 引数1  : int nIdx / インデックス
-// 引数2  : D3DXVECTOR3 pos / 中心の位置
-// 引数3  : D3DXVECTOR3 rot / 向き
+// 引数2  : D3DXVECTOR3 &pos / 中心の位置
+// 引数3  : D3DXVECTOR3 &rot / 向き
 // 引数4  : float fWidth / 幅
 // 引数5  : float fHeight / 高さ
 //--------------------------------------------------
@@ -70,15 +70,15 @@ void SetRotationPosRectangle(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3
 //--------------------------------------------------
 // 色の設定
 // 引数1  : int nIdx / インデックス
-// 引数2  : D3DXCOLOR color / 色
+// 引数2  : D3DXCOLOR &color / 色
 //--------------------------------------------------
 void SetColorRectangle(int nIdx, const D3DXCOLOR &color);
 
 //--------------------------------------------------
 // テクスチャ座標の設定
 // 引数1  : int nIdx / インデックス
-// 引数2  : D3DXVECTOR2 texU / x = 左端, y = 右端
-// 引数3  : D3DXVECTOR2 texV / x = 上端, y = 下端
+// 引数2  : D3DXVECTOR2 &texU / x = 左端, y = 右端
+// 引数3  : D3DXVECTOR2 &texV / x = 上端, y = 下端
 //--------------------------------------------------
 void SetTexRectangle(int nIdx, const D3DXVECTOR2 &texU, const D3DXVECTOR2 &texV);
 
