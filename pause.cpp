@@ -105,9 +105,9 @@ void SetPause(void)
 	menu.fHeight = MENU_HEIGHT;
 	menu.bSort = true;
 
-	menu.texture[MENU_GAME] = TEXTURE_Pose_Resume;
-	menu.texture[MENU_RETRY] = TEXTURE_Pose_Quit;
-	menu.texture[MENU_TITLE] = TEXTURE_Back_to_title;
+	menu.texture[MENU_GAME] = TEXTURE_Pose_Title;
+	menu.texture[MENU_RETRY] = TEXTURE_Pose_Resume;
+	menu.texture[MENU_TITLE] = TEXTURE_Pose_Quit;
 	
 	FrameArgument Frame;
 	Frame.bUse = true;

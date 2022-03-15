@@ -12,27 +12,36 @@
 //==================================================
 typedef enum
 {
-	TEXTURE_BG = 0,
-	TEXTURE_Disc,
-	TEXTURE_Frame,
-	TEXTURE_Title_blue,
-	TEXTURE_TitleLight_red,
-	TEXTURE_Pose_Title,
-	TEXTURE_Pose_Resume,
-	TEXTURE_Pose_Quit,
-	TEXTURE_Back_to_title,
-	TEXTURE_UI000,
-	TEXTURE_UI001,
-	TEXTURE_Select_Left,
-	TEXTURE_Select_Right,
-	TEXTURE_Number_0To9,
-	TEXTURE_Select_Time,
-	TEXTURE_Select_Point,
-	TEXTURE_Select_Set,
-	TEXTURE_Select_BG,
-	TEXTURE_Game_BG,
-	TEXTURE_Map_Title,
-	TEXTURE_Rule_Title,
+	//タイトル
+	TEXTURE_BG = 0,				//タイトル画面の背景
+	TEXTURE_Frame,				//タイトル画面の枠
+	TEXTURE_Title_blue,			//タイトルロゴ
+	TEXTURE_TitleLight_red,		//タイトルロゴの後光
+	TEXTURE_Game_Start,			//ゲームスタートの文字
+
+	//セレクト
+	TEXTURE_Select_Left,		//左ボタン
+	TEXTURE_Select_Right,		//右ボタン
+	TEXTURE_Select_Time,		//制限時間
+	TEXTURE_Select_Point,		//ポイント数
+	TEXTURE_Select_Set,			//セット数
+	TEXTURE_Select_BG,			//セレクト画面の背景
+	TEXTURE_Map_Title,			//マップ選択
+	TEXTURE_Rule_Title,			//ルール選択
+
+	//ゲーム
+	TEXTURE_Disc,				//ディスク
+	TEXTURE_Game_BG,			//ゲーム画面の背景
+	TEXTURE_UI000,				//UI-0
+	TEXTURE_UI001,				//UI-1
+
+	//ポーズ
+	TEXTURE_Pose_Title,			//ポーズ画面のタイトル
+	TEXTURE_Pose_Resume,		//再開
+	TEXTURE_Pose_Quit,			//終了
+
+	//その他
+	TEXTURE_Number_0To9,		//数字
 	TEXTURE_MAX,
 	TEXTURE_NONE,
 }TEXTURE;
