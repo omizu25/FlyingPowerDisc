@@ -28,7 +28,7 @@ void InitTime(void)
 
 	//テクスチャ読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\Number_0To9.png",
+		"data\\TEXTURE\\GAME\\Number_Yellow.png",
 		&g_pTextureTime);
 
 	// スコアの情報の初期化
