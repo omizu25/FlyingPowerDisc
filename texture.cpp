@@ -40,6 +40,7 @@ const char *s_FileName[] =
 	//ゲーム
 	"data/TEXTURE/GAME/Disc.png",			//ディスク
 	"data/TEXTURE/GAME/Game_BG.png",		//ゲーム画面の背景
+	"data/TEXTURE/GAME/Number_Yellow.png",	//数字(黄色)
 	"data/TEXTURE/UI/UI000.png",			//UI-0
 	"data/TEXTURE/UI/UI001.png",			//UI-1
 
