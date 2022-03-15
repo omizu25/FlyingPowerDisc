@@ -18,6 +18,8 @@ typedef enum
 	TEXTURE_Title_blue,			//タイトルロゴ
 	TEXTURE_TitleLight_red,		//タイトルロゴの後光
 	TEXTURE_Game_Start,			//ゲームスタートの文字
+	TEXTURE_Three_Point,		//3ポイント
+	TEXTURE_Five_Point,			//5ポイント
 
 	//セレクト
 	TEXTURE_Select_Left,		//左ボタン
