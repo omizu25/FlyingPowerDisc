@@ -274,7 +274,7 @@ void MovePlayer(void)
 			s_Player[0].pos.x += s_Player[0].Speed * 5;
 			s_Player[0].bDive = true;
 		}
-		else if (s_Player[0].bDive == true && pDisc->nThrow == 1)
+		if (s_Player[0].bDive == true && pDisc->nThrow == 1)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[0];
 
@@ -286,6 +286,7 @@ void MovePlayer(void)
 				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
 				(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
 			{// プレイヤーにディスクが当たった時
+				
 				pDisc->nThrow = 0;
 				s_Player[0].bDive = false;
 				pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow * 3;
@@ -363,6 +364,7 @@ void MovePlayer(void)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[0].bHave = false;
 			pDisc->nThrow = 0;
+			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[0].nHaveCount / 10;
 			pDisc->move = D3DXVECTOR3(1.0f - Ross*0.1, 0.0f, 0.0f)*s_Player[0].Pow;
 			pDisc->bHave = false;
@@ -470,7 +472,7 @@ void MovePlayer(void)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[1].bHave = false;
 			pDisc->nThrow = 1;
-			
+			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[1].nHaveCount / 10;
 			pDisc->move = D3DXVECTOR3(-1.0f + Ross*0.1, 0.0f, 0.0f) * s_Player[1].Pow;
 			pDisc->bHave = false;
