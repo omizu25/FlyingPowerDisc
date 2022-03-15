@@ -366,7 +366,7 @@ void MovePlayer(void)
 			pDisc->nThrow = 0;
 			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[0].nHaveCount / 10;
-			pDisc->move = D3DXVECTOR3(1.0f - Ross*0.1, 0.0f, 0.0f)*s_Player[0].Pow;
+			pDisc->move = D3DXVECTOR3(1.0f - Ross*0.1f, 0.0f, 0.0f)*s_Player[0].Pow;
 			pDisc->bHave = false;
 			s_Player[0].nHaveCount = 0;
 		}
@@ -474,7 +474,7 @@ void MovePlayer(void)
 			pDisc->nThrow = 1;
 			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[1].nHaveCount / 10;
-			pDisc->move = D3DXVECTOR3(-1.0f + Ross*0.1, 0.0f, 0.0f) * s_Player[1].Pow;
+			pDisc->move = D3DXVECTOR3(-1.0f + Ross*0.1f, 0.0f, 0.0f) * s_Player[1].Pow;
 			pDisc->bHave = false;
 			s_Player[1].nHaveCount = 0;
 		}
