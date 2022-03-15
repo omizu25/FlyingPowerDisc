@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="color.cpp" />
     <ClCompile Include="disc.cpp" />
+    <ClCompile Include="effect.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
@@ -173,6 +174,7 @@
   <ItemGroup>
     <ClInclude Include="color.h" />
     <ClInclude Include="disc.h" />
+    <ClInclude Include="effect.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />

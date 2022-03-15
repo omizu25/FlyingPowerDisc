@@ -11,6 +11,7 @@
 #include "rectangle.h"
 #include "wall.h"
 #include "game.h"
+#include "effect.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -46,12 +47,13 @@ void InitPlayer(void)
 		s_Player[count].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_Player[count].nLife = 5;
 		s_Player[count].Speed = 0;
-		s_Player[count].have = false;
+		s_Player[count].bHave = false;
 		s_Player[count].bUse = false;
-		s_Player[count].dive = false;
-		s_Player[count].fheight = PLAYERSIZ_Y;
-		s_Player[count].fwidth = PLAYERSIZ_X;
-
+		s_Player[count].bDive = false;
+		s_Player[count].fheight = PLAYERSIZE_Y;
+		s_Player[count].fwidth = PLAYERSIZE_X;
+		s_Player[count].nSkillCount = 0;
+		s_Player[count].nHaveCount = 0;
 		// 矩形の設定
 		s_Player[count].nIdx = SetRectangleWithTex(s_pTexturePlayer[count]);
 	}
@@ -145,9 +147,9 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 		s_Player[count].nLife = 5;
 		s_Player[count].Speed = s_PlayerType[nType].Speed;
 		s_Player[count].Pow = s_PlayerType[nType].Pow;
-		s_Player[count].fheight = PLAYERSIZ_Y;
-		s_Player[count].fwidth = PLAYERSIZ_X;
-		s_Player[count].have = false;
+		s_Player[count].fheight = PLAYERSIZE_Y;
+		s_Player[count].fwidth = PLAYERSIZE_X;
+		s_Player[count].bHave = false;
 		if (light)
 		{
 			D3DXVECTOR2 texU(1.0f, 0.0f);
@@ -172,49 +174,6 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 	}
 }
 
-#if 0	// もう使ってないよ。
-//------------------------------------
-//中心点真ん中のPOSセット
-//------------------------------------
-void SetUp(VERTEX_2D *pVtx,
-	float posx,		//中心点ｘ
-	float posy,		//中心点ｙ
-	float rotPlayer,		//プレイヤー回転
-	float fAngleAttack 		//対角線角度
-	, float fLengthAttack)	//対角線ノ長さ
-{
-	//回転
-	pVtx[0].pos.x = posx + sinf(rotPlayer - D3DX_PI + fAngleAttack)*fLengthAttack;
-	pVtx[0].pos.y = posy + cosf(rotPlayer - D3DX_PI + fAngleAttack)*fLengthAttack;
-	pVtx[0].pos.z = 0.0f;
-
-	pVtx[1].pos.x = posx + sinf(rotPlayer + D3DX_PI - fAngleAttack)*fLengthAttack;
-	pVtx[1].pos.y = posy + cosf(rotPlayer + D3DX_PI - fAngleAttack)*fLengthAttack;
-	pVtx[1].pos.z = 0.0f;
-
-	pVtx[2].pos.x = posx + sinf(rotPlayer + -fAngleAttack)*fLengthAttack;
-	pVtx[2].pos.y = posy + cosf(rotPlayer + -fAngleAttack)*fLengthAttack;
-	pVtx[2].pos.z = 0.0f;
-
-	pVtx[3].pos.x = posx + sinf(rotPlayer + fAngleAttack)*fLengthAttack;
-	pVtx[3].pos.y = posy + cosf(rotPlayer + fAngleAttack)*fLengthAttack;
-	pVtx[3].pos.z = 0.0f;
-
-}
-//---------------------------------------
-//セットテクスチャ(2d)
-//Auther：hamada ryuuga
-//---------------------------------------
-void SetTex2d(VERTEX_2D *pVtx, float left, float right, float top, float down)
-{
-	//テクスチャの座標設定
-	pVtx[0].tex = D3DXVECTOR2(left, top);
-	pVtx[1].tex = D3DXVECTOR2(right, top);
-	pVtx[2].tex = D3DXVECTOR2(left, down);
-	pVtx[3].tex = D3DXVECTOR2(right, down);
-
-}
-#endif
 //----------------------------
 //Playerのステータス読み込み
 //----------------------------
@@ -304,30 +263,32 @@ void MovePlayer(void)
 
 	Disc *pDisc = GetDisc();
 
+	
 	//---------------------------------------
 	//１体目の行動
 	//----------------------------------------
-	if (!s_Player[0].have)
+	if (!s_Player[0].bHave)
 	{// ディスクを持っていない
 		if (GetKeyboardTrigger(DIK_C) || GetJoypadIdxPress(JOYKEY_A, 0))
 		{//タックル
 			s_Player[0].pos.x += s_Player[0].Speed * 5;
-			s_Player[0].dive = true;
+			s_Player[0].bDive = true;
 		}
-		else if (s_Player[0].dive == true && pDisc->nThrow == 1)
+		if (s_Player[0].bDive == true && pDisc->nThrow == 1)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[0];
 
-			float fHeight = ((PLAYERSIZ_Y * 0.5f));
-			float fWidth = ((PLAYERSIZ_X * 0.5f));
+			float fHeight = ((PLAYERSIZE_Y * 0.5f));
+			float fWidth = ((PLAYERSIZE_X * 0.5f));
 
 			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
 				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
 				(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
 			{// プレイヤーにディスクが当たった時
+				
 				pDisc->nThrow = 0;
-				s_Player[0].dive = false;
+				s_Player[0].bDive = false;
 				pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow * 3;
 			}
 		}
@@ -398,31 +359,35 @@ void MovePlayer(void)
 	}
 	else
 	{// ディスクを持っている
-		if (GetKeyboardPress(DIK_SPACE) || GetJoypadIdxPress(JOYKEY_A, 0))
+		s_Player[0].nHaveCount++;
+		if (GetKeyboardPress(DIK_SPACE) || GetJoypadIdxPress(JOYKEY_A, 0)|| s_Player[0].nHaveCount >= 30)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
-			s_Player[0].have = false;
+			s_Player[0].bHave = false;
 			pDisc->nThrow = 0;
-			pDisc->move = D3DXVECTOR3(1.0f, 0.0f, 0.0f)*s_Player[0].Pow;
+			//タイミングのによって速度変えるやつ
+			int Ross = s_Player[0].nHaveCount / 10;
+			pDisc->move = D3DXVECTOR3(1.0f - Ross*0.1, 0.0f, 0.0f)*s_Player[0].Pow;
 			pDisc->bHave = false;
+			s_Player[0].nHaveCount = 0;
 		}
 	}
 
 	//---------------------------------------
 	//２体目の行動
 	//----------------------------------------
-	if (!s_Player[1].have)
+	if (!s_Player[1].bHave)
 	{// ディスクを持っていない
 		if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxPress(JOYKEY_A, 1))
 		{//タックル
 			s_Player[1].pos.x -= s_Player[1].Speed * 5;
-			s_Player[1].dive = true;
+			s_Player[1].bDive = true;
 		}
-		else if (s_Player[1].dive == true && pDisc->nThrow == 0)
+		else if (s_Player[1].bDive == true && pDisc->nThrow == 0)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[1];
 
-			float fHeight = ((PLAYERSIZ_Y * 0.5f));
-			float fWidth = ((PLAYERSIZ_X * 0.5f));
+			float fHeight = ((PLAYERSIZE_Y * 0.5f));
+			float fWidth = ((PLAYERSIZE_X * 0.5f));
 
 			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
@@ -431,7 +396,7 @@ void MovePlayer(void)
 			{// プレイヤーにディスクが当たった時
 
 				pDisc->nThrow = 1;
-				s_Player[1].dive = false;
+				s_Player[1].bDive = false;
 				pDisc->move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f)*s_Player[1].Pow * 3;
 			}
 		}
@@ -502,12 +467,16 @@ void MovePlayer(void)
 	}
 	else
 	{// ディスクを持っている
-		if (GetKeyboardPress(DIK_RETURN) || GetJoypadIdxPress(JOYKEY_A, 1))
+		s_Player[1].nHaveCount++;
+		if (GetKeyboardPress(DIK_RETURN) || GetJoypadIdxPress(JOYKEY_A, 1) || s_Player[1].nHaveCount >= 30)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
-			s_Player[1].have = false;
+			s_Player[1].bHave = false;
 			pDisc->nThrow = 1;
-			pDisc->move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f) * s_Player[1].Pow;
+			//タイミングのによって速度変えるやつ
+			int Ross = s_Player[1].nHaveCount / 10;
+			pDisc->move = D3DXVECTOR3(-1.0f + Ross*0.1, 0.0f, 0.0f) * s_Player[1].Pow;
 			pDisc->bHave = false;
+			s_Player[1].nHaveCount = 0;
 		}
 	}
 }
@@ -521,8 +490,8 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 	Player *pPlayer = &s_Player[number];
 
 	float fDiscSize = Size * 0.0f;
-	float fHeight = (fDiscSize + (PLAYERSIZ_Y * 0.5f));
-	float fWidth = (fDiscSize + (PLAYERSIZ_X * 0.5f));
+	float fHeight = (fDiscSize + (PLAYERSIZE_Y * 0.5f));
+	float fWidth = (fDiscSize + (PLAYERSIZE_X * 0.5f));
 
 	if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 		(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
@@ -548,7 +517,13 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 		pDisc->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		pDisc->bHave = true;
 		s_Player[number].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		s_Player[number].have = true;
+		s_Player[number].nSkillCount++;
+		if (s_Player[number].nSkillCount >= 10)
+		{
+			s_Player[number].nSkillCount = 0;
+			s_Player[number].bSkill = true;
+		}
+		s_Player[number].bHave = true;
 	
 		bIsLanding = true;
 	}
@@ -611,7 +586,11 @@ static void UpdateNormal(void)
 		{
 			s_Player[1].pos.x = SCREEN_WIDTH * 0.5f + pPlayer->fwidth / 2.0f;
 		}
-
+		//skill使用可能な時のエフェクト
+		if (s_Player[count].bSkill)
+		{
+			SetEffect(D3DXVECTOR3(s_Player[count].pos.x, s_Player[count].pos.y - 70.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SHOOT, 10, 200.0f);
+		}
 		// 矩形の回転する位置の設定
 		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
 	}

@@ -20,7 +20,7 @@
 #include "pause.h"
 #include "menu.h"
 #include "wall.h"
-
+#include "effect.h"
 #include <assert.h>
 
 //==================================================
@@ -38,13 +38,17 @@ bool		s_bPause = false;				// ポーズ中かどうか [してる  : true してない  : false
 //--------------------------------------------------
 void InitGame(void)
 {
-
+	//かべ初期化
 	InitWall();
+
 	// 矩形の初期化
 	InitRectangle();
 
 	// ディスクの初期化
 	InitDisc();
+
+	//エフェクト初期化
+	InitEffect();
 
 	//プレイヤーの初期化
 	InitPlayer();
@@ -87,6 +91,7 @@ void UninitGame(void)
 	// サウンドの停止
 	StopSound();
 
+	//かべの終了
 	UninitWall();
 
 	// 矩形の終了
@@ -94,6 +99,9 @@ void UninitGame(void)
 
 	// ディスクの終了
 	UninitDisc();
+
+	//エフェクト終了
+	UninitEffect();
 
 	// プレイヤーの終了
 	UninitPlayer();
@@ -140,9 +148,13 @@ void UpdateGame(void)
 	// ディスクの更新
 	UpdateDisc();
 
+	//エフェクト更新
+	UpdateEffect();
+
 	//UIの更新(まだ何もしてない)
 	UpdateUi();
 
+	//かべの更新
 	UpdateWall();
 
 	// プレイヤーの更新
@@ -154,10 +166,14 @@ void UpdateGame(void)
 //--------------------------------------------------
 void DrawGame(void)
 {
+	//かべの描画
 	DrawWall();
 	
 	//UIの描画
 	DrawUi();
+
+	//エフェクト更新
+	DrawEffect();
 
 	// 矩形の描画
 	DrawRectangle();
