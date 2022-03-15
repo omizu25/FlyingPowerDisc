@@ -45,7 +45,6 @@ typedef enum
 {
 	MENU_GAME = 0,	// ÉQÅ[ÉÄ
 	MENU_RULE,		// ÉãÅ[Éã
-	MENU_RULE1,		// ÉãÅ[Éã
 	MENU_MAX
 }MENU;
 
@@ -170,7 +169,6 @@ void InitTitle(void)
 
 		menu.texture[MENU_GAME] = TEXTURE_Game_Start;
 		menu.texture[MENU_RULE] = menu.texture[MENU_GAME];
-		menu.texture[MENU_RULE1] = menu.texture[MENU_GAME];
 
 		FrameArgument Frame;
 		Frame.bUse = true;

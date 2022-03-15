@@ -53,5 +53,8 @@ void FlashTexture(int nNumber);
 void AddRule(int nNumber);
 void SubRule(int nNumber);
 int ChangeSelect(void);
+int GetTimeRule(void);
+int GetPointRule(void);
+int GetSetRule(void);
 
 #endif

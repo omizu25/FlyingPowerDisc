@@ -449,3 +449,27 @@ int ChangeSelect(void)
 
 	return s_nSelect;
 }
+
+//============================
+// 時間の取得
+//============================
+int GetTimeRule(void)
+{
+	return s_nOption[OPTION_TIME];
+}
+
+//============================
+// ポイント数の取得
+//============================
+int GetPointRule(void)
+{
+	return s_nOption[OPTION_POINT];
+}
+
+//============================
+// セット数の取得
+//============================
+int GetSetRule(void)
+{
+	return s_nOption[OPTION_SET];
+}

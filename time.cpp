@@ -224,3 +224,9 @@ void AddTime(int nValue)
 	//頂点バッファをアンロック
 	g_pVtxBuffTime->Unlock();
 }
+
+//スコアの
+int GetTime(void)
+{
+	return g_nTime;
+}
