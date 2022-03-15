@@ -21,6 +21,7 @@
 #include "menu.h"
 #include "wall.h"
 #include "effect.h"
+#include "time.h"
 #include <assert.h>
 
 //==================================================
@@ -38,6 +39,9 @@ bool		s_bPause = false;				// ポーズ中かどうか [してる  : true してない  : false
 //--------------------------------------------------
 void InitGame(void)
 {
+	//タイム初期化
+	InitTime();
+
 	//かべ初期化
 	InitWall();
 
@@ -76,6 +80,8 @@ void InitGame(void)
 
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), 400.0f, 100.0f,4, D3DXVECTOR3(1.0f, 0.0f, 0.0f));
 
+	SetTime(60);
+
 	s_gameState = GAMESTATE_START;	// 開始状態に設定
 
 	s_nCounterState = 0;			// カウンターの初期化
@@ -90,6 +96,9 @@ void UninitGame(void)
 {
 	// サウンドの停止
 	StopSound();
+
+	//タイムの終了
+	UninitTime();
 
 	//かべの終了
 	UninitWall();
@@ -157,6 +166,9 @@ void UpdateGame(void)
 	//かべの更新
 	UpdateWall();
 
+	//タイムの更新
+	UpdateTime();
+
 	// プレイヤーの更新
 	UpdatePlayer();
 }
@@ -166,11 +178,14 @@ void UpdateGame(void)
 //--------------------------------------------------
 void DrawGame(void)
 {
-	//かべの描画
-	DrawWall();
-	
 	//UIの描画
 	DrawUi();
+
+	//タイムの描画
+	DrawTime();
+
+	//かべの描画
+	DrawWall();
 
 	//エフェクト更新
 	DrawEffect();
