@@ -43,6 +43,9 @@ bool		s_bPause = false;				// ポーズ中かどうか [してる  : true してない  : false
 //--------------------------------------------------
 void InitGame(void)
 {
+	// ルールの読み込み
+	LoadRule();
+
 	//タイム初期化
 	InitTime();
 
@@ -89,9 +92,9 @@ void InitGame(void)
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 500.0f, 0.0f), 150.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
 	//セット数																							
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), 400.0f, 100.0f,4, D3DXVECTOR3(1.0f, 0.0f, 0.0f),4);
+	
 	//選択した時間を表示
-	//SetTime(GetTimeRule());
-	SetTime(99);
+	SetTime(GetTimeRule());
 
 	s_gameState = GAMESTATE_NONE;	// 何もしていない状態に設定
 
