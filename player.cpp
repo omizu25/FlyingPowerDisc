@@ -23,6 +23,7 @@
 #define MAX_RESET_SPEED (5.0f)	// リセット状態の速さ
 #define MAX_HAVE_COUNT (120)	// 持ってる時間の最大値
 #define DISC_SPEED (2.0f)		// ディスクの速さ
+#define TACKLESIZE (50.0f)		//タックルの当たり判定
 //スタティック変数///スタティックをヘッタに使うなよ？
 
 static LPDIRECT3DTEXTURE9 s_pTexturePlayer[MAXPLAYERTYPE] = {}; //テクスチャのポインタ
@@ -101,6 +102,9 @@ void UpdatePlayer(void)
 {
 	switch (GetGameState())
 	{
+	case GAMESTATE_NONE:	// 何もしていない状態
+		break;
+
 	case GAMESTATE_START:	// 開始状態
 		break;
 
@@ -119,7 +123,6 @@ void UpdatePlayer(void)
 
 		break;
 
-	case GAMESTATE_NONE:	// 何もしていない状態
 	default:
 		assert(false);
 		break;
@@ -270,7 +273,14 @@ void MovePlayer(void)
 
 	Disc *pDisc = GetDisc();
 
-	
+	if (GetKeyboardTrigger(DIK_F))
+	{
+		pDisc->move.y = 5.0f;
+	}
+	if (GetKeyboardTrigger(DIK_K))
+	{
+		pDisc->move.y = -5.0f;
+	}
 	//---------------------------------------
 	//１体目の行動
 	//----------------------------------------
@@ -286,8 +296,8 @@ void MovePlayer(void)
 
 			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
-				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
-				(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
+				(pDisc->pos.x <= (pPlayer->pos.x + fWidth+ TACKLESIZE)) &&
+				(pDisc->pos.x >= (pPlayer->pos.x - fWidth - TACKLESIZE)))
 			{// プレイヤーにディスクが当たった時
 				
 				pDisc->nThrow = 0;
@@ -407,8 +417,8 @@ void MovePlayer(void)
 
 			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
-				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
-				(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
+				(pDisc->pos.x <= (pPlayer->pos.x + fWidth + TACKLESIZE)) &&
+				(pDisc->pos.x >= (pPlayer->pos.x - fWidth - TACKLESIZE)))
 			{// プレイヤーにディスクが当たった時
 
 				pDisc->nThrow = 1;

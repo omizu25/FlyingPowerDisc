@@ -13,6 +13,7 @@
 typedef struct
 {
 	D3DXVECTOR3	pos;	// 位置
+	D3DXVECTOR3	posOld;
 	D3DXVECTOR3	rot;	// 向き
 	D3DXVECTOR3	move;	// 移動量
 	int			nIdx;	// 矩形のインデックス

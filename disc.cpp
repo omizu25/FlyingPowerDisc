@@ -18,6 +18,7 @@
 #include "effect.h"
 #include "utility.h"
 #include "score.h"
+#include "wall.h"
 
 #include <assert.h>
 
@@ -89,6 +90,9 @@ void UpdateDisc(void)
 {
 	switch (GetGameState())
 	{
+	case GAMESTATE_NONE:	// 何もしていない状態
+		break;
+
 	case GAMESTATE_START:	// 開始状態
 		UpdateStart();
 		break;
@@ -106,7 +110,6 @@ void UpdateDisc(void)
 
 		break;
 
-	case GAMESTATE_NONE:	// 何もしていない状態
 	default:
 		assert(false);
 		break;
@@ -203,6 +206,9 @@ void UpdateNormal(void)
 	// 角度の正規化
 	NormalizeAngle(&s_disc.rot.z);
 
+	//CollisionWall(&s_disc.pos, &s_disc.posOld);
+
+	s_disc.posOld = s_disc.pos;
 	// 位置の更新
 	s_disc.pos += s_disc.move;
 	
@@ -213,7 +219,11 @@ void UpdateNormal(void)
 	
 	// プレイヤーとディスクの当たり判定
 	CollisionPlayer(&s_disc, DISC_SIZE, s_disc.nThrow ^ 1);
-	
+	bool Wall = CollisionWall(&s_disc.pos, &s_disc.posOld);
+	if (Wall)
+	{
+		s_disc.move.y *= -1.0f;
+	}
 	// 反射
 	Reflect();
 
@@ -252,10 +262,13 @@ void Reflect(void)
 		s_disc.move.y *= -1.0f;
 	}
 
+
 	if (s_disc.pos.x >= SCREEN_WIDTH - fRadius)
 	{// 右
+		
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
+		UpdateReset();
 		s_nPossPlayer = 1;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
 
@@ -264,8 +277,10 @@ void Reflect(void)
 	}
 	else if (s_disc.pos.x <= fRadius)
 	{// 左
+		
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
+		UpdateReset();
 		s_nPossPlayer = 0;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
 

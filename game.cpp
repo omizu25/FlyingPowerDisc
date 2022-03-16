@@ -93,7 +93,7 @@ void InitGame(void)
 	//SetTime(GetTimeRule());
 	SetTime(99);
 
-	s_gameState = GAMESTATE_START;	// 開始状態に設定
+	s_gameState = GAMESTATE_NONE;	// 何もしていない状態に設定
 
 	s_nCounterState = 0;			// カウンターの初期化
 
@@ -199,7 +199,7 @@ void UpdateGame(void)
 void DrawGame(void)
 {
 	//かべの描画
-	//DrawWall();
+	DrawWall();
 
 	//エフェクト更新
 	DrawEffect();

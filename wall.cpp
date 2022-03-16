@@ -47,7 +47,7 @@ void InitWall(void)
 
 	for (int count = 0; count< MAXWALL; count++,pVtx+=4)
 	{
-		SetNormalpos2d(pVtx, 0.0f, SCREEN_WIDTH, 200.0f, 200.0f + WALLWIDE);
+	
 		if (count == 0)
 		{
 			SetNormalpos2d(pVtx, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT - WALLWIDE, SCREEN_HEIGHT);
@@ -114,19 +114,6 @@ void UninitWall(void)
 //===================
 void UpdateWall(void)
 {
-
-	VERTEX_2D*pVtx; //頂点へのポインタ
-					//頂点バッファをロックし頂点情報へのポインタを取得
-	s_pVtxBuffWall->Lock(0, 0, (void**)&pVtx, 0);
-
-
-
-	for (int count = 0; count < MAXWALL; count++, pVtx += 4)
-	{
-
-	}
-	//頂点バッファをアンロック
-	s_pVtxBuffWall->Unlock();
 }
 //===================
 //描画処理
@@ -251,16 +238,17 @@ bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld)
 				if (t1 + eps < 0 || t1 - eps > 1 || t2 + eps < 0 || t2 - eps > 1)
 				{//交差してないときの判
 				 //頂点カラーの設定
-					pVtx[0].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-					pVtx[1].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-					pVtx[2].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-					pVtx[3].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+					pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
+					pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
+					pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
+					pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
 				}
 				else
 				{//交差してるとき
 					pPos->x = (pPosOld->x + vecMove.x*t1) + (vecC.x*5.5f);
 					pPos->y = (pPosOld->y - vecMove.y*t1) - (vecC.y*5.5f);
 					
+					bIsLanding = true;
 					//あとここでMove反転させればいい//まかせた
 
 					//頂点カラーの設定
