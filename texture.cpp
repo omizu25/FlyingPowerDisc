@@ -52,6 +52,10 @@ const char *s_FileName[] =
 	"data/TEXTURE/GAME/Set1_2p.png",		//セット1(2pカラー)
 	"data/TEXTURE/GAME/Set2_2p.png",		//セット2(2pカラー)
 	"data/TEXTURE/GAME/Set3_2p.png",		//セット3(2pカラー)
+	"data/TEXTURE/GAME/SetFrame01.png",		//セットの枠(1pカラー)
+	"data/TEXTURE/GAME/SetFrame02.png",		//セットの枠(2pカラー)
+	"data/TEXTURE/GAME/PtsFrame01.png",		//ポイントの枠(1pカラー)
+	"data/TEXTURE/GAME/PtsFrame02.png",		//ポイントの枠(2pカラー)
 	"data/TEXTURE/UI/UI000.png",			//UI-0
 	"data/TEXTURE/UI/UI001.png",			//UI-1
 

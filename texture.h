@@ -44,6 +44,10 @@ typedef enum
 	TEXTURE_Set1_2p,			//セット1(2pカラー)
 	TEXTURE_Set2_2p,			//セット2(2pカラー)
 	TEXTURE_Set3_2p,			//セット3(2pカラー)
+	TEXTURE_GAME_SetFrame01,	//セットの枠(1pカラー)
+	TEXTURE_GAME_SetFrame02,	//セットの枠(2pカラー)
+	TEXTURE_GAME_PtsFrame01,	//ポイントの枠(1pカラー)
+	TEXTURE_GAME_PtsFrame02,	//ポイントの枠(2pカラー)
 	TEXTURE_UI000,				//UI-0
 	TEXTURE_UI001,				//UI-1
 
