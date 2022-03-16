@@ -96,7 +96,7 @@ void InitGame(void)
 	//選択した時間を表示
 	SetTime(GetTimeRule());
 
-	s_gameState = GAMESTATE_START;	// 開始状態に設定
+	s_gameState = GAMESTATE_NONE;	// 何もしていない状態に設定
 
 	s_nCounterState = 0;			// カウンターの初期化
 
