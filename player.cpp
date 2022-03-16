@@ -30,7 +30,7 @@ static LPDIRECT3DTEXTURE9 s_pTexturePlayer[MAXPLAYERTYPE] = {}; //テクスチャのポ
 static Player s_Player[MAXPLAYER];//プレイヤー構造体取得
 static Player s_PlayerType[MAXPLAYERTYPE];//プレイヤーのTypeを保存する
 static bool	s_bKeyBoardWASD;			// WASDのキーボード入力があるかどうか
-static bool	s_bKeyBoardArrow;			// やじるしのキーボード入力があるかどうか
+static bool	s_bKeyBoardNumPad;			// テンキーのキーボード入力があるかどうか
 static bool	s_bJoyPad[MAXPLAYER];		// ジョイパッド入力があるかどうか
 static bool	s_bStickLeft[MAXPLAYER];	// 左スティック入力があるかどうか
 
@@ -273,20 +273,28 @@ void MovePlayer(void)
 
 	Disc *pDisc = GetDisc();
 
-	if (GetKeyboardTrigger(DIK_F))
-	{
-		pDisc->move.y = 5.0f;
-	}
-	if (GetKeyboardTrigger(DIK_K))
-	{
-		pDisc->move.y = -5.0f;
-	}
 	//---------------------------------------
 	//１体目の行動
 	//----------------------------------------
 	if (!s_Player[0].bHave)
 	{// ディスクを持っていない
 		
+		if (pDisc->nThrow == 0)
+		{// 自分がディスクを投げた
+			if (GetKeyboardPress(DIK_Q) && GetKeyboardPress(DIK_E))
+			{
+				pDisc->move.y = 0.0f;
+			}
+			else if (GetKeyboardPress(DIK_E))
+			{
+				pDisc->move.y = 5.0f;
+			}
+			else if (GetKeyboardPress(DIK_Q))
+			{
+				pDisc->move.y = -5.0f;
+			}
+		}
+
 		if (s_Player[0].bDive == true && pDisc->nThrow == 1)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[0];
@@ -317,7 +325,7 @@ void MovePlayer(void)
 				s_Player[0].bDive = false;
 			}
 		}
-		else if (GetKeyboardTrigger(DIK_C) || GetJoypadIdxPress(JOYKEY_A, 0))
+		else if (GetKeyboardTrigger(DIK_C) || GetJoypadIdxTrigger(JOYKEY_A, 0))
 		{//タックル
 			s_Player[0].pos.x += s_Player[0].Speed * 5;
 			s_Player[0].bDive = true;
@@ -391,7 +399,7 @@ void MovePlayer(void)
 	else
 	{// ディスクを持っている
 		s_Player[0].nHaveCount++;
-		if (GetKeyboardPress(DIK_SPACE) || GetJoypadIdxPress(JOYKEY_A, 0)|| s_Player[0].nHaveCount >= MAX_HAVE_COUNT)
+		if (GetKeyboardTrigger(DIK_SPACE) || GetJoypadIdxTrigger(JOYKEY_A, 0)|| s_Player[0].nHaveCount >= MAX_HAVE_COUNT)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[0].bHave = false;
 			pDisc->nThrow = 0;
@@ -408,6 +416,22 @@ void MovePlayer(void)
 	//----------------------------------------
 	if (!s_Player[1].bHave)
 	{// ディスクを持っていない
+		if (pDisc->nThrow == 1)
+		{// 自分がディスクを投げた
+			if (GetKeyboardPress(DIK_NUMPAD4) && GetKeyboardPress(DIK_NUMPAD6))
+			{
+				pDisc->move.y = 0.0f;
+			}
+			else if (GetKeyboardPress(DIK_NUMPAD6))
+			{
+				pDisc->move.y = 5.0f;
+			}
+			else if (GetKeyboardPress(DIK_NUMPAD4))
+			{
+				pDisc->move.y = -5.0f;
+			}
+		}
+
 		if (s_Player[1].bDive == true && pDisc->nThrow == 0)
 		{//タックル適用時
 			Player *pPlayer = &s_Player[1];
@@ -438,29 +462,29 @@ void MovePlayer(void)
 				s_Player[1].bDive = false;
 			}
 		}
-		else if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxPress(JOYKEY_A, 1))
+		else if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxTrigger(JOYKEY_A, 1))
 		{//タックル
 			s_Player[1].pos.x -= s_Player[1].Speed * 5;
 			s_Player[1].bDive = true;
 			s_Player[1].nDiveCount = 0;
 		}
-		else if (s_bKeyBoardArrow)
+		else if (s_bKeyBoardNumPad)
 		{// キーボード
 			D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-			if (GetKeyboardPress(DIK_LEFT))
+			if (GetKeyboardPress(DIK_NUMPAD1))
 			{// キーが押された
 				vec.x -= 1.0f;
 			}
-			if (GetKeyboardPress(DIK_RIGHT))
+			if (GetKeyboardPress(DIK_NUMPAD3))
 			{// キーが押された
 				vec.x += 1.0f;
 			}
-			if (GetKeyboardPress(DIK_UP))
+			if (GetKeyboardPress(DIK_NUMPAD5))
 			{// キーが押された
 				vec.y -= 1.0f;
 			}
-			if (GetKeyboardPress(DIK_DOWN))
+			if (GetKeyboardPress(DIK_NUMPAD2))
 			{// キーが押された
 				vec.y += 1.0f;
 			}
@@ -512,7 +536,7 @@ void MovePlayer(void)
 	else
 	{// ディスクを持っている
 		s_Player[1].nHaveCount++;
-		if (GetKeyboardPress(DIK_RETURN) || GetJoypadIdxPress(JOYKEY_A, 1) || s_Player[1].nHaveCount >= MAX_HAVE_COUNT)
+		if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadIdxTrigger(JOYKEY_A, 1) || s_Player[1].nHaveCount >= MAX_HAVE_COUNT)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[1].bHave = false;
 			pDisc->nThrow = 1;
@@ -691,7 +715,7 @@ static void UpdateReset(void)
 static void InputMove(void)
 {
 	s_bKeyBoardWASD = false;
-	s_bKeyBoardArrow = false;
+	s_bKeyBoardNumPad = false;
 
 	for (int i = 0; i < MAXPLAYER; i++)
 	{
@@ -705,10 +729,10 @@ static void InputMove(void)
 		s_bKeyBoardWASD = true;
 	}
 
-	if (GetKeyboardPress(DIK_LEFT) || GetKeyboardPress(DIK_RIGHT) ||
-		GetKeyboardPress(DIK_UP) || GetKeyboardPress(DIK_DOWN))
+	if (GetKeyboardPress(DIK_NUMPAD1) || GetKeyboardPress(DIK_NUMPAD3) ||
+		GetKeyboardPress(DIK_NUMPAD5) || GetKeyboardPress(DIK_NUMPAD2))
 	{// キーが押された
-		s_bKeyBoardArrow = true;
+		s_bKeyBoardNumPad = true;
 	}
 
 	for (int i = 0; i < MAXPLAYER; i++)
