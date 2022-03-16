@@ -23,6 +23,7 @@
 #define MAX_RESET_SPEED (5.0f)	// リセット状態の速さ
 #define MAX_HAVE_COUNT (120)	// 持ってる時間の最大値
 #define DISC_SPEED (2.0f)		// ディスクの速さ
+#define TACKLESIZE (50.0f)		//タックルの当たり判定
 //スタティック変数///スタティックをヘッタに使うなよ？
 
 static LPDIRECT3DTEXTURE9 s_pTexturePlayer[MAXPLAYERTYPE] = {}; //テクスチャのポインタ
@@ -286,8 +287,8 @@ void MovePlayer(void)
 
 			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
-				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
-				(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
+				(pDisc->pos.x <= (pPlayer->pos.x + fWidth+ TACKLESIZE)) &&
+				(pDisc->pos.x >= (pPlayer->pos.x - fWidth - TACKLESIZE)))
 			{// プレイヤーにディスクが当たった時
 				
 				pDisc->nThrow = 0;
@@ -407,8 +408,8 @@ void MovePlayer(void)
 
 			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
-				(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
-				(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
+				(pDisc->pos.x <= (pPlayer->pos.x + fWidth + TACKLESIZE)) &&
+				(pDisc->pos.x >= (pPlayer->pos.x - fWidth - TACKLESIZE)))
 			{// プレイヤーにディスクが当たった時
 
 				pDisc->nThrow = 1;
