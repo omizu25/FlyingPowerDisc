@@ -18,6 +18,7 @@
 LPDIRECT3DTEXTURE9 g_pTextureUi[NUM_UI] = {};	//テクスチャへのポインタ
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffUi = NULL;	//頂点バッファへのポインタ
 Ui g_aUi[MAX_UI];		//UIの情報
+bool g_bUse;			//UIを使うかどうか
 //====================================
 //メイン関数
 //====================================
@@ -61,6 +62,7 @@ void InitUi(void)
 		g_aUi[nCntUi].bUse = false;		//使用していない状態にする
 		g_aUi[nCntUi].bSwitch = false;	//消えていく状態にする
 	}
+	g_bUse = true;
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_UI,
 		D3DUSAGE_WRITEONLY,
@@ -124,6 +126,11 @@ void UninitUi(void)
 //====================================
 void UpdateUi(void)
 {
+	if (!g_bUse)
+	{//UIを使わない
+		return;
+	}
+
 	VERTEX_2D * pVtx;		//頂点情報へのポインタ
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	g_pVtxBuffUi->Lock(0, 0, (void**)&pVtx, 0);
@@ -190,6 +197,8 @@ void UpdateUi(void)
 
 			if (g_aUi[nCntUi].scale.y <= 0.0f)
 			{
+				g_bUse = false;
+
 				// ゲームの状態の設定
 				SetGameState(GAMESTATE_START);
 			}
@@ -266,6 +275,11 @@ void UpdateUi(void)
 //====================================
 void DrawUi(void)
 {
+	if (!g_bUse)
+	{//UIを使わない
+		return;
+	}
+
 	//デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	//頂点バッファをデータストリームに設定
