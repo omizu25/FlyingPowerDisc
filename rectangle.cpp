@@ -28,6 +28,8 @@ typedef struct
 	LPDIRECT3DTEXTURE9		pTexture;	// テクスチャ
 	LPDIRECT3DVERTEXBUFFER9	pVtxBuff;	// 頂点バッファ
 	bool					bUse;		// 使用しているかどうか
+	bool					bDraw;		// 描画するかどうか
+	bool					bAdd;		// 加算合成するかどうか
 }MyRectangle;
 }// namespaceはここまで
 
@@ -67,12 +69,20 @@ void DrawRectangle(void)
 	{
 		MyRectangle *pRectangle = &s_aRectangle[i];
 
-		if (!pRectangle->bUse)
-		{// 使用していない
+		if (!pRectangle->bUse || !pRectangle->bDraw)
+		{// 使用していない、描画するしない
 			continue;
 		}
 
-		/*↓ 使用している ↓*/
+		/*↓ 使用している、描画する ↓*/
+
+		if (pRectangle->bAdd)
+		{// 加算合成する
+			// レンダーステートの設定
+			pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+			pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+			pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+		}
 
 		// 頂点バッファをデータストリームに設定
 		pDevice->SetStreamSource(0, pRectangle->pVtxBuff, 0, sizeof(VERTEX_2D));
@@ -91,6 +101,14 @@ void DrawRectangle(void)
 
 		// テクスチャの解除
 		pDevice->SetTexture(0, NULL);
+
+		if (pRectangle->bAdd)
+		{// 加算合成する
+			// レンダーステートを元に戻す
+			pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+			pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+			pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		}
 	}
 }
 
@@ -121,6 +139,8 @@ int SetRectangleWithTex(LPDIRECT3DTEXTURE9 pTexture)
 
 		pRectangle->pTexture = pTexture;
 		pRectangle->bUse = true;
+		pRectangle->bDraw = true;
+		pRectangle->bAdd = false;
 
 		// 頂点バッファの生成
 		GetDevice()->CreateVertexBuffer(
@@ -335,6 +355,63 @@ void SetTexRectangle(int nIdx, const D3DXVECTOR2 &texU, const D3DXVECTOR2 &texV)
 
 	// 頂点バッファをアンロックする
 	pVtxBuff->Unlock();
+}
+
+//--------------------------------------------------
+// 描画するかどうか
+//--------------------------------------------------
+void SetDrawRectangle(int nIdx, bool bDraw)
+{
+	assert(nIdx >= 0 && nIdx < MAX_RECTANGLE);
+
+	MyRectangle *pRectangle = &s_aRectangle[nIdx];
+
+	if (!pRectangle->bUse)
+	{// 使用していない
+		return;
+	}
+
+	/*↓ 使用している ↓*/
+
+	pRectangle->bDraw = bDraw;
+}
+
+//--------------------------------------------------
+// 加算合成するかどうか
+//--------------------------------------------------
+void SetAddRectangle(int nIdx, bool bAdd)
+{
+	assert(nIdx >= 0 && nIdx < MAX_RECTANGLE);
+
+	MyRectangle *pRectangle = &s_aRectangle[nIdx];
+
+	if (!pRectangle->bUse)
+	{// 使用していない
+		return;
+	}
+
+	/*↓ 使用している ↓*/
+
+	pRectangle->bAdd = bAdd;
+}
+
+//--------------------------------------------------
+// テクスチャの変更
+//--------------------------------------------------
+void ChangeTextureRectangle(int nIdx, TEXTURE texture)
+{
+	assert(nIdx >= 0 && nIdx < MAX_RECTANGLE);
+
+	MyRectangle *pRectangle = &s_aRectangle[nIdx];
+
+	if (!pRectangle->bUse)
+	{// 使用していない
+		return;
+	}
+
+	/*↓ 使用している ↓*/
+
+	pRectangle->pTexture = GetTexture(texture);
 }
 
 //--------------------------------------------------

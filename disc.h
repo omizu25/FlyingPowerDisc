@@ -12,13 +12,14 @@
 //==================================================
 typedef struct
 {
-	D3DXVECTOR3	pos;	// 位置
-	D3DXVECTOR3	posOld;
-	D3DXVECTOR3	rot;	// 向き
-	D3DXVECTOR3	move;	// 移動量
-	int			nIdx;	// 矩形のインデックス
-	int			nThrow;	// 何番目のプレイヤーが投げたか
-	bool		bHave;	// プレイヤーが持っているかどうか
+	D3DXVECTOR3	pos;		// 位置
+	D3DXVECTOR3	posOld;		// 前回の位置
+	D3DXVECTOR3	rot;		// 向き
+	D3DXVECTOR3	move;		// 移動量
+	int			nIdx;		// 矩形のインデックス
+	int			nThrow;		// 何番目のプレイヤーが投げたか
+	int			nEffect;	// エフェクトの出すタイミングを調整
+	bool		bHave;		// プレイヤーが持っているかどうか
 }Disc;
 
 //==================================================

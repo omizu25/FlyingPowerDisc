@@ -8,7 +8,7 @@
 #include "main.h"
 
 #define MAX_TIME (2)
-#define MAX_SIZE  (50.0f)        //大きさの最大数
+#define MAX_SIZE  (100.0f)        //大きさの最大数
 
 
 //プロトタイプ宣言

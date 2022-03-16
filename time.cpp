@@ -29,11 +29,11 @@ void InitTime(void)
 
 	//テクスチャ読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\Number_0To9.png",
+		"data/TEXTURE/GAME/Number_Yellow.png",
 		&g_pTextureTime);
 
 	// スコアの情報の初期化
-	g_posTime = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 50.0f, 0.0f);
+	g_posTime = D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - (MAX_SIZE * 0.5f), SCREEN_HEIGHT * 0.1f, 0.0f);
 
 	g_TimenCnt = 60;
 	// 頂点バッファの生成
@@ -50,10 +50,10 @@ void InitTime(void)
 	for (nCntTime = 0; nCntTime < MAX_TIME; nCntTime++)
 	{
 		//頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(g_posTime.x - MAX_SIZE / 2 + (nCntTime * 40), g_posTime.y - MAX_SIZE / 2, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(g_posTime.x + MAX_SIZE / 2 + (nCntTime * 40), g_posTime.y - MAX_SIZE / 2, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(g_posTime.x - MAX_SIZE / 2 + (nCntTime * 40), g_posTime.y + MAX_SIZE / 2, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(g_posTime.x + MAX_SIZE / 2 + (nCntTime * 40), g_posTime.y + MAX_SIZE / 2, 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(g_posTime.x - MAX_SIZE / 2 + (nCntTime * MAX_SIZE), g_posTime.y - MAX_SIZE / 2, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(g_posTime.x + MAX_SIZE / 2 + (nCntTime * MAX_SIZE), g_posTime.y - MAX_SIZE / 2, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(g_posTime.x - MAX_SIZE / 2 + (nCntTime * MAX_SIZE), g_posTime.y + MAX_SIZE / 2, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(g_posTime.x + MAX_SIZE / 2 + (nCntTime * MAX_SIZE), g_posTime.y + MAX_SIZE / 2, 0.0f);
 
 		//rhwの設定
 		pVtx[0].rhw = 1.0f;

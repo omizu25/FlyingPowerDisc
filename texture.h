@@ -12,52 +12,54 @@
 //==================================================
 typedef enum
 {
-	//タイトル
-	TEXTURE_BG = 0,				//タイトル画面の背景
-	TEXTURE_Frame,				//タイトル画面の枠
-	TEXTURE_Title_blue,			//タイトルロゴ
-	TEXTURE_TitleLight_red,		//タイトルロゴの後光
-	TEXTURE_Game_Start,			//ゲームスタートの文字
-	TEXTURE_Three_Point,		//3ポイント
-	TEXTURE_Five_Point,			//5ポイント
+	/*↓ タイトル ↓*/
+	TEXTURE_BG = 0,				// タイトル画面の背景
+	TEXTURE_Frame,				// タイトル画面の枠
+	TEXTURE_Title_blue,			// タイトルロゴ
+	TEXTURE_TitleLight_red,		// タイトルロゴの後光
+	TEXTURE_Game_Start,			// ゲームスタートの文字
+	TEXTURE_Three_Point,		// 3ポイント
+	TEXTURE_Five_Point,			// 5ポイント
 
-	//セレクト
-	TEXTURE_Select_Left,		//左ボタン
-	TEXTURE_Select_Right,		//右ボタン
-	TEXTURE_Select_Time,		//制限時間
-	TEXTURE_Select_Point,		//ポイント数
-	TEXTURE_Select_Set,			//セット数
-	TEXTURE_Select_BG,			//セレクト画面の背景
-	TEXTURE_Map_Title,			//マップ選択
-	TEXTURE_Rule_Title,			//ルール選択
+	/*↓ セレクト ↓*/
+	TEXTURE_Select_Left,		// 左ボタン
+	TEXTURE_Select_Right,		// 右ボタン
+	TEXTURE_Select_Time,		// 制限時間
+	TEXTURE_Select_Point,		// ポイント数
+	TEXTURE_Select_Set,			// セット数
+	TEXTURE_Select_BG,			// セレクト画面の背景
+	TEXTURE_Map_Title,			// マップ選択
+	TEXTURE_Rule_Title,			// ルール選択
 
-	//ゲーム
-	TEXTURE_Disc,				//ディスク
-	TEXTURE_Game_BG,			//ゲーム画面の背景
-	TEXTURE_Number_Yellow,		//数字(黄色)
-	TEXTURE_Stage01,			//1つ目のステージ
+	/*↓ ゲーム ↓*/
+	TEXTURE_Disc,				// ディスク
+	TEXTURE_Game_BG,			// ゲーム画面の背景
+	TEXTURE_Number_Yellow,		// 数字(黄色)
+	TEXTURE_Stage01,			// 1つ目のステージ
 
-	//ゲーム中のUI
-	TEXTURE_Set1_1p,			//セット1(1pカラー)
-	TEXTURE_Set2_1p,			//セット2(1pカラー)
-	TEXTURE_Set3_1p,			//セット3(1pカラー)
-	TEXTURE_Set1_2p,			//セット1(2pカラー)
-	TEXTURE_Set2_2p,			//セット2(2pカラー)
-	TEXTURE_Set3_2p,			//セット3(2pカラー)
-	TEXTURE_GAME_SetFrame01,	//セットの枠(1pカラー)
-	TEXTURE_GAME_SetFrame02,	//セットの枠(2pカラー)
-	TEXTURE_GAME_PtsFrame01,	//ポイントの枠(1pカラー)
-	TEXTURE_GAME_PtsFrame02,	//ポイントの枠(2pカラー)
-	TEXTURE_UI000,				//UI-0
-	TEXTURE_UI001,				//UI-1
+	/*↓ ゲーム中のUI ↓*/
+	TEXTURE_Set1_1p,			// セット1(1pカラー)
+	TEXTURE_Set2_1p,			// セット2(1pカラー)
+	TEXTURE_Set3_1p,			// セット3(1pカラー)
+	TEXTURE_Set1_2p,			// セット1(2pカラー)
+	TEXTURE_Set2_2p,			// セット2(2pカラー)
+	TEXTURE_Set3_2p,			// セット3(2pカラー)
+	TEXTURE_GAME_SetFrame01,	// セットの枠(1pカラー)
+	TEXTURE_GAME_SetFrame02,	// セットの枠(2pカラー)
+	TEXTURE_GAME_PtsFrame01,	// ポイントの枠(1pカラー)
+	TEXTURE_GAME_PtsFrame02,	// ポイントの枠(2pカラー)
+	TEXTURE_UI000,				// UI-0
+	TEXTURE_UI001,				// UI-1
 
-	//ポーズ
-	TEXTURE_Pose_Title,			//ポーズ画面のタイトル
-	TEXTURE_Pose_Resume,		//再開
-	TEXTURE_Pose_Quit,			//終了
+	/*↓ ポーズ ↓*/
+	TEXTURE_Pose_Title,			// ポーズ画面のタイトル
+	TEXTURE_Pose_Resume,		// 再開
+	TEXTURE_Pose_Quit,			// 終了
 
-	//その他
-	TEXTURE_Number_0To9,		//数字
+	/*↓ その他 ↓*/
+	TEXTURE_Number_0To9,		// 数字
+	TEXTURE_fire,				// 炎のエフェクト
+	TEXTURE_spin,				// ディスクのエフェクト
 	TEXTURE_MAX,
 	TEXTURE_NONE,
 }TEXTURE;

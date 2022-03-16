@@ -4,36 +4,26 @@
 //===================
 #include"effect.h"
 #include"player.h"
+#include"rectangle.h"
+#include"texture.h"
+
+#include <assert.h>
 
 #define NUR_EFFECT (4)
 
 //スタティック
-static LPDIRECT3DTEXTURE9 s_pTextureEffect[EFFECTSTATE_MAX] = {}; //テクスチャのポインタ
-static LPDIRECT3DVERTEXBUFFER9 s_pVtxBuffEffect = NULL; //頂点バッファの設定
 static Effect s_aEffect[MAX_EFFECT];
+static TEXTURE s_aTexture[EFFECTSTATE_MAX];
 
 //==================================
 //初期化
 //==================================
 void InitEffect(void)
 {
-	LPDIRECT3DDEVICE9  pDevice;
-	int nCntEffect;
+	s_aTexture[EFFECTSTATE_SPIN] = TEXTURE_spin;
+	s_aTexture[EFFECTSTATE_SHOOT] = TEXTURE_fire;
 
-	//デバイスの取得
-	pDevice = GetDevice();
-
-	//テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice,
-		"data/TEXTURE/fire.png",
-		&s_pTextureEffect[EFFECTSTATE_SHOOT]);
-	//テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice,
-		"data/TEXTURE/spin.png",
-		&s_pTextureEffect[EFFECTSTATE_SPIN]);
-	
-
-	for (nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
+	for (int nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
 	{
 		//初期化忘れない
 		s_aEffect[nCntEffect].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -41,81 +31,42 @@ void InitEffect(void)
 		s_aEffect[nCntEffect].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		s_aEffect[nCntEffect].nLife = 0;
 		s_aEffect[nCntEffect].bUse = false;
+
+		// 矩形の設定
+		s_aEffect[nCntEffect].nIdx = SetRectangle(TEXTURE_NONE);
+
+		// 矩形を描画するかどうか
+		SetDrawRectangle(s_aEffect[nCntEffect].nIdx, false);
+
+		// 矩形の加算合成をするかどうか
+		SetAddRectangle(s_aEffect[nCntEffect].nIdx, true);
 	}
-
-	//頂点バッファ
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_EFFECT,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,//ここ頂点フォーマット
-		&s_pVtxBuffEffect,
-		NULL);
-
-	VERTEX_2D*pVtx; //頂点へのポインタ
-	s_pVtxBuffEffect->Lock(0, 0, (void**)&pVtx, 0);
-
-	//頂点バッファをロックし頂点情報へのポインタを取得
-	for (nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
-	{
-		////頂点座標
-
-
-		SetNormalpos2d(pVtx, s_aEffect[nCntEffect].pos.x - s_aEffect[nCntEffect].fRadeius,
-			s_aEffect[nCntEffect].pos.x + s_aEffect[nCntEffect].fRadeius,
-			s_aEffect[nCntEffect].pos.y - s_aEffect[nCntEffect].fRadeius,
-			s_aEffect[nCntEffect].pos.y + s_aEffect[nCntEffect].fRadeius);
-
-		//RHWの設定
-		pVtx[0].rhw = 1.0f;
-		pVtx[1].rhw = 1.0f;
-		pVtx[2].rhw = 1.0f;
-		pVtx[3].rhw = 1.0f;
-
-		//頂点カラーの設定
-		pVtx[0].col = s_aEffect[nCntEffect].col;
-		pVtx[1].col = s_aEffect[nCntEffect].col;
-		pVtx[2].col = s_aEffect[nCntEffect].col;
-		pVtx[3].col = s_aEffect[nCntEffect].col;
-
-		//テクスチャの座標設定
-		SetTex2d(pVtx, 0.0f, 1.0f, 0.0f, 1.0f);
-
-		pVtx += 4; //頂点ポイントを四つ進む
-	}
-
-	//頂点バッファをアンロック
-	s_pVtxBuffEffect->Unlock();
 }
 void UninitEffect(void)
 {
-	for (int cut = 0; cut < EFFECTSTATE_MAX; cut++)
+	for (int nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
 	{
-		if (s_pTextureEffect[cut] != NULL)
-		{
-			s_pTextureEffect[cut]->Release();
-			s_pTextureEffect[cut] = NULL;
-		}
-	}
-
-
-	//頂点バッファの破棄
-	if (s_pVtxBuffEffect != NULL)
-	{
-		s_pVtxBuffEffect->Release();
-		s_pVtxBuffEffect = NULL;
+		// 使うのを止める
+		StopUseRectangle(s_aEffect[nCntEffect].nIdx);
 	}
 }
 void UpdateEffect(void)
 {
 	int nCntEffect;
 	VERTEX_2D*pVtx; //頂点へのポインタ
-					//頂点バッファをアンロック
-	s_pVtxBuffEffect->Lock(0, 0, (void**)&pVtx, 0);
+
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
+
 	for (nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
 	{
 		if (s_aEffect[nCntEffect].bUse)
 		{
-	
+			// 頂点バッファの取得
+			pVtxBuff = GetVtxBuffRectangle(s_aEffect[nCntEffect].nIdx);
+
+			//頂点バッファをアンロック
+			pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
 			s_aEffect[nCntEffect].pos += s_aEffect[nCntEffect].move;
 
 			SetNormalpos2d(pVtx, s_aEffect[nCntEffect].pos.x - s_aEffect[nCntEffect].fRadeius,
@@ -129,6 +80,7 @@ void UpdateEffect(void)
 			{
 				s_aEffect[nCntEffect].bUse = false;
 			}
+
 			// テクスチャの設定
 			SetVtxAnimTex(pVtx, &s_aEffect[nCntEffect].AnimTex);
 			SetTex2d(pVtx, (1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionX)*s_aEffect[nCntEffect].AnimTex.nPatternX
@@ -142,61 +94,23 @@ void UpdateEffect(void)
 			pVtx[2].col = s_aEffect[nCntEffect].col;
 			pVtx[3].col = s_aEffect[nCntEffect].col;
 
-
-
-
+			//頂点バッファをアンロック
+			pVtxBuff->Unlock();
 		}
-		pVtx += 4;
 	}
 
-	//頂点バッファをアンロック
-	s_pVtxBuffEffect->Unlock();
+	
 }
 void DrawEffect(void)
 {
-	int nCntEffect;
-
-	LPDIRECT3DDEVICE9 pDevice;//デバイスのポインタ
-
-	pDevice = GetDevice(); //代入
-
-						   //頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, s_pVtxBuffEffect, 0, sizeof(VERTEX_2D));
-
-	//頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-
-	//テクスチャの描画
-	//頂点バッファをロックし頂点情報へのポインタを取得
-	for (nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
-	{
-		if (s_aEffect[nCntEffect].bUse)
-		{
-
-			//テクスチャの設定
-			pDevice->SetTexture(0, s_pTextureEffect[s_aEffect[nCntEffect].nType]);
-
-			//ポリゴンの描画 四角
-			pDevice->DrawPrimitive(
-				D3DPT_TRIANGLESTRIP,		//プリミティブの種類
-				nCntEffect * 4,			//描画する最初の頂点インデックス
-				2);
-		}//プリミティブ(ポリゴン)数
-	}
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
 }
 void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, float size)
 {
+	assert(nType >= 0 && nType < EFFECTSTATE_MAX);
+
 	int nCntEffect;
 	VERTEX_2D*pVtx; //頂点へのポインタ
-	s_pVtxBuffEffect->Lock(0, 0, (void**)&pVtx, 0);
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
 
 	for (nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
 	{
@@ -207,6 +121,13 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 			s_aEffect[nCntEffect].pos.x = pos.x;
 			s_aEffect[nCntEffect].pos.y = pos.y;
 			s_aEffect[nCntEffect].pos.z = pos.z;
+
+			// 頂点バッファの取得
+			pVtxBuff = GetVtxBuffRectangle(s_aEffect[nCntEffect].nIdx);
+
+			//頂点バッファをアンロック
+			pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
 													//頂点座標
 			SetNormalpos2d(pVtx, s_aEffect[nCntEffect].pos.x - s_aEffect[nCntEffect].fRadeius,
 				s_aEffect[nCntEffect].pos.x + s_aEffect[nCntEffect].fRadeius,
@@ -219,26 +140,10 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 			s_aEffect[nCntEffect].col = col;
 			s_aEffect[nCntEffect].nMaxLife = life;
 
-			switch (s_aEffect[nCntEffect].nType)
+			switch (nType)
 			{
 			case EFFECTSTATE_SHOOT:
 				s_aEffect[nCntEffect].AnimTex.nDivisionX = 10;
-				s_aEffect[nCntEffect].AnimTex.nDivisionY = 1;
-				break;
-			case EFFECTSTATE_GOAL:
-				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
-				s_aEffect[nCntEffect].AnimTex.nDivisionY = 1;
-				break;
-			case EFFECTSTATE_MAXGAGE:
-				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
-				s_aEffect[nCntEffect].AnimTex.nDivisionY = 1;
-				break;
-			case EFFECTSTATE_JUMP:
-				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
-				s_aEffect[nCntEffect].AnimTex.nDivisionY = 1;
-				break;
-			case EFFECTSTATE_RUNNOW:
-				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
 				s_aEffect[nCntEffect].AnimTex.nDivisionY = 1;
 				break;
 			case EFFECTSTATE_SPIN:
@@ -246,6 +151,7 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 				s_aEffect[nCntEffect].AnimTex.nDivisionY = 3;
 				break;
 			default:
+				assert(false);
 				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
 				s_aEffect[nCntEffect].AnimTex.nDivisionY = 1;
 				break;
@@ -262,13 +168,18 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 			pVtx[2].col = col;
 			pVtx[3].col = col;
 
+			//頂点バッファをアンロック
+			pVtxBuff->Unlock();
+
+			// 矩形を描画するかどうか
+			SetDrawRectangle(s_aEffect[nCntEffect].nIdx, true);
+
+			// 矩形のテクスチャの変更
+			ChangeTextureRectangle(s_aEffect[nCntEffect].nIdx, s_aTexture[nType]);
+
 			break;
 		}
-		pVtx += 4;
 	}
-	//頂点バッファをアンロック
-	s_pVtxBuffEffect->Unlock();
-
 }
 
 //=========================================

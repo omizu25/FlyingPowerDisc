@@ -27,9 +27,10 @@
 //==================================================
 namespace
 {
+const int	EFFECT_TIME = 1;									// エフェクトの出すタイム
 const float	DISC_SIZE = 75.0f;									// ディスクのサイズ
 const float	DISC_ROT_SPEED = -0.25f;							// ディスクの回転速度
-const float	MAX_MOVE = 5.0f;									// 移動量の最大値
+const float	MAX_MOVE = 10.0f;									// 移動量の最大値
 const float	START_POS_X = SCREEN_WIDTH * 0.5f;					// ディスクの始まりのXの位置
 const float	START_POS_Y = SCREEN_HEIGHT - (DISC_SIZE * 0.5f);	// ディスクの始まりのYの位置
 }// namespaceはここまで
@@ -205,16 +206,20 @@ void UpdateNormal(void)
 	// 角度の正規化
 	NormalizeAngle(&s_disc.rot.z);
 
-	//CollisionWall(&s_disc.pos, &s_disc.posOld);
-
-	s_disc.posOld = s_disc.pos;
 	// 位置の更新
+	s_disc.posOld = s_disc.pos;
 	s_disc.pos += s_disc.move;
 	
 	//------------------------
 	//このまま使うと変だから一定間隔で使うといいかも
 	//------------------------
-	SetEffect(D3DXVECTOR3(s_disc.pos.x, s_disc.pos.y, s_disc.pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SPIN, 30, 100.0f);
+	s_disc.nEffect++;
+
+	if (s_disc.nEffect % EFFECT_TIME == 0)
+	{// 一定間隔
+		// エフェクトの設定
+		SetEffect(s_disc.pos, GetColor(COLOR_WHITE), EFFECTSTATE_SPIN, 30, 100.0f);
+	}
 	
 	// プレイヤーとディスクの当たり判定
 	CollisionPlayer(&s_disc, DISC_SIZE, s_disc.nThrow ^ 1);

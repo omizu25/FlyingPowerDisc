@@ -83,6 +83,27 @@ void SetColorRectangle(int nIdx, const D3DXCOLOR &color);
 void SetTexRectangle(int nIdx, const D3DXVECTOR2 &texU, const D3DXVECTOR2 &texV);
 
 //--------------------------------------------------
+// 描画するかどうか
+// 引数1  : int nIdx / インデックス
+// 引数2  : bool bDraw / 描画するかどうか
+//--------------------------------------------------
+void SetDrawRectangle(int nIdx, bool bDraw);
+
+//--------------------------------------------------
+// 加算合成するかどうか
+// 引数1  : int nIdx / インデックス
+// 引数2  : bool bDraw / 加算合成するかどうか
+//--------------------------------------------------
+void SetAddRectangle(int nIdx, bool bAdd);
+
+//--------------------------------------------------
+// テクスチャの変更
+// 引数1  : int nIdx / インデックス
+// 引数2  : TEXTURE texture / 列挙型 種類
+//--------------------------------------------------
+void ChangeTextureRectangle(int nIdx, TEXTURE texture);
+
+//--------------------------------------------------
 // 頂点バッファの取得
 // 引数  : int nIdx / インデックス
 // 返値  : LPDIRECT3DVERTEXBUFFER9 / 頂点バッファ

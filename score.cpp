@@ -25,6 +25,7 @@ namespace
 {
 const float	NUMBER_WIDTH = 40.0f;	// 数の幅
 const float	NUMBER_HEIGHT = 60.0f;	// 数の高さ
+const float	START_POS_Y = 83.0f;	// 始まりのYの位置
 }// namespaceはここまで
 
 //==================================================
@@ -50,19 +51,22 @@ void InitScore(void)
 		nSet[nPlayerNo] = 0;
 		nPoint[nPlayerNo] = 0;
 
-		D3DXVECTOR3 posSet = D3DXVECTOR3(0.0f, NUMBER_HEIGHT, 0.0f);
-		D3DXVECTOR3 posPoint = D3DXVECTOR3(0.0f, NUMBER_HEIGHT, 0.0f);
+		D3DXVECTOR3 posSet = D3DXVECTOR3(0.0f, START_POS_Y, 0.0f);
+		D3DXVECTOR3 posPoint = D3DXVECTOR3(0.0f, START_POS_Y, 0.0f);
+		D3DXCOLOR color = GetColor(COLOR_WHITE);
 
 		switch (nPlayerNo)
 		{
 		case 0:
-			posSet.x = SCREEN_WIDTH * 0.2f;
-			posPoint.x = SCREEN_WIDTH * 0.3f;
+			posSet.x = SCREEN_WIDTH * 0.17f;
+			posPoint.x = SCREEN_WIDTH * 0.37f;
+			color = GetColor(COLOR_RED);
 			break;
 
 		case 1:
-			posSet.x = SCREEN_WIDTH * 0.8f;
-			posPoint.x = SCREEN_WIDTH * 0.7f;
+			posSet.x = SCREEN_WIDTH * 0.97f;
+			posPoint.x = SCREEN_WIDTH * 0.77f;
+			color = GetColor(COLOR_BLUE);
 			break;
 
 		default:
@@ -71,8 +75,8 @@ void InitScore(void)
 		}
 
 		// 数の設定
-		nSetIdx[nPlayerNo] = SetNumber(posSet, size, GetColor(COLOR_BLUE), nSet[nPlayerNo]);
-		nPointIdx[nPlayerNo] = SetNumber(posPoint, size, GetColor(COLOR_RED), nPoint[nPlayerNo]);
+		nSetIdx[nPlayerNo] = SetNumber(posSet, size, color, nSet[nPlayerNo]);
+		nPointIdx[nPlayerNo] = SetNumber(posPoint, size, color, nPoint[nPlayerNo]);
 	}
 }
 
@@ -99,7 +103,8 @@ void UpdateScore(void)
 		if (nPoint[nPlayerNo] >= GetPointRule())
 		{// ポイント数が指定の値を越えた
 			// ポイント数を0にする
-			ZeroPointScore(nPlayerNo);
+			ZeroPointScore(0);
+			ZeroPointScore(1);
 		
 			// セット数の加算
 			AddSetScore(nPlayerNo, 1);
@@ -107,9 +112,6 @@ void UpdateScore(void)
 
 		if (nSet[nPlayerNo] >= GetSetRule())
 		{// セット数が指定の値を越えた
-			// セット数を0にする
-			ZeroSetScore(nPlayerNo);
-		
 			// モードの変更
 			ChangeMode(MODE_TITLE);
 		}

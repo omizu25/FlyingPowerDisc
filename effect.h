@@ -9,16 +9,11 @@
 
 #define EFFECTRMOVE (50)  //ループの幅
 #define MAXEFFECTR (2)//登場最大数
-#define MAX_EFFECT (1280)//Effectの最大数
+#define MAX_EFFECT (128)//Effectの最大数
 typedef enum
 {
-	EFFECTSTATE_NORMAL = 0,
-	EFFECTSTATE_SHOOT,		//通常ATTACK
-	EFFECTSTATE_GOAL,		//ごる
-	EFFECTSTATE_MAXGAGE,	//技ゲージMAX
-	EFFECTSTATE_JUMP,	//ジャンプ
-	EFFECTSTATE_RUNNOW,		//走れ
-	EFFECTSTATE_SPIN,		//回転
+	EFFECTSTATE_SHOOT = 0,	//炎
+	EFFECTSTATE_SPIN,		//ディスク
 	EFFECTSTATE_MAX
 
 }EFFECTSTATE;
@@ -43,6 +38,7 @@ typedef struct
 	float fRadeius;		//半径
 	EFFECTSTATE nType;			//タイプ
 	int nMaxLife;		//ライフの最大
+	int nIdx;			// 矩形のインデックス
 	ANIM_TEX AnimTex;
 }Effect;
 

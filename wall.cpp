@@ -50,12 +50,12 @@ void InitWall(void)
 	
 		if (count == 0)
 		{
-			SetNormalpos2d(pVtx, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT - WALLWIDE, SCREEN_HEIGHT);
+			SetNormalpos2d(pVtx, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT - WALLWIDE + 5.0f, SCREEN_HEIGHT + 5.0f);
 			Type[count] = WALL_UP;
 		}
 		if (count == 1)
 		{
-			SetNormalpos2d(pVtx, 0.0f, SCREEN_WIDTH, 0.0f , 0.0f+ WALLWIDE);
+			SetNormalpos2d(pVtx, 0.0f, SCREEN_WIDTH, 130.0f , 130.0f + WALLWIDE);
 			Type[count] = WALL_DOWN;
 		}
 
@@ -68,10 +68,10 @@ void InitWall(void)
 
 
 		//í∏ì_ÉJÉâÅ[ÇÃê›íË
-		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[0].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
+		pVtx[1].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
+		pVtx[2].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
+		pVtx[3].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
 
 
 

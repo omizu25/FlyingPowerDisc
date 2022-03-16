@@ -25,6 +25,7 @@
 #include "rule.h"
 #include "number.h"
 #include "score.h"
+#include "bg.h"
 
 #include <assert.h>
 
@@ -46,11 +47,14 @@ void InitGame(void)
 	// ルールの読み込み
 	LoadRule();
 
-	//タイム初期化
-	InitTime();
-
 	// 矩形の初期化
 	InitRectangle();
+
+	// 背景の初期化
+	InitBG();
+
+	// タイムの初期化
+	InitTime();
 
 	// 数の初期化
 	InitNumber();
@@ -58,19 +62,19 @@ void InitGame(void)
 	// スコアの初期化
 	InitScore();
 
-	//かべ初期化
+	// かべの初期化
 	InitWall();
+
+	// エフェクトの初期化
+	InitEffect();
 
 	// ディスクの初期化
 	InitDisc();
 
-	//エフェクト初期化
-	InitEffect();
-
-	//プレイヤーの初期化
+	// プレイヤーの初期化
 	InitPlayer();
 
-	//UIの初期化
+	// UIの初期化
 	InitUi();
 
 	// ポーズの初期化
@@ -79,21 +83,21 @@ void InitGame(void)
 	// メニューの初期化
 	InitMenu();
 
-	//UIの配置			置く座標			横幅	縦幅	タイプ			拡大率とフェード	テクスチャの種類
+	// UIの配置			置く座標			横幅	縦幅	タイプ			拡大率とフェード	テクスチャの種類
 	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0, D3DXVECTOR3(1.0f, 1.0f, 0.0f),0);	
 	SetUi(D3DXVECTOR3 (SCREEN_WIDTH - 50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 1, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1);
-	//左から出てくるやつ
+	// 左から出てくるやつ
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 100.0f, 0.0f), 150.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 300.0f, 0.0f), 150.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f),2);
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 500.0f, 0.0f), 150.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
-	//右から出てくるやつ																				
+	// 右から出てくるやつ																				
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 100.0f, 0.0f), 150.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 300.0f, 0.0f), 150.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f),2);
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 500.0f, 0.0f), 150.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
-	//セット数																							
+	// セット数																							
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), 400.0f, 100.0f,4, D3DXVECTOR3(1.0f, 0.0f, 0.0f),4);
 	
-	//選択した時間を表示
+	// 選択した時間を表示
 	SetTime(GetTimeRule());
 
 	s_gameState = GAMESTATE_NONE;	// 何もしていない状態に設定
@@ -111,7 +115,10 @@ void UninitGame(void)
 	// サウンドの停止
 	StopSound();
 
-	//タイムの終了
+	// 背景の終了
+	UninitBG();
+
+	// タイムの終了
 	UninitTime();
 
 	// 数の終了
@@ -120,7 +127,7 @@ void UninitGame(void)
 	// スコアの終了
 	UninitScore();
 
-	//かべの終了
+	// かべの終了
 	UninitWall();
 
 	// 矩形の終了
@@ -129,13 +136,13 @@ void UninitGame(void)
 	// ディスクの終了
 	UninitDisc();
 
-	//エフェクト終了
+	// エフェクトの終了
 	UninitEffect();
 
 	// プレイヤーの終了
 	UninitPlayer();
 
-	//UIの終了
+	// UIの終了
 	UninitUi();
 
 	// ポーズの終了
@@ -177,16 +184,16 @@ void UpdateGame(void)
 	// ディスクの更新
 	UpdateDisc();
 
-	//エフェクト更新
+	// エフェクトの更新
 	UpdateEffect();
 
-	//UIの更新(まだ何もしてない)
+	// UIの更新
 	UpdateUi();
 
-	//かべの更新
+	// かべの更新
 	UpdateWall();
 
-	//タイムの更新
+	// タイムの更新
 	UpdateTime();
 
 	// スコアの更新
@@ -201,19 +208,19 @@ void UpdateGame(void)
 //--------------------------------------------------
 void DrawGame(void)
 {
-	//かべの描画
-	DrawWall();
-
-	//エフェクト更新
-	DrawEffect();
-
 	// 矩形の描画
 	DrawRectangle();
 
-	//タイムの描画
+	// かべの描画
+	//DrawWall();
+
+	// エフェクトの描画
+	DrawEffect();
+
+	// タイムの描画
 	DrawTime();
 
-	//UIの描画
+	// UIの描画
 	DrawUi();
 }
 

@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bg.cpp" />
     <ClCompile Include="color.cpp" />
     <ClCompile Include="disc.cpp" />
     <ClCompile Include="effect.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bg.h" />
     <ClInclude Include="color.h" />
     <ClInclude Include="disc.h" />
     <ClInclude Include="effect.h" />
