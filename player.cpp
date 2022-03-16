@@ -101,6 +101,9 @@ void UpdatePlayer(void)
 {
 	switch (GetGameState())
 	{
+	case GAMESTATE_NONE:	// ‰½‚à‚µ‚Ä‚¢‚È‚¢ó‘Ô
+		break;
+
 	case GAMESTATE_START:	// ŠJnó‘Ô
 		break;
 
@@ -119,7 +122,6 @@ void UpdatePlayer(void)
 
 		break;
 
-	case GAMESTATE_NONE:	// ‰½‚à‚µ‚Ä‚¢‚È‚¢ó‘Ô
 	default:
 		assert(false);
 		break;

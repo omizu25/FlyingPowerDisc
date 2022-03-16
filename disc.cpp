@@ -89,6 +89,9 @@ void UpdateDisc(void)
 {
 	switch (GetGameState())
 	{
+	case GAMESTATE_NONE:	// ‰½‚à‚µ‚Ä‚¢‚È‚¢ó‘Ô
+		break;
+
 	case GAMESTATE_START:	// ŠJnó‘Ô
 		UpdateStart();
 		break;
@@ -106,7 +109,6 @@ void UpdateDisc(void)
 
 		break;
 
-	case GAMESTATE_NONE:	// ‰½‚à‚µ‚Ä‚¢‚È‚¢ó‘Ô
 	default:
 		assert(false);
 		break;

@@ -5,6 +5,7 @@
 //
 //========================================================
 #include "ui.h"
+#include "game.h"
 //====================================
 //マクロ定義
 //====================================
@@ -186,6 +187,12 @@ void UpdateUi(void)
 		else if (g_aUi[nCntUi].nType == 4 && g_aUi[nCntUi].bSwitch)
 		{//消える処理
 			g_aUi[nCntUi].scale.y -= 0.01f;
+
+			if (g_aUi[nCntUi].scale.y <= 0.0f)
+			{
+				// ゲームの状態の設定
+				SetGameState(GAMESTATE_START);
+			}
 		}
 
 		//拡大率の調整
