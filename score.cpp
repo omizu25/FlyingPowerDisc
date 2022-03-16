@@ -48,42 +48,21 @@ void InitScore(void)
 	for (int nPlayerNo = 0; nPlayerNo < MAXPLAYER; nPlayerNo++)
 	{
 		nSet[nPlayerNo] = 0;
-
-		D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, NUMBER_HEIGHT, 0.0f);
-
-		switch (nPlayerNo)
-		{
-		case 0:
-			pos.x = SCREEN_WIDTH * 0.2f;
-			break;
-
-		case 1:
-			pos.x = SCREEN_WIDTH * 0.8f;
-			break;
-
-		default:
-			assert(false);
-			break;
-		}
-
-		// ”‚ÌÝ’è
-		nSetIdx[nPlayerNo] = SetNumber(pos, size, GetColor(COLOR_BLUE), nSet[nPlayerNo]);
-	}
-
-	for (int nPlayerNo = 0; nPlayerNo < MAXPLAYER; nPlayerNo++)
-	{
 		nPoint[nPlayerNo] = 0;
 
-		D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, NUMBER_HEIGHT, 0.0f);
+		D3DXVECTOR3 posSet = D3DXVECTOR3(0.0f, NUMBER_HEIGHT, 0.0f);
+		D3DXVECTOR3 posPoint = D3DXVECTOR3(0.0f, NUMBER_HEIGHT, 0.0f);
 
 		switch (nPlayerNo)
 		{
 		case 0:
-			pos.x = SCREEN_WIDTH * 0.3f;
+			posSet.x = SCREEN_WIDTH * 0.2f;
+			posPoint.x = SCREEN_WIDTH * 0.3f;
 			break;
 
 		case 1:
-			pos.x = SCREEN_WIDTH * 0.7f;
+			posSet.x = SCREEN_WIDTH * 0.8f;
+			posPoint.x = SCREEN_WIDTH * 0.7f;
 			break;
 
 		default:
@@ -92,7 +71,8 @@ void InitScore(void)
 		}
 
 		// ”‚ÌÝ’è
-		nPointIdx[nPlayerNo] = SetNumber(pos, size, GetColor(COLOR_RED), nPoint[nPlayerNo]);
+		nSetIdx[nPlayerNo] = SetNumber(posSet, size, GetColor(COLOR_BLUE), nSet[nPlayerNo]);
+		nPointIdx[nPlayerNo] = SetNumber(posPoint, size, GetColor(COLOR_RED), nPoint[nPlayerNo]);
 	}
 }
 
