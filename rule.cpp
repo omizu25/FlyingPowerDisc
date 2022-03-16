@@ -16,25 +16,29 @@
 #include "texture.h"
 #include "number.h"
 
+#include <stdio.h>
+#include <assert.h>
+
 //==================================================
 // 定義
 //==================================================
 namespace
 {
-const int	START_TIME = 60;		// タイムの始まりの値
-const int	START_POINT = 21;		// ポイントの始まりの値
-const int	START_SET = 2;			// セットの始まりの値
-const int	CHANGE_TIME = 30;		// タイムの変更値
-const int	CHANGE_POINT = 3;		// ポイントの変更値
-const int	CHANGE_SET = 1;			// セットの変更値
-const int	MAX_TIME = 90;			// タイムの最大値
-const int	MAX_POINT = 24;			// ポイントの最大値
-const int	MAX_SET = 3;			// セットの最大値
-const int	MIN_TIME = 30;			// タイムの最小値
-const int	MIN_POINT = 18;			// ポイントの最小値
-const int	MIN_SET = 1;			// セットの最小値
-const float	NUMBER_WIDTH = 30.0f;	// 数の幅
-const float	NUMBER_HEIGHT = 100.0f;	// 数の高さ
+const int	START_TIME = 60;					// タイムの始まりの値
+const int	START_POINT = 21;					// ポイントの始まりの値
+const int	START_SET = 2;						// セットの始まりの値
+const int	CHANGE_TIME = 30;					// タイムの変更値
+const int	CHANGE_POINT = 3;					// ポイントの変更値
+const int	CHANGE_SET = 1;						// セットの変更値
+const int	MAX_TIME = 90;						// タイムの最大値
+const int	MAX_POINT = 24;						// ポイントの最大値
+const int	MAX_SET = 3;						// セットの最大値
+const int	MIN_TIME = 30;						// タイムの最小値
+const int	MIN_POINT = 18;						// ポイントの最小値
+const int	MIN_SET = 1;						// セットの最小値
+const float	NUMBER_WIDTH = 30.0f;				// 数の幅
+const float	NUMBER_HEIGHT = 100.0f;				// 数の高さ
+const char	*RULE_FILE = "data/txt/Rule.txt";	// ルールのファイル
 
 typedef enum
 {
@@ -154,12 +158,18 @@ void UpdateRule(void)
 	{//Aキーが押されたとき
 	//数値の減算
 		SubRule(nNumber);
+
+		// セーブ
+		SaveRule();
 	}
 
 	if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
 	{//Dキーが押されたとき
 	 //数値の加算
 		AddRule(nNumber);
+
+		// セーブ
+		SaveRule();
 	}
 
 	//テクスチャの点滅
@@ -448,6 +458,81 @@ int ChangeSelect(void)
 	}
 
 	return s_nSelect;
+}
+
+//============================
+// 読み込み
+//============================
+void LoadRule(void)
+{
+	FILE *pFile;	// ファイルポインタを宣言
+
+	// ファイルを開く
+	pFile = fopen(RULE_FILE, "r");
+
+	if (pFile != NULL)
+	{// ファイルが開いた場合
+		fscanf(pFile, "%d", &s_nOption[OPTION_TIME]);
+		fscanf(pFile, "%d", &s_nOption[OPTION_POINT]);
+		fscanf(pFile, "%d", &s_nOption[OPTION_SET]);
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{// ファイルが開かない場合
+		assert(false);
+	}
+}
+
+//============================
+// セーブ
+//============================
+void SaveRule(void)
+{
+	FILE *pFile;	// ファイルポインタを宣言
+
+	// ファイルを開く
+	pFile = fopen(RULE_FILE, "w");
+
+	if (pFile != NULL)
+	{// ファイルが開いた場合
+		fprintf(pFile, "%d\n\n", s_nOption[OPTION_TIME]);
+		fprintf(pFile, "%d\n\n", s_nOption[OPTION_POINT]);
+		fprintf(pFile, "%d\n\n", s_nOption[OPTION_SET]);
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{// ファイルが開かない場合
+		assert(false);
+	}
+}
+
+//============================
+// リセットのセーブ
+//============================
+void ResetSaveRule(void)
+{
+	FILE *pFile;	// ファイルポインタを宣言
+
+					// ファイルを開く
+	pFile = fopen(RULE_FILE, "w");
+
+	if (pFile != NULL)
+	{// ファイルが開いた場合
+		fprintf(pFile, "%d\n\n", START_TIME);
+		fprintf(pFile, "%d\n\n", START_POINT);
+		fprintf(pFile, "%d\n\n", START_SET);
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{// ファイルが開かない場合
+		assert(false);
+	}
 }
 
 //============================

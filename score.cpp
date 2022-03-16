@@ -116,38 +116,20 @@ void UpdateScore(void)
 {
 	for (int nPlayerNo = 0; nPlayerNo < MAXPLAYER; nPlayerNo++)
 	{
-		//if (nPoint[nPlayerNo] >= GetPointRule())
-		//{// ポイント数が指定の値を越えた
-		//	// ポイント数を0にする
-		//	ZeroPointScore(nPlayerNo);
-		//
-		//	// セット数の加算
-		//	AddSetScore(nPlayerNo, 1);
-		//}
-
-		//if (nSet[nPlayerNo] >= GetSetRule())
-		//{// セット数が指定の値を越えた
-		//	// セット数を0にする
-		//	ZeroSetScore(nPlayerNo);
-		//
-		//	// モードの変更
-		//	ChangeMode(MODE_TITLE);
-		//}
-
-		if (nPoint[nPlayerNo] >= 6)
+		if (nPoint[nPlayerNo] >= GetPointRule())
 		{// ポイント数が指定の値を越えた
 			// ポイント数を0にする
 			ZeroPointScore(nPlayerNo);
-
+		
 			// セット数の加算
 			AddSetScore(nPlayerNo, 1);
 		}
 
-		if (nSet[nPlayerNo] >= 2)
+		if (nSet[nPlayerNo] >= GetSetRule())
 		{// セット数が指定の値を越えた
 			// セット数を0にする
 			ZeroSetScore(nPlayerNo);
-
+		
 			// モードの変更
 			ChangeMode(MODE_TITLE);
 		}
