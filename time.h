@@ -7,7 +7,7 @@
 
 #include "main.h"
 
-#define MAX_TIME (3)
+#define MAX_TIME (2)
 #define MAX_SIZE  (50.0f)        //‘å‚«‚³‚ÌÅ‘å”
 
 

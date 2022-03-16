@@ -5,6 +5,7 @@
 //
 //================================
 #include "time.h"
+#include "game.h"
 
 //グローバル変数
 LPDIRECT3DTEXTURE9 g_pTextureTime = NULL;
@@ -33,7 +34,7 @@ void InitTime(void)
 
 	// スコアの情報の初期化
 	g_posTime = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 50.0f, 0.0f);
-	g_nTime = 0;
+
 	g_TimenCnt = 60;
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_TIME,
@@ -99,6 +100,12 @@ void UninitTime(void)
 //スコアの
 void UpdateTime(void)
 {
+	if (GetGameState() != GAMESTATE_NORMAL)
+	{
+		g_TimenCnt = 60;
+		return;
+	}
+
 	//デクリメントでカウント
 	g_TimenCnt--;
 	if (g_TimenCnt == 0)
@@ -141,7 +148,7 @@ void SetTime(int nTime)
 {
 	//頂点座標へのポインタ
 	VERTEX_2D *pVtx;
-	int nNumber[3];
+	int nNumber[MAX_TIME];
 	int nCntTime;
 
 	g_nTime = nTime;
@@ -156,10 +163,10 @@ void SetTime(int nTime)
 	//テクスチャ座標の設定
 	for (nCntTime = 0; nCntTime < MAX_TIME; nCntTime++)
 	{
-		pVtx[0].tex = D3DXVECTOR2(0.1f * nNumber[nTime], 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(0.1f * nNumber[nTime] + 0.1f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.1f * nNumber[nTime], 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(0.1f * nNumber[nTime] + 0.1f, 1.0f);
+		pVtx[0].tex = D3DXVECTOR2(0.1f * nNumber[nCntTime], 0.0f);
+		pVtx[1].tex = D3DXVECTOR2(0.1f * nNumber[nCntTime] + 0.1f, 0.0f);
+		pVtx[2].tex = D3DXVECTOR2(0.1f * nNumber[nCntTime], 1.0f);
+		pVtx[3].tex = D3DXVECTOR2(0.1f * nNumber[nCntTime] + 0.1f, 1.0f);
 
 		pVtx += 4;	//頂点データのポインタを4つ分進める
 	}
@@ -172,7 +179,7 @@ void AddTime(int nValue)
 {
 	//頂点座標へのポインタ
 	VERTEX_2D*pVtx;
-	int nNumber[2];	//各桁の数字を格納
+	int nNumber[MAX_TIME];	//各桁の数字を格納
 
 	g_nTime += nValue;
 
@@ -185,7 +192,6 @@ void AddTime(int nValue)
 
 	//テクスチャ座標の設定
 	for (int nCntTime = 0; nCntTime < MAX_TIME; nCntTime++)
-
 	{
 		pVtx[0].tex = D3DXVECTOR2(0.1f * nNumber[nCntTime], 0.0f);
 		pVtx[1].tex = D3DXVECTOR2(0.1f * nNumber[nCntTime] + 0.1f, 0.0f);
