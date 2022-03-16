@@ -47,9 +47,9 @@ const char *s_FileName[] =
 	"data/TEXTURE/UI/UI001.png",			//UI-1
 
 	//ポーズ
-	"data/TEXTURE/POSE/Pose_Title.png",		//ポーズ画面のタイトル
-	"data/TEXTURE/POSE/Pose_Resume.png",	//再開
-	"data/TEXTURE/POSE/Pose_Quit.png",		//終了
+	"data/TEXTURE/PAUSE/Pose_Title.png",	//ポーズ画面のタイトル
+	"data/TEXTURE/PAUSE/Pose_Resume.png",	//再開
+	"data/TEXTURE/PAUSE/Pose_Quit.png",		//終了
 
 	//その他
 	"data/TEXTURE/Number_0To9.png",			//数字
