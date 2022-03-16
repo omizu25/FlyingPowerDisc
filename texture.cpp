@@ -44,6 +44,14 @@ const char *s_FileName[] =
 	"data/TEXTURE/GAME/Game_BG.png",		//ゲーム画面の背景
 	"data/TEXTURE/GAME/Number_Yellow.png",	//数字(黄色)
 	"data/TEXTURE/GAME/Stage01.png"			//1つ目のステージ
+
+	//ゲーム中のUI
+	"data/TEXTURE/GAME/Set1_1p.png"			//セット1(1pカラー)
+	"data/TEXTURE/GAME/Set2_1p.png"			//セット2(1pカラー)
+	"data/TEXTURE/GAME/Set3_1p.png"			//セット3(1pカラー)
+	"data/TEXTURE/GAME/Set1_2p.png"			//セット1(2pカラー)
+	"data/TEXTURE/GAME/Set2_2p.png"			//セット2(2pカラー)
+	"data/TEXTURE/GAME/Set3_2p.png"			//セット3(2pカラー)
 	"data/TEXTURE/UI/UI000.png",			//UI-0
 	"data/TEXTURE/UI/UI001.png",			//UI-1
 
