@@ -262,10 +262,13 @@ void Reflect(void)
 		s_disc.move.y *= -1.0f;
 	}
 
+
 	if (s_disc.pos.x >= SCREEN_WIDTH - fRadius)
 	{// ‰E
+		
 		// ƒQ[ƒ€‚Ìó‘Ô‚Ìİ’è
 		SetGameState(GAMESTATE_RESET);
+		UpdateReset();
 		s_nPossPlayer = 1;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
 
@@ -274,8 +277,10 @@ void Reflect(void)
 	}
 	else if (s_disc.pos.x <= fRadius)
 	{// ¶
+		
 		// ƒQ[ƒ€‚Ìó‘Ô‚Ìİ’è
 		SetGameState(GAMESTATE_RESET);
+		UpdateReset();
 		s_nPossPlayer = 0;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
 
