@@ -271,7 +271,14 @@ void MovePlayer(void)
 
 	Disc *pDisc = GetDisc();
 
-	
+	if (GetKeyboardTrigger(DIK_F))
+	{
+		pDisc->move.y = 5.0f;
+	}
+	if (GetKeyboardTrigger(DIK_K))
+	{
+		pDisc->move.y = -5.0f;
+	}
 	//---------------------------------------
 	//ÇPëÃñ⁄ÇÃçsìÆ
 	//----------------------------------------

@@ -202,7 +202,7 @@ void UpdateGame(void)
 void DrawGame(void)
 {
 	//かべの描画
-	//DrawWall();
+	DrawWall();
 
 	//エフェクト更新
 	DrawEffect();
