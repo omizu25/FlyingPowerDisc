@@ -49,9 +49,9 @@ int		s_nPossPlayer;	// 次のディスクの始まりのプレイヤー
 namespace
 {
 void UpdateStart(void);
-void UpdateReset(void);
+void Reset(void);
 void UpdateNormal(void);
-void Reflect(void);
+void Goal(void);
 }// namespaceはここまで
 
 //--------------------------------------------------
@@ -102,7 +102,6 @@ void UpdateDisc(void)
 		break;
 
 	case GAMESTATE_RESET:	// リセット状態
-		UpdateReset();
 		break;
 
 	case GAMESTATE_END:		// 終了状態
@@ -219,22 +218,23 @@ void UpdateNormal(void)
 	
 	// プレイヤーとディスクの当たり判定
 	CollisionPlayer(&s_disc, DISC_SIZE, s_disc.nThrow ^ 1);
-	bool Wall = CollisionWall(&s_disc.pos, &s_disc.posOld);
-	if (Wall)
-	{
+
+	if (CollisionWall(&s_disc.pos, &s_disc.posOld))
+	{// 壁とディスクの当たり判定
 		s_disc.move.y *= -1.0f;
 	}
-	// 反射
-	Reflect();
+
+	// ゴール
+	Goal();
 
 	// 矩形の回転する位置の設定
 	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);
 }
 
 //--------------------------------------------------
-// リセット状態
+// リセット
 //--------------------------------------------------
-void UpdateReset(void)
+void Reset(void)
 {
 	s_disc.pos = D3DXVECTOR3(START_POS_X, START_POS_Y, 0.0f);
 	s_disc.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -245,30 +245,20 @@ void UpdateReset(void)
 }
 
 //--------------------------------------------------
-// 反射
+// ゴール
 //--------------------------------------------------
-void Reflect(void)
+void Goal(void)
 {
 	float fRadius = DISC_SIZE * 0.5f;
 
-	if (s_disc.pos.y >= SCREEN_HEIGHT - fRadius)
-	{// 下
-		s_disc.pos.y = SCREEN_HEIGHT - fRadius;
-		s_disc.move.y *= -1.0f;
-	}
-	else if (s_disc.pos.y <= fRadius)
-	{// 上
-		s_disc.pos.y = fRadius;
-		s_disc.move.y *= -1.0f;
-	}
-
-
 	if (s_disc.pos.x >= SCREEN_WIDTH - fRadius)
 	{// 右
-		
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
-		UpdateReset();
+
+		// リセット
+		Reset();
+
 		s_nPossPlayer = 1;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
 
@@ -277,10 +267,12 @@ void Reflect(void)
 	}
 	else if (s_disc.pos.x <= fRadius)
 	{// 左
-		
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
-		UpdateReset();
+
+		// リセット
+		Reset();
+
 		s_nPossPlayer = 0;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
 
