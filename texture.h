@@ -35,6 +35,15 @@ typedef enum
 	TEXTURE_Disc,				//ディスク
 	TEXTURE_Game_BG,			//ゲーム画面の背景
 	TEXTURE_Number_Yellow,		//数字(黄色)
+	TEXTURE_Stage01,			//1つ目のステージ
+
+	//ゲーム中のUI
+	TEXTURE_Set1_1p,			//セット1(1pカラー)
+	TEXTURE_Set2_1p,			//セット2(1pカラー)
+	TEXTURE_Set3_1p,			//セット3(1pカラー)
+	TEXTURE_Set1_2p,			//セット1(2pカラー)
+	TEXTURE_Set2_2p,			//セット2(2pカラー)
+	TEXTURE_Set3_2p,			//セット3(2pカラー)
 	TEXTURE_UI000,				//UI-0
 	TEXTURE_UI001,				//UI-1
 
