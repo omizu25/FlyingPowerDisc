@@ -45,6 +45,7 @@ typedef enum
 {
 	MENU_GAME = 0,	// ゲーム
 	MENU_RULE,		// ルール
+	MENU_PLAYER,	// プレイヤー選択
 	MENU_MAX
 }MENU;
 
@@ -169,6 +170,7 @@ void InitTitle(void)
 
 		menu.texture[MENU_GAME] = TEXTURE_Game_Start;
 		menu.texture[MENU_RULE] = menu.texture[MENU_GAME];
+		menu.texture[MENU_PLAYER] = menu.texture[MENU_GAME];
 
 		FrameArgument Frame;
 		Frame.bUse = true;
@@ -302,6 +304,9 @@ void Input(void)
 
 		case MENU_RULE:	// ゲーム
 			ChangeMode(MODE_RULE);
+			break;
+
+		case MENU_PLAYER:	// プレイヤー選択
 			break;
 
 		default:
