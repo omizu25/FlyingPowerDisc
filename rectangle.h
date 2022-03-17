@@ -104,6 +104,13 @@ void SetAddRectangle(int nIdx, bool bAdd);
 void ChangeTextureRectangle(int nIdx, TEXTURE texture);
 
 //--------------------------------------------------
+// テクスチャの変更 [ テクスチャあり ]
+// 引数1  : int nIdx / インデックス
+// 引数2  : TEXTURE texture / 列挙型 種類
+//--------------------------------------------------
+void ChangeTextureRectangleWithTex(int nIdx, LPDIRECT3DTEXTURE9 pTexture);
+
+//--------------------------------------------------
 // 頂点バッファの取得
 // 引数  : int nIdx / インデックス
 // 返値  : LPDIRECT3DVERTEXBUFFER9 / 頂点バッファ

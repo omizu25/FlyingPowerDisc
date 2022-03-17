@@ -400,6 +400,15 @@ void SetAddRectangle(int nIdx, bool bAdd)
 //--------------------------------------------------
 void ChangeTextureRectangle(int nIdx, TEXTURE texture)
 {
+	// テクスチャの変更 [ テクスチャあり ]
+	ChangeTextureRectangleWithTex(nIdx, GetTexture(texture));
+}
+
+//--------------------------------------------------
+// テクスチャの変更 [ テクスチャあり ]
+//--------------------------------------------------
+void ChangeTextureRectangleWithTex(int nIdx, LPDIRECT3DTEXTURE9 pTexture)
+{
 	assert(nIdx >= 0 && nIdx < MAX_RECTANGLE);
 
 	MyRectangle *pRectangle = &s_aRectangle[nIdx];
@@ -411,7 +420,7 @@ void ChangeTextureRectangle(int nIdx, TEXTURE texture)
 
 	/*↓ 使用している ↓*/
 
-	pRectangle->pTexture = GetTexture(texture);
+	pRectangle->pTexture = pTexture;
 }
 
 //--------------------------------------------------
