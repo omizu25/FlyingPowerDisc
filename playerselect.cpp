@@ -13,6 +13,7 @@
 #include "input.h"
 #include "rectangle.h"
 #include "main.h"
+#include "mode.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -30,13 +31,13 @@
  // スタティック変数
  //------------------------------
 int s_nSelect;
-
+LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
 //============================
 // キャラ選択画面の初期化
 //============================
 void InitCharacter(void)
 {
-
+	LoadFileSet("data\\txt\\Status.txt");
 
 	// 矩形の初期化
 	InitRectangle();
@@ -70,8 +71,8 @@ void UpdateCharacter(void)
 		{//Aキーが押されたとき
 		 //数値の減算
 			player->nType++;
-			player->nIdx++;
-			if (player->nType > 4)
+
+			if (player->nType > 3)
 			{
 				player->nType = 0;
 			}
@@ -83,14 +84,14 @@ void UpdateCharacter(void)
 		 //数値の加算
 
 			player->nType--;
-			player->nIdx--;
-			if (player->nType < -1)
+
+			if (player->nType < 0)
 			{
-				player->nType = 4;
+				player->nType = 3;
 				
 			}
 		}
-
+		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 	}
 
 	{	
@@ -100,7 +101,7 @@ void UpdateCharacter(void)
 		{//Aキーが押されたとき
 		 //数値の減算
 			player->nType++;
-			if (player->nType > 4)
+			if (player->nType > 3)
 			{
 				player->nType = 0;
 			}
@@ -111,17 +112,20 @@ void UpdateCharacter(void)
 		{//Dキーが押されたとき
 		 //数値の加算
 			player->nType--;
-			if (player->nType < -1)
+			
+			if (player->nType < 0)
 			{
-				player->nType = 4;
+				player->nType = 3;
 			}
 
 		}
-		D3DXVECTOR2 texU(1.0f, 0.0f);
-		D3DXVECTOR2 texV(0.0f, 1.0f);
 
-		// 矩形のテクスチャ座標の設定
-		SetTexRectangle(player->nIdx, texU, texV);
+		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
+
+	}
+	if (GetKeyboardTrigger(DIK_RETURN))
+	{	//ゲーム選択画面行く
+		ChangeMode(MODE_GAME);		
 	}
 }
 
@@ -134,5 +138,60 @@ void DrawCharacter(void)
 	DrawRectangle();
 }
 
+//----------------------------
+//Playerのステータス読み込み
+//----------------------------
+void LoadFileSet(char *Filename)
+{
+	char	s_aString[256];//
+	int		Num_Tex = 0;
 
+	// ファイルポインタの宣言
+	FILE* pFile;
+
+	//ファイルを開く
+	pFile = fopen(Filename, "r");
+	int number = 0;
+
+	if (pFile != NULL)
+	{//ファイルが開いた場合
+		fscanf(pFile, "%s", &s_aString);
+
+		while (strncmp(&s_aString[0], "SCRIPT", 6) != 0)
+		{//スタート来るまで空白読み込む
+			s_aString[0] = {};
+			fscanf(pFile, "%s", &s_aString[0]);
+		}
+		D3DXVECTOR3	s_modelMainpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		while (strncmp(&s_aString[0], "END_SCRIPT", 10) != 0)
+		{// 文字列の初期化と読み込み// 文字列の初期化と読み込み
+
+			fscanf(pFile, "%s", &s_aString[0]);
+
+			if (strncmp(&s_aString[0], "#", 1) == 0)
+			{//これのあとコメント
+				fgets(&s_aString[0], sizeof(s_aString), pFile);
+				continue;
+			}
+
+			if (strcmp(&s_aString[0], "TEXTURE_FILENAME") == 0)
+			{
+				fscanf(pFile, "%s", &s_aString[0]);	//＝読み込むやつ
+				fscanf(pFile, "%s", &s_aString[0]);
+				LPDIRECT3DDEVICE9  pDevice;
+				//デバイスの取得
+				pDevice = GetDevice();
+				//テクスチャの読み込み
+				D3DXCreateTextureFromFile(pDevice,
+					&s_aString[0],
+					&s_pTexture[Num_Tex]);
+				Num_Tex++;
+
+			}
+			
+		}
+		//ファイルを閉じる
+		fclose(pFile);
+	}
+}
 

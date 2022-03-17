@@ -67,7 +67,7 @@ void InitPlayer(void)
 		s_Player[count].nDiveCount = 0;
 		s_Player[count].nHaveCount = 0;
 		// ãÈå`ÇÃê›íË
-		s_Player[count].nIdx = SetRectangleWithTex(s_pTexturePlayer[count]);
+		s_Player[count].nIdx = SetRectangleWithTex(s_pTexturePlayer[s_Player[count].nType]);
 	}
 
 	SetPlayer(D3DXVECTOR3((float)PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), s_Player[0].nType, true);

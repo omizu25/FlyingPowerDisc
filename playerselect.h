@@ -32,5 +32,5 @@ void DrawCharacter(void);
 //--------------------------------------------------
 // •`‰æ
 //--------------------------------------------------
-//int ChangeSelect(void)
+void LoadFileSet(char *Filename);
 #endif 
