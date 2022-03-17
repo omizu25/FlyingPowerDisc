@@ -46,18 +46,21 @@ const char *s_FileName[] =
 	"data/TEXTURE/GAME/Stage01.png",		// 1つ目のステージ
 
 	/*↓ ゲーム中のUI ↓*/
-	"data/TEXTURE/GAME/Set1_1p.png",		// セット1(1pカラー)
-	"data/TEXTURE/GAME/Set2_1p.png",		// セット2(1pカラー)
-	"data/TEXTURE/GAME/Set3_1p.png",		// セット3(1pカラー)
-	"data/TEXTURE/GAME/Set1_2p.png",		// セット1(2pカラー)
-	"data/TEXTURE/GAME/Set2_2p.png",		// セット2(2pカラー)
-	"data/TEXTURE/GAME/Set3_2p.png",		// セット3(2pカラー)
-	"data/TEXTURE/GAME/SetFrame01.png",		// セットの枠(1pカラー)
-	"data/TEXTURE/GAME/SetFrame02.png",		// セットの枠(2pカラー)
-	"data/TEXTURE/GAME/PtsFrame01.png",		// ポイントの枠(1pカラー)
-	"data/TEXTURE/GAME/PtsFrame02.png",		// ポイントの枠(2pカラー)
-	"data/TEXTURE/UI/UI000.png",			// UI-0
-	"data/TEXTURE/UI/UI001.png",			// UI-1
+	"data/TEXTURE/UI/Set1_1p.png",			// セット1(1pカラー)
+	"data/TEXTURE/UI/Set2_1p.png",			// セット2(1pカラー)
+	"data/TEXTURE/UI/Set3_1p.png",			// セット3(1pカラー)
+	"data/TEXTURE/UI/Set1_2p.png",			// セット1(2pカラー)
+	"data/TEXTURE/UI/Set2_2p.png",			// セット2(2pカラー)
+	"data/TEXTURE/UI/Set3_2p.png",			// セット3(2pカラー)
+	"data/TEXTURE/UI/SetFrame01.png",		// セットの枠(1pカラー)
+	"data/TEXTURE/UI/SetFrame02.png",		// セットの枠(2pカラー)
+	"data/TEXTURE/UI/PtsFrame01.png",		// ポイントの枠(1pカラー)
+	"data/TEXTURE/UI/PtsFrame02.png",		// ポイントの枠(2pカラー)
+	"data/TEXTURE/UI/UI000.png",			// プレイヤー1
+	"data/TEXTURE/UI/UI001.png",			// プレイヤー2
+	"data/TEXTURE/UI/Set1.png",				//セット1の表示
+	"data/TEXTURE/UI/Set2.png",				//セット2の表示
+	"data/TEXTURE/UI/Set3.png",				//セット3の表示
 
 	/*↓ ポーズ ↓*/
 	"data/TEXTURE/PAUSE/Pose_Title.png",	// ポーズ画面のタイトル
