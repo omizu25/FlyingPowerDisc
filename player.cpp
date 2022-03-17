@@ -22,7 +22,8 @@
 #define MAX_DIVECOUNT (15)		// ダイブの硬直時間
 #define MAX_RESET_SPEED (5.0f)	// リセット状態の速さ
 #define MAX_HAVE_COUNT (120)	// 持ってる時間の最大値
-#define DISC_SPEED (2.0f)		// ディスクの速さ
+#define DISC_SPEED_X (2.0f)		// ディスクのXの速さ
+#define DISC_SPEED_Y (5.0f)		// ディスクのYの速さ
 #define TACKLESIZE (50.0f)		//タックルの当たり判定
 #define START_POS_X (20.0f)		// スタート位置、調整用
 #define LIMIT_POS_Y (140.0f)	// 移動制限の上壁
@@ -289,31 +290,20 @@ void MovePlayer(void)
 			}
 			else if (GetKeyboardPress(DIK_E))
 			{
-				pDisc->move.y = 5.0f;
+				pDisc->move.y = DISC_SPEED_Y;
 			}
 			else if (GetKeyboardPress(DIK_Q))
 			{
-				pDisc->move.y = -5.0f;
+				pDisc->move.y = -DISC_SPEED_Y;
 			}
-		}
 
-		if (s_Player[0].bDive == true && pDisc->nThrow == 1)
-		{//タックル適用時
-			Player *pPlayer = &s_Player[0];
-
-			float fHeight = ((PLAYERSIZE_Y * 0.5f));
-			float fWidth = ((PLAYERSIZE_X * 0.5f));
-
-			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
-				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
-				(pDisc->pos.x <= (pPlayer->pos.x + fWidth+ TACKLESIZE)) &&
-				(pDisc->pos.x >= (pPlayer->pos.x - fWidth - TACKLESIZE)))
-			{// プレイヤーにディスクが当たった時
-				
-				pDisc->nThrow = 0;
-				s_Player[0].bDive = false;
-				s_Player[0].nDiveCount = 0;
-				pDisc->move = D3DXVECTOR3(DISC_SPEED, 0.0f, 0.0f)*s_Player[0].Pow * 3;
+			if (GetJoypadStick(JOYKEY_RIGHT_STICK, 0).y > DEAD_ZONE)
+			{// 左スティックが傾いた
+				pDisc->move.y = DISC_SPEED_Y;
+			}
+			else if (GetJoypadStick(JOYKEY_RIGHT_STICK, 0).y < -DEAD_ZONE)
+			{
+				pDisc->move.y = -DISC_SPEED_Y;
 			}
 		}
 		
@@ -407,7 +397,7 @@ void MovePlayer(void)
 			pDisc->nThrow = 0;
 			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[0].nHaveCount / 10;
-			pDisc->move = D3DXVECTOR3(DISC_SPEED - Ross*0.1f, 0.0f, 0.0f)*s_Player[0].Pow;
+			pDisc->move = D3DXVECTOR3(DISC_SPEED_X - Ross*0.1f, 0.0f, 0.0f)*s_Player[0].Pow;
 			pDisc->bHave = false;
 			s_Player[0].nHaveCount = 0;
 		}
@@ -426,31 +416,20 @@ void MovePlayer(void)
 			}
 			else if (GetKeyboardPress(DIK_NUMPAD6))
 			{
-				pDisc->move.y = 5.0f;
+				pDisc->move.y = DISC_SPEED_Y;
 			}
 			else if (GetKeyboardPress(DIK_NUMPAD4))
 			{
-				pDisc->move.y = -5.0f;
+				pDisc->move.y = -DISC_SPEED_Y;
 			}
-		}
 
-		if (s_Player[1].bDive == true && pDisc->nThrow == 0)
-		{//タックル適用時
-			Player *pPlayer = &s_Player[1];
-
-			float fHeight = ((PLAYERSIZE_Y * 0.5f));
-			float fWidth = ((PLAYERSIZE_X * 0.5f));
-
-			if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
-				(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
-				(pDisc->pos.x <= (pPlayer->pos.x + fWidth + TACKLESIZE)) &&
-				(pDisc->pos.x >= (pPlayer->pos.x - fWidth - TACKLESIZE)))
-			{// プレイヤーにディスクが当たった時
-
-				pDisc->nThrow = 1;
-				s_Player[1].bDive = false;
-				s_Player[1].nDiveCount = 0;
-				pDisc->move = D3DXVECTOR3(-DISC_SPEED, 0.0f, 0.0f)*s_Player[1].Pow * 3;
+			if (GetJoypadStick(JOYKEY_RIGHT_STICK, 1).y > DEAD_ZONE)
+			{// 左スティックが傾いた
+				pDisc->move.y = DISC_SPEED_Y;
+			}
+			else if (GetJoypadStick(JOYKEY_RIGHT_STICK, 1).y < -DEAD_ZONE)
+			{
+				pDisc->move.y = -DISC_SPEED_Y;
 			}
 		}
 
@@ -544,7 +523,7 @@ void MovePlayer(void)
 			pDisc->nThrow = 1;
 			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[1].nHaveCount / 10;
-			pDisc->move = D3DXVECTOR3(-DISC_SPEED + Ross*0.1f, 0.0f, 0.0f) * s_Player[1].Pow;
+			pDisc->move = D3DXVECTOR3(-DISC_SPEED_X + Ross*0.1f, 0.0f, 0.0f) * s_Player[1].Pow;
 			pDisc->bHave = false;
 			s_Player[1].nHaveCount = 0;
 		}
@@ -568,32 +547,53 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 		(pDisc->pos.x <= (pPlayer->pos.x + fWidth)) &&
 		(pDisc->pos.x >= (pPlayer->pos.x - fWidth)))
 	{// プレイヤーにディスクが当たった時
-		switch (number)
-		{
-		case 0:
-			pDisc->pos.x = s_Player[number].pos.x + fWidth;
-			break;
 
-		case 1:
+		if (!pPlayer->bDive)
+		{// ダイブしてない
+			switch (number)
+			{
+			case 0:
+				pDisc->pos.x = pPlayer->pos.x + fWidth;
+				break;
 
-			pDisc->pos.x = s_Player[number].pos.x - fWidth;
-			break;
+			case 1:
 
-		default:
-			assert(false);
-			break;
+				pDisc->pos.x = pPlayer->pos.x - fWidth;
+				break;
+
+			default:
+				assert(false);
+				break;
+			}
+			pDisc->pos.y = pPlayer->pos.y;
+			pDisc->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			pDisc->bHave = true;
+			pPlayer->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			pPlayer->nSkillCount++;
+			if (pPlayer->nSkillCount >= 10)
+			{
+				pPlayer->nSkillCount = 0;
+				pPlayer->bSkill = true;
+			}
+			pPlayer->bHave = true;
 		}
-		pDisc->pos.y = s_Player[number].pos.y;
-		pDisc->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		pDisc->bHave = true;
-		s_Player[number].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		s_Player[number].nSkillCount++;
-		if (s_Player[number].nSkillCount >= 10)
-		{
-			s_Player[number].nSkillCount = 0;
-			s_Player[number].bSkill = true;
+		else
+		{// ダイブしてる
+			if (pDisc->nThrow == 1)
+			{
+				pDisc->nThrow = 0;
+				s_Player[0].bDive = false;
+				s_Player[0].nDiveCount = 0;
+				pDisc->move = D3DXVECTOR3(DISC_SPEED_X, 0.0f, 0.0f)*s_Player[0].Pow * 3;
+			}
+			else if (pDisc->nThrow == 0)
+			{
+				pDisc->nThrow = 1;
+				s_Player[1].bDive = false;
+				s_Player[1].nDiveCount = 0;
+				pDisc->move = D3DXVECTOR3(-DISC_SPEED_X, 0.0f, 0.0f)*s_Player[1].Pow * 3;
+			}
 		}
-		s_Player[number].bHave = true;
 	
 		bIsLanding = true;
 	}
@@ -684,11 +684,11 @@ static void UpdateReset(void)
 		switch (nPlayerNo)
 		{
 		case 0:
-			posDest = D3DXVECTOR3(PLAYERSIZE_X + START_POS_X, SCREEN_HEIGHT * 0.5f, 0.0f);
+			posDest = D3DXVECTOR3(PLAYERSIZE_X + START_POS_X, SCREEN_HEIGHT * 0.6f, 0.0f);
 			break;
 
 		case 1:
-			posDest = D3DXVECTOR3(SCREEN_WIDTH - PLAYERSIZE_X - START_POS_X, SCREEN_HEIGHT * 0.5f, 0.0f);
+			posDest = D3DXVECTOR3(SCREEN_WIDTH - PLAYERSIZE_X - START_POS_X, SCREEN_HEIGHT * 0.6f, 0.0f);
 			break;
 		
 		default:

@@ -23,7 +23,7 @@
 namespace
 {
 const float	MAX_WIDTH = 200.0f;		// •‚ÌÅ‘å’l
-const float	MAX_HEIGHT = 100.0f;	// ‚‚³‚ÌÅ‘å’l
+const float	MAX_HEIGHT = 125.0f;	// ‚‚³‚ÌÅ‘å’l
 }// namespace‚Í‚±‚±‚Ü‚Å
 
 //==================================================
