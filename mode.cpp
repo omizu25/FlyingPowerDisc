@@ -13,6 +13,7 @@
 #include "mode.h"
 #include "title.h"
 #include "rule.h"
+#include "playerselect.h"
 
 #include <assert.h>
 
@@ -47,6 +48,9 @@ void UninitMode(void)
 	//ルール選択画面の終了
 	UninitRule();
 
+	//キャラ選択画面の終了
+	UninitCharacter();
+
 	//ルール選択画面のリセットのセーブ
 	ResetSaveRule();
 }
@@ -75,8 +79,8 @@ void UpdateMode(void)
 		break;
 
 	case MODE_PLAYER:	// プレイヤー選択
+		UpdateCharacter();
 		break;
-
 	case MODE_NONE:
 		/* 処理なし */
 		break;
@@ -111,6 +115,7 @@ void DrawMode(void)
 		break;
 
 	case MODE_PLAYER:	// プレイヤー選択
+		DrawCharacter();
 		break;
 
 	case MODE_NONE:
@@ -162,6 +167,7 @@ void SetMode(void)
 		break;
 
 	case MODE_PLAYER:	// プレイヤー選択
+		UninitCharacter();
 		break;
 
 	case MODE_NONE:
@@ -198,6 +204,7 @@ void SetMode(void)
 		break;
 
 	case MODE_PLAYER:	// プレイヤー選択
+		InitCharacter();
 		break;
 
 	case MODE_NONE:

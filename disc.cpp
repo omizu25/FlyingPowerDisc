@@ -267,6 +267,7 @@ void Goal(void)
 		s_nPossPlayer = 1;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
 
+
 		// ƒ|ƒCƒ“ƒg”‚Ì‰ÁZ
 		AddPointScore(0, 3);
 	}

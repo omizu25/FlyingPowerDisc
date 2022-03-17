@@ -26,6 +26,7 @@
 #define TACKLESIZE (50.0f)		//タックルの当たり判定
 #define START_POS_X (20.0f)		// スタート位置、調整用
 #define LIMIT_POS_Y (140.0f)	// 移動制限の上壁
+
 //スタティック変数///スタティックをヘッタに使うなよ？
 
 static LPDIRECT3DTEXTURE9 s_pTexturePlayer[MAXPLAYERTYPE] = {}; //テクスチャのポインタ
@@ -67,8 +68,10 @@ void InitPlayer(void)
 		// 矩形の設定
 		s_Player[count].nIdx = SetRectangleWithTex(s_pTexturePlayer[count]);
 	}
-	SetPlayer(D3DXVECTOR3((float)PLAYERSIZE_X + START_POS_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), 0,true);
-	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYERSIZE_X - START_POS_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), 1,false);
+
+	SetPlayer(D3DXVECTOR3((float)PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), s_Player[0].nType, true);
+	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), s_Player[1].nType, false);
+	
 }
 
 //===================
@@ -129,6 +132,7 @@ void UpdatePlayer(void)
 		assert(false);
 		break;
 	}
+
 }
 //===================
 //描画処理

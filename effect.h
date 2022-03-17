@@ -7,7 +7,6 @@
 #include"main.h"
 #include"disc.h"
 
-#define EFFECTRMOVE (50)  //ƒ‹[ƒv‚Ì•
 #define MAXEFFECTR (2)//“oêÅ‘å”
 #define MAX_EFFECT (128)//Effect‚ÌÅ‘å”
 typedef enum
@@ -48,7 +47,7 @@ void UninitEffect(void);
 void UpdateEffect(void);
 void DrawEffect(void);
 void SetEffect(D3DXVECTOR3 pos, D3DXCOLOR col, EFFECTSTATE nType,int life, float size);
-Effect* GetEffect(void);
+
 
 void SetVtxAnimTex(VERTEX_2D* pVtx, ANIM_TEX* pAnimTex);
 void SetNormalpos2d(VERTEX_2D *pVtx, float XUP, float XDW, float YUP, float YDW);

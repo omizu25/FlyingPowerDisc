@@ -307,6 +307,7 @@ void Input(void)
 			break;
 
 		case MENU_PLAYER:	// プレイヤー選択
+			ChangeMode(MODE_PLAYER);
 			break;
 
 		default:

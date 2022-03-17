@@ -12,6 +12,7 @@
 #define PLAYERSIZE_Y (100)//ƒTƒCƒY
 #define MAXPLAYER (2)//“oêÅ‘å”
 
+
 typedef enum
 {
 	PLAYESTATE_NORMAL = 0,

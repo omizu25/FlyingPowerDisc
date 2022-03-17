@@ -42,6 +42,10 @@ void InitEffect(void)
 		SetAddRectangle(s_aEffect[nCntEffect].nIdx, true);
 	}
 }
+
+//==================================
+//破棄
+//==================================
 void UninitEffect(void)
 {
 	for (int nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
@@ -50,6 +54,10 @@ void UninitEffect(void)
 		StopUseRectangle(s_aEffect[nCntEffect].nIdx);
 	}
 }
+
+//==================================
+//更新
+//==================================
 void UpdateEffect(void)
 {
 	int nCntEffect;
@@ -104,6 +112,10 @@ void UpdateEffect(void)
 void DrawEffect(void)
 {
 }
+
+//==================================
+//セット　引数　座標、色、使いたいタイプ、寿命、サイズ
+//==================================
 void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, float size)
 {
 	assert(nType >= 0 && nType < EFFECTSTATE_MAX);
