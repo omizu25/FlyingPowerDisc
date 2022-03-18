@@ -40,16 +40,20 @@ void InitUi(void)
 		&g_pTextureUi[1]);
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\GAME\\FivePoints.png",
+		"data\\TEXTURE\\UI\\FivePoints.png",
 		&g_pTextureUi[2]);
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\GAME\\ThreePoints.png",
+		"data\\TEXTURE\\UI\\ThreePoints.png",
 		&g_pTextureUi[3]);
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\UI\\UI001.png",
+		"data\\TEXTURE\\UI\\Set1.png",
 		&g_pTextureUi[4]);
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\UI\\Set2.png",
+		&g_pTextureUi[5]);
 	//UIの情報の初期化
 	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
 	{
@@ -322,6 +326,8 @@ void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType, D3DXVECTOR3 
 			pVtx[2].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
 			pVtx[3].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y + g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
 
+			g_aUi[nCntUi].bSwitch = false;
+			g_bUse = true;
 			g_aUi[nCntUi].bUse = true;		//使用している状態
 			break;
 		}

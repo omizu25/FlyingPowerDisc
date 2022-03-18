@@ -6,6 +6,7 @@
 //================================
 #include "time.h"
 #include "game.h"
+#include "mode.h"
 
 //グローバル変数
 LPDIRECT3DTEXTURE9 g_pTextureTime = NULL;
@@ -113,6 +114,11 @@ void UpdateTime(void)
 		g_TimenCnt = 60;
 		AddTime(-1);
 	}
+	if (g_nTime <= 0)
+	{
+		// モードの変更
+		ChangeMode(MODE_TITLE);
+	}
 }
 
 //スコアの
@@ -172,6 +178,7 @@ void SetTime(int nTime)
 	}
 	//頂点バッファをアンロック
 	g_pVtxBuffTime->Unlock();
+
 }
 
 //スコアの

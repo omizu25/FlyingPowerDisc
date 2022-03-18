@@ -15,6 +15,7 @@
 #include "color.h"
 #include "rule.h"
 #include "mode.h"
+#include "time.h"
 
 #include <assert.h>
 
@@ -105,11 +106,11 @@ void UpdateScore(void)
 			// ポイント数を0にする
 			ZeroPointScore(0);
 			ZeroPointScore(1);
-		
+			// 時間のリセット
+			SetTime(GetTimeRule());
 			// セット数の加算
 			AddSetScore(nPlayerNo, 1);
 		}
-
 		if (nSet[nPlayerNo] >= GetSetRule())
 		{// セット数が指定の値を越えた
 			// モードの変更
