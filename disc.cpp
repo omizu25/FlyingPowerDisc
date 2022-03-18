@@ -33,6 +33,8 @@ const float	DISC_ROT_SPEED = -0.25f;							// ディスクの回転速度
 const float	MAX_MOVE = 10.0f;									// 移動量の最大値
 const float	START_POS_X = SCREEN_WIDTH * 0.5f;					// ディスクの始まりのXの位置
 const float	START_POS_Y = SCREEN_HEIGHT - (DISC_SIZE * 0.5f);	// ディスクの始まりのYの位置
+const float	GOAL_TOP = 350.0f;									// ゴールの上端
+const float	GOAL_BOTTOM = 500.0f;								// ゴールの下端
 }// namespaceはここまで
 
 //==================================================
@@ -258,6 +260,17 @@ void Goal(void)
 
 	if (s_disc.pos.x >= SCREEN_WIDTH - fRadius)
 	{// 右
+		if ((s_disc.pos.y >= GOAL_TOP) && s_disc.pos.y <= GOAL_BOTTOM)
+		{
+			// ポイント数の加算
+			AddPointScore(0, 5);
+		}
+		else
+		{
+			// ポイント数の加算
+			AddPointScore(0, 3);
+		}
+
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
 
@@ -266,13 +279,20 @@ void Goal(void)
 
 		s_nPossPlayer = 1;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
-
-
-		// ポイント数の加算
-		AddPointScore(0, 3);
 	}
 	else if (s_disc.pos.x <= fRadius)
 	{// 左
+		if ((s_disc.pos.y >= GOAL_TOP) && s_disc.pos.y <= GOAL_BOTTOM)
+		{
+			// ポイント数の加算
+			AddPointScore(1, 5);
+		}
+		else
+		{
+			// ポイント数の加算
+			AddPointScore(1, 3);
+		}
+
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
 
@@ -281,9 +301,6 @@ void Goal(void)
 
 		s_nPossPlayer = 0;
 		s_disc.nThrow = s_nPossPlayer ^ 1;
-
-		// ポイント数の加算
-		AddPointScore(1, 3);
 	}
 }
 } // namespaceはここまで
