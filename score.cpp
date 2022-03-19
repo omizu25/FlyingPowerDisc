@@ -39,6 +39,7 @@ int	nSet[MAXPLAYER];		// セット数
 int nPoint[MAXPLAYER];		// ポイント数
 int nSetIdx[MAXPLAYER];		// セット数の値のインデックス
 int nPointIdx[MAXPLAYER];	// ポイント数の値のインデックス
+int g_nCntSet;				// セット数のカウント
 }// namespaceはここまで
 
 //--------------------------------------------------
@@ -102,7 +103,7 @@ void UpdateScore(void)
 {
 	for (int nPlayerNo = 0; nPlayerNo < MAXPLAYER; nPlayerNo++)
 	{
-		if (nPoint[nPlayerNo] >= 1)
+		if (nPoint[nPlayerNo] >= GetPointRule())
 		{// ポイント数が指定の値を越えた
 			// ポイント数を0にする
 			ZeroPointScore(0);
@@ -111,8 +112,27 @@ void UpdateScore(void)
 			SetTime(GetTimeRule());
 			// セット数の加算
 			AddSetScore(nPlayerNo, 1);
-			//セット数の表示
-			SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 5);
+			//セット数に応じて表示する
+			if (g_nCntSet == 1)
+			{
+				//セット数の表示
+				SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 5);
+			}
+			else if (g_nCntSet == 2)
+			{
+				//セット数の表示
+				SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 6);
+			}
+			else if (g_nCntSet == 3)
+			{
+				//セット数の表示
+				SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 7);
+			}
+			else if (g_nCntSet == 4)
+			{
+				//セット数の表示
+				SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 8);
+			}
 		}
 		if (nSet[nPlayerNo] >= GetSetRule())
 		{// セット数が指定の値を越えた
@@ -167,6 +187,9 @@ void AddSetScore(int nPlayerNo, int nValue)
 
 	// 数の変更
 	ChangeNumber(nSetIdx[nPlayerNo], nSet[nPlayerNo]);
+
+	//セット数のカウントを増やす
+	g_nCntSet++;
 }
 
 //--------------------------------------------------

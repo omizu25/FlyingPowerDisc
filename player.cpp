@@ -708,11 +708,11 @@ static void UpdateReset(void)
 		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
 	}
 
-	//if (bOverlap[0] && bOverlap[1])
-	//{// どちらも指定の位置
-	//	// ゲームの状態の設定
-	//	SetGameState(GAMESTATE_START);
-	//}
+	if (bOverlap[0] && bOverlap[1])
+	{// どちらも指定の位置
+		// ゲームの状態の設定
+		SetGameState(GAMESTATE_START);
+	}
 }
 
 //----------------------------

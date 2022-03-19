@@ -54,6 +54,18 @@ void InitUi(void)
 	D3DXCreateTextureFromFile(pDevice,
 		"data\\TEXTURE\\UI\\Set2.png",
 		&g_pTextureUi[5]);
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\UI\\Set3.png",
+		&g_pTextureUi[6]);
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\UI\\Set4.png",
+		&g_pTextureUi[7]);
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\UI\\Set5.png",
+		&g_pTextureUi[8]);
 	//UIの情報の初期化
 	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
 	{
