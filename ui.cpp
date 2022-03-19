@@ -202,7 +202,7 @@ void UpdateUi(void)
 			if (g_aUi[nCntUi].scale.y <= 0.0f)
 			{
 				g_bUse = false;
-
+				g_aUi[nCntUi].bUse = false;
 				// ƒQ[ƒ€‚Ìó‘Ô‚ÌÝ’è
 				SetGameState(GAMESTATE_START);
 			}
@@ -320,6 +320,7 @@ void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType, D3DXVECTOR3 
 			g_aUi[nCntUi].nType = nType;
 			g_aUi[nCntUi].scale = scale;
 			g_aUi[nCntUi].nTexture = nTexture;
+			g_aUi[nCntUi].nCntTime = 0;
 			//’¸“_À•W‚ÌÝ’è
 			pVtx[0].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
 			pVtx[1].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);

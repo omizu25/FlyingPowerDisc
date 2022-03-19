@@ -16,6 +16,7 @@
 #include "rule.h"
 #include "mode.h"
 #include "time.h"
+#include "ui.h"
 
 #include <assert.h>
 
@@ -101,7 +102,7 @@ void UpdateScore(void)
 {
 	for (int nPlayerNo = 0; nPlayerNo < MAXPLAYER; nPlayerNo++)
 	{
-		if (nPoint[nPlayerNo] >= GetPointRule())
+		if (nPoint[nPlayerNo] >= 1)
 		{// ポイント数が指定の値を越えた
 			// ポイント数を0にする
 			ZeroPointScore(0);
@@ -110,6 +111,8 @@ void UpdateScore(void)
 			SetTime(GetTimeRule());
 			// セット数の加算
 			AddSetScore(nPlayerNo, 1);
+			//セット数の表示
+			SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 5);
 		}
 		if (nSet[nPlayerNo] >= GetSetRule())
 		{// セット数が指定の値を越えた
