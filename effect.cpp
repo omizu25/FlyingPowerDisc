@@ -1,7 +1,9 @@
-//===================
-//パーティクル
-//autho hamadaryuuga
-//===================
+//**************************************************
+//
+// FPD制作 ( effect.cpp )
+// Author  : hamada ryuuga
+//
+//**************************************************
 #include"effect.h"
 #include"player.h"
 #include"rectangle.h"

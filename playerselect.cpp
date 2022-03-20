@@ -42,6 +42,7 @@ void InitCharacter(void)
 	// 矩形の初期化
 	InitRectangle();
 
+	//Player
 	InitPlayer();
 
 	SetPlayer(D3DXVECTOR3((float)PLAYERSIZE_X , (float)SCREEN_HEIGHT * 0.6f, 0.0f), 0, true);
@@ -76,21 +77,20 @@ void UpdateCharacter(void)
 			{
 				player->nType = 0;
 			}
-
 		}
 
 		if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
 		{//Dキーが押されたとき
 		 //数値の加算
-
 			player->nType--;
-
 			if (player->nType < 0)
 			{
 				player->nType = 3;
 				
 			}
 		}
+
+		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 	}
 
@@ -105,7 +105,6 @@ void UpdateCharacter(void)
 			{
 				player->nType = 0;
 			}
-
 		}
 
 		if (GetKeyboardTrigger(DIK_NUMPAD3) || GetJoypadTrigger(JOYKEY_RIGHT))
@@ -117,11 +116,10 @@ void UpdateCharacter(void)
 			{
 				player->nType = 3;
 			}
-
 		}
 
+		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
-
 	}
 	if (GetKeyboardTrigger(DIK_RETURN))
 	{	//ゲーム選択画面行く
