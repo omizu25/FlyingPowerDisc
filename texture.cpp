@@ -61,6 +61,8 @@ const char *s_FileName[] =
 	"data/TEXTURE/UI/Set1.png",				//セット1の表示
 	"data/TEXTURE/UI/Set2.png",				//セット2の表示
 	"data/TEXTURE/UI/Set3.png",				//セット3の表示
+	"data/TEXTURE/UI/Set4.png",				//セット3の表示
+	"data/TEXTURE/UI/Set5.png",				//セット3の表示
 
 	/*↓ ポーズ ↓*/
 	"data/TEXTURE/PAUSE/Pose_Title.png",	// ポーズ画面のタイトル

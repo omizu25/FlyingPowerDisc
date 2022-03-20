@@ -70,8 +70,8 @@ void InitPlayer(void)
 		s_Player[count].nIdx = SetRectangleWithTex(s_pTexturePlayer[s_Player[count].nType]);
 	}
 
-	SetPlayer(D3DXVECTOR3((float)PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), s_Player[0].nType, true);
-	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), s_Player[1].nType, false);
+	SetPlayer(D3DXVECTOR3((float)START_POS_X + PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), s_Player[0].nType, true);
+	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - START_POS_X - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), s_Player[1].nType, false);
 	
 }
 

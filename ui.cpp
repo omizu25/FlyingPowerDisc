@@ -54,6 +54,18 @@ void InitUi(void)
 	D3DXCreateTextureFromFile(pDevice,
 		"data\\TEXTURE\\UI\\Set2.png",
 		&g_pTextureUi[5]);
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\UI\\Set3.png",
+		&g_pTextureUi[6]);
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\UI\\Set4.png",
+		&g_pTextureUi[7]);
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\UI\\Set5.png",
+		&g_pTextureUi[8]);
 	//UIの情報の初期化
 	for (int nCntUi = 0; nCntUi < MAX_UI; nCntUi++)
 	{
@@ -202,7 +214,7 @@ void UpdateUi(void)
 			if (g_aUi[nCntUi].scale.y <= 0.0f)
 			{
 				g_bUse = false;
-
+				g_aUi[nCntUi].bUse = false;
 				// ゲームの状態の設定
 				SetGameState(GAMESTATE_START);
 			}
@@ -320,6 +332,7 @@ void SetUi(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType, D3DXVECTOR3 
 			g_aUi[nCntUi].nType = nType;
 			g_aUi[nCntUi].scale = scale;
 			g_aUi[nCntUi].nTexture = nTexture;
+			g_aUi[nCntUi].nCntTime = 0;
 			//頂点座標の設定
 			pVtx[0].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x - g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
 			pVtx[1].pos = D3DXVECTOR3((g_aUi[nCntUi].pos.x + g_aUi[nCntUi].fWidth / 2) *  g_aUi[nCntUi].scale.x, (g_aUi[nCntUi].pos.y - g_aUi[nCntUi].fHeight / 2) * g_aUi[nCntUi].scale.y, 0.0f);
