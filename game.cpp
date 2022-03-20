@@ -97,6 +97,9 @@ void InitGame(void)
 	// セット数																							
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f,4, D3DXVECTOR3(1.0f, 0.0f, 0.0f),4);
 	
+	//サウンド開始
+	PlaySound(SOUND_LABEL_BGM);
+
 	// 選択した時間を表示
 	SetTime(GetTimeRule());
 

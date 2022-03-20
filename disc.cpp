@@ -19,6 +19,7 @@
 #include "utility.h"
 #include "score.h"
 #include "wall.h"
+#include "sound.h"
 
 #include <assert.h>
 
@@ -82,6 +83,9 @@ void InitDisc(void)
 //--------------------------------------------------
 void UninitDisc(void)
 {
+	//サウンド停止
+	StopSound();
+
 	// 使うのを止める
 	StopUseRectangle(s_disc.nIdx);
 }
@@ -270,7 +274,8 @@ void Goal(void)
 			// ポイント数の加算
 			AddPointScore(0, 3);
 		}
-
+		//歓声
+		PlaySound(SOUND_LABEL_KANSEI);
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
 
@@ -292,7 +297,8 @@ void Goal(void)
 			// ポイント数の加算
 			AddPointScore(1, 3);
 		}
-
+		//歓声
+		PlaySound(SOUND_LABEL_KANSEI);
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
 

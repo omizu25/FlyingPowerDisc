@@ -280,6 +280,15 @@ void MovePlayer(void)
 
 	Disc *pDisc = GetDisc();
 
+	if (GetKeyboardPress(DIK_A)|| GetKeyboardPress(DIK_W)|| GetKeyboardPress(DIK_S)|| GetKeyboardPress(DIK_D)
+		|| GetKeyboardPress(DIK_NUMPAD1)|| GetKeyboardPress(DIK_NUMPAD2)
+		|| GetKeyboardPress(DIK_NUMPAD3)|| GetKeyboardPress(DIK_NUMPAD5)
+		|| GetJoypadStick(JOYKEY_RIGHT_STICK, 0).y > DEAD_ZONE|| GetJoypadStick(JOYKEY_RIGHT_STICK, 0).y < -DEAD_ZONE
+		|| GetJoypadStick(JOYKEY_RIGHT_STICK, 1).y > DEAD_ZONE || GetJoypadStick(JOYKEY_RIGHT_STICK, 1).y < -DEAD_ZONE)
+	{//歩き音
+		PlaySound(SOUND_LABEL_RUN);
+	}
+
 	//---------------------------------------
 	//１体目の行動
 	//----------------------------------------
@@ -399,6 +408,10 @@ void MovePlayer(void)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[0].bHave = false;
 			pDisc->nThrow = 0;
+			
+			//投げる音
+			PlaySound(SOUND_LABEL_SHOT);
+
 			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[0].nHaveCount / 10;
 			pDisc->move = D3DXVECTOR3(DISC_SPEED_X - Ross*0.1f, 0.0f, 0.0f)*s_Player[0].Pow;
@@ -525,6 +538,10 @@ void MovePlayer(void)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[1].bHave = false;
 			pDisc->nThrow = 1;
+
+			//投げる音
+			PlaySound(SOUND_LABEL_SHOT);
+
 			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[1].nHaveCount / 10;
 			pDisc->move = D3DXVECTOR3(-DISC_SPEED_X + Ross*0.1f, 0.0f, 0.0f) * s_Player[1].Pow;

@@ -17,6 +17,7 @@
 #include "rectangle.h"
 #include "title.h"
 #include "color.h"
+#include "sound.h"
 #include "texture.h"
 
 #include <assert.h>
@@ -86,6 +87,7 @@ void Input(void);
 //--------------------------------------------------
 void InitTitle(void)
 {
+	PlaySound(SOUND_LABEL_TITLE2);
 	// 矩形の初期化
 	InitRectangle();
 
@@ -187,6 +189,9 @@ void InitTitle(void)
 //--------------------------------------------------
 void UninitTitle(void)
 {
+	//サウンド停止
+	StopSound();
+
 	// 矩形の終了
 	UninitRectangle();
 

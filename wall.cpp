@@ -65,15 +65,11 @@ void InitWall(void)
 		pVtx[2].rhw = 1.0f;
 		pVtx[3].rhw = 1.0f;
 		
-
-
 		//頂点カラーの設定
 		pVtx[0].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
 		pVtx[1].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
 		pVtx[2].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
 		pVtx[3].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
-
-
 
 		//頂点バッファをアンロック
 		s_pVtxBuffWall->Unlock();
@@ -98,7 +94,6 @@ void UninitWall(void)
 			s_pTextureWall[Tex] = NULL;
 		}
 	}
-
 
 	//頂点バッファの破棄
 	if (s_pVtxBuffWall != NULL)
@@ -129,14 +124,11 @@ void DrawWall(void)
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
 	for (int count = 0; count < MAXWALL; count++)
-	{
-		
+	{	
 			//テクスチャの設定
 			pDevice->SetTexture(0, NULL); //);
-
-																			 //ポリゴンの描画
-			pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, count * 4, 2);
-		
+			//ポリゴンの描画
+			pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, count * 4, 2);	
 	}
 }
 
@@ -152,7 +144,6 @@ bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld)
 	bool bIsLanding = false;
 	for (int count = 0; count< MAXWALL; count++, pVtx += 4)
 	{
-
 			//V1 move
 			D3DXVECTOR3 vecMove = *pPos - *pPosOld;
 			D3DXVECTOR3 vecWall;
@@ -247,9 +238,10 @@ bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld)
 				{//交差してるとき
 					pPos->x = (pPosOld->x + vecMove.x*t1) + (vecC.x*5.5f);
 					pPos->y = (pPosOld->y - vecMove.y*t1) - (vecC.y*5.5f);
-					
 					bIsLanding = true;
 					//あとここでMove反転させればいい//まかせた
+
+					PlaySound(SOUND_LABEL_WALLHIT);
 
 					//頂点カラーの設定
 					pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
