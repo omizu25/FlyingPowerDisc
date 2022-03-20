@@ -53,6 +53,8 @@ typedef enum
 	TEXTURE_Set1,				//セット1の表示
 	TEXTURE_Set2,				//セット2の表示
 	TEXTURE_Set3,				//セット3の表示
+	TEXTURE_Set4,				//セット2の表示
+	TEXTURE_Set5,				//セット3の表示
 
 	/*↓ ポーズ ↓*/
 	TEXTURE_Pose_Title,			// ポーズ画面のタイトル
