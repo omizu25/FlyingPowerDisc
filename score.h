@@ -50,6 +50,12 @@ void ZeroPointScore(int nPlayerNo);
 void AddSetScore(int nPlayerNo, int nValue);
 
 //--------------------------------------------------
+// 全てのセット数を加算
+// 引数2  : int nValue / 加算する値
+//--------------------------------------------------
+void AllAddSetScore(int nValue);
+
+//--------------------------------------------------
 // ポイント数を加算
 // 引数1  : int nPlayerNo / 何番目のプレイヤーか
 // 引数2  : int nValue / 加算する値

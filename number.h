@@ -41,6 +41,14 @@ void DrawNumber(void);
 int SetNumber(const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size, const D3DXCOLOR &col, int nNumber);
 
 //--------------------------------------------------
+// 位置の設定
+// 引数1  : int nIdx / 配列のインデックス
+// 引数2  : D3DXVECTOR3 &pos / 中心の位置
+// 引数3  : D3DXVECTOR3 &size / サイズ
+//--------------------------------------------------
+void SetPosNumber(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size);
+
+//--------------------------------------------------
 // 変更
 // 引数1  : int nIdx / 配列のインデックス
 // 引数2  : int nNumber / 数
@@ -59,5 +67,12 @@ void StopUseNumber(int nIdx);
 // 返値  : int / 桁数
 //--------------------------------------------------
 int DigitNumber(int nNumber);
+
+//--------------------------------------------------
+// 描画するかどうか
+// 引数1  : int nIdx / インデックス
+// 引数2  : bool bDraw / 描画するかどうか
+//--------------------------------------------------
+void SetDrawNumber(int nIdx, bool bDraw);
 
 #endif // !_NUMBER_H_
