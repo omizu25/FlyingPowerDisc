@@ -175,9 +175,9 @@ void InitTitle(void)
 		menu.texture[MENU_PLAYER] = menu.texture[MENU_GAME];
 
 		FrameArgument Frame;
-		Frame.bUse = true;
+		Frame.bUse = false;
 		Frame.col = GetColor(COLOR_WHITE);
-		Frame.texture = TEXTURE_Frame;
+		Frame.texture = TEXTURE_NONE;
 
 		// ƒƒjƒ…[‚Ìİ’è
 		s_nIdxUseMenu = SetMenu(menu, Frame);

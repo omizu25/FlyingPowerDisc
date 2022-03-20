@@ -7,6 +7,8 @@
 #include "time.h"
 #include "game.h"
 #include "mode.h"
+#include "score.h"
+#include "rule.h"
 
 //グローバル変数
 LPDIRECT3DTEXTURE9 g_pTextureTime = NULL;
@@ -116,8 +118,32 @@ void UpdateTime(void)
 	}
 	if (g_nTime <= 0)
 	{
-		// モードの変更
-		ChangeMode(MODE_TITLE);
+		if (GetPointScore(0) > GetPointScore(1))
+		{
+			// セット数の加算
+			AddSetScore(0, 1);
+		}
+		else if (GetPointScore(0) < GetPointScore(1))
+		{
+			// セット数の加算
+			AddSetScore(1, 1);
+		}
+		else
+		{
+			// セット数の加算
+			AddSetScore(0, 1);
+			AddSetScore(1, 1);
+		}
+
+		// ポイント数を0にする
+		ZeroPointScore(0);
+		ZeroPointScore(1);
+
+		// 時間のリセット
+		SetTime(GetTimeRule());
+
+		// ゲームの状態の設定
+		SetGameState(GAMESTATE_RESET);
 	}
 }
 
