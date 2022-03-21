@@ -26,6 +26,9 @@ const char *s_FileName[] =
 	"data/TEXTURE/TITLE/Title_blue.png",	// タイトルロゴ
 	"data/TEXTURE/TITLE/TitleLight_red.png",// タイトルロゴの後光
 	"data/TEXTURE/TITLE/Game_Start.png",	// ゲームスタートの文字
+	"data/TEXTURE/TITLE/Rule_Select.png",	// ルール選択の文字
+	"data/TEXTURE/TITLE/Map_Select.png",	// マップ選択の文字
+	"data/TEXTURE/TITLE/Char_Select.png",	// キャラ選択の文字
 	"data/TEXTURE/TITLE/ThreePoints.png",	// 3ポイント
 	"data/TEXTURE/TITLE/FivrPoints.png",	// 5ポイント
 
