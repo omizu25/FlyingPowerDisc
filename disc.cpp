@@ -53,7 +53,6 @@ int		s_nPossPlayer;	// 次のディスクの始まりのプレイヤー
 namespace
 {
 void UpdateStart(void);
-void Reset(void);
 void UpdateNormal(void);
 void Goal(void);
 }// namespaceはここまで
@@ -136,6 +135,30 @@ void DrawDisc(void)
 Disc *GetDisc(void)
 {
 	return &s_disc;
+}
+
+//--------------------------------------------------
+// リセット
+//--------------------------------------------------
+void ResetDisc(void)
+{
+	s_disc.pos = D3DXVECTOR3(START_POS_X, START_POS_Y, 0.0f);
+	s_disc.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_disc.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	// 矩形の回転する位置の設定
+	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);
+}
+
+//--------------------------------------------------
+// 次に始めるプレイヤーの設定
+//--------------------------------------------------
+void SetPossDisc(int nIdx)
+{
+	assert(nIdx >= 0 && nIdx < MAXPLAYER);
+
+	s_nPossPlayer = nIdx;
+	s_disc.nThrow = s_nPossPlayer ^ 1;
 }
 
 //==================================================
@@ -243,19 +266,6 @@ void UpdateNormal(void)
 }
 
 //--------------------------------------------------
-// リセット
-//--------------------------------------------------
-void Reset(void)
-{
-	s_disc.pos = D3DXVECTOR3(START_POS_X, START_POS_Y, 0.0f);
-	s_disc.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_disc.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	// 矩形の回転する位置の設定
-	SetRotationPosRectangle(s_disc.nIdx, s_disc.pos, s_disc.rot, DISC_SIZE, DISC_SIZE);
-}
-
-//--------------------------------------------------
 // ゴール
 //--------------------------------------------------
 void Goal(void)
@@ -280,10 +290,10 @@ void Goal(void)
 		SetGameState(GAMESTATE_RESET);
 
 		// リセット
-		Reset();
+		ResetDisc();
 
-		s_nPossPlayer = 1;
-		s_disc.nThrow = s_nPossPlayer ^ 1;
+		// 次に始めるプレイヤーの設定
+		SetPossDisc(1);
 	}
 	else if (s_disc.pos.x <= fRadius)
 	{// 左
@@ -303,10 +313,10 @@ void Goal(void)
 		SetGameState(GAMESTATE_RESET);
 
 		// リセット
-		Reset();
+		ResetDisc();
 
-		s_nPossPlayer = 0;
-		s_disc.nThrow = s_nPossPlayer ^ 1;
+		// 次に始めるプレイヤーの設定
+		SetPossDisc(0);
 	}
 }
 } // namespaceはここまで

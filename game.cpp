@@ -59,9 +59,6 @@ void InitGame(void)
 	// 数の初期化
 	InitNumber();
 
-	// スコアの初期化
-	InitScore();
-
 	// かべの初期化
 	InitWall();
 
@@ -77,11 +74,14 @@ void InitGame(void)
 	// UIの初期化
 	InitUi();
 
-	// ポーズの初期化
-	InitPause();
+	// スコアの初期化
+	InitScore();
 
 	// メニューの初期化
 	InitMenu();
+
+	// ポーズの初期化
+	InitPause();
 
 	// UIの配置			置く座標			横幅	縦幅	タイプ			拡大率とフェード	テクスチャの種類
 	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0, D3DXVECTOR3(1.0f, 1.0f, 0.0f),0);	
@@ -216,9 +216,6 @@ void DrawGame(void)
 
 	// かべの描画
 	//DrawWall();
-
-	// エフェクトの描画
-	DrawEffect();
 
 	// タイムの描画
 	DrawTime();

@@ -20,7 +20,7 @@
 #define MOVESPEED (5.0f)
 #define DEAD_ZONE	(0.1f)		// スティックの遊び
 #define MAX_DIVECOUNT (15)		// ダイブの硬直時間
-#define MAX_RESET_SPEED (5.0f)	// リセット状態の速さ
+#define MAX_RESET_SPEED (7.0f)	// リセット状態の速さ
 #define MAX_HAVE_COUNT (120)	// 持ってる時間の最大値
 #define DISC_SPEED_X (2.0f)		// ディスクのXの速さ
 #define DISC_SPEED_Y (5.0f)		// ディスクのYの速さ
@@ -723,12 +723,6 @@ static void UpdateReset(void)
 		
 		// 矩形の回転する位置の設定
 		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
-	}
-
-	if (bOverlap[0] && bOverlap[1])
-	{// どちらも指定の位置
-		// ゲームの状態の設定
-		SetGameState(GAMESTATE_START);
 	}
 }
 

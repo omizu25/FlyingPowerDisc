@@ -148,6 +148,35 @@ int SetNumber(const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size, const D3DXCOLOR &
 }
 
 //--------------------------------------------------
+// 位置の設定
+// 引数1  : int nIdx / 配列のインデックス
+// 引数2  : D3DXVECTOR3 &pos / 中心の位置
+// 引数3  : D3DXVECTOR3 &size / サイズ
+//--------------------------------------------------
+void SetPosNumber(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size)
+{
+	assert(nIdx >= 0 && nIdx < MAX_NUMBER);
+
+	Number *pNumber = &s_Number[nIdx];
+
+	if (!pNumber->bUse)
+	{// 使用していない
+		return;
+	}
+
+	/*↓ 使用している ↓*/
+
+	pNumber->pos = pos;
+	pNumber->size = size;
+
+	for (int i = 0; i < pNumber->nDigit; i++)
+	{
+		// 一桁ずつの設定
+		SetOneDigitNumber(pNumber, i);
+	}
+}
+
+//--------------------------------------------------
 // 変更
 //--------------------------------------------------
 void ChangeNumber(int nIdx, int nNumber)
@@ -246,6 +275,29 @@ int DigitNumber(int nNumber)
 	}
 
 	return s_nDigit;
+}
+
+//--------------------------------------------------
+// 描画するかどうか
+//--------------------------------------------------
+void SetDrawNumber(int nIdx, bool bDraw)
+{
+	assert(nIdx >= 0 && nIdx < MAX_NUMBER);
+
+	Number *pNumber = &s_Number[nIdx];
+
+	if (!pNumber->bUse)
+	{// 使用していない
+		return;
+	}
+
+	/*↓ 使用している ↓*/
+
+	for (int i = 0; i < pNumber->nDigit; i++)
+	{
+		// 矩形の描画するかどうか
+		SetDrawRectangle(pNumber->nIdx[i], bDraw);
+	}
 }
 
 namespace
