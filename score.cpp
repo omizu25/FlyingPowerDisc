@@ -134,7 +134,6 @@ void UpdateScore(void)
 			// セット数の加算
 			AddSetScore(nPlayerNo, 1);
 		}
-
 		if (s_nSet[nPlayerNo] >= GetSetRule())
 		{// セット数が指定の値を越えた
 			// モードの変更
