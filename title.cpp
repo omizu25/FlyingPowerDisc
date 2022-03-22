@@ -40,7 +40,7 @@ const float	MAX_ROTATION = 0.003f;	// 回転の最大値
 const float	DECREASE_SIZE = 0.6f;	// サイズの減少割合
 const float	DECREASE_SPEED = 0.5f;	// 速度の減少割合
 const float	MENU_WIDTH = 540.0f;	// メニューの幅
-const float	MENU_HEIGHT = 150.0f;	// メニューの高さ
+const float	MENU_HEIGHT = 80.0f;	// メニューの高さ
 
 typedef enum
 {
@@ -164,15 +164,15 @@ void InitTitle(void)
 		menu.nNumUse = MENU_MAX;
 		menu.fLeft = SCREEN_WIDTH * 0.25f;
 		menu.fRight = SCREEN_WIDTH * 0.75f;
-		menu.fTop = SCREEN_HEIGHT * 0.5f;
+		menu.fTop = SCREEN_HEIGHT * 0.4f;
 		menu.fBottom = SCREEN_HEIGHT;
 		menu.fWidth = MENU_WIDTH;
 		menu.fHeight = MENU_HEIGHT;
 		menu.bSort = true;
 
 		menu.texture[MENU_GAME] = TEXTURE_Game_Start;
-		menu.texture[MENU_RULE] = menu.texture[MENU_GAME];
-		menu.texture[MENU_PLAYER] = menu.texture[MENU_GAME];
+		menu.texture[MENU_RULE] = TEXTURE_Rule_Select;
+		menu.texture[MENU_PLAYER] = TEXTURE_Char_Select;
 
 		FrameArgument Frame;
 		Frame.bUse = false;
