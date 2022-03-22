@@ -116,7 +116,7 @@ void InitTitle(void)
 	}
 
 	{// ÉçÉS
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, TITLE_POS_Y, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(TITLE_WIDTH, TITLE_HEIGHT, 0.0f);
 
 		// ãÈå`ÇÃà íuÇÃê›íË
@@ -124,7 +124,7 @@ void InitTitle(void)
 	}
 
 	{// å„åı
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, TITLE_POS_Y, 0.0f);
 
 		for (int i = 0; i < MAX_LIGHT; i++)
 		{
@@ -162,9 +162,9 @@ void InitTitle(void)
 
 		MenuArgument menu;
 		menu.nNumUse = MENU_MAX;
-		menu.fLeft = SCREEN_WIDTH * 0.25f;
-		menu.fRight = SCREEN_WIDTH * 0.75f;
-		menu.fTop = SCREEN_HEIGHT * 0.4f;
+		menu.fLeft = 0.0f;
+		menu.fRight = SCREEN_WIDTH * 0.5f;
+		menu.fTop = 0.0f;
 		menu.fBottom = SCREEN_HEIGHT;
 		menu.fWidth = MENU_WIDTH;
 		menu.fHeight = MENU_HEIGHT;
@@ -242,7 +242,7 @@ void UpdateLight(void)
 {
 	s_nFlashTime++;
 
-	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
+	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, TITLE_POS_Y, 0.0f);
 	float fCurve = sinf((s_nFlashTime * CHANGE_SPEED) * (D3DX_PI * 2.0f));
 
 	for (int i = 0; i < MAX_LIGHT; i++)
