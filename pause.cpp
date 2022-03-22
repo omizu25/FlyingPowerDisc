@@ -23,19 +23,18 @@
 //==================================================
 namespace
 {
-const float		MENU_WIDTH = 500.0f;					// メニューの幅
-const float		MENU_HEIGHT = 150.0f;					// メニューの高さ
-const float		MENU_LEFT = SCREEN_WIDTH * 0.25f;		// メニューの左端
-const float		MENU_RIGHT = SCREEN_WIDTH * 0.75f;		// メニューの右端
-const float		MENU_TOP = SCREEN_HEIGHT * 0.1f;		// メニューの上端
-const float		MENU_BOTTOM = SCREEN_HEIGHT * 0.9f;		// メニューの下端
+const float		MENU_WIDTH = 450.0f;					// メニューの幅
+const float		MENU_HEIGHT = 125.0f;					// メニューの高さ
+const float		MENU_LEFT = SCREEN_WIDTH * 0.275f;		// メニューの左端
+const float		MENU_RIGHT = SCREEN_WIDTH * 0.725f;		// メニューの右端
+const float		MENU_TOP = SCREEN_HEIGHT * 0.25f;		// メニューの上端
+const float		MENU_BOTTOM = SCREEN_HEIGHT * 0.95f;	// メニューの下端
 const D3DXCOLOR	BG_COLOR(0.0f, 0.0f, 0.0f, 0.6f);		// 背景の色
-const D3DXCOLOR	FRAME_COLOR(0.5f, 1.0f, 0.5f, 1.0f);	// フレームの色
+const D3DXCOLOR	FRAME_COLOR(0.5f, 0.5f, 1.0f, 1.0f);	// フレームの色
 
 typedef enum
 {
 	MENU_GAME = 0,	// ゲーム
-	MENU_RETRY,		// リトライ
 	MENU_TITLE,		// タイトル
 	MENU_MAX
 }MENU;
@@ -105,8 +104,7 @@ void SetPause(void)
 	menu.fHeight = MENU_HEIGHT;
 	menu.bSort = true;
 
-	menu.texture[MENU_GAME] = TEXTURE_Pose_Title;
-	menu.texture[MENU_RETRY] = TEXTURE_Pose_Resume;
+	menu.texture[MENU_GAME] = TEXTURE_Pose_Resume;
 	menu.texture[MENU_TITLE] = TEXTURE_Pose_Quit;
 	
 	FrameArgument Frame;
@@ -168,10 +166,6 @@ void Input(void)
 		case MENU_GAME:		// ゲーム
 			SetEnablePause(false);
 			ResetMenu(s_nIdxMenu);
-			break;
-
-		case MENU_RETRY:	// リトライ
-			ChangeMode(MODE_GAME);
 			break;
 
 		case MENU_TITLE:	// タイトル

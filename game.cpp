@@ -162,15 +162,18 @@ void UpdateGame(void)
 {
 	if (GetKeyboardTrigger(DIK_P))
 	{// Pキーが押された
-		// ポーズのリセット
-		ResetPause();
+		if (s_gameState == GAMESTATE_NORMAL)
+		{// 通常状態の時
+			// ポーズのリセット
+			ResetPause();
 
-		s_bPause = !s_bPause;
+			s_bPause = !s_bPause;
 
-		if (s_bPause)
-		{// ポーズしている
-			// メニューの設定
-			SetPause();
+			if (s_bPause)
+			{// ポーズしている
+				// メニューの設定
+				SetPause();
+			}
 		}
 	}
 
@@ -213,9 +216,6 @@ void DrawGame(void)
 {
 	// 矩形の描画
 	DrawRectangle();
-
-	// かべの描画
-	//DrawWall();
 
 	// タイムの描画
 	DrawTime();

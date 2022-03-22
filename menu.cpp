@@ -309,7 +309,7 @@ void ChangeColor(Menu *pMenu)
 	float fCurve = cosf((s_nAlphaTime * pMenu->fBlinkSpeed) * (D3DX_PI * 2.0f));
 	float fAlpha = (fCurve * (1.0f - MIN_ALPHA)) + MIN_ALPHA;
 
-	pOption->col = D3DXCOLOR(1.0f, 0.0f, 0.0f, fAlpha);
+	pOption->col = D3DXCOLOR(1.0f, 1.0f, 1.0f, fAlpha);
 
 	// ‹éŒ`‚ÌF‚ÌÝ’è
 	SetColorRectangle(pOption->nIdx, pOption->col);
