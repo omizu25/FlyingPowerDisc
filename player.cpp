@@ -155,6 +155,8 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 		{
 			continue;
 		}
+		s_Player[count].nSkillCount = 0;
+		s_Player[count].bSkill = false;
 		s_Player[count].nType = nType;
 		s_Player[count].bUse = true;
 		s_Player[count].pos = pos;
