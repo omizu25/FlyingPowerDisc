@@ -16,6 +16,8 @@
 #include "mode.h"
 #include "menu.h"
 #include "color.h"
+#include "gauge.h"
+
 #include <stdio.h>
 #include <assert.h>
 
@@ -24,6 +26,8 @@
  //------------------------------
 #define MAX_CHARACTER	(5)					//キャラの最大数
 #define START_POS_X		(50.0f)				//スタート位置、調整用
+#define GAUGE_WIDTH		(50.0f)				//ゲージの幅
+#define GAUGE_HEIGHT	(45.0f)				//ゲージの高さ
 
  //------------------------------
  // 列挙型
@@ -38,10 +42,22 @@ typedef enum
 	MENU_MAX
 }MENU;
 
+//------------------------------
+// 構造体
+//------------------------------
+typedef struct
+{
+	float fPower;	// パワー
+	float fSpeed;	// スピード
+}Status;
+
  //------------------------------
  // スタティック変数
  //------------------------------
 int s_nSelect[MAXPLAYER];
+int s_nIdxPower[MAXPLAYER];
+int s_nIdxSpeed[MAXPLAYER];
+Status s_status[MAX_CHARACTER];
 LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
 int s_nIdxBG;
 int s_nIdxMenu;
@@ -77,6 +93,35 @@ void InitCharacter(void)
 	pPlayer++;
 	s_nSelect[1] = pPlayer->nType;
 	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - START_POS_X - PLAYERSIZE_X, SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, false);
+	
+	{// ゲージ
+		// ゲージの初期化
+		InitGauge();
+
+		float fHeight = GAUGE_HEIGHT * s_status[s_nSelect[0]].fPower;
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+
+		// ゲージの設定
+		s_nIdxPower[0] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+
+		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
+		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+
+		// ゲージの設定
+		s_nIdxSpeed[0] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+
+		fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
+		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.875f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+
+		// ゲージの設定
+		s_nIdxPower[1] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+
+		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
+		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+
+		// ゲージの設定
+		s_nIdxSpeed[1] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+	}
 
 	{// メニュー
 		// メニューの初期化
@@ -120,6 +165,9 @@ void UninitCharacter(void)
 
 	// メニューの終了
 	UninitMenu();
+
+	// ゲージの終了
+	UninitGauge();
 
 	// 矩形の終了
 	UninitRectangle();
@@ -211,6 +259,7 @@ void LoadFileSet(char *Filename)
 {
 	char	s_aString[256];//
 	int		Num_Tex = 0;
+	int		number = 0;
 
 	// ファイルポインタの宣言
 	FILE* pFile;
@@ -252,6 +301,30 @@ void LoadFileSet(char *Filename)
 					&s_pTexture[Num_Tex]);
 				Num_Tex++;
 
+			}
+
+			if (strcmp(&s_aString[0], "STATUSSET") == 0)
+			{
+				while (1)
+				{
+					fscanf(pFile, "%s", &s_aString[0]);
+
+					if (strcmp(&s_aString[0], "ATTACKPOW") == 0)
+					{
+						fscanf(pFile, "%s", &s_aString[0]);//＝読み込むやつ
+						fscanf(pFile, "%f", &s_status[number].fPower);
+					}
+					if (strcmp(&s_aString[0], "MOVESPEED") == 0)
+					{
+						fscanf(pFile, "%s", &s_aString[0]);//＝読み込むやつ
+						fscanf(pFile, "%f", &s_status[number].fSpeed);
+					}
+					if (strcmp(&s_aString[0], "ENDSET") == 0)
+					{
+						number++;
+						break;
+					}
+				}
 			}
 			
 		}
