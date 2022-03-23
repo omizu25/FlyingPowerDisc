@@ -85,11 +85,13 @@ const char *s_FileName[] =
 	"data/TEXTURE/PLAYER/ghost.png",			// ゴースト
 	"data/TEXTURE/PLAYER/zolbak.png",			// 地面
 
+	/*↓ エフェクト ↓*/
+	"data/TEXTURE/EFFECT/fire.png",			// 炎のエフェクト
+	"data/TEXTURE/EFFECT/spin.png",			// ディスクのエフェクト
+	"data/TEXTURE/EFFECT/tackle.png",		// タックルのエフェクト
+
 	/*↓ その他 ↓*/
-	"data/TEXTURE/Number_0To9.png",				// 数字
-	"data/TEXTURE/fire.png",					// 炎のエフェクト
-	"data/TEXTURE/spin.png",					// ディスクのエフェクト
-	"data/TEXTURE/tackle.png",					// タックルのエフェクト
+	"data/TEXTURE/Number_0To9.png",			// 数字
 };
 }// namespaceはここまで
 
