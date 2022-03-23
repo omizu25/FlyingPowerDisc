@@ -26,6 +26,10 @@
 #define DISC_SPEED_Y (5.0f)		// ディスクのYの速さ
 #define TACKLESIZE (50.0f)		//タックルの当たり判定
 #define LIMIT_POS_Y (140.0f)	// 移動制限の上壁
+#define SKILLMAX (600)			//skillの制限時間
+#define SKILLSETCOUNT (5)		//skillが何回やったら発生するかのカウント
+#define MOVESKILL  (1.1f)		//skill発生中の動きの倍率
+#define POWSKILL  (1.5f)		//skill発生中の攻撃の倍率
 
 //スタティック変数///スタティックをヘッタに使うなよ？
 
@@ -63,6 +67,7 @@ void InitPlayer(void)
 		s_Player[count].fheight = PLAYERSIZE;
 		s_Player[count].fwidth = PLAYERSIZE;
 		s_Player[count].nSkillCount = 0;
+		s_Player[count].nSkilltimerCount = 0;
 		s_Player[count].nDiveCount = 0;
 		s_Player[count].nHaveCount = 0;
 		// 矩形の設定
@@ -412,6 +417,10 @@ void MovePlayer(void)
 			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[0].nHaveCount / 10;
 			pDisc->move = D3DXVECTOR3(DISC_SPEED_X - Ross*0.1f, 0.0f, 0.0f)*s_Player[0].Pow;
+			if (s_Player[0].bSkill)
+			{
+				pDisc->move *= POWSKILL;
+			}
 			pDisc->bHave = false;
 			s_Player[0].nHaveCount = 0;
 		}
@@ -539,10 +548,15 @@ void MovePlayer(void)
 
 			//投げる音
 			PlaySound(SOUND_LABEL_SHOT);
-
+			//skill使用可能な時のエフェクト
+		
 			//タイミングのによって速度変えるやつ
 			int Ross = s_Player[1].nHaveCount / 10;
 			pDisc->move = D3DXVECTOR3(-DISC_SPEED_X + Ross*0.1f, 0.0f, 0.0f) * s_Player[1].Pow;
+			if (s_Player[1].bSkill)
+			{
+				pDisc->move *= POWSKILL;
+			}
 			pDisc->bHave = false;
 			s_Player[1].nHaveCount = 0;
 		}
@@ -589,7 +603,7 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 			pDisc->bHave = true;
 			pPlayer->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			pPlayer->nSkillCount++;
-			if (pPlayer->nSkillCount >= 10)
+			if (pPlayer->nSkillCount >= SKILLSETCOUNT)
 			{
 				pPlayer->nSkillCount = 0;
 				pPlayer->bSkill = true;
@@ -634,12 +648,26 @@ Player* GetPlayer(void)
 static void UpdateNormal(void)
 {
 	MovePlayer();
-
+	Disc *pDisc = GetDisc();
 	for (int count = 0; count < MAXPLAYER; count++)
 	{
 		Player *pPlayer = &s_Player[count];
 
+		//skill使用可能な時のエフェクト
+		if (s_Player[count].bSkill)
+		{
 
+			s_Player[count].nSkilltimerCount++;
+			if (s_Player[count].nSkilltimerCount >= SKILLMAX)
+			{
+				s_Player[count].nSkilltimerCount = 0;
+				s_Player[count].nSkillCount = 0;
+				s_Player[count].bSkill = false;
+			}
+  			
+			s_Player[count].move*= MOVESKILL;
+			SetEffect(D3DXVECTOR3(s_Player[count].pos.x, s_Player[count].pos.y - 70.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SHOOT, 10, 200.0f, false);
+		}
 		//移動量を更新(減衰させる)
 		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  
 		s_Player[count].move.y += (0.0f - s_Player[count].move.y)*0.2f;//（目的の値-現在の値）＊減衰係数
@@ -676,12 +704,7 @@ static void UpdateNormal(void)
 		{
 			s_Player[1].pos.x = SCREEN_WIDTH * 0.5f + PLAYER_POS_X + pPlayer->fwidth / 2.0f;
 		}
-		//skill使用可能な時のエフェクト
-		if (s_Player[count].bSkill)
-		{
-			
-			SetEffect(D3DXVECTOR3(s_Player[count].pos.x, s_Player[count].pos.y - 70.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SHOOT, 10, 200.0f,false);
-		}
+	
 		// 矩形の回転する位置の設定
 		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
 	}

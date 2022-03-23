@@ -197,8 +197,8 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 				Log = pos;
 				if (mirror)
 				{
-					s_aEffect[nCntEffect].move.x = sinf((float)(rand() % 629 - 314) / 100.0f)*5;
-					s_aEffect[nCntEffect].move.y = sinf((float)(rand() % 629 - 314) / 100.0f) * 5;
+					s_aEffect[nCntEffect].move.x = sinf((float)(rand() % 629 - 314) / 100.0f)*7;
+					s_aEffect[nCntEffect].move.y = sinf((float)(rand() % 629 - 314) / 100.0f)*5;
 				}
 				else
 				{
