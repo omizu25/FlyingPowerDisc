@@ -29,6 +29,7 @@ const char *s_FileName[] =
 	"data/TEXTURE/TITLE/Rule_Select.png",	// ルール選択の文字
 	"data/TEXTURE/TITLE/Map_Select.png",	// マップ選択の文字
 	"data/TEXTURE/TITLE/Char_Select.png",	// キャラ選択の文字
+	"data/TEXTURE/TITLE/Tutorial_Start.png",// ゲームスタートの文字
 	"data/TEXTURE/TITLE/ThreePoints.png",	// 3ポイント
 	"data/TEXTURE/TITLE/FivrPoints.png",	// 5ポイント
 
