@@ -89,7 +89,8 @@ const char *s_FileName[] =
 	"data/TEXTURE/EFFECT/fire.png",			// 炎のエフェクト
 	"data/TEXTURE/EFFECT/spin.png",			// ディスクのエフェクト
 	"data/TEXTURE/EFFECT/tackle.png",		// タックルのエフェクト
-	"data/TEXTURE/EFFECT/Goal.png",					// ゴールのエフェクト
+	"data/TEXTURE/EFFECT/Goal.png",			// ゴールのエフェクト
+	"data/TEXTURE/EFFECT/spark.png",		//壁の火花
 
 	/*↓ その他 ↓*/
 	"data/TEXTURE/Number_0To9.png",			// 数字

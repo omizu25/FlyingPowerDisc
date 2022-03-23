@@ -240,7 +240,7 @@ bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld)
 					pPos->y = (pPosOld->y - vecMove.y*t1) - (vecC.y*5.5f);
 					bIsLanding = true;
 					//Ç†Ç∆Ç±Ç±Ç≈MoveîΩì]Ç≥ÇπÇÍÇŒÇ¢Ç¢//Ç‹Ç©ÇπÇΩ
-
+					SetEffect(*pPos, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SPARK, 50, 150.0f, false);
 					PlaySound(SOUND_LABEL_WALLHIT);
 
 					//í∏ì_ÉJÉâÅ[ÇÃê›íË

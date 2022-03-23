@@ -29,15 +29,6 @@ void UninitWall(void);
 void UpdateWall(void);
 void DrawWall(void);
 bool CollisionWall(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld);
-//bool CalcParticlePlaneAfterPos(
-//	D3DXVECTOR3 *pColliPos,
-//	D3DXVECTOR3 *pVelo,
-//	FLOAT res,
-//	FLOAT time,
-//	D3DXVECTOR3 *pOut_pos,
-//	D3DXVECTOR3 *pOut_velo
-//);
-//void MoveWall(void);
-//Wall* GetWall(void);
+
 #endif
 

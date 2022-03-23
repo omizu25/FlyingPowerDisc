@@ -28,7 +28,8 @@ void InitEffect(void)
 	s_aTexture[EFFECTSTATE_SPIN] = TEXTURE_Effect_spin;
 	s_aTexture[EFFECTSTATE_SHOOT] = TEXTURE_Effect_fire;
 	s_aTexture[EFFECTSTATE_TACKLE] = TEXTURE_Effect_tackle;
-	s_aTexture[EFFECTSTATE_GOAL] = TEXTURE_Effect__goal;
+	s_aTexture[EFFECTSTATE_GOAL] = TEXTURE_Effect_goal; 
+	s_aTexture[EFFECTSTATE_SPARK] = TEXTURE_Effect_spark;
 	timer = 0;
 	for (int nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
 	{
@@ -204,6 +205,10 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 					s_aEffect[nCntEffect].move.x = 5.0f;
 					s_aEffect[nCntEffect].move.y = sinf((float)(rand() % 629 - 314) / 100.0f);
 				}
+				break;
+			case EFFECTSTATE_SPARK:
+				s_aEffect[nCntEffect].AnimTex.nDivisionX = 8;
+				s_aEffect[nCntEffect].AnimTex.nDivisionY = 1;
 				break;
 			default:
 				assert(false);
