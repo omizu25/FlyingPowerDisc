@@ -14,6 +14,7 @@
 #include "title.h"
 #include "rule.h"
 #include "playerselect.h"
+#include "tutorial.h"
 
 #include <assert.h>
 
@@ -51,6 +52,9 @@ void UninitMode(void)
 	//キャラ選択画面の終了
 	UninitCharacter();
 
+	//チュートリアルの終了
+	UninitTutorial();
+
 	//ルール選択画面のリセットのセーブ
 	ResetSaveRule();
 }
@@ -83,7 +87,7 @@ void UpdateMode(void)
 		break;
 
 	case MODE_TUTORIAL:	// チュートリアル
-
+		UpdateTutorial();
 		break;
 
 	case MODE_NONE:
@@ -124,7 +128,7 @@ void DrawMode(void)
 		break;
 
 	case MODE_TUTORIAL:	// チュートリアル
-
+		DrawTutorial();
 		break;
 
 	case MODE_NONE:
@@ -180,7 +184,7 @@ void SetMode(void)
 		break;
 
 	case MODE_TUTORIAL:	// チュートリアル
-
+		UninitTutorial();
 		break;
 
 	case MODE_NONE:
@@ -221,7 +225,7 @@ void SetMode(void)
 		break;
 
 	case MODE_TUTORIAL:	// チュートリアル
-
+		InitTutorial();
 		break;
 
 	case MODE_NONE:
