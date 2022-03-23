@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define MAXPLAYERTYPE (4)//Type最大数
+#define MAXPLAYERTYPE (5)//Type最大数
 #define MOVESPEED (5.0f)
 #define DEAD_ZONE	(0.1f)		// スティックの遊び
 #define MAX_DIVECOUNT (15)		// ダイブの硬直時間

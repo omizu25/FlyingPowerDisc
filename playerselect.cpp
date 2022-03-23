@@ -15,28 +15,56 @@
 #include "main.h"
 #include "mode.h"
 #include "menu.h"
+#include "color.h"
 #include <stdio.h>
 #include <assert.h>
 
  //------------------------------
  // マクロ定義
  //------------------------------
-#define MAX_CHARACTER	(4)					//キャラの最大数
+#define MAX_CHARACTER	(5)					//キャラの最大数
+
+ //------------------------------
+ // 列挙型
+ //------------------------------
+typedef enum
+{
+	MENU_FOX = 0,	// キツネ
+	MENU_CAPYBARA,	// カピバラ
+	MENU_SLIME,		// スライム
+	MENU_EMPTY,		// 空
+	MENU_GROUND,	// 地面
+	MENU_MAX
+}MENU;
 
  //------------------------------
  // スタティック変数
  //------------------------------
 int s_nSelect;
 LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
+int s_nIdxBG;
+int s_nIdxMenu;
+
 //============================
 // キャラ選択画面の初期化
 //============================
 void InitCharacter(void)
 {
-	LoadFileSet("data\\txt\\Status.txt");
-
 	// 矩形の初期化
 	InitRectangle();
+
+	{// 背景
+		// 矩形の設定
+		s_nIdxBG = SetRectangle(TEXTURE_BG);
+
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
+		D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxBG, pos, size);
+	}
+
+	LoadFileSet("data\\txt\\Status.txt");
 
 	//Player
 	InitPlayer();
@@ -44,7 +72,34 @@ void InitCharacter(void)
 	SetPlayer(D3DXVECTOR3((float)PLAYERSIZE_X , (float)SCREEN_HEIGHT * 0.6f, 0.0f), 0, true);
 	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), 1, false);
 
-	
+	{// メニュー
+		// メニューの初期化
+		InitMenu();
+
+		MenuArgument menu;
+		menu.nNumUse = MENU_MAX;
+		menu.fLeft = 0.0f;
+		menu.fRight = SCREEN_WIDTH;
+		menu.fTop = 0.0f;
+		menu.fBottom = SCREEN_HEIGHT;
+		menu.fWidth = PLAYERSIZE_X;
+		menu.fHeight = PLAYERSIZE_Y;
+		menu.bSort = true;
+
+		menu.texture[MENU_FOX] = TEXTURE_kitune;
+		menu.texture[MENU_CAPYBARA] = TEXTURE_enemy000;
+		menu.texture[MENU_SLIME] = TEXTURE_player000;
+		menu.texture[MENU_EMPTY] = TEXTURE_sky_enemy_002;
+		menu.texture[MENU_GROUND] = TEXTURE_zolbak;
+
+		FrameArgument Frame;
+		Frame.bUse = false;
+		Frame.col = GetColor(COLOR_WHITE);
+		Frame.texture = TEXTURE_NONE;
+
+		// メニューの設定
+		s_nIdxMenu = SetMenu(menu, Frame);
+	}
 }
 
 //============================
@@ -52,7 +107,13 @@ void InitCharacter(void)
 //============================
 void UninitCharacter(void)
 {
+	// 使うのを止める
+	StopUseRectangle(s_nIdxBG);
+
 	UninitPlayer();
+
+	// メニューの終了
+	UninitMenu();
 
 	// 矩形の終了
 	UninitRectangle();
@@ -66,24 +127,24 @@ void UpdateCharacter(void)
 	{
 		Player*player = GetPlayer();
 
-		if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT))
-		{//Aキーが押されたとき
+		if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
+		{//Sキーが押されたとき
 		 //数値の減算
 			player->nType++;
 
-			if (player->nType > 3)
+			if (player->nType >= MAX_CHARACTER)
 			{
 				player->nType = 0;
 			}
 		}
 
-		if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
-		{//Dキーが押されたとき
+		if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP))
+		{//Wキーが押されたとき
 		 //数値の加算
 			player->nType--;
 			if (player->nType < 0)
 			{
-				player->nType = 3;
+				player->nType = MAX_CHARACTER - 1;
 				
 			}
 		}
@@ -95,24 +156,24 @@ void UpdateCharacter(void)
 	{	
 		Player*player = GetPlayer();
 		player++;
-		if (GetKeyboardTrigger(DIK_NUMPAD1) || GetJoypadTrigger(JOYKEY_LEFT))
-		{//Aキーが押されたとき
+		if (GetKeyboardTrigger(DIK_NUMPAD2) || GetJoypadTrigger(JOYKEY_DOWN))
+		{//Sキーが押されたとき
 		 //数値の減算
 			player->nType++;
-			if (player->nType > 3)
+			if (player->nType >= MAX_CHARACTER)
 			{
 				player->nType = 0;
 			}
 		}
 
-		if (GetKeyboardTrigger(DIK_NUMPAD3) || GetJoypadTrigger(JOYKEY_RIGHT))
-		{//Dキーが押されたとき
+		if (GetKeyboardTrigger(DIK_NUMPAD5) || GetJoypadTrigger(JOYKEY_UP))
+		{//Wキーが押されたとき
 		 //数値の加算
 			player->nType--;
 			
 			if (player->nType < 0)
 			{
-				player->nType = 3;
+				player->nType = MAX_CHARACTER - 1;
 			}
 		}
 
