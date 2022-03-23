@@ -15,6 +15,7 @@ typedef struct
 {
 	D3DXVECTOR3 pos;	//位置
 	D3DXVECTOR3 scale;	//拡大率
+	float nCnt;			//一度だけ使う
 	float nCntTime;		//出現時間
 	float fWidth;		//幅
 	float fHeight;		//高さ

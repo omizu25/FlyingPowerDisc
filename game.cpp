@@ -88,8 +88,8 @@ void InitGame(void)
 	InitResult();
 
 	// UIの配置			置く座標			横幅	縦幅	タイプ			拡大率とフェード	テクスチャの種類
-	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0, D3DXVECTOR3(1.0f, 1.0f, 0.0f),0);	
-	SetUi(D3DXVECTOR3 (SCREEN_WIDTH - 50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 1, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1);
+	SetUi(D3DXVECTOR3 (125.0f, 350.0f, 0.0f), 150.0f, 50.0f, 1, D3DXVECTOR3(1.0f, 1.0f, 0.0f),0);	
+	SetUi(D3DXVECTOR3 (SCREEN_WIDTH - 125.0f, 350.0f, 0.0f), 150.0f, 50.0f, 1, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1);
 	// 左から出てくるやつ
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 250.0f, 0.0f), 150.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.2f, 450.0f, 0.0f), 150.0f, 60.0f, 2, D3DXVECTOR3(0.0f, 1.0f, 0.0f),2);
