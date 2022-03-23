@@ -81,10 +81,10 @@ typedef enum
 	TEXTURE_Effect_fire,		// 炎のエフェクト
 	TEXTURE_Effect_spin,		// ディスクのエフェクト
 	TEXTURE_Effect_tackle,		// タックルのエフェクト
+	TEXTURE_Effect__goal,
 
 	/*↓ その他 ↓*/
 	TEXTURE_Number_0To9,		// 数字
-	TEXTURE_goal,
 	TEXTURE_MAX,
 	TEXTURE_NONE,
 }TEXTURE;

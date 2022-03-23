@@ -16,7 +16,10 @@
 //スタティック
 static Effect s_aEffect[MAX_EFFECT];
 static TEXTURE s_aTexture[EFFECTSTATE_MAX];
-
+static bool Particle;
+static int timer;
+static D3DXVECTOR3 Log;
+static bool setmirror;
 //==================================
 //初期化
 //==================================
@@ -25,8 +28,8 @@ void InitEffect(void)
 	s_aTexture[EFFECTSTATE_SPIN] = TEXTURE_Effect_spin;
 	s_aTexture[EFFECTSTATE_SHOOT] = TEXTURE_Effect_fire;
 	s_aTexture[EFFECTSTATE_TACKLE] = TEXTURE_Effect_tackle;
-	s_aTexture[EFFECTSTATE_GOAL] = TEXTURE_goal;
-
+	s_aTexture[EFFECTSTATE_GOAL] = TEXTURE_Effect__goal;
+	timer = 0;
 	for (int nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
 	{
 		//初期化忘れない
@@ -66,6 +69,19 @@ void UpdateEffect(void)
 {
 	int nCntEffect;
 	VERTEX_2D*pVtx; //頂点へのポインタ
+	if (Particle)
+	{
+		timer++;
+		
+		SetEffect(D3DXVECTOR3(Log.x, Log.y, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_GOAL, 100, 50.0f, setmirror);
+	
+		if (timer >= 30)
+		{
+			Particle = false;
+			timer = 0;
+		}
+	}
+	
 
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
 
@@ -156,7 +172,9 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 			s_aEffect[nCntEffect].bUse = true;
 			s_aEffect[nCntEffect].col = col;
 			s_aEffect[nCntEffect].nMaxLife = life;
-
+			setmirror = mirror; 
+			s_aEffect[nCntEffect].move.x = 0.0f;
+			s_aEffect[nCntEffect].move.y = 0.0f;
 			switch (nType)
 			{
 			case EFFECTSTATE_SHOOT:
@@ -172,8 +190,20 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 				s_aEffect[nCntEffect].AnimTex.nDivisionY = 7;
 				break;
 			case EFFECTSTATE_GOAL:
-				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
-				s_aEffect[nCntEffect].AnimTex.nDivisionY = 15;
+				s_aEffect[nCntEffect].AnimTex.nDivisionX = 5;
+				s_aEffect[nCntEffect].AnimTex.nDivisionY = 3;
+				Particle = true;
+				Log = pos;
+				if (mirror)
+				{
+					s_aEffect[nCntEffect].move.x = sinf((float)(rand() % 629 - 314) / 100.0f)*5;
+					s_aEffect[nCntEffect].move.y = sinf((float)(rand() % 629 - 314) / 100.0f) * 5;
+				}
+				else
+				{
+					s_aEffect[nCntEffect].move.x = 5.0f;
+					s_aEffect[nCntEffect].move.y = sinf((float)(rand() % 629 - 314) / 100.0f);
+				}
 				break;
 			default:
 				assert(false);

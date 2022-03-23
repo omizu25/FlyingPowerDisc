@@ -284,7 +284,7 @@ void Goal(void)
 			// ポイント数の加算
 			AddPointScore(0, 3);
 		}
-		SetEffect(D3DXVECTOR3(s_disc.pos.x + 30.0f, s_disc.pos.y + 10.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_GOAL, 50, 500.0f, false);
+		SetEffect(D3DXVECTOR3(s_disc.pos.x, s_disc.pos.y, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_GOAL, 100, 50.0f, true);
 		//歓声
 		PlaySound(SOUND_LABEL_KANSEI);
 		// ゲームの状態の設定
@@ -308,6 +308,7 @@ void Goal(void)
 			// ポイント数の加算
 			AddPointScore(1, 3);
 		}
+		SetEffect(D3DXVECTOR3(s_disc.pos.x, s_disc.pos.y, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_GOAL, 100, 50.0f, false);
 		//歓声
 		PlaySound(SOUND_LABEL_KANSEI);
 		// ゲームの状態の設定
