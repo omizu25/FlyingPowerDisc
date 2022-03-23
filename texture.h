@@ -74,14 +74,16 @@ typedef enum
 	TEXTURE_enemy000,			// カピバラ
 	TEXTURE_kitune,				// ゴン
 	TEXTURE_player000,			// スライム
-	TEXTURE_sky_enemy_002,		// 空
+	TEXTURE_ghost,				// ゴースト
 	TEXTURE_zolbak,				// 地面
+
+	/*↓ エフェクト ↓*/
+	TEXTURE_Effect_fire,		// 炎のエフェクト
+	TEXTURE_Effect_spin,		// ディスクのエフェクト
+	TEXTURE_Effect_tackle,		// タックルのエフェクト
 
 	/*↓ その他 ↓*/
 	TEXTURE_Number_0To9,		// 数字
-	TEXTURE_fire,				// 炎のエフェクト
-	TEXTURE_spin,				// ディスクのエフェクト
-	TEXTURE_tackle,				// タックルのエフェクト
 	TEXTURE_goal,
 	TEXTURE_MAX,
 	TEXTURE_NONE,

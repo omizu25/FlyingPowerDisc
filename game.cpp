@@ -72,6 +72,12 @@ void InitGame(void)
 	// プレイヤーの初期化
 	InitPlayer();
 
+	// プレイヤーの設定
+	Player *pPlayer = GetPlayer();
+	SetPlayer(D3DXVECTOR3((float)PLAYER_POS_X + PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, true);
+	pPlayer++;
+	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYER_POS_X - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, false);
+
 	// UIの初期化
 	InitUi();
 

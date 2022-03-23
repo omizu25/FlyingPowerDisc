@@ -31,10 +31,10 @@ const float	MAX_HEIGHT = 125.0f;	// 高さの最大値
 //==================================================
 namespace
 {
-int	nIdxBG;					// 背景の矩形のインデックス
-int	nIdxStage;				// ステージの矩形のインデックス
-int	nIdxSet[MAXPLAYER];		// セット数
-int	nIdxPoint[MAXPLAYER];	// ポイント数
+int	s_nIdxBG;				// 背景の矩形のインデックス
+int	s_nIdxStage;			// ステージの矩形のインデックス
+int	s_nIdxSet[MAXPLAYER];	// セット数
+int	s_nIdxPoint[MAXPLAYER];	// ポイント数
 }// namespaceはここまで
 
 //--------------------------------------------------
@@ -44,56 +44,56 @@ void InitBG(void)
 {
 	{// 背景
 		// 矩形の設定
-		nIdxBG = SetRectangle(TEXTURE_BG);
+		s_nIdxBG = SetRectangle(TEXTURE_BG);
 
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
 
 		// 矩形の位置の設定
-		SetPosRectangle(nIdxBG, pos, size);
+		SetPosRectangle(s_nIdxBG, pos, size);
 	}
 
 	{// ステージ
 		// 矩形の設定
-		nIdxStage = SetRectangle(TEXTURE_Stage01);
+		s_nIdxStage = SetRectangle(TEXTURE_Stage01);
 
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.6f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT * 0.8f, 0.0f);
 
 		// 矩形の位置の設定
-		SetPosRectangle(nIdxStage, pos, size);
+		SetPosRectangle(s_nIdxStage, pos, size);
 	}
 
 	D3DXVECTOR3 size = D3DXVECTOR3(MAX_WIDTH, MAX_HEIGHT, 0.0f);
 
 	{// セット数
 		// 矩形の設定
-		nIdxSet[0] = SetRectangle(TEXTURE_GAME_SetFrame01);
-		nIdxSet[1] = SetRectangle(TEXTURE_GAME_SetFrame02);
+		s_nIdxSet[0] = SetRectangle(TEXTURE_GAME_SetFrame01);
+		s_nIdxSet[1] = SetRectangle(TEXTURE_GAME_SetFrame02);
 
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.1f, 0.0f);
 
 		// 矩形の位置の設定
-		SetPosRectangle(nIdxSet[0], pos, size);
+		SetPosRectangle(s_nIdxSet[0], pos, size);
 
 		pos.x = SCREEN_WIDTH * 0.9f;
 
-		SetPosRectangle(nIdxSet[1], pos, size);
+		SetPosRectangle(s_nIdxSet[1], pos, size);
 	}
 
 	{// ポイント数
 		// 矩形の設定
-		nIdxPoint[0] = SetRectangle(TEXTURE_GAME_PtsFrame01);
-		nIdxPoint[1] = SetRectangle(TEXTURE_GAME_PtsFrame02);
+		s_nIdxPoint[0] = SetRectangle(TEXTURE_GAME_PtsFrame01);
+		s_nIdxPoint[1] = SetRectangle(TEXTURE_GAME_PtsFrame02);
 
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT * 0.1f, 0.0f);
 
 		// 矩形の位置の設定
-		SetPosRectangle(nIdxPoint[0], pos, size);
+		SetPosRectangle(s_nIdxPoint[0], pos, size);
 
 		pos.x = SCREEN_WIDTH * 0.7f;
 
-		SetPosRectangle(nIdxPoint[1], pos, size);
+		SetPosRectangle(s_nIdxPoint[1], pos, size);
 	}
 }
 
@@ -103,7 +103,14 @@ void InitBG(void)
 void UninitBG(void)
 {
 	// 使うのを止める
-	StopUseRectangle(nIdxBG);
+	StopUseRectangle(s_nIdxBG);
+	StopUseRectangle(s_nIdxStage);
+
+	for (int i = 0; i < MAXPLAYER; i++)
+	{
+		StopUseRectangle(s_nIdxSet[i]);
+		StopUseRectangle(s_nIdxPoint[i]);
+	}
 }
 
 //--------------------------------------------------

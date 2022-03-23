@@ -6,36 +6,44 @@
 #==============================================================================
 SCRIPT			# この行は絶対消さないこと！
 
-TEXTURE_FILENAME = data/TEXTURE/PLAYER/kitune.png				# [0]Playerテクスチャ
-TEXTURE_FILENAME = data/TEXTURE/PLAYER/enemy000.png				# [1]Playerテクスチャ
-TEXTURE_FILENAME = data/TEXTURE/PLAYER/player000.png			# [2]Playerテクスチャ
-TEXTURE_FILENAME = data/TEXTURE/PLAYER/zolbak.png				# [3]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/PLAYER/kitune.png			# [0]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/PLAYER/enemy000.png			# [1]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/PLAYER/player000.png		# [2]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/PLAYER/ghost.png			# [3]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/PLAYER/zolbak.png			# [4]Playerテクスチャ
 
 STATUSSET
 
 ATTACKPOW = 5.0
-MOVESPEED = 15.0
+MOVESPEED = 20.0
 
 ENDSET
 
 STATUSSET
 
-ATTACKPOW = 5.0
+ATTACKPOW = 8.0
+MOVESPEED = 12.0
+
+ENDSET
+
+STATUSSET
+
+ATTACKPOW = 10.0
 MOVESPEED = 10.0
 
 ENDSET
 
 STATUSSET
 
-ATTACKPOW = 3.0
-MOVESPEED = 7.0
+ATTACKPOW = 6.0
+MOVESPEED = 14.0
 
 ENDSET
 
 STATUSSET
 
-ATTACKPOW = 2.0
-MOVESPEED = 8.0
+ATTACKPOW = 7.0
+MOVESPEED = 16.0
 
 ENDSET
 

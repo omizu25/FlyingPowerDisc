@@ -22,9 +22,9 @@ static TEXTURE s_aTexture[EFFECTSTATE_MAX];
 //==================================
 void InitEffect(void)
 {
-	s_aTexture[EFFECTSTATE_SPIN] = TEXTURE_spin;
-	s_aTexture[EFFECTSTATE_SHOOT] = TEXTURE_fire;
-	s_aTexture[EFFECTSTATE_TACKLE] = TEXTURE_tackle;
+	s_aTexture[EFFECTSTATE_SPIN] = TEXTURE_Effect_spin;
+	s_aTexture[EFFECTSTATE_SHOOT] = TEXTURE_Effect_fire;
+	s_aTexture[EFFECTSTATE_TACKLE] = TEXTURE_Effect_tackle;
 	s_aTexture[EFFECTSTATE_GOAL] = TEXTURE_goal;
 
 	for (int nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)

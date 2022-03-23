@@ -30,7 +30,7 @@ namespace
 const int	MAX_LIGHT = 2;			// 後光の最大数
 const float	TITLE_WIDTH = 600.0f;	// タイトルの幅
 const float	TITLE_HEIGHT = 600.0f;	// タイトルの高さ
-const float	MENU_WIDTH = 540.0f;	// メニューの幅
+const float	MENU_WIDTH = 300.0f;	// メニューの幅
 const float	MENU_HEIGHT = 80.0f;	// メニューの高さ
 
 typedef enum
@@ -90,7 +90,7 @@ void InitTitle(void)
 	}
 
 	{// ロゴ
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, SCREEN_HEIGHT * 0.5f, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.25f, SCREEN_HEIGHT * 0.5f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(TITLE_WIDTH, TITLE_HEIGHT, 0.0f);
 
 		// 矩形の位置の設定
@@ -103,8 +103,8 @@ void InitTitle(void)
 
 		MenuArgument menu;
 		menu.nNumUse = MENU_MAX;
-		menu.fLeft = 0.0f;
-		menu.fRight = SCREEN_WIDTH * 0.5f;
+		menu.fLeft = SCREEN_WIDTH * 0.55f;
+		menu.fRight = SCREEN_WIDTH * 0.95f;
 		menu.fTop = 0.0f;
 		menu.fBottom = SCREEN_HEIGHT;
 		menu.fWidth = MENU_WIDTH;
@@ -118,8 +118,8 @@ void InitTitle(void)
 		menu.texture[MENU_TUTORIAL] = TEXTURE_Tutorial_Start;
 
 		FrameArgument Frame;
-		Frame.bUse = false;
-		Frame.col = GetColor(COLOR_WHITE);
+		Frame.bUse = true;
+		Frame.col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f);
 		Frame.texture = TEXTURE_NONE;
 
 		// メニューの設定

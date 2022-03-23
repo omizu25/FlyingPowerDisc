@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define MAXPLAYERTYPE (4)//Type最大数
+#define MAXPLAYERTYPE (5)//Type最大数
 #define MOVESPEED (5.0f)
 #define DEAD_ZONE	(0.1f)		// スティックの遊び
 #define MAX_DIVECOUNT (15)		// ダイブの硬直時間
@@ -25,7 +25,6 @@
 #define DISC_SPEED_X (2.0f)		// ディスクのXの速さ
 #define DISC_SPEED_Y (5.0f)		// ディスクのYの速さ
 #define TACKLESIZE (50.0f)		//タックルの当たり判定
-#define START_POS_X (20.0f)		// スタート位置、調整用
 #define LIMIT_POS_Y (140.0f)	// 移動制限の上壁
 
 //スタティック変数///スタティックをヘッタに使うなよ？
@@ -69,10 +68,6 @@ void InitPlayer(void)
 		// 矩形の設定
 		s_Player[count].nIdx = SetRectangleWithTex(s_pTexturePlayer[s_Player[count].nType]);
 	}
-
-	SetPlayer(D3DXVECTOR3((float)START_POS_X + PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), s_Player[0].nType, true);
-	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - START_POS_X - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), s_Player[1].nType, false);
-	
 }
 
 //===================
@@ -655,13 +650,13 @@ static void UpdateNormal(void)
 		s_Player[count].pos.y += s_Player[count].move.y;
 
 		//壁---------------------------------------------------
-		if (s_Player[count].pos.x <= START_POS_X + pPlayer->fwidth)
+		if (s_Player[count].pos.x <= PLAYER_POS_X + pPlayer->fwidth)
 		{//横壁（左）
-			s_Player[count].pos.x = START_POS_X + pPlayer->fwidth;
+			s_Player[count].pos.x = PLAYER_POS_X + pPlayer->fwidth;
 		}
-		else if (s_Player[count].pos.x >= SCREEN_WIDTH - START_POS_X - pPlayer->fwidth)
+		else if (s_Player[count].pos.x >= SCREEN_WIDTH - PLAYER_POS_X - pPlayer->fwidth)
 		{//横壁（右）
-			s_Player[count].pos.x = SCREEN_WIDTH - START_POS_X - pPlayer->fwidth;
+			s_Player[count].pos.x = SCREEN_WIDTH - PLAYER_POS_X - pPlayer->fwidth;
 		}
 		if (s_Player[count].pos.y <= LIMIT_POS_Y + pPlayer->fheight / 2.0f+ WALLSIZ_Y /2)
 		{//上壁　
@@ -672,13 +667,13 @@ static void UpdateNormal(void)
 			s_Player[count].pos.y = SCREEN_HEIGHT - pPlayer->fheight / 2.0f - WALLSIZ_Y / 2;
 		}
 		//真ん中ライン
-		if (s_Player[0].pos.x >= SCREEN_WIDTH* 0.5f - START_POS_X - pPlayer->fwidth / 2.0f)
+		if (s_Player[0].pos.x >= SCREEN_WIDTH* 0.5f - PLAYER_POS_X - pPlayer->fwidth / 2.0f)
 		{
-			s_Player[0].pos.x = SCREEN_WIDTH* 0.5f - START_POS_X - pPlayer->fwidth / 2.0f;
+			s_Player[0].pos.x = SCREEN_WIDTH* 0.5f - PLAYER_POS_X - pPlayer->fwidth / 2.0f;
 		}
-		if (s_Player[1].pos.x <= SCREEN_WIDTH * 0.5f + START_POS_X + pPlayer->fwidth / 2.0f)
+		if (s_Player[1].pos.x <= SCREEN_WIDTH * 0.5f + PLAYER_POS_X + pPlayer->fwidth / 2.0f)
 		{
-			s_Player[1].pos.x = SCREEN_WIDTH * 0.5f + START_POS_X + pPlayer->fwidth / 2.0f;
+			s_Player[1].pos.x = SCREEN_WIDTH * 0.5f + PLAYER_POS_X + pPlayer->fwidth / 2.0f;
 		}
 		//skill使用可能な時のエフェクト
 		if (s_Player[count].bSkill)
@@ -708,11 +703,11 @@ static void UpdateReset(void)
 		switch (nPlayerNo)
 		{
 		case 0:
-			posDest = D3DXVECTOR3(PLAYERSIZE_X + START_POS_X, SCREEN_HEIGHT * 0.6f, 0.0f);
+			posDest = D3DXVECTOR3(PLAYERSIZE_X + PLAYER_POS_X, SCREEN_HEIGHT * 0.6f, 0.0f);
 			break;
 
 		case 1:
-			posDest = D3DXVECTOR3(SCREEN_WIDTH - PLAYERSIZE_X - START_POS_X, SCREEN_HEIGHT * 0.6f, 0.0f);
+			posDest = D3DXVECTOR3(SCREEN_WIDTH - PLAYERSIZE_X - PLAYER_POS_X, SCREEN_HEIGHT * 0.6f, 0.0f);
 			break;
 		
 		default:
