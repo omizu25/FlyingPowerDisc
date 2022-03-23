@@ -74,6 +74,7 @@ typedef enum
 	TEXTURE_Number_0To9,		// 数字
 	TEXTURE_fire,				// 炎のエフェクト
 	TEXTURE_spin,				// ディスクのエフェクト
+	TEXTURE_tackle,				// タックルのエフェクト
 	TEXTURE_MAX,
 	TEXTURE_NONE,
 }TEXTURE;
