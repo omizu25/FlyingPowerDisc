@@ -173,7 +173,7 @@ void UninitGame(void)
 //--------------------------------------------------
 void UpdateGame(void)
 {
-	if (GetKeyboardTrigger(DIK_P))
+	if (GetKeyboardTrigger(DIK_P) || GetJoypadTrigger(JOYKEY_START))
 	{// PƒL[‚ª‰Ÿ‚³‚ê‚½
 		if (s_gameState == GAMESTATE_NORMAL)
 		{// ’Êíó‘Ô‚Ì

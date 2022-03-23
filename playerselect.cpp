@@ -218,7 +218,7 @@ void UpdateCharacter(void)
 	{
 		Player*player = GetPlayer();
 
-		if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
+		if (GetKeyboardTrigger(DIK_S) || GetJoypadIdxTrigger(JOYKEY_DOWN, 0))
 		{//Sキーが押されたとき
 		 //数値の減算
 			player->nType++;
@@ -229,7 +229,7 @@ void UpdateCharacter(void)
 			}
 		}
 
-		if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP))
+		if (GetKeyboardTrigger(DIK_W) || GetJoypadIdxTrigger(JOYKEY_UP, 0))
 		{//Wキーが押されたとき
 		 //数値の加算
 			player->nType--;
@@ -254,7 +254,7 @@ void UpdateCharacter(void)
 	{	
 		Player*player = GetPlayer();
 		player++;
-		if (GetKeyboardTrigger(DIK_NUMPAD2) || GetJoypadTrigger(JOYKEY_DOWN))
+		if (GetKeyboardTrigger(DIK_NUMPAD2) || GetJoypadIdxTrigger(JOYKEY_DOWN, 1))
 		{//Sキーが押されたとき
 		 //数値の減算
 			player->nType++;
@@ -264,7 +264,7 @@ void UpdateCharacter(void)
 			}
 		}
 
-		if (GetKeyboardTrigger(DIK_NUMPAD5) || GetJoypadTrigger(JOYKEY_UP))
+		if (GetKeyboardTrigger(DIK_NUMPAD5) || GetJoypadIdxTrigger(JOYKEY_UP, 1))
 		{//Wキーが押されたとき
 		 //数値の加算
 			player->nType--;
@@ -286,8 +286,10 @@ void UpdateCharacter(void)
 		ChangePosCursor(s_nIdxCursor[1], s_nSelect[1]);
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN))
-	{	//ゲーム選択画面行く
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
+	{//決定キー(ENTERキー)が押されたかどうか
+		//ゲーム選択画面行く
 		ChangeMode(MODE_TITLE);
 	}
 

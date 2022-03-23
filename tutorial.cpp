@@ -93,8 +93,9 @@ void UninitTutorial(void)
 //====================================
 void UpdateTutorial(void)
 {
-	if (GetKeyboardTrigger(DIK_RETURN) == true)
-	{//ENTERキーが押された
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
+	{//決定キー(ENTERキー)が押されたかどうか
 	 //フェードの取得処理
 		FADE p_fade = GetFade();
 		if (p_fade == FADE_NONE)
