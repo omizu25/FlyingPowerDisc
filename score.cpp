@@ -18,6 +18,7 @@
 #include "time.h"
 #include "ui.h"
 #include "game.h"
+#include "result.h"
 
 #include <assert.h>
 
@@ -88,9 +89,8 @@ void InitScore(void)
 		}
 
 		// 数の設定
-		s_nSetIdx[nPlayerNo] = SetNumber(posSet, size, color, s_nSet[nPlayerNo]);
-		s_nPointIdx[nPlayerNo] = SetNumber(posPoint, size, color, s_nPoint[nPlayerNo]);
-
+		s_nSetIdx[nPlayerNo] = SetNumber(posSet, size, GetColor(COLOR_BLACK), s_nSet[nPlayerNo]);
+		s_nPointIdx[nPlayerNo] = SetNumber(posPoint, size, GetColor(COLOR_BLACK), s_nPoint[nPlayerNo]);
 
 		int nDigit = DigitNumber(s_nPoint[nPlayerNo]);
 		D3DXVECTOR3 posUI = D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 200.0f + (nPlayerNo * 600.0f) + (NUMBER_UI_WIDTH * (nDigit * 0.5f)), 450.0f, 0.0f);
@@ -134,10 +134,33 @@ void UpdateScore(void)
 			// セット数の加算
 			AddSetScore(nPlayerNo, 1);
 		}
+
 		if (s_nSet[nPlayerNo] >= GetSetRule())
 		{// セット数が指定の値を越えた
-			// モードの変更
-			ChangeMode(MODE_TITLE);
+
+			switch (nPlayerNo)
+			{// リザルトの勝敗の設定
+			case 0:
+				SetResult(0, true);
+				SetResult(1, false);
+				break;
+
+			case 1:
+				SetResult(0, false);
+				SetResult(1, true);
+				break;
+
+			default:
+				assert(false);
+				break;
+			}
+
+			// リザルトの描画するかどうか
+			SetDrawResult(true);
+
+			// ゲームの状態の設定
+			SetGameState(GAMESTATE_RESULT);
+
 			s_nCntSet = 0;
 		}
 	}
@@ -204,6 +227,11 @@ void AddSetScore(int nPlayerNo, int nValue)
 
 	// 数の変更
 	ChangeNumber(s_nSetIdx[nPlayerNo], s_nSet[nPlayerNo]);
+
+	if (s_nSet[nPlayerNo] >= GetSetRule())
+	{// セット数が指定の値を越えた
+		return;
+	}
 
 	switch (s_nCntSet)
 	{// セット数に応じて表示する
