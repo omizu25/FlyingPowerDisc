@@ -62,6 +62,11 @@ LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
 int s_nIdxBG;
 int s_nIdxMenu;
 
+//------------------------------
+// プロトタイプ宣言
+//------------------------------
+static void ChangeGauge(void);
+
 //============================
 // キャラ選択画面の初期化
 //============================
@@ -206,6 +211,8 @@ void UpdateCharacter(void)
 		s_nSelect[0] = player->nType;
 		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
+
+		ChangeGauge();
 	}
 
 	{	
@@ -235,6 +242,8 @@ void UpdateCharacter(void)
 		s_nSelect[1] = player->nType;
 		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
+
+		ChangeGauge();
 	}
 
 	if (GetKeyboardTrigger(DIK_RETURN))
@@ -333,3 +342,32 @@ void LoadFileSet(char *Filename)
 	}
 }
 
+//----------------------------
+//ゲージの変更
+//----------------------------
+static void ChangeGauge(void)
+{
+	float fHeight = GAUGE_HEIGHT * s_status[s_nSelect[0]].fPower;
+	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+
+	// ゲージの減少
+	SubGauge(s_nIdxPower[0], pos, GAUGE_WIDTH, fHeight);
+
+	fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
+	pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+
+	// ゲージの設定
+	SubGauge(s_nIdxSpeed[0], pos, GAUGE_WIDTH, fHeight);
+
+	fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
+	pos = D3DXVECTOR3(SCREEN_WIDTH * 0.875f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+
+	// ゲージの設定
+	SubGauge(s_nIdxPower[1], pos, GAUGE_WIDTH, fHeight);
+
+	fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
+	pos = D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+
+	// ゲージの設定
+	SubGauge(s_nIdxSpeed[1], pos, GAUGE_WIDTH, fHeight);
+}

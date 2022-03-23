@@ -48,8 +48,10 @@ int SetGauge(D3DXVECTOR3 pos, D3DXCOLOR col, float fWidth, float fHeight);
 //--------------------------------------------------
 // 減少
 // 引数1  : int nIdx / 配列のインデックス
-// 引数2  : float fWidth / 幅
+// 引数2  : D3DXVECTOR3 pos / 位置
+// 引数3  : float fWidth / 幅
+// 引数4  : float fHeight / 高さ
 //--------------------------------------------------
-void SubGauge(int nIdx, float fWidth);
+void SubGauge(int nIdx, D3DXVECTOR3 pos, float fWidth, float fHeight);
 
 #endif // !_GAUGE_H_

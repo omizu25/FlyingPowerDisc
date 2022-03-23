@@ -125,12 +125,13 @@ int SetGauge(D3DXVECTOR3 pos, D3DXCOLOR col, float fWidth, float fHeight)
 //--------------------------------------------------
 // Œ¸­
 //--------------------------------------------------
-void SubGauge(int nIdx, float fWidth, float fHeight)
+void SubGauge(int nIdx, D3DXVECTOR3 pos, float fWidth, float fHeight)
 {
 	assert(nIdx >= 0 && nIdx < MAX_GAUGE);
 
 	Gauge *pGauge = &s_gauge[nIdx];
 
+	pGauge->pos = pos;
 	pGauge->fWidth = fWidth;
 	pGauge->fHeight = fHeight;
 	pGauge->fWidthDest = fWidth;
