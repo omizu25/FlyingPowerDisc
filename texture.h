@@ -82,6 +82,7 @@ typedef enum
 	TEXTURE_fire,				// 炎のエフェクト
 	TEXTURE_spin,				// ディスクのエフェクト
 	TEXTURE_tackle,				// タックルのエフェクト
+	TEXTURE_goal,
 	TEXTURE_MAX,
 	TEXTURE_NONE,
 }TEXTURE;

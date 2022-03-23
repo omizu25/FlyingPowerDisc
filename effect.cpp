@@ -25,6 +25,7 @@ void InitEffect(void)
 	s_aTexture[EFFECTSTATE_SPIN] = TEXTURE_spin;
 	s_aTexture[EFFECTSTATE_SHOOT] = TEXTURE_fire;
 	s_aTexture[EFFECTSTATE_TACKLE] = TEXTURE_tackle;
+	s_aTexture[EFFECTSTATE_GOAL] = TEXTURE_goal;
 
 	for (int nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
 	{
@@ -169,6 +170,10 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 			case EFFECTSTATE_TACKLE:
 				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
 				s_aEffect[nCntEffect].AnimTex.nDivisionY = 7;
+				break;
+			case EFFECTSTATE_GOAL:
+				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
+				s_aEffect[nCntEffect].AnimTex.nDivisionY = 15;
 				break;
 			default:
 				assert(false);

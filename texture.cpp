@@ -90,6 +90,7 @@ const char *s_FileName[] =
 	"data/TEXTURE/fire.png",					// 炎のエフェクト
 	"data/TEXTURE/spin.png",					// ディスクのエフェクト
 	"data/TEXTURE/tackle.png",					// タックルのエフェクト
+	"data/TEXTURE/go-ru.png",					// ゴールのエフェクト
 };
 }// namespaceはここまで
 
