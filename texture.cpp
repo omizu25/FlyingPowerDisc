@@ -82,6 +82,7 @@ const char *s_FileName[] =
 	"data/TEXTURE/Number_0To9.png",			// 数字
 	"data/TEXTURE/fire.png",				// 炎のエフェクト
 	"data/TEXTURE/spin.png",				// ディスクのエフェクト
+	"data/TEXTURE/tackle.png",				//tackleエフェクト
 };
 }// namespaceはここまで
 
