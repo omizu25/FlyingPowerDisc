@@ -11,6 +11,7 @@
 #define PLAYERSIZE_X (100)//サイズ
 #define PLAYERSIZE_Y (100)//サイズ
 #define MAXPLAYER (2)//登場最大数
+#define PLAYER_POS_X (20.0f)//スタート位置、調整用
 
 
 typedef enum

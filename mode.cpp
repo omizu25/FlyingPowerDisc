@@ -203,6 +203,7 @@ void SetMode(void)
 		break;
 
 	case MODE_RULE:		// ƒ‹[ƒ‹
+		LoadRule();
 		InitRule();
 
 		// ƒ‹[ƒ‹‘I‘ğ‰æ–Ê‚Ìİ’è

@@ -82,7 +82,7 @@ const char *s_FileName[] =
 	"data/TEXTURE/PLAYER/enemy000.png",			// カピバラ
 	"data/TEXTURE/PLAYER/kitune.png",			// ゴン
 	"data/TEXTURE/PLAYER/player000.png",		// スライム
-	"data/TEXTURE/PLAYER/sky_enemy_002.png",	// 空
+	"data/TEXTURE/PLAYER/ghost.png",			// ゴースト
 	"data/TEXTURE/PLAYER/zolbak.png",			// 地面
 
 	/*↓ その他 ↓*/

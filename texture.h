@@ -74,7 +74,7 @@ typedef enum
 	TEXTURE_enemy000,			// カピバラ
 	TEXTURE_kitune,				// ゴン
 	TEXTURE_player000,			// スライム
-	TEXTURE_sky_enemy_002,		// 空
+	TEXTURE_ghost,				// ゴースト
 	TEXTURE_zolbak,				// 地面
 
 	/*↓ その他 ↓*/

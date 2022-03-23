@@ -23,6 +23,7 @@
  // マクロ定義
  //------------------------------
 #define MAX_CHARACTER	(5)					//キャラの最大数
+#define START_POS_X		(50.0f)				//スタート位置、調整用
 
  //------------------------------
  // 列挙型
@@ -32,7 +33,7 @@ typedef enum
 	MENU_FOX = 0,	// キツネ
 	MENU_CAPYBARA,	// カピバラ
 	MENU_SLIME,		// スライム
-	MENU_EMPTY,		// 空
+	MENU_GHOST,		// ゴースト
 	MENU_GROUND,	// 地面
 	MENU_MAX
 }MENU;
@@ -40,7 +41,7 @@ typedef enum
  //------------------------------
  // スタティック変数
  //------------------------------
-int s_nSelect;
+int s_nSelect[MAXPLAYER];
 LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
 int s_nIdxBG;
 int s_nIdxMenu;
@@ -69,8 +70,13 @@ void InitCharacter(void)
 	//Player
 	InitPlayer();
 
-	SetPlayer(D3DXVECTOR3((float)PLAYERSIZE_X , (float)SCREEN_HEIGHT * 0.6f, 0.0f), 0, true);
-	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), 1, false);
+	Player *pPlayer = GetPlayer();
+
+	SetPlayer(D3DXVECTOR3(START_POS_X + PLAYERSIZE_X , SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, true);
+
+	pPlayer++;
+
+	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - START_POS_X - PLAYERSIZE_X, SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, false);
 
 	{// メニュー
 		// メニューの初期化
@@ -89,7 +95,7 @@ void InitCharacter(void)
 		menu.texture[MENU_FOX] = TEXTURE_kitune;
 		menu.texture[MENU_CAPYBARA] = TEXTURE_enemy000;
 		menu.texture[MENU_SLIME] = TEXTURE_player000;
-		menu.texture[MENU_EMPTY] = TEXTURE_sky_enemy_002;
+		menu.texture[MENU_GHOST] = TEXTURE_ghost;
 		menu.texture[MENU_GROUND] = TEXTURE_zolbak;
 
 		FrameArgument Frame;
