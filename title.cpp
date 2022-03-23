@@ -40,13 +40,14 @@ const float	MAX_ROTATION = 0.003f;	// 回転の最大値
 const float	DECREASE_SIZE = 0.6f;	// サイズの減少割合
 const float	DECREASE_SPEED = 0.5f;	// 速度の減少割合
 const float	MENU_WIDTH = 540.0f;	// メニューの幅
-const float	MENU_HEIGHT = 150.0f;	// メニューの高さ
+const float	MENU_HEIGHT = 80.0f;	// メニューの高さ
 
 typedef enum
 {
 	MENU_GAME = 0,	// ゲーム
 	MENU_RULE,		// ルール
 	MENU_PLAYER,	// プレイヤー選択
+	MENU_TUTORIAL,	// チュートリアル
 	MENU_MAX
 }MENU;
 
@@ -116,7 +117,7 @@ void InitTitle(void)
 	}
 
 	{// ロゴ
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, TITLE_POS_Y, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(TITLE_WIDTH, TITLE_HEIGHT, 0.0f);
 
 		// 矩形の位置の設定
@@ -124,7 +125,7 @@ void InitTitle(void)
 	}
 
 	{// 後光
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, TITLE_POS_Y, 0.0f);
 
 		for (int i = 0; i < MAX_LIGHT; i++)
 		{
@@ -162,17 +163,18 @@ void InitTitle(void)
 
 		MenuArgument menu;
 		menu.nNumUse = MENU_MAX;
-		menu.fLeft = SCREEN_WIDTH * 0.25f;
-		menu.fRight = SCREEN_WIDTH * 0.75f;
-		menu.fTop = SCREEN_HEIGHT * 0.5f;
+		menu.fLeft = 0.0f;
+		menu.fRight = SCREEN_WIDTH * 0.5f;
+		menu.fTop = 0.0f;
 		menu.fBottom = SCREEN_HEIGHT;
 		menu.fWidth = MENU_WIDTH;
 		menu.fHeight = MENU_HEIGHT;
 		menu.bSort = true;
 
 		menu.texture[MENU_GAME] = TEXTURE_Game_Start;
-		menu.texture[MENU_RULE] = menu.texture[MENU_GAME];
-		menu.texture[MENU_PLAYER] = menu.texture[MENU_GAME];
+		menu.texture[MENU_RULE] = TEXTURE_Rule_Select;
+		menu.texture[MENU_PLAYER] = TEXTURE_Char_Select;
+		menu.texture[MENU_TUTORIAL] = TEXTURE_Char_Select;
 
 		FrameArgument Frame;
 		Frame.bUse = false;
@@ -242,7 +244,7 @@ void UpdateLight(void)
 {
 	s_nFlashTime++;
 
-	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, TITLE_POS_Y, 0.0f);
+	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, TITLE_POS_Y, 0.0f);
 	float fCurve = sinf((s_nFlashTime * CHANGE_SPEED) * (D3DX_PI * 2.0f));
 
 	for (int i = 0; i < MAX_LIGHT; i++)
@@ -313,6 +315,10 @@ void Input(void)
 
 		case MENU_PLAYER:	// プレイヤー選択
 			ChangeMode(MODE_PLAYER);
+			break;
+
+		case MENU_TUTORIAL:	// チュートリアル
+			ChangeMode(MODE_TUTORIAL);
 			break;
 
 		default:

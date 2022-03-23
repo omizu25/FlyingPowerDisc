@@ -209,22 +209,22 @@ void AddSetScore(int nPlayerNo, int nValue)
 	{// セット数に応じて表示する
 	case 0:
 		// セット数の表示
-		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 5);
+		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 150.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 5);
 		break;
 
 	case 1:
 		// セット数の表示
-		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 6);
+		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 150.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 6);
 		break;
 
 	case 2:
 		// セット数の表示
-		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 7);
+		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 150.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 7);
 		break;
 
 	case 3:
 		// セット数の表示
-		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 8);
+		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 150.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 8);
 		break;
 
 	default:
@@ -253,22 +253,22 @@ void AllAddSetScore(int nValue)
 	{// セット数に応じて表示する
 	case 0:
 		// セット数の表示
-		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 5);
+		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 150.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 5);
 		break;
 
 	case 1:
 		// セット数の表示
-		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 6);
+		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 150.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 6);
 		break;
 
 	case 2:
 		// セット数の表示
-		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 7);
+		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 150.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 7);
 		break;
 
 	case 3:
 		// セット数の表示
-		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 8);
+		SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 150.0f, 4, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 8);
 		break;
 
 	default:

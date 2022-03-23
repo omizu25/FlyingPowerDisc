@@ -17,6 +17,7 @@ typedef enum
 	MODE_RULE,		// ルール
 	MODE_GAME,		// ゲーム
 	MODE_PLAYER,	// プレイヤー選択
+	MODE_TUTORIAL,	// チュートリアル
 	MODE_MAX,
 	MODE_NONE
 }MODE;

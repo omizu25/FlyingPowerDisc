@@ -95,7 +95,7 @@ void InitGame(void)
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 450.0f, 0.0f), 150.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f),2);
 	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.8f, 650.0f, 0.0f), 150.0f, 60.0f, 3, D3DXVECTOR3(0.0f, 1.0f, 0.0f),3);
 	// セット数																							
-	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 100.0f,4, D3DXVECTOR3(1.0f, 0.0f, 0.0f),4);
+	SetUi(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 400.0f, 0.0f), 400.0f, 150.0f,4, D3DXVECTOR3(1.0f, 0.0f, 0.0f),4);
 	
 	//サウンド開始
 	PlaySound(SOUND_LABEL_BGM);
@@ -162,15 +162,18 @@ void UpdateGame(void)
 {
 	if (GetKeyboardTrigger(DIK_P))
 	{// Pキーが押された
-		// ポーズのリセット
-		ResetPause();
+		if (s_gameState == GAMESTATE_NORMAL)
+		{// 通常状態の時
+			// ポーズのリセット
+			ResetPause();
 
-		s_bPause = !s_bPause;
+			s_bPause = !s_bPause;
 
-		if (s_bPause)
-		{// ポーズしている
-			// メニューの設定
-			SetPause();
+			if (s_bPause)
+			{// ポーズしている
+				// メニューの設定
+				SetPause();
+			}
 		}
 	}
 
@@ -213,9 +216,6 @@ void DrawGame(void)
 {
 	// 矩形の描画
 	DrawRectangle();
-
-	// かべの描画
-	//DrawWall();
 
 	// タイムの描画
 	DrawTime();
