@@ -78,11 +78,13 @@ const char *s_FileName[] =
 	"data/TEXTURE/RESULT/Lose.png",			// 敗北
 	"data/TEXTURE/RESULT/Draw.png",			// 引き分け
 
+	/*↓ エフェクト ↓*/
+	"data/TEXTURE/EFFECT/fire.png",			// 炎のエフェクト
+	"data/TEXTURE/EFFECT/spin.png",			// ディスクのエフェクト
+	"data/TEXTURE/EFFECT/tackle.png",		// タックルのエフェクト
+
 	/*↓ その他 ↓*/
 	"data/TEXTURE/Number_0To9.png",			// 数字
-	"data/TEXTURE/fire.png",				// 炎のエフェクト
-	"data/TEXTURE/spin.png",				// ディスクのエフェクト
-	"data/TEXTURE/tackle.png",				//tackleエフェクト
 };
 }// namespaceはここまで
 
