@@ -23,13 +23,13 @@ const char *s_FileName[] =
 	/*↓ タイトル ↓*/
 	"data/TEXTURE/TITLE/BG.png",			// タイトル画面の背景
 	"data/TEXTURE/TITLE/Frame.png",			// タイトル画面の枠
-	"data/TEXTURE/TITLE/Title_blue.png",	// タイトルロゴ
+	"data/TEXTURE/TITLE/Title_Rogo.png",	// タイトルロゴ
 	"data/TEXTURE/TITLE/TitleLight_red.png",// タイトルロゴの後光
 	"data/TEXTURE/TITLE/Game_Start.png",	// ゲームスタートの文字
 	"data/TEXTURE/TITLE/Rule_Select.png",	// ルール選択の文字
 	"data/TEXTURE/TITLE/Map_Select.png",	// マップ選択の文字
 	"data/TEXTURE/TITLE/Char_Select.png",	// キャラ選択の文字
-	"data/TEXTURE/TITLE/Tutorial_Start.png",// ゲームスタートの文字
+	"data/TEXTURE/TITLE/Tutorial_Start.png",// チュートリアルの文字
 	"data/TEXTURE/TITLE/ThreePoints.png",	// 3ポイント
 	"data/TEXTURE/TITLE/FivrPoints.png",	// 5ポイント
 
