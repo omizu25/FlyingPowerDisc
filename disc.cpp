@@ -180,11 +180,11 @@ void UpdateStart(void)
 	switch (s_nPossPlayer)
 	{
 	case 0:
-		posDest.x += PLAYERSIZE_X * 0.5f;
+		posDest.x += PLAYERSIZE * 0.5f;
 		break;
 		
 	case 1:
-		posDest.x += -PLAYERSIZE_X * 0.5f;
+		posDest.x += -PLAYERSIZE * 0.5f;
 		break;
 
 	default:

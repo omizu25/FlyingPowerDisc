@@ -74,9 +74,9 @@ void InitGame(void)
 
 	// ƒvƒŒƒCƒ„[‚Ìİ’è
 	Player *pPlayer = GetPlayer();
-	SetPlayer(D3DXVECTOR3((float)PLAYER_POS_X + PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, true);
+	SetPlayer(D3DXVECTOR3((float)PLAYER_POS_X + PLAYERSIZE, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, true, PLAYERSIZE);
 	pPlayer++;
-	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYER_POS_X - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, false);
+	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYER_POS_X - PLAYERSIZE, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, false, PLAYERSIZE);
 
 	// UI‚Ì‰Šú‰»
 	InitUi();

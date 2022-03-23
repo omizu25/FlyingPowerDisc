@@ -8,8 +8,8 @@
 #include"disc.h"
 
 #define PLAYERMOVE (50)  //ループの幅
-#define PLAYERSIZE_X (100)//サイズ
-#define PLAYERSIZE_Y (100)//サイズ
+#define PLAYERSIZE (100)//サイズ
+//#define PLAYERSIZ (100)//サイズ
 #define MAXPLAYER (2)//登場最大数
 #define PLAYER_POS_X (20.0f)//スタート位置、調整用
 
@@ -39,6 +39,7 @@ typedef struct
 	int nType;					//タイプ
 	int nIdx;					//矩形のインデックス
 	int nSkillCount;
+	int nSkilltimerCount;
 	int nDiveCount;				//タックルの硬直時間
 	int nHaveCount;				//もってる時間
 	float fheight;				//高さ
@@ -56,7 +57,7 @@ void InitPlayer(void);
 void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
-void SetPlayer(D3DXVECTOR3 pos, int nType, bool light);
+void SetPlayer(D3DXVECTOR3 pos, int nType, bool light,float siz);
 bool CollisionPlayer(Disc *pDisc, float Size,int number);
 
 void MovePlayer(void);
