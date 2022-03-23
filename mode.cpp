@@ -11,6 +11,7 @@
 #include "fade.h"
 #include "game.h"
 #include "mode.h"
+#include "map.h"
 #include "title.h"
 #include "rule.h"
 #include "playerselect.h"
@@ -43,6 +44,9 @@ void UninitMode(void)
 	// タイトルの終了
 	UninitTitle();
 
+	//マップ選択の終了
+	UninitMap();
+
 	// ゲームの終了
 	UninitGame();
 
@@ -71,6 +75,7 @@ void UpdateMode(void)
 		break;
 
 	case MODE_MAP:		// マップ
+		UpdateMap();
 		break;
 
 	case MODE_RULE:		// ルール
@@ -111,6 +116,7 @@ void DrawMode(void)
 		break;
 
 	case MODE_MAP:		// マップ
+		DrawMap();
 		break;
 
 	case MODE_RULE:		// ルール
@@ -166,6 +172,7 @@ void SetMode(void)
 		break;
 
 	case MODE_MAP:		// マップ
+		UninitMap();
 		break;
 
 	case MODE_RULE:		// ルール
@@ -200,6 +207,11 @@ void SetMode(void)
 		break;
 
 	case MODE_MAP:		// マップ
+		InitMap();
+		SetBGMap(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+		SetMap(D3DXVECTOR3(200.0f, 300.0f, 0.0f));
+		SetMap(D3DXVECTOR3(600.0f, 300.0f, 0.0f));
+		SetMap(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
 		break;
 
 	case MODE_RULE:		// ルール

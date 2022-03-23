@@ -163,6 +163,7 @@
     <ClCompile Include="gauge.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="mode.cpp" />
     <ClCompile Include="number.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="gauge.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="mode.h" />
     <ClInclude Include="number.h" />
