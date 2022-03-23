@@ -138,21 +138,20 @@ void UpdateScore(void)
 		if (s_nSet[nPlayerNo] >= GetSetRule())
 		{// セット数が指定の値を越えた
 
-			switch (nPlayerNo)
-			{// リザルトの勝敗の設定
-			case 0:
-				SetResult(0, true);
-				SetResult(1, false);
-				break;
-
-			case 1:
-				SetResult(0, false);
-				SetResult(1, true);
-				break;
-
-			default:
-				assert(false);
-				break;
+			if (s_nSet[0] == s_nSet[1])
+			{// 引き分け
+				SetResult(0, RESULT_DRAW);
+				SetResult(1, RESULT_DRAW);
+			}
+			else if (s_nSet[0] > s_nSet[1])
+			{// 1Pの勝ち
+				SetResult(0, RESULT_WIN);
+				SetResult(1, RESULT_LOSE);
+			}
+			else if (s_nSet[0] > s_nSet[1])
+			{// 2Pの勝ち
+				SetResult(0, RESULT_LOSE);
+				SetResult(1, RESULT_WIN);
 			}
 
 			// リザルトの描画するかどうか
@@ -275,6 +274,14 @@ void AllAddSetScore(int nValue)
 
 		// 数の変更
 		ChangeNumber(s_nSetIdx[nPlayerNo], s_nSet[nPlayerNo]);
+	}
+
+	for (int nPlayerNo = 0; nPlayerNo < MAXPLAYER; nPlayerNo++)
+	{
+		if (s_nSet[nPlayerNo] >= GetSetRule())
+		{// セット数が指定の値を越えた
+			return;
+		}
 	}
 
 	switch (s_nCntSet)

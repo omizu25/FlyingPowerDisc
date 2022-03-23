@@ -247,7 +247,7 @@ void UpdateNormal(void)
 	if (s_disc.nEffect % EFFECT_TIME == 0)
 	{// 一定間隔
 		// エフェクトの設定
-		SetEffect(s_disc.pos, GetColor(COLOR_WHITE), EFFECTSTATE_SPIN, 30, 100.0f);
+		SetEffect(s_disc.pos, GetColor(COLOR_WHITE), EFFECTSTATE_SPIN, 30, 100.0f, false);
 	}
 	
 	// プレイヤーとディスクの当たり判定

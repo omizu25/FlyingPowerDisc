@@ -24,6 +24,7 @@ void InitEffect(void)
 {
 	s_aTexture[EFFECTSTATE_SPIN] = TEXTURE_spin;
 	s_aTexture[EFFECTSTATE_SHOOT] = TEXTURE_fire;
+	s_aTexture[EFFECTSTATE_TACKLE] = TEXTURE_tackle;
 
 	for (int nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
 	{
@@ -96,7 +97,7 @@ void UpdateEffect(void)
 			SetTex2d(pVtx, (1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionX)*s_aEffect[nCntEffect].AnimTex.nPatternX
 				, (1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionX)* (s_aEffect[nCntEffect].AnimTex.nPatternX + 1)
 				, 1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionY*s_aEffect[nCntEffect].AnimTex.nPatternY
-				, 1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionY*(s_aEffect[nCntEffect].AnimTex.nPatternY + 1));
+				, 1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionY*(s_aEffect[nCntEffect].AnimTex.nPatternY + 1), s_aEffect[nCntEffect].mirror);
 
 			//頂点カラーの設定
 			pVtx[0].col = s_aEffect[nCntEffect].col;
@@ -118,7 +119,7 @@ void DrawEffect(void)
 //==================================
 //セット　引数　座標、色、使いたいタイプ、寿命、サイズ
 //==================================
-void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, float size)
+void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, float size, bool mirror)
 {
 	assert(nType >= 0 && nType < EFFECTSTATE_MAX);
 
@@ -131,6 +132,7 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 		if (!s_aEffect[nCntEffect].bUse)
 		{
 			//敵が使用されてない場合
+			s_aEffect[nCntEffect].mirror = mirror;
 			s_aEffect[nCntEffect].fRadeius = size;
 			s_aEffect[nCntEffect].pos.x = pos.x;
 			s_aEffect[nCntEffect].pos.y = pos.y;
@@ -164,6 +166,10 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 				s_aEffect[nCntEffect].AnimTex.nDivisionX = 5;
 				s_aEffect[nCntEffect].AnimTex.nDivisionY = 3;
 				break;
+			case EFFECTSTATE_TACKLE:
+				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
+				s_aEffect[nCntEffect].AnimTex.nDivisionY = 7;
+				break;
 			default:
 				assert(false);
 				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
@@ -174,7 +180,7 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 			SetTex2d(pVtx, (1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionX)*s_aEffect[nCntEffect].AnimTex.nPatternX
 				, (1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionX)* (s_aEffect[nCntEffect].AnimTex.nPatternX + 1)
 				, 1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionY*s_aEffect[nCntEffect].AnimTex.nPatternY
-				, 1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionY*(s_aEffect[nCntEffect].AnimTex.nPatternY + 1));
+				, 1.0f / s_aEffect[nCntEffect].AnimTex.nDivisionY*(s_aEffect[nCntEffect].AnimTex.nPatternY + 1), s_aEffect[nCntEffect].mirror);
 
 			//頂点カラーの設定
 			pVtx[0].col = col;
@@ -207,6 +213,31 @@ void SetNormalpos2d(VERTEX_2D *pVtx, float XUP, float XDW, float YUP, float YDW)
 	pVtx[2].pos = D3DXVECTOR3(XUP, YDW, 0.0f);
 	pVtx[3].pos = D3DXVECTOR3(XDW, YDW, 0.0f);
 }
+//---------------------------------------
+//セットテクスチャ(2d)
+//Auther：hamada ryuuga
+//---------------------------------------
+void SetTex2d(VERTEX_2D *pVtx, float left, float right, float top, float down,bool mirror)
+{
+	if (mirror)
+	{	//テクスチャの座標設定
+		pVtx[0].tex = D3DXVECTOR2(right, top);
+		pVtx[1].tex = D3DXVECTOR2(left, top);
+		pVtx[2].tex = D3DXVECTOR2(right, down);
+		pVtx[3].tex = D3DXVECTOR2(left, down);	
+	}
+	else 
+	{
+		//テクスチャの座標設定
+		pVtx[0].tex = D3DXVECTOR2(left, top);
+		pVtx[1].tex = D3DXVECTOR2(right, top);
+		pVtx[2].tex = D3DXVECTOR2(left, down);
+		pVtx[3].tex = D3DXVECTOR2(right, down);
+	
+	}
+
+}
+
 //---------------------------------------
 //セットテクスチャ(2d)
 //Auther：hamada ryuuga

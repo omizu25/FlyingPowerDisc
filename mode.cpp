@@ -56,7 +56,7 @@ void UninitMode(void)
 	UninitTutorial();
 
 	//ルール選択画面のリセットのセーブ
-	//ResetSaveRule();
+	ResetSaveRule();
 }
 
 //--------------------------------------------------

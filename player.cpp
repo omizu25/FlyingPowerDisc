@@ -325,7 +325,7 @@ void MovePlayer(void)
 		if (s_Player[0].bDive == true)
 		{
 			s_Player[0].nDiveCount++;
-
+			SetEffect(D3DXVECTOR3(s_Player[0].pos.x + 30.0f, s_Player[0].pos.y + 10.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_TACKLE, 10, 100.0f, false);
 			if (s_Player[0].nDiveCount >= MAX_DIVECOUNT)
 			{
 				s_Player[0].nDiveCount = 0;
@@ -455,7 +455,7 @@ void MovePlayer(void)
 		if (s_Player[1].bDive == true)
 		{
 			s_Player[1].nDiveCount++;
-
+			SetEffect(D3DXVECTOR3(s_Player[1].pos.x-30.0f, s_Player[1].pos.y+10.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_TACKLE, 10, 100.0f, true);
 			if (s_Player[1].nDiveCount >= MAX_DIVECOUNT)
 			{
 				s_Player[1].nDiveCount = 0;
@@ -464,6 +464,7 @@ void MovePlayer(void)
 		}
 		else if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxTrigger(JOYKEY_A, 1))
 		{//タックル
+
 			s_Player[1].pos.x -= s_Player[1].Speed * 5;
 			s_Player[1].bDive = true;
 			s_Player[1].nDiveCount = 0;
@@ -682,7 +683,7 @@ static void UpdateNormal(void)
 		//skill使用可能な時のエフェクト
 		if (s_Player[count].bSkill)
 		{
-			SetEffect(D3DXVECTOR3(s_Player[count].pos.x, s_Player[count].pos.y - 70.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SHOOT, 10, 200.0f);
+			SetEffect(D3DXVECTOR3(s_Player[count].pos.x, s_Player[count].pos.y - 70.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SHOOT, 10, 200.0f,false);
 		}
 		// 矩形の回転する位置の設定
 		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
