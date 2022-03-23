@@ -65,6 +65,11 @@ typedef enum
 	TEXTURE_Pose_Resume,		// 再開
 	TEXTURE_Pose_Quit,			// 終了
 
+	/*↓ リザルト ↓*/
+	TEXTURE_Result_Win,			// 勝利
+	TEXTURE_Result_Lose,		// 敗北
+	TEXTURE_Result_Draw,		// 引き分け
+
 	/*↓ その他 ↓*/
 	TEXTURE_Number_0To9,		// 数字
 	TEXTURE_fire,				// 炎のエフェクト
