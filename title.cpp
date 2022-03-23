@@ -28,17 +28,8 @@
 namespace
 {
 const int	MAX_LIGHT = 2;			// 後光の最大数
-const float	TITLE_POS_Y = 200.0f;	// タイトルのYの位置
-const float	TITLE_WIDTH = 900.0f;	// タイトルの幅
-const float	TITLE_HEIGHT = 200.0f;	// タイトルの高さ
-const float	LIGHT_WIDTH = 560.0f;	// ライトの幅
-const float	LIGHT_HEIGHT = 560.0f;	// ライトの高さ
-const float	CHANGE_SPEED = 0.005f;	// 収縮の速度
-const float	CHANGE_AMOUNT = 0.1f;	// 変化量
-const float	MEDIAN_LENGTH = 0.95f;	// 長さの中央値
-const float	MAX_ROTATION = 0.003f;	// 回転の最大値
-const float	DECREASE_SIZE = 0.6f;	// サイズの減少割合
-const float	DECREASE_SPEED = 0.5f;	// 速度の減少割合
+const float	TITLE_WIDTH = 600.0f;	// タイトルの幅
+const float	TITLE_HEIGHT = 600.0f;	// タイトルの高さ
 const float	MENU_WIDTH = 540.0f;	// メニューの幅
 const float	MENU_HEIGHT = 80.0f;	// メニューの高さ
 
@@ -46,19 +37,11 @@ typedef enum
 {
 	MENU_GAME = 0,	// ゲーム
 	MENU_RULE,		// ルール
+	MENU_MAP,		// マップ選択
 	MENU_PLAYER,	// プレイヤー選択
 	MENU_TUTORIAL,	// チュートリアル
 	MENU_MAX
 }MENU;
-
-typedef struct
-{
-	D3DXVECTOR3	rot;		// 向き
-	float		fWidth;		// 幅
-	float		fHeight;	// 高さ
-	float		fSpeed;		// 速度
-	int			nIdx;		// 矩形のインデックス
-}Light;
 }// namespaceはここまで
 
 //==================================================
@@ -66,12 +49,10 @@ typedef struct
 //==================================================
 namespace
 {
-int		s_nIdxBG;			// 背景の矩形のインデックス
-int		s_nIdx;				// 矩形のインデックス
-Light	s_light[MAX_LIGHT];	// 後光の情報
-int		s_nFlashTime;		// 時間
-int		s_nSelectMenu;		// 選ばれているメニュー
-int		s_nIdxUseMenu;		// 使っているメニューの番号
+int		s_nIdxBG;		// 背景の矩形のインデックス
+int		s_nIdx;			// 矩形のインデックス
+int		s_nSelectMenu;	// 選ばれているメニュー
+int		s_nIdxUseMenu;	// 使っているメニューの番号
 }// namespaceはここまで
 
 //==================================================
@@ -79,7 +60,6 @@ int		s_nIdxUseMenu;		// 使っているメニューの番号
 //==================================================
 namespace
 {
-void UpdateLight(void);
 void Input(void);
 }// namespaceはここまで
 
@@ -89,21 +69,14 @@ void Input(void);
 void InitTitle(void)
 {
 	PlaySound(SOUND_LABEL_TITLE2);
+
 	// 矩形の初期化
 	InitRectangle();
 
-	s_nFlashTime = 0;
 	s_nSelectMenu = 0;
 
 	// 矩形の設定
 	s_nIdxBG = SetRectangle(TEXTURE_BG);
-
-	// 矩形の設定
-	for (int i = 0; i < MAX_LIGHT; i++)
-	{
-		Light *pLight = &s_light[i];
-		pLight->nIdx = SetRectangle(TEXTURE_TitleLight_red);
-	}
 
 	// 矩形の設定
 	s_nIdx = SetRectangle(TEXTURE_Title_blue);
@@ -117,44 +90,11 @@ void InitTitle(void)
 	}
 
 	{// ロゴ
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, TITLE_POS_Y, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, SCREEN_HEIGHT * 0.5f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(TITLE_WIDTH, TITLE_HEIGHT, 0.0f);
 
 		// 矩形の位置の設定
 		SetPosRectangle(s_nIdx, pos, size);
-	}
-
-	{// 後光
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, TITLE_POS_Y, 0.0f);
-
-		for (int i = 0; i < MAX_LIGHT; i++)
-		{
-			Light *pLight = &s_light[i];
-
-			pLight->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-			if (i == 0)
-			{//	奥
-				pLight->fWidth = LIGHT_WIDTH;
-				pLight->fHeight = LIGHT_HEIGHT;
-				pLight->fSpeed = MAX_ROTATION * DECREASE_SPEED;
-			}
-			else if (i == 1)
-			{// 手前
-				pLight->fWidth = LIGHT_WIDTH * DECREASE_SIZE;
-				pLight->fHeight = LIGHT_HEIGHT * DECREASE_SIZE;
-				pLight->fSpeed = MAX_ROTATION;
-			}
-
-			// 矩形の回転する位置の設定
-			SetRotationPosRectangle(pLight->nIdx, pos, pLight->rot, pLight->fWidth, pLight->fHeight);
-
-			D3DXVECTOR2 texU = D3DXVECTOR2(0.0f + (i * 1.0f), 1.0f + (i * -1.0f));
-			D3DXVECTOR2 texV = D3DXVECTOR2(0.0f, 1.0f);
-
-			// 矩形のテクスチャ座標の設定
-			SetTexRectangle(pLight->nIdx, texU, texV);
-		}
 	}
 
 	{// メニュー
@@ -173,8 +113,9 @@ void InitTitle(void)
 
 		menu.texture[MENU_GAME] = TEXTURE_Game_Start;
 		menu.texture[MENU_RULE] = TEXTURE_Rule_Select;
+		menu.texture[MENU_MAP] = TEXTURE_Map_Select;
 		menu.texture[MENU_PLAYER] = TEXTURE_Char_Select;
-		menu.texture[MENU_TUTORIAL] = TEXTURE_Char_Select;
+		menu.texture[MENU_TUTORIAL] = TEXTURE_Tutorial_Start;
 
 		FrameArgument Frame;
 		Frame.bUse = false;
@@ -203,12 +144,6 @@ void UninitTitle(void)
 	// 使うのを止める
 	StopUseRectangle(s_nIdxBG);
 	StopUseRectangle(s_nIdx);
-
-	for (int i = 0; i < MAX_LIGHT; i++)
-	{
-		Light *pLight = &s_light[i];
-		StopUseRectangle(pLight->nIdx);
-	}
 }
 
 //--------------------------------------------------
@@ -216,9 +151,6 @@ void UninitTitle(void)
 //--------------------------------------------------
 void UpdateTitle(void)
 {
-	// 後光
-	UpdateLight();
-
 	// 入力
 	Input();
 
@@ -237,38 +169,6 @@ void DrawTitle(void)
 
 namespace
 {
-//--------------------------------------------------
-// 後光
-//--------------------------------------------------
-void UpdateLight(void)
-{
-	s_nFlashTime++;
-
-	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.75f, TITLE_POS_Y, 0.0f);
-	float fCurve = sinf((s_nFlashTime * CHANGE_SPEED) * (D3DX_PI * 2.0f));
-
-	for (int i = 0; i < MAX_LIGHT; i++)
-	{
-		Light *pLight = &s_light[i];
-
-		if (i == 0)
-		{// 奥
-			pLight->rot.z += pLight->fSpeed;
-		}
-		else if (i == 1)
-		{// 手前
-			pLight->rot.z += -pLight->fSpeed;
-		}
-
-		float fRatio = (fCurve * CHANGE_AMOUNT) + MEDIAN_LENGTH;
-		float fWidth = pLight->fWidth * fRatio;
-		float fHeight = pLight->fHeight * fRatio;
-
-		// 矩形の回転する位置の設定
-		SetRotationPosRectangle(pLight->nIdx, pos, pLight->rot, fWidth, fHeight);
-	}
-}
-
 //--------------------------------------------------
 // 入力
 //--------------------------------------------------
@@ -309,8 +209,12 @@ void Input(void)
 			ChangeMode(MODE_GAME);
 			break;
 
-		case MENU_RULE:	// ゲーム
+		case MENU_RULE:	// ルール
 			ChangeMode(MODE_RULE);
+			break;
+
+		case MENU_MAP:	// マップ選択
+			ChangeMode(MODE_MAP);
 			break;
 
 		case MENU_PLAYER:	// プレイヤー選択

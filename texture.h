@@ -21,7 +21,7 @@ typedef enum
 	TEXTURE_Rule_Select,		// ルール選択の文字
 	TEXTURE_Map_Select,			// マップ選択の文字
 	TEXTURE_Char_Select,		// キャラ選択の文字
-	TEXTURE_Tutorial_Start,		// ゲームスタートの文字
+	TEXTURE_Tutorial_Start,		// チュートリアルの文字
 	TEXTURE_Three_Point,		// 3ポイント
 	TEXTURE_Five_Point,			// 5ポイント
 
