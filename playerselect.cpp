@@ -93,11 +93,11 @@ void InitCharacter(void)
 
 	Player *pPlayer = GetPlayer();
 	s_nSelect[0] = pPlayer->nType;
-	SetPlayer(D3DXVECTOR3(START_POS_X + PLAYERSIZE_X , SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, true);
+	SetPlayer(D3DXVECTOR3(START_POS_X + PLAYERSIZE , SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, true, PLAYERSIZE*2);
 
 	pPlayer++;
 	s_nSelect[1] = pPlayer->nType;
-	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - START_POS_X - PLAYERSIZE_X, SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, false);
+	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - START_POS_X - PLAYERSIZE, SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, false, PLAYERSIZE*2);
 	
 	{// ゲージ
 		// ゲージの初期化
@@ -138,8 +138,8 @@ void InitCharacter(void)
 		menu.fRight = SCREEN_WIDTH;
 		menu.fTop = 0.0f;
 		menu.fBottom = SCREEN_HEIGHT;
-		menu.fWidth = PLAYERSIZE_X;
-		menu.fHeight = PLAYERSIZE_Y;
+		menu.fWidth = PLAYERSIZE;
+		menu.fHeight = PLAYERSIZE;
 		menu.bSort = true;
 
 		menu.texture[MENU_FOX] = TEXTURE_kitune;

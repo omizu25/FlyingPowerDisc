@@ -60,8 +60,8 @@ void InitPlayer(void)
 		s_Player[count].bHave = false;
 		s_Player[count].bUse = false;
 		s_Player[count].bDive = false;
-		s_Player[count].fheight = PLAYERSIZE_Y;
-		s_Player[count].fwidth = PLAYERSIZE_X;
+		s_Player[count].fheight = PLAYERSIZE;
+		s_Player[count].fwidth = PLAYERSIZE;
 		s_Player[count].nSkillCount = 0;
 		s_Player[count].nDiveCount = 0;
 		s_Player[count].nHaveCount = 0;
@@ -140,7 +140,7 @@ void DrawPlayer(void)
 //===================
 //セット
 //===================
-void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
+void SetPlayer(D3DXVECTOR3 pos, int nType,bool light,float siz)
 {
 	for (int count = 0; count< MAXPLAYER; count++)
 	{
@@ -161,8 +161,8 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light)
 		s_Player[count].nLife = 5;
 		s_Player[count].Speed = s_PlayerType[nType].Speed;
 		s_Player[count].Pow = s_PlayerType[nType].Pow;
-		s_Player[count].fheight = PLAYERSIZE_Y;
-		s_Player[count].fwidth = PLAYERSIZE_X;
+		s_Player[count].fheight = siz;
+		s_Player[count].fwidth = siz;
 		s_Player[count].bHave = false;
 		if (light)
 		{
@@ -558,8 +558,8 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 	Player *pPlayer = &s_Player[number];
 
 	float fDiscSize = Size * 0.0f;
-	float fHeight = (fDiscSize + (PLAYERSIZE_Y * 0.5f));
-	float fWidth = (fDiscSize + (PLAYERSIZE_X * 0.5f));
+	float fHeight = (fDiscSize + (PLAYERSIZE * 0.5f));
+	float fWidth = (fDiscSize + (PLAYERSIZE * 0.5f));
 
 	if ((pDisc->pos.y <= (pPlayer->pos.y + fHeight)) &&
 		(pDisc->pos.y >= (pPlayer->pos.y - fHeight)) &&
@@ -639,6 +639,7 @@ static void UpdateNormal(void)
 	{
 		Player *pPlayer = &s_Player[count];
 
+
 		//移動量を更新(減衰させる)
 		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  
 		s_Player[count].move.y += (0.0f - s_Player[count].move.y)*0.2f;//（目的の値-現在の値）＊減衰係数
@@ -678,6 +679,7 @@ static void UpdateNormal(void)
 		//skill使用可能な時のエフェクト
 		if (s_Player[count].bSkill)
 		{
+			
 			SetEffect(D3DXVECTOR3(s_Player[count].pos.x, s_Player[count].pos.y - 70.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SHOOT, 10, 200.0f,false);
 		}
 		// 矩形の回転する位置の設定
@@ -703,11 +705,11 @@ static void UpdateReset(void)
 		switch (nPlayerNo)
 		{
 		case 0:
-			posDest = D3DXVECTOR3(PLAYERSIZE_X + PLAYER_POS_X, SCREEN_HEIGHT * 0.6f, 0.0f);
+			posDest = D3DXVECTOR3(PLAYERSIZE + PLAYER_POS_X, SCREEN_HEIGHT * 0.6f, 0.0f);
 			break;
 
 		case 1:
-			posDest = D3DXVECTOR3(SCREEN_WIDTH - PLAYERSIZE_X - PLAYER_POS_X, SCREEN_HEIGHT * 0.6f, 0.0f);
+			posDest = D3DXVECTOR3(SCREEN_WIDTH - PLAYERSIZE - PLAYER_POS_X, SCREEN_HEIGHT * 0.6f, 0.0f);
 			break;
 		
 		default:
