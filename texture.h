@@ -70,6 +70,13 @@ typedef enum
 	TEXTURE_Result_Lose,		// 敗北
 	TEXTURE_Result_Draw,		// 引き分け
 
+	/*↓ プレイヤー ↓*/
+	TEXTURE_enemy000,			// カピバラ
+	TEXTURE_kitune,				// ゴン
+	TEXTURE_player000,			// スライム
+	TEXTURE_sky_enemy_002,		// 空
+	TEXTURE_zolbak,				// 地面
+
 	/*↓ その他 ↓*/
 	TEXTURE_Number_0To9,		// 数字
 	TEXTURE_fire,				// 炎のエフェクト

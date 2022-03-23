@@ -46,16 +46,16 @@ void UninitMode(void)
 	// ゲームの終了
 	UninitGame();
 
-	//ルール選択画面の終了
+	// ルール選択画面の終了
 	UninitRule();
 
-	//キャラ選択画面の終了
+	// キャラ選択画面の終了
 	UninitCharacter();
 
-	//チュートリアルの終了
+	// チュートリアルの終了
 	UninitTutorial();
 
-	//ルール選択画面のリセットのセーブ
+	// ルール選択画面のリセットのセーブ
 	ResetSaveRule();
 }
 
@@ -74,7 +74,6 @@ void UpdateMode(void)
 		break;
 
 	case MODE_RULE:		// ルール
-		//ルール選択画面の更新
 		UpdateRule();
 		break;
 
@@ -115,7 +114,6 @@ void DrawMode(void)
 		break;
 
 	case MODE_RULE:		// ルール
-		//ルール選択画面の描画
 		DrawRule();
 		break;
 
@@ -171,7 +169,6 @@ void SetMode(void)
 		break;
 
 	case MODE_RULE:		// ルール
-		//ルール選択画面の終了
 		UninitRule();
 		break;
 
@@ -206,10 +203,9 @@ void SetMode(void)
 		break;
 
 	case MODE_RULE:		// ルール
-		//ルール選択画面の初期化
 		InitRule();
 
-		//ルール選択画面の設定
+		// ルール選択画面の設定
 		SetBG(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 		SetRule(D3DXVECTOR3(400.0f, 150.0f, 0.0f));
 		SetRule(D3DXVECTOR3(400.0f, 350.0f, 0.0f));

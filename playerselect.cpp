@@ -14,18 +14,14 @@
 #include "rectangle.h"
 #include "main.h"
 #include "mode.h"
+#include "menu.h"
 #include <stdio.h>
 #include <assert.h>
-
-//==================================================
-// 定義
-//==================================================
 
  //------------------------------
  // マクロ定義
  //------------------------------
 #define MAX_CHARACTER	(4)					//キャラの最大数
-
 
  //------------------------------
  // スタティック変数
@@ -47,6 +43,8 @@ void InitCharacter(void)
 
 	SetPlayer(D3DXVECTOR3((float)PLAYERSIZE_X , (float)SCREEN_HEIGHT * 0.6f, 0.0f), 0, true);
 	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), 1, false);
+
+	
 }
 
 //============================
@@ -54,8 +52,8 @@ void InitCharacter(void)
 //============================
 void UninitCharacter(void)
 {
-
 	UninitPlayer();
+
 	// 矩形の終了
 	UninitRectangle();
 }
@@ -121,6 +119,7 @@ void UpdateCharacter(void)
 		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 	}
+
 	if (GetKeyboardTrigger(DIK_RETURN))
 	{	//ゲーム選択画面行く
 		ChangeMode(MODE_TITLE);
