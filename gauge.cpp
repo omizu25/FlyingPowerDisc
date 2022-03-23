@@ -18,7 +18,7 @@
 namespace
 {
 const int	MAX_GAUGE = 256;		// ゲージの最大数
-const float	CHANGE_RATIO = 0.05f;	// 変更の割合
+const float	CHANGE_RATIO = 0.15f;	// 変更の割合
 
 typedef struct
 {

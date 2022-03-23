@@ -24,18 +24,21 @@
 namespace
 {
 const int	MAX_CURSOR = 16;		// カーソルの最大数
+const float	ROT_SPEED = -0.25f;		// 回転速度
 
 /*↓ メニュー ↓*/
 typedef struct
 {
-	D3DXVECTOR3	pos;				// 位置
-	int			nNumUse;			// 使用数
-	int			nIdx;				// 矩形のインデックス
-	float		fTop;				// 上端
-	float		fWidth;				// 幅
-	float		fHeight;			// 高さ
-	float		fInterval;			// 選択肢の間隔
-	bool		bUse;				// 使用しているかどうか
+	D3DXVECTOR3	pos;		// 位置
+	D3DXVECTOR3	rot;		// 向き
+	int			nNumUse;	// 使用数
+	int			nIdx;		// 矩形のインデックス
+	float		fTop;		// 上端
+	float		fWidth;		// 幅
+	float		fHeight;	// 高さ
+	float		fInterval;	// 選択肢の間隔
+	bool		bRotation;	// 回転するかどうか
+	bool		bUse;		// 使用しているかどうか
 }Cursor;
 }// namespaceはここまで
 
@@ -73,6 +76,7 @@ void UninitCursor(void)
 
 		/*↓ 使用している ↓*/
 
+		// 使うのを止める
 		StopUseRectangle(pCursor->nIdx);
 	}
 }
@@ -82,6 +86,29 @@ void UninitCursor(void)
 //--------------------------------------------------
 void UpdateCursor(void)
 {
+	for (int i = 0; i < MAX_CURSOR; i++)
+	{
+		Cursor *pCursor = &s_aCursor[i];
+
+		if (!pCursor->bUse)
+		{// 使用していない
+			continue;
+		}
+
+		/*↓ 使用している ↓*/
+
+		if (!pCursor->bRotation)
+		{// 回転しない
+			continue;
+		}
+
+		/*↓ 回転する ↓*/
+
+		pCursor->rot.z += ROT_SPEED;
+
+		// 矩形の回転する位置の設定
+		SetRotationPosRectangle(pCursor->nIdx, pCursor->pos, pCursor->rot, pCursor->fWidth, pCursor->fHeight);
+	}
 }
 
 //--------------------------------------------------
@@ -111,21 +138,20 @@ int SetCursor(const CursorArgument &cursor)
 		/*↓ 使用していない ↓*/
 
 		pCursor->nNumUse = cursor.nNumUse;
-
+		pCursor->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		pCursor->fInterval = (cursor.fBottom - cursor.fTop) / (cursor.nNumUse + 1);
 		pCursor->pos = D3DXVECTOR3(cursor.fPosX, cursor.fTop + (pCursor->fInterval * (cursor.nSelect + 1)), 0.0f);
 		pCursor->fWidth = cursor.fWidth;
 		pCursor->fHeight = cursor.fHeight;
 		pCursor->fTop = cursor.fTop;
+		pCursor->bRotation = cursor.bRotation;
 		pCursor->bUse = true;
 
 		// 矩形の設定
 		pCursor->nIdx = SetRectangle(cursor.texture);
 
-		D3DXVECTOR3 size = D3DXVECTOR3(cursor.fWidth, cursor.fHeight, 0.0f);
-
-		// 矩形の位置の設定
-		SetPosRectangle(pCursor->nIdx, pCursor->pos, size);
+		// 矩形の回転する位置の設定
+		SetRotationPosRectangle(pCursor->nIdx, pCursor->pos, pCursor->rot, cursor.fWidth, cursor.fHeight);
 
 		// 矩形の色の設定
 		SetColorRectangle(pCursor->nIdx, GetColor(COLOR_WHITE));
@@ -156,8 +182,21 @@ void ChangePosCursor(int nIdx, int nSelect)
 
 	pCursor->pos = D3DXVECTOR3(pCursor->pos.x, pCursor->fTop + (pCursor->fInterval * (nSelect + 1)), 0.0f);
 
-	D3DXVECTOR3 size = D3DXVECTOR3(pCursor->fWidth, pCursor->fHeight, 0.0f);
+	// 矩形の回転する位置の設定
+	SetRotationPosRectangle(pCursor->nIdx, pCursor->pos, pCursor->rot, pCursor->fWidth, pCursor->fHeight);
+}
 
-	// 矩形の位置の設定
-	SetPosRectangle(pCursor->nIdx, pCursor->pos, size);
+//--------------------------------------------------
+// リセット
+//--------------------------------------------------
+void ResetCursor(int nIdx)
+{
+	assert(nIdx >= 0 && nIdx < MAX_CURSOR);
+
+	Cursor *pCursor = &s_aCursor[nIdx];
+
+	// 使うのを止める
+	StopUseRectangle(pCursor->nIdx);
+	
+	pCursor->bUse = false;
 }

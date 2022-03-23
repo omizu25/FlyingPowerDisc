@@ -27,6 +27,7 @@ typedef struct
 	float	fBottom;	// 下端
 	float	fWidth;		// 幅
 	float	fHeight;	// 高さ
+	bool	bRotation;	// 回転するかどうか
 }CursorArgument;
 
 //==================================================
@@ -65,5 +66,11 @@ int SetCursor(const CursorArgument &cursor);
 // 引数2  : int nSelect / 選ばれている番号
 //--------------------------------------------------
 void ChangePosCursor(int nIdx, int nSelect);
+
+//--------------------------------------------------
+// リセット
+// 引数  : int nIdx / 配列のインデックス
+//--------------------------------------------------
+void ResetCursor(int nIdx);
 
 #endif // !_CURSOR_H_

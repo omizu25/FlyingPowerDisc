@@ -173,6 +173,7 @@ void InitCharacter(void)
 		cursor.fHeight = CURSOR_SIZE;
 		cursor.texture = TEXTURE_Select_Right;
 		cursor.nSelect = s_nSelect[0];
+		cursor.bRotation = false;
 
 		// カーソルの設定
 		s_nIdxCursor[0] = SetCursor(cursor);
@@ -292,6 +293,9 @@ void UpdateCharacter(void)
 
 	// ゲージの更新
 	UpdateGauge();
+
+	// カーソルの更新
+	UpdateCursor();
 }
 
 //============================

@@ -19,6 +19,7 @@
 #include "color.h"
 #include "sound.h"
 #include "texture.h"
+#include "cursor.h"
 
 #include <assert.h>
 
@@ -32,6 +33,7 @@ const float	TITLE_WIDTH = 600.0f;	// タイトルの幅
 const float	TITLE_HEIGHT = 600.0f;	// タイトルの高さ
 const float	MENU_WIDTH = 300.0f;	// メニューの幅
 const float	MENU_HEIGHT = 80.0f;	// メニューの高さ
+const float	CURSOR_SIZE = 50.0f;	// カーソルのサイズ
 
 typedef enum
 {
@@ -49,10 +51,11 @@ typedef enum
 //==================================================
 namespace
 {
-int		s_nIdxBG;		// 背景の矩形のインデックス
-int		s_nIdx;			// 矩形のインデックス
-int		s_nSelectMenu;	// 選ばれているメニュー
-int		s_nIdxUseMenu;	// 使っているメニューの番号
+int	s_nIdxBG;		// 背景の矩形のインデックス
+int	s_nIdx;			// 矩形のインデックス
+int	s_nSelectMenu;	// 選ばれているメニュー
+int	s_nIdxUseMenu;	// 使っているメニューの番号
+int	s_nIdxCursor;	// カーソルの配列のインデックス
 }// namespaceはここまで
 
 //==================================================
@@ -125,6 +128,25 @@ void InitTitle(void)
 		// メニューの設定
 		s_nIdxUseMenu = SetMenu(menu, Frame);
 	}
+
+	{// カーソル
+		// カーソル初期化
+		InitCursor();
+
+		CursorArgument cursor;
+		cursor.nNumUse = MENU_MAX;
+		cursor.fPosX = SCREEN_WIDTH * 0.595f;
+		cursor.fTop = 0.0f;
+		cursor.fBottom = SCREEN_HEIGHT;
+		cursor.fWidth = CURSOR_SIZE;
+		cursor.fHeight = CURSOR_SIZE;
+		cursor.texture = TEXTURE_Disc;
+		cursor.nSelect = s_nSelectMenu;
+		cursor.bRotation = true;
+
+		// カーソルの設定
+		s_nIdxCursor = SetCursor(cursor);
+	}
 }
 
 //--------------------------------------------------
@@ -156,6 +178,9 @@ void UpdateTitle(void)
 
 	// メニューの更新
 	UpdateMenu();
+
+	// カーソルの更新
+	UpdateCursor();
 }
 
 //--------------------------------------------------
@@ -189,6 +214,8 @@ void Input(void)
 		// 選択肢の変更
 		ChangeOption(s_nSelectMenu);
 
+		// カーソルの位置の変更
+		ChangePosCursor(s_nIdxCursor, s_nSelectMenu);
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
 	{// Sキーが押されたかどうか
@@ -199,6 +226,9 @@ void Input(void)
 
 		// 選択肢の変更
 		ChangeOption(s_nSelectMenu);
+
+		// カーソルの位置の変更
+		ChangePosCursor(s_nIdxCursor, s_nSelectMenu);
 	}
 
 	if (GetKeyboardTrigger(DIK_RETURN))
