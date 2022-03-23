@@ -169,6 +169,7 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerselect.cpp" />
     <ClCompile Include="rectangle.cpp" />
+    <ClCompile Include="result.cpp" />
     <ClCompile Include="rule.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="sound.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="playerselect.h" />
     <ClInclude Include="rectangle.h" />
+    <ClInclude Include="result.h" />
     <ClInclude Include="rule.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="sound.h" />

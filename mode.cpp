@@ -52,7 +52,7 @@ void UninitMode(void)
 	UninitCharacter();
 
 	//ルール選択画面のリセットのセーブ
-	ResetSaveRule();
+	//ResetSaveRule();
 }
 
 //--------------------------------------------------

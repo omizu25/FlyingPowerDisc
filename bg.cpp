@@ -44,7 +44,7 @@ void InitBG(void)
 {
 	{// îwåi
 		// ãÈå`ÇÃê›íË
-		nIdxBG = SetRectangle(TEXTURE_NONE);
+		nIdxBG = SetRectangle(TEXTURE_BG);
 
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);

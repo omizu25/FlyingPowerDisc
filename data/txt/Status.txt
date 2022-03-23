@@ -6,10 +6,10 @@
 #==============================================================================
 SCRIPT			# この行は絶対消さないこと！
 
-TEXTURE_FILENAME = data/TEXTURE/kitune.png				# [0]Playerテクスチャ
-TEXTURE_FILENAME = data/TEXTURE/enemy000.png			# [1]Playerテクスチャ
-TEXTURE_FILENAME = data/TEXTURE/sky_enemy_002.png		# [2]Playerテクスチャ
-TEXTURE_FILENAME = data/TEXTURE/zolbak.png				# [3]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/PLAYER/kitune.png				# [0]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/PLAYER/enemy000.png				# [1]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/PLAYER/player000.png			# [2]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/PLAYER/zolbak.png				# [3]Playerテクスチャ
 
 STATUSSET
 
