@@ -73,6 +73,11 @@ const char *s_FileName[] =
 	"data/TEXTURE/PAUSE/Pose_Resume.png",	// 再開
 	"data/TEXTURE/PAUSE/Pose_Quit.png",		// 終了
 
+	/*↓ リザルト ↓*/
+	"data/TEXTURE/RESULT/Win.png",			// 勝利
+	"data/TEXTURE/RESULT/Lose.png",			// 敗北
+	"data/TEXTURE/RESULT/Draw.png",			// 引き分け
+
 	/*↓ その他 ↓*/
 	"data/TEXTURE/Number_0To9.png",			// 数字
 	"data/TEXTURE/fire.png",				// 炎のエフェクト
