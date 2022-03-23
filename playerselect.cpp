@@ -17,6 +17,7 @@
 #include "menu.h"
 #include "color.h"
 #include "gauge.h"
+#include "cursor.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -27,7 +28,8 @@
 #define MAX_CHARACTER	(5)					//キャラの最大数
 #define START_POS_X		(50.0f)				//スタート位置、調整用
 #define GAUGE_WIDTH		(50.0f)				//ゲージの幅
-#define GAUGE_HEIGHT	(45.0f)				//ゲージの高さ
+#define GAUGE_HEIGHT	(42.5f)				//ゲージの高さ
+#define CURSOR_SIZE		(75.0f)				//カーソルのサイズ
 
  //------------------------------
  // 列挙型
@@ -61,6 +63,7 @@ Status s_status[MAX_CHARACTER];
 LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
 int s_nIdxBG;
 int s_nIdxMenu;
+int s_nIdxCursor[MAXPLAYER];
 
 //------------------------------
 // プロトタイプ宣言
@@ -110,19 +113,19 @@ void InitCharacter(void)
 		s_nIdxPower[0] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
-		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT, 0.0f);
+		pos.x = SCREEN_WIDTH * 0.3f;
 
 		// ゲージの設定
 		s_nIdxSpeed[0] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
-		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.875f, SCREEN_HEIGHT, 0.0f);
+		pos.x = SCREEN_WIDTH * 0.875f;
 
 		// ゲージの設定
 		s_nIdxPower[1] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
-		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT, 0.0f);
+		pos.x = SCREEN_WIDTH * 0.7f;
 
 		// ゲージの設定
 		s_nIdxSpeed[1] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
@@ -156,6 +159,31 @@ void InitCharacter(void)
 		// メニューの設定
 		s_nIdxMenu = SetMenu(menu, Frame);
 	}
+
+	{// カーソル
+		// カーソル初期化
+		InitCursor();
+
+		CursorArgument cursor;
+		cursor.nNumUse = MENU_MAX;
+		cursor.fPosX = SCREEN_WIDTH * 0.4f;
+		cursor.fTop = 0.0f;
+		cursor.fBottom = SCREEN_HEIGHT;
+		cursor.fWidth = CURSOR_SIZE;
+		cursor.fHeight = CURSOR_SIZE;
+		cursor.texture = TEXTURE_Select_Right;
+		cursor.nSelect = s_nSelect[0];
+
+		// カーソルの設定
+		s_nIdxCursor[0] = SetCursor(cursor);
+
+		cursor.fPosX = SCREEN_WIDTH * 0.6f;
+		cursor.texture = TEXTURE_Select_Left;
+		cursor.nSelect = s_nSelect[1];
+
+		// カーソルの設定
+		s_nIdxCursor[1] = SetCursor(cursor);
+	}
 }
 
 //============================
@@ -170,6 +198,9 @@ void UninitCharacter(void)
 
 	// メニューの終了
 	UninitMenu();
+
+	// カーソルの終了
+	UninitCursor();
 
 	// ゲージの終了
 	UninitGauge();
@@ -212,7 +243,11 @@ void UpdateCharacter(void)
 		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 
+		// ゲージの変更
 		ChangeGauge();
+
+		// カーソルの位置の変更
+		ChangePosCursor(s_nIdxCursor[0], s_nSelect[0]);
 	}
 
 	{	
@@ -243,7 +278,11 @@ void UpdateCharacter(void)
 		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 
+		// ゲージの変更
 		ChangeGauge();
+
+		// カーソルの位置の変更
+		ChangePosCursor(s_nIdxCursor[1], s_nSelect[1]);
 	}
 
 	if (GetKeyboardTrigger(DIK_RETURN))
