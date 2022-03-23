@@ -81,6 +81,11 @@ void UpdateMode(void)
 	case MODE_PLAYER:	// プレイヤー選択
 		UpdateCharacter();
 		break;
+
+	case MODE_TUTORIAL:	// チュートリアル
+
+		break;
+
 	case MODE_NONE:
 		/* 処理なし */
 		break;
@@ -116,6 +121,10 @@ void DrawMode(void)
 
 	case MODE_PLAYER:	// プレイヤー選択
 		DrawCharacter();
+		break;
+
+	case MODE_TUTORIAL:	// チュートリアル
+
 		break;
 
 	case MODE_NONE:
@@ -170,6 +179,10 @@ void SetMode(void)
 		UninitCharacter();
 		break;
 
+	case MODE_TUTORIAL:	// チュートリアル
+
+		break;
+
 	case MODE_NONE:
 		/* 処理なし */
 		break;
@@ -205,6 +218,10 @@ void SetMode(void)
 
 	case MODE_PLAYER:	// プレイヤー選択
 		InitCharacter();
+		break;
+
+	case MODE_TUTORIAL:	// チュートリアル
+
 		break;
 
 	case MODE_NONE:
