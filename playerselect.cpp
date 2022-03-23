@@ -123,7 +123,7 @@ void UpdateCharacter(void)
 	}
 	if (GetKeyboardTrigger(DIK_RETURN))
 	{	//ゲーム選択画面行く
-		ChangeMode(MODE_GAME);		
+		ChangeMode(MODE_TITLE);
 	}
 }
 
@@ -149,7 +149,6 @@ void LoadFileSet(char *Filename)
 
 	//ファイルを開く
 	pFile = fopen(Filename, "r");
-	int number = 0;
 
 	if (pFile != NULL)
 	{//ファイルが開いた場合
