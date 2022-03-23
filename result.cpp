@@ -23,26 +23,19 @@
 //==================================================
 namespace
 {
-const float	MAX_WIDTH = 200.0f;		// 幅の最大値
-const float	MAX_HEIGHT = 125.0f;	// 高さの最大値
+const float	MAX_WIDTH = 400.0f;		// 幅の最大値
+const float	MAX_HEIGHT = 300.0f;	// 高さの最大値
+const float	DRAW_WIDTH = 700.0f;	// 幅の最大値
+const float	DRAW_HEIGHT = 350.0f;	// 高さの最大値
 const int	LIMIT_TIME = 300;		// 時間の限界
 
 /*↓ 勝敗 ↓*/
 
 typedef struct
 {
-	int		nIdx;		// 矩形のインデックス
-	bool	bResult;	// 勝敗 [ true : 勝ち / false : 負け ]
-	bool	bDraw;		// 描画するかどうか
+	int		nIdx;	// 矩形のインデックス
+	RESULT	result;	// 勝敗
 }Result;
-
-/*↓ 引き分け ↓*/
-
-typedef struct
-{
-	int		nIdx;		// 矩形のインデックス
-	bool	bDraw;		// 描画するかどうか
-}Draw;
 }// namespaceはここまで
 
 //==================================================
@@ -50,10 +43,9 @@ typedef struct
 //==================================================
 namespace
 {
-Result	s_result[MAXPLAYER];	// 勝敗の情報
-Draw	s_draw;					// 引き分けの情報
+Result	s_aResult[MAXPLAYER];	// 勝敗の情報
+int		s_nIdxDraw;				// 引き分けの情報
 int		s_nTime;				// 時間
-
 }// namesapceはここまで
 
 //--------------------------------------------------
@@ -61,13 +53,12 @@ int		s_nTime;				// 時間
 //--------------------------------------------------
 void InitResult(void)
 {
-	D3DXVECTOR3 size = D3DXVECTOR3(MAX_WIDTH, MAX_HEIGHT, 0.0f);
-
 	for (int i = 0; i < MAXPLAYER; i++)
 	{
-		Result *pResult = &s_result[i];
+		Result *pResult = &s_aResult[i];
 
-		D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, SCREEN_HEIGHT * 0.5f, 0.0f);
+		D3DXVECTOR3 size = D3DXVECTOR3(MAX_WIDTH, MAX_HEIGHT, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, SCREEN_HEIGHT * 0.6f, 0.0f);
 
 		switch (i)
 		{
@@ -93,22 +84,22 @@ void InitResult(void)
 		// 矩形の描画するかどうか
 		SetDrawRectangle(pResult->nIdx, false);
 
-		pResult->bResult = false;
-		pResult->bDraw = false;
+		pResult->result = RESULT_NONE;
 	}
 
-	// 矩形の設定
-	s_draw.nIdx = SetRectangle(TEXTURE_NONE);
+	{// 引き分け
+		// 矩形の設定
+		s_nIdxDraw = SetRectangle(TEXTURE_Result_Draw);
 
-	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
+		D3DXVECTOR3 size = D3DXVECTOR3(DRAW_WIDTH, DRAW_HEIGHT, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.6f, 0.0f);
 
-	// 矩形の位置の設定
-	SetPosRectangle(s_draw.nIdx, pos, size);
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxDraw, pos, size);
 
-	// 矩形の描画するかどうか
-	SetDrawRectangle(s_draw.nIdx, false);
-
-	s_draw.bDraw = false;
+		// 矩形の描画するかどうか
+		SetDrawRectangle(s_nIdxDraw, false);
+	}
 }
 
 //--------------------------------------------------
@@ -157,23 +148,30 @@ void DrawResult(void)
 //--------------------------------------------------
 // 勝敗の設定
 //--------------------------------------------------
-void SetResult(int nPlayerNo, bool bResult)
+void SetResult(int nPlayerNo, RESULT result)
 {
 	assert(nPlayerNo >= 0 && nPlayerNo < MAXPLAYER);
 
-	Result *pResult = &s_result[nPlayerNo];
+	Result *pResult = &s_aResult[nPlayerNo];
 
-	pResult->bResult = bResult;
+	pResult->result = result;
 
-	if (bResult)
-	{// 勝ち
-		// 矩形のテクスチャの設定
-		ChangeTextureRectangle(pResult->nIdx, TEXTURE_Disc);
-	}
-	else
-	{// 負け
-		// 矩形のテクスチャの設定
-		ChangeTextureRectangle(pResult->nIdx, TEXTURE_Select_Left);
+	switch (result)
+	{// 矩形のテクスチャの設定
+	case RESULT_WIN:	// 勝ち
+		ChangeTextureRectangle(pResult->nIdx, TEXTURE_Result_Win);
+		break;
+
+	case RESULT_LOSE:	// 負け
+		ChangeTextureRectangle(pResult->nIdx, TEXTURE_Result_Lose);
+		break;
+
+	case RESULT_DRAW:	// 引き分け
+		break;
+
+	default:
+		assert(false);
+		break;
 	}
 }
 
@@ -184,11 +182,20 @@ void SetDrawResult(bool bDraw)
 {
 	for (int i = 0; i < MAXPLAYER; i++)
 	{
-		Result *pResult = &s_result[i];
+		Result *pResult = &s_aResult[i];
 
-		pResult->bDraw = bDraw;
+		if (pResult->result == RESULT_DRAW)
+		{// 引き分け
+			// 矩形の描画するかどうか
+			SetDrawRectangle(s_nIdxDraw, true);
+
+			continue;
+		}
 
 		// 矩形の描画するかどうか
 		SetDrawRectangle(pResult->nIdx, bDraw);
+
+		// 矩形の描画するかどうか
+		SetDrawRectangle(s_nIdxDraw, false);
 	}
 }

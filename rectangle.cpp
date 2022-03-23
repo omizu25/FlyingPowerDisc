@@ -39,7 +39,7 @@ typedef struct
 namespace
 {
 MyRectangle	s_aRectangle[MAX_RECTANGLE];	// ‹éŒ`‚Ìî•ñ
-}
+}// namespace‚Í‚±‚±‚Ü‚Å
 
 //--------------------------------------------------
 // ‰Šú‰»

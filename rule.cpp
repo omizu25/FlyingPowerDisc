@@ -119,12 +119,13 @@ void InitRule(void)
 		Switch->bUse = false;		//使用していない状態
 	}
 
+	s_BG.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_BG.fWidth = 0.0f;
+	s_BG.fHeight = 0.0f;
+	s_BG.bUse = false;
+
 	// 数の初期化
 	InitNumber();
-
-	s_nOption[OPTION_TIME] = START_TIME;
-	s_nOption[OPTION_POINT] = START_POINT;
-	s_nOption[OPTION_SET] = START_SET;
 }
 
 //============================
@@ -142,6 +143,17 @@ void UninitRule(void)
 		// 矩形を使うのを止める
 		StopUseRectangle(rule->nIdx);
 	}
+
+	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+	{
+		Switch *Switch = s_Switch + nCnt;
+
+		// 矩形を使うのを止める
+		StopUseRectangle(Switch->nIdx);
+	}
+
+	// 矩形を使うのを止める
+	StopUseRectangle(s_BG.nIdx);
 }
 
 //============================
