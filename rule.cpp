@@ -15,6 +15,7 @@
 #include "input.h"
 #include "texture.h"
 #include "number.h"
+#include "mode.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -172,6 +173,11 @@ void UpdateRule(void)
 		SaveRule();
 	}
 
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_A))
+	{//エンターキーが押されたとき
+	 //タイトルに戻る
+		ChangeMode(MODE_TITLE);
+	}
 	//テクスチャの点滅
 	FlashTexture(nNumber);
 
