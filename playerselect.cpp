@@ -71,11 +71,11 @@ void InitCharacter(void)
 	InitPlayer();
 
 	Player *pPlayer = GetPlayer();
-
+	s_nSelect[0] = pPlayer->nType;
 	SetPlayer(D3DXVECTOR3(START_POS_X + PLAYERSIZE_X , SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, true);
 
 	pPlayer++;
-
+	s_nSelect[1] = pPlayer->nType;
 	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - START_POS_X - PLAYERSIZE_X, SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, false);
 
 	{// メニュー
@@ -155,6 +155,7 @@ void UpdateCharacter(void)
 			}
 		}
 
+		s_nSelect[0] = player->nType;
 		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 	}
@@ -183,6 +184,7 @@ void UpdateCharacter(void)
 			}
 		}
 
+		s_nSelect[1] = player->nType;
 		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 	}
