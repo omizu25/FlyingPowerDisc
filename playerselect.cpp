@@ -104,28 +104,28 @@ void InitCharacter(void)
 		InitGauge();
 
 		float fHeight = GAUGE_HEIGHT * s_status[s_nSelect[0]].fPower;
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT, 0.0f);
 
 		// ゲージの設定
-		s_nIdxPower[0] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+		s_nIdxPower[0] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
-		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT, 0.0f);
 
 		// ゲージの設定
-		s_nIdxSpeed[0] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+		s_nIdxSpeed[0] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
-		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.875f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.875f, SCREEN_HEIGHT, 0.0f);
 
 		// ゲージの設定
-		s_nIdxPower[1] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+		s_nIdxPower[1] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
-		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT, 0.0f);
 
 		// ゲージの設定
-		s_nIdxSpeed[1] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+		s_nIdxSpeed[1] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 	}
 
 	{// メニュー
@@ -250,6 +250,9 @@ void UpdateCharacter(void)
 	{	//ゲーム選択画面行く
 		ChangeMode(MODE_TITLE);
 	}
+
+	// ゲージの更新
+	UpdateGauge();
 }
 
 //============================
@@ -348,26 +351,22 @@ void LoadFileSet(char *Filename)
 static void ChangeGauge(void)
 {
 	float fHeight = GAUGE_HEIGHT * s_status[s_nSelect[0]].fPower;
-	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
 
 	// ゲージの減少
-	SubGauge(s_nIdxPower[0], pos, GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxPower[0], GAUGE_WIDTH, fHeight);
 
 	fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
-	pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
-
+	
 	// ゲージの設定
-	SubGauge(s_nIdxSpeed[0], pos, GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxSpeed[0], GAUGE_WIDTH, fHeight);
 
 	fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
-	pos = D3DXVECTOR3(SCREEN_WIDTH * 0.875f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
-
+	
 	// ゲージの設定
-	SubGauge(s_nIdxPower[1], pos, GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxPower[1], GAUGE_WIDTH, fHeight);
 
 	fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
-	pos = D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
-
+	
 	// ゲージの設定
-	SubGauge(s_nIdxSpeed[1], pos, GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxSpeed[1], GAUGE_WIDTH, fHeight);
 }

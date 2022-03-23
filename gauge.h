@@ -13,6 +13,18 @@
 #include "main.h"
 
 //==================================================
+// 列挙型
+//==================================================
+typedef enum
+{
+	GAUGE_TOP = 0,	// 上
+	GAUGE_BOTTOM,	// 下
+	GAUGE_LEFT,		// 左
+	GAUGE_RIGHT,	// 右
+	GAUGE_MAX
+}GAUGE;
+
+//==================================================
 //プロトタイプ宣言
 //==================================================
 //--------------------------------------------------
@@ -37,21 +49,21 @@ void DrawGauge(void);
 
 //--------------------------------------------------
 // 設定
-// 引数1  : D3DXVECTOR3 pos / 位置
-// 引数2  : D3DXCOLOR col / 色
+// 引数1  : D3DXVECTOR3 &pos / 始まりの位置
+// 引数2  : D3DXCOLOR &col / 色
 // 引数3  : float fWidth / 幅
 // 引数4  : float fHeight / 高さ
+// 引数5  : GAUGE gauge / 列挙型 中心の位置
 // 返値   ; int / 配列のインデックス
 //--------------------------------------------------
-int SetGauge(D3DXVECTOR3 pos, D3DXCOLOR col, float fWidth, float fHeight);
+int SetGauge(const D3DXVECTOR3 &posStart, const D3DXCOLOR &col, float fWidth, float fHeight, GAUGE gauge);
 
 //--------------------------------------------------
 // 減少
 // 引数1  : int nIdx / 配列のインデックス
-// 引数2  : D3DXVECTOR3 pos / 位置
-// 引数3  : float fWidth / 幅
-// 引数4  : float fHeight / 高さ
+// 引数2  : float fWidth / 幅
+// 引数3  : float fHeight / 高さ
 //--------------------------------------------------
-void SubGauge(int nIdx, D3DXVECTOR3 pos, float fWidth, float fHeight);
+void SubGauge(int nIdx, float fWidth, float fHeight);
 
 #endif // !_GAUGE_H_
