@@ -26,6 +26,7 @@
 #include "number.h"
 #include "score.h"
 #include "bg.h"
+#include "result.h"
 
 #include <assert.h>
 
@@ -82,6 +83,9 @@ void InitGame(void)
 
 	// ポーズの初期化
 	InitPause();
+
+	// リザルトの初期化
+	InitResult();
 
 	// UIの配置			置く座標			横幅	縦幅	タイプ			拡大率とフェード	テクスチャの種類
 	SetUi(D3DXVECTOR3 (50.0f, 15.0f, 0.0f), 100.0f, 30.0f, 0, D3DXVECTOR3(1.0f, 1.0f, 0.0f),0);	
@@ -145,6 +149,9 @@ void UninitGame(void)
 	// プレイヤーの終了
 	UninitPlayer();
 
+	// リザルトの終了
+	UninitResult();
+
 	// UIの終了
 	UninitUi();
 
@@ -207,6 +214,9 @@ void UpdateGame(void)
 
 	// プレイヤーの更新
 	UpdatePlayer();
+
+	// リザルトの更新
+	UpdateResult();
 }
 
 //--------------------------------------------------

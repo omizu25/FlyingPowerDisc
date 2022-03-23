@@ -21,7 +21,7 @@ typedef enum
 	TEXTURE_Rule_Select,		// ルール選択の文字
 	TEXTURE_Map_Select,			// マップ選択の文字
 	TEXTURE_Char_Select,		// キャラ選択の文字
-	TEXTURE_Tutorial_Start,		// ゲームスタートの文字
+	TEXTURE_Tutorial_Start,		// チュートリアルの文字
 	TEXTURE_Three_Point,		// 3ポイント
 	TEXTURE_Five_Point,			// 5ポイント
 
@@ -64,6 +64,11 @@ typedef enum
 	TEXTURE_Pose_Title,			// ポーズ画面のタイトル
 	TEXTURE_Pose_Resume,		// 再開
 	TEXTURE_Pose_Quit,			// 終了
+
+	/*↓ リザルト ↓*/
+	TEXTURE_Result_Win,			// 勝利
+	TEXTURE_Result_Lose,		// 敗北
+	TEXTURE_Result_Draw,		// 引き分け
 
 	/*↓ その他 ↓*/
 	TEXTURE_Number_0To9,		// 数字

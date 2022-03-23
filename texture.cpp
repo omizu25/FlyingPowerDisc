@@ -23,13 +23,13 @@ const char *s_FileName[] =
 	/*↓ タイトル ↓*/
 	"data/TEXTURE/TITLE/BG.png",			// タイトル画面の背景
 	"data/TEXTURE/TITLE/Frame.png",			// タイトル画面の枠
-	"data/TEXTURE/TITLE/Title_blue.png",	// タイトルロゴ
+	"data/TEXTURE/TITLE/Title_Rogo.png",	// タイトルロゴ
 	"data/TEXTURE/TITLE/TitleLight_red.png",// タイトルロゴの後光
 	"data/TEXTURE/TITLE/Game_Start.png",	// ゲームスタートの文字
 	"data/TEXTURE/TITLE/Rule_Select.png",	// ルール選択の文字
 	"data/TEXTURE/TITLE/Map_Select.png",	// マップ選択の文字
 	"data/TEXTURE/TITLE/Char_Select.png",	// キャラ選択の文字
-	"data/TEXTURE/TITLE/Tutorial_Start.png",// ゲームスタートの文字
+	"data/TEXTURE/TITLE/Tutorial_Start.png",// チュートリアルの文字
 	"data/TEXTURE/TITLE/ThreePoints.png",	// 3ポイント
 	"data/TEXTURE/TITLE/FivrPoints.png",	// 5ポイント
 
@@ -72,6 +72,11 @@ const char *s_FileName[] =
 	"data/TEXTURE/PAUSE/Pose_Title.png",	// ポーズ画面のタイトル
 	"data/TEXTURE/PAUSE/Pose_Resume.png",	// 再開
 	"data/TEXTURE/PAUSE/Pose_Quit.png",		// 終了
+
+	/*↓ リザルト ↓*/
+	"data/TEXTURE/RESULT/Win.png",			// 勝利
+	"data/TEXTURE/RESULT/Lose.png",			// 敗北
+	"data/TEXTURE/RESULT/Draw.png",			// 引き分け
 
 	/*↓ その他 ↓*/
 	"data/TEXTURE/Number_0To9.png",			// 数字
