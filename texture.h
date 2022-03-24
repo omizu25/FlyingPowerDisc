@@ -30,6 +30,8 @@ typedef enum
 	TEXTURE_Select_BG,			// セレクト画面の背景
 	TEXTURE_Map_Title,			// マップ選択
 	TEXTURE_Rule_Title,			// ルール選択
+	TEXTURE_Speed,				// 速度
+	TEXTURE_Power,				// 力
 
 	/*↓ ゲーム ↓*/
 	TEXTURE_Disc,				// ディスク

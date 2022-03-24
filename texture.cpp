@@ -38,6 +38,8 @@ const char *s_FileName[] =
 	"data/TEXTURE/SELECT/Select_BG.png",		// セレクト画面の背景
 	"data/TEXTURE/SELECT/Map_Title.png",		// マップ選択
 	"data/TEXTURE/SELECT/Rule_Title.png",		// ルール選択
+	"data/TEXTURE/SELECT/SPEED.png",			// 速度
+	"data/TEXTURE/SELECT/POWER.png",			// パワー
 	
 	/*↓ ゲーム ↓*/
 	"data/TEXTURE/GAME/Disc.png",				// ディスク
@@ -61,8 +63,8 @@ const char *s_FileName[] =
 	"data/TEXTURE/UI/Set3.png",					// セット3の表示
 	"data/TEXTURE/UI/Set4.png",					// セット4の表示
 	"data/TEXTURE/UI/Set5.png",					// セット5の表示
-	"data/TEXTURE/UI/ThreePoints.png",		// 3ポイント
-	"data/TEXTURE/UI/FivrPoints.png",		// 5ポイント
+	"data/TEXTURE/UI/ThreePoints.png",			// 3ポイント
+	"data/TEXTURE/UI/FivrPoints.png",			// 5ポイント
 
 	/*↓ ポーズ ↓*/
 	"data/TEXTURE/PAUSE/Pose_Title.png",		// ポーズ画面のタイトル
