@@ -32,6 +32,8 @@
 #define MOVESKILL  (1.1f)		//skill発生中の動きの倍率
 #define POWSKILL  (1.5f)		//skill発生中の攻撃の倍率
 #define TACKLE_SREED (2.0f)		// タックルの速度
+#define MAXTRACK (540)			//soundの時間
+
 
 //スタティック変数///スタティックをヘッタに使うなよ？
 
@@ -42,6 +44,8 @@ static bool	s_bKeyBoardWASD;			// WASDのキーボード入力があるかどうか
 static bool	s_bKeyBoardNumPad;			// テンキーのキーボード入力があるかどうか
 static bool	s_bJoyPad[MAXPLAYER];		// ジョイパッド入力があるかどうか
 static bool	s_bStickLeft[MAXPLAYER];	// 左スティック入力があるかどうか
+static int sound;
+static bool fastsound;
 
 // スタティック関数プロトタイプ宣言
 static void UpdateNormal(void);
@@ -53,6 +57,7 @@ static void InputMove(void);
 //=======================
 void InitPlayer(void)
 {
+	sound = 0;
 	LoadFile("data\\txt\\Status.txt");
 
 	for (int count = 0; count < MAXPLAYER; count++)
@@ -75,6 +80,7 @@ void InitPlayer(void)
 		// 矩形の設定
 		s_Player[count].nIdx = SetRectangleWithTex(s_pTexturePlayer[s_Player[count].nType]);
 	}
+	fastsound = false;
 }
 
 //===================
@@ -292,10 +298,29 @@ void MovePlayer(void)
 	if (GetKeyboardPress(DIK_A)|| GetKeyboardPress(DIK_W)|| GetKeyboardPress(DIK_S)|| GetKeyboardPress(DIK_D)
 		|| GetKeyboardPress(DIK_NUMPAD1)|| GetKeyboardPress(DIK_NUMPAD2)
 		|| GetKeyboardPress(DIK_NUMPAD3)|| GetKeyboardPress(DIK_NUMPAD5)
-		|| GetJoypadStick(JOYKEY_RIGHT_STICK, 0).y > DEAD_ZONE|| GetJoypadStick(JOYKEY_RIGHT_STICK, 0).y < -DEAD_ZONE
-		|| GetJoypadStick(JOYKEY_RIGHT_STICK, 1).y > DEAD_ZONE || GetJoypadStick(JOYKEY_RIGHT_STICK, 1).y < -DEAD_ZONE)
+		|| GetJoypadStick(JOYKEY_LEFT_STICK, 0).y > DEAD_ZONE|| GetJoypadStick(JOYKEY_LEFT_STICK, 0).y < -DEAD_ZONE
+		|| GetJoypadStick(JOYKEY_LEFT_STICK, 1).y > DEAD_ZONE || GetJoypadStick(JOYKEY_LEFT_STICK, 1).y < -DEAD_ZONE
+		|| GetJoypadStick(JOYKEY_LEFT_STICK, 0).x > DEAD_ZONE || GetJoypadStick(JOYKEY_LEFT_STICK, 0).x < -DEAD_ZONE
+		|| GetJoypadStick(JOYKEY_LEFT_STICK, 1).x > DEAD_ZONE || GetJoypadStick(JOYKEY_LEFT_STICK, 1).x < -DEAD_ZONE)
 	{//歩き音
-		PlaySound(SOUND_LABEL_RUN);
+		if (!fastsound)
+		{
+			PlaySound(SOUND_LABEL_RUN);
+		}
+		fastsound = true;
+		sound++;
+		if(sound >= MAXTRACK)
+		{
+			fastsound = false;
+			PlaySound(SOUND_LABEL_RUN);
+		}
+	}
+	else
+	{
+		//サウンド停止
+		StopSound(SOUND_LABEL_RUN);
+		fastsound = false;
+		sound = 0;
 	}
 
 	//---------------------------------------
@@ -320,7 +345,7 @@ void MovePlayer(void)
 			}
 
 			if (GetJoypadStick(JOYKEY_RIGHT_STICK, 0).y > DEAD_ZONE)
-			{// 左スティックが傾いた
+			{// 右スティックが傾いた
 				pDisc->move.y = DISC_SPEED_Y;
 			}
 			else if (GetJoypadStick(JOYKEY_RIGHT_STICK, 0).y < -DEAD_ZONE)
@@ -399,7 +424,7 @@ void MovePlayer(void)
 			s_Player[0].move = vec * s_Player[0].Speed;
 		}
 		else if (s_bStickLeft[0])
-		{// 左スティック
+		{// 右スティックが傾いた
 			D3DXVECTOR3 stick = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 			stick.x = GetJoypadStick(JOYKEY_LEFT_STICK, 0).x;
