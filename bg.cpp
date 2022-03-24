@@ -47,9 +47,9 @@ void InitBG(void)
 	{// îwåi
 		TEXTURE aTexture[MAX_STAGE];
 
-		aTexture[0] = TEXTURE_BG;
-		aTexture[1] = TEXTURE_BG2;
-		aTexture[2] = TEXTURE_BG3;
+		aTexture[0] = TEXTURE_Stage01_BG;
+		aTexture[1] = TEXTURE_Stage02_BG;
+		aTexture[2] = TEXTURE_Stage03_BG;
 
 		// ãÈå`ÇÃê›íË
 		s_nIdxBG = SetRectangle(aTexture[GetSelectMap()]);

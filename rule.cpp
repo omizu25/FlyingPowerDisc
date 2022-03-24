@@ -17,6 +17,7 @@
 #include "number.h"
 #include "mode.h"
 #include "sound.h"
+#include "cursor.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -62,6 +63,7 @@ typedef enum
 #define MAX_TEXTURE	(6)					//テクスチャの最大数
 #define MAX_FLASH	(80)				//点滅の往復時間
 #define HALF_FLASH	(MAX_FLASH / 2)		//点滅の切り替え時間
+#define CURSOR_SIZE	(75.0f)				//カーソルのサイズ
 
 //------------------------------
 // スタティック変数
@@ -79,6 +81,7 @@ static int s_nSelect;					// 選択中の番号
 static int s_nOption[OPTION_MAX];		// 選択肢の値
 static int s_nNumberIdx[OPTION_MAX];	// 選択肢の値のインデックス
 static int s_nSelectIdx;				// 選択の矩形のインデックス
+static int s_nIdxCursor;				// カーソルの配列のインデックス
 
 //============================
 // ルール選択画面の初期化
@@ -142,9 +145,28 @@ void InitRule(void)
 
 	SetPosRectangle(s_nSelectIdx, pos, size);
 
-	SetRule(D3DXVECTOR3(400.0f, 150.0f, 0.0f));
-	SetRule(D3DXVECTOR3(400.0f, 350.0f, 0.0f));
-	SetRule(D3DXVECTOR3(400.0f, 550.0f, 0.0f));
+	SetRule(D3DXVECTOR3(400.0f, SCREEN_HEIGHT * 0.25f, 0.0f));
+	SetRule(D3DXVECTOR3(400.0f, SCREEN_HEIGHT * 0.5f, 0.0f));
+	SetRule(D3DXVECTOR3(400.0f, SCREEN_HEIGHT * 0.75f, 0.0f));
+
+	{// カーソル
+		// カーソル初期化
+		InitCursor();
+
+		CursorArgument cursor;
+		cursor.nNumUse = OPTION_MAX;
+		cursor.fPosX = SCREEN_WIDTH * 0.1f;
+		cursor.fTop = 0.0f;
+		cursor.fBottom = SCREEN_HEIGHT;
+		cursor.fWidth = CURSOR_SIZE;
+		cursor.fHeight = CURSOR_SIZE;
+		cursor.texture = TEXTURE_Cursor_Right;
+		cursor.nSelect = s_nSelect;
+		cursor.bRotation = false;
+
+		// カーソルの設定
+		s_nIdxCursor = SetCursor(cursor);
+	}
 }
 
 //============================
@@ -157,6 +179,9 @@ void UninitRule(void)
 
 	// 数の終了
 	UninitNumber();
+
+	// カーソルの終了
+	UninitCursor();
 
 	for (int nCnt = 0; nCnt < MAX_RULE; nCnt++)
 	{
@@ -503,6 +528,9 @@ int ChangeSelect(void)
 			PlaySound(SOUND_LABEL_SELECT);
 
 			s_nSelect--;
+
+			// カーソルの位置の変更
+			ChangePosCursor(s_nIdxCursor, s_nSelect);
 		}
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
@@ -513,6 +541,9 @@ int ChangeSelect(void)
 			PlaySound(SOUND_LABEL_SELECT);
 
 			s_nSelect++;
+
+			// カーソルの位置の変更
+			ChangePosCursor(s_nIdxCursor, s_nSelect);
 		}
 	}
 

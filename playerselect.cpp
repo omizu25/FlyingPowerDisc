@@ -258,7 +258,7 @@ void InitCharacter(void)
 		cursor.fBottom = SCREEN_HEIGHT;
 		cursor.fWidth = CURSOR_SIZE;
 		cursor.fHeight = CURSOR_SIZE;
-		cursor.texture = TEXTURE_Select_Right;
+		cursor.texture = TEXTURE_Cursor_Right;
 		cursor.nSelect = s_nSelect[0];
 		cursor.bRotation = false;
 
@@ -266,7 +266,7 @@ void InitCharacter(void)
 		s_nIdxCursor[0] = SetCursor(cursor);
 
 		cursor.fPosX = SCREEN_WIDTH * 0.6f;
-		cursor.texture = TEXTURE_Select_Left;
+		cursor.texture = TEXTURE_Cursor_Left;
 		cursor.nSelect = s_nSelect[1];
 
 		// ÉJÅ[É\ÉãÇÃê›íË

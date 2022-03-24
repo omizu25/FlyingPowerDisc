@@ -58,9 +58,6 @@ void InitMap(void)
 	// 矩形の初期化
 	InitRectangle();
 
-	// カーソルの初期化
-	InitCursor();
-
 	//------------------------------
 	// テクスチャの取得
 	//------------------------------
@@ -135,7 +132,7 @@ void InitMap(void)
 		cursor.fBottom = SCREEN_HEIGHT;
 		cursor.fWidth = CURSOR_SIZE;
 		cursor.fHeight = CURSOR_SIZE;
-		cursor.texture = TEXTURE_Select_Right;
+		cursor.texture = TEXTURE_Cursor_Right;
 		cursor.nSelect = s_nSelect;
 		cursor.bRotation = false;
 
