@@ -20,6 +20,7 @@ static bool Particle;
 static int timer;
 static D3DXVECTOR3 Log;
 static bool setmirror;
+EFFECTSTATE settex;
 //==================================
 //èâä˙âª
 //==================================
@@ -28,7 +29,8 @@ void InitEffect(void)
 	s_aTexture[EFFECTSTATE_SPIN] = TEXTURE_Effect_spin;
 	s_aTexture[EFFECTSTATE_SHOOT] = TEXTURE_Effect_fire;
 	s_aTexture[EFFECTSTATE_TACKLE] = TEXTURE_Effect_tackle;
-	s_aTexture[EFFECTSTATE_GOAL] = TEXTURE_Effect_goal; 
+	s_aTexture[EFFECTSTATE_GOAL_POINT3] = TEXTURE_Effect_goal;
+	s_aTexture[EFFECTSTATE_GOAL_POINT5] = TEXTURE_Effect_goal;
 	s_aTexture[EFFECTSTATE_SPARK] = TEXTURE_Effect_spark;
 	timer = 0;
 	for (int nCntEffect = 0; nCntEffect < MAX_EFFECT; nCntEffect++)
@@ -74,7 +76,7 @@ void UpdateEffect(void)
 	{
 		timer++;
 		
-		SetEffect(D3DXVECTOR3(Log.x, Log.y, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_GOAL, 100, 50.0f, setmirror);
+		SetEffect(D3DXVECTOR3(Log.x, Log.y, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), settex, 100, 50.0f, setmirror);
 	
 		if (timer >= 30)
 		{
@@ -190,15 +192,33 @@ void SetEffect(D3DXVECTOR3 pos,  D3DXCOLOR col, EFFECTSTATE nType, int life, flo
 				s_aEffect[nCntEffect].AnimTex.nDivisionX = 1;
 				s_aEffect[nCntEffect].AnimTex.nDivisionY = 7;
 				break;
-			case EFFECTSTATE_GOAL:
+			case EFFECTSTATE_GOAL_POINT5:
 				s_aEffect[nCntEffect].AnimTex.nDivisionX = 5;
 				s_aEffect[nCntEffect].AnimTex.nDivisionY = 3;
 				Particle = true;
 				Log = pos;
+				settex = EFFECTSTATE_GOAL_POINT5;
 				if (mirror)
 				{
 					s_aEffect[nCntEffect].move.x = sinf((float)(rand() % 629 - 314) / 100.0f)*7;
 					s_aEffect[nCntEffect].move.y = sinf((float)(rand() % 629 - 314) / 100.0f)*5;
+				}
+				else
+				{
+					s_aEffect[nCntEffect].move.x = sinf((float)(rand() % 629 - 314) / 100.0f) * 7;
+					s_aEffect[nCntEffect].move.y = sinf((float)(rand() % 629 - 314) / 100.0f) * 5;
+				}
+				break;
+			case EFFECTSTATE_GOAL_POINT3:
+				s_aEffect[nCntEffect].AnimTex.nDivisionX = 5;
+				s_aEffect[nCntEffect].AnimTex.nDivisionY = 3;
+				Particle = true;
+				Log = pos;
+				settex = EFFECTSTATE_GOAL_POINT3;
+				if (mirror)
+				{
+					s_aEffect[nCntEffect].move.x = -5.0f;
+					s_aEffect[nCntEffect].move.y = sinf((float)(rand() % 629 - 314) / 100.0f);
 				}
 				else
 				{
