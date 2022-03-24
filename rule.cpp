@@ -93,6 +93,8 @@ void InitRule(void)
 	// 矩形の初期化
 	InitRectangle();
 
+	s_nSelect = 0;
+
 	//------------------------------
 	// テクスチャの取得
 	//------------------------------
@@ -225,7 +227,11 @@ void UpdateRule(void)
 	if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_NUMPAD1) ||
 		GetJoypadTrigger(JOYKEY_LEFT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_LEFT))
 	{//Aキーが押されたとき
-		
+		//数値の減算
+		SubRule(nNumber);
+
+		// セーブ
+		SaveRule();
 	}
 
 	if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_NUMPAD3) ||
@@ -422,12 +428,6 @@ void FlashTexture(int nNumber)
 
 		// 矩形の色の設定
 		SetColorRectangle(s_Switch[nNumber].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
-
-		//数値の減算
-		SubRule(nNumber);
-
-		// セーブ
-		SaveRule();
 	}
 
 	//------------------------------
@@ -609,7 +609,7 @@ void ResetSaveRule(void)
 {
 	FILE *pFile;	// ファイルポインタを宣言
 
-					// ファイルを開く
+	// ファイルを開く
 	pFile = fopen(RULE_FILE, "w");
 
 	if (pFile != NULL)
