@@ -39,7 +39,7 @@ const int	MAX_SET = 3;						// セットの最大値
 const int	MIN_TIME = 30;						// タイムの最小値
 const int	MIN_POINT = 18;						// ポイントの最小値
 const int	MIN_SET = 1;						// セットの最小値
-const float	NUMBER_WIDTH = 30.0f;				// 数の幅
+const float	NUMBER_WIDTH = 40.0f;				// 数の幅
 const float	NUMBER_HEIGHT = 100.0f;				// 数の高さ
 const float	SELECT_WIDTH = 250.0f;				// 選択の幅
 const float	SELECT_HEIGHT = 50.0f;				// 選択の高さ
@@ -147,9 +147,9 @@ void InitRule(void)
 
 	SetPosRectangle(s_nSelectIdx, pos, size);
 
-	SetRule(D3DXVECTOR3(400.0f, SCREEN_HEIGHT * 0.25f, 0.0f));
-	SetRule(D3DXVECTOR3(400.0f, SCREEN_HEIGHT * 0.5f, 0.0f));
-	SetRule(D3DXVECTOR3(400.0f, SCREEN_HEIGHT * 0.75f, 0.0f));
+	SetRule(D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.25f, 0.0f));
+	SetRule(D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.5f, 0.0f));
+	SetRule(D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.75f, 0.0f));
 
 	{// カーソル
 		// カーソル初期化
@@ -157,7 +157,7 @@ void InitRule(void)
 
 		CursorArgument cursor;
 		cursor.nNumUse = OPTION_MAX;
-		cursor.fPosX = SCREEN_WIDTH * 0.1f;
+		cursor.fPosX = SCREEN_WIDTH * 0.125f;
 		cursor.fTop = 0.0f;
 		cursor.fBottom = SCREEN_HEIGHT;
 		cursor.fWidth = CURSOR_SIZE;
@@ -225,11 +225,7 @@ void UpdateRule(void)
 	if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_NUMPAD1) ||
 		GetJoypadTrigger(JOYKEY_LEFT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_LEFT))
 	{//Aキーが押されたとき
-		//数値の減算
-		SubRule(nNumber);
-
-		// セーブ
-		SaveRule();
+		
 	}
 
 	if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_NUMPAD3) ||
@@ -298,7 +294,7 @@ void SetRule(D3DXVECTOR3 pos)
 			// 桁数
 			int nDigit = DigitNumber(s_nOption[nCnt]);
 
-			D3DXVECTOR3 posNumber = pos + D3DXVECTOR3(450.0f + (NUMBER_WIDTH * (nDigit * 0.5f)), 0.0f, 0.0f);
+			D3DXVECTOR3 posNumber = pos + D3DXVECTOR3(500.0f + (NUMBER_WIDTH * (nDigit * 0.5f)), 0.0f, 0.0f);
 			D3DXVECTOR3 sizeNumber = D3DXVECTOR3(NUMBER_WIDTH, NUMBER_HEIGHT, 0.0f);
 
 			// 数の設定
@@ -321,7 +317,7 @@ void SetSwitchLeft(D3DXVECTOR3 pos)
 		if (Switch->bUse == false)
 		{//使用していないなら
 			//構造体の設定
-			Switch->pos = D3DXVECTOR3(pos.x + 300.0f, pos.y, pos.z);
+			Switch->pos = D3DXVECTOR3(pos.x + 350.0f, pos.y, pos.z);
 			Switch->fWidth = 100.0f;
 			Switch->fHeight = 100.0f;
 			Switch->bUse = true;
@@ -351,7 +347,7 @@ void SetSwitchRight(D3DXVECTOR3 pos)
 		if (Switch->bUse == false)
 		{//使用していないなら
 		 //構造体の設定
-			Switch->pos = D3DXVECTOR3(pos.x + 600.0f, pos.y, pos.z);
+			Switch->pos = D3DXVECTOR3(pos.x + 650.0f, pos.y, pos.z);
 			Switch->fWidth = 100.0f;
 			Switch->fHeight = 100.0f;
 			Switch->bUse = true;
@@ -421,19 +417,17 @@ void FlashTexture(int nNumber)
 	if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_NUMPAD1) ||
 		GetJoypadTrigger(JOYKEY_LEFT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_LEFT))
 	{//Aキーが押されたとき
-	 //音の再生
+		//音の再生
 		PlaySound(SOUND_LABEL_SELECT);
 
-		if (s_nFlashTime >= HALF_FLASH)
-		{
-			// 矩形の色の設定
-			SetColorRectangle(s_Switch[nNumber].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
-		}
-		else
-		{
-			// 矩形の色の設定
-			SetColorRectangle(s_Switch[nNumber].nIdx, GetColor(COLOR_WHITE));
-		}
+		// 矩形の色の設定
+		SetColorRectangle(s_Switch[nNumber].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+
+		//数値の減算
+		SubRule(nNumber);
+
+		// セーブ
+		SaveRule();
 	}
 
 	//------------------------------
@@ -442,19 +436,17 @@ void FlashTexture(int nNumber)
 	if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_NUMPAD3) ||
 		GetJoypadTrigger(JOYKEY_RIGHT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_RIGHT))
 	{//Dキーが押されたとき
-	 //音の再生
+		//音の再生
 		PlaySound(SOUND_LABEL_SELECT);
 
-		if (s_nFlashTime >= HALF_FLASH)
-		{
-			// 矩形の色の設定
-			SetColorRectangle(s_Switch[nNumber + 3].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
-		}
-		else
-		{
-			// 矩形の色の設定
-			SetColorRectangle(s_Switch[nNumber + 3].nIdx, GetColor(COLOR_WHITE));
-		}
+		// 矩形の色の設定
+		SetColorRectangle(s_Switch[nNumber + 3].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+
+		//数値の加算
+		AddRule(nNumber);
+
+		// セーブ
+		SaveRule();
 	}
 }
 
