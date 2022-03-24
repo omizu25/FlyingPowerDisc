@@ -14,6 +14,7 @@
 #include "color.h"
 #include "texture.h"
 #include "player.h"
+#include "map.h"
 
 #include <assert.h>
 
@@ -22,6 +23,7 @@
 //==================================================
 namespace
 {
+const int	MAX_STAGE = 3;			// ステージの最大数
 const float	MAX_WIDTH = 200.0f;		// 幅の最大値
 const float	MAX_HEIGHT = 125.0f;	// 高さの最大値
 }// namespaceはここまで
@@ -43,8 +45,14 @@ int	s_nIdxPoint[MAXPLAYER];	// ポイント数
 void InitBG(void)
 {
 	{// 背景
+		TEXTURE aTexture[MAX_STAGE];
+
+		aTexture[0] = TEXTURE_BG;
+		aTexture[1] = TEXTURE_BG2;
+		aTexture[2] = TEXTURE_BG3;
+
 		// 矩形の設定
-		s_nIdxBG = SetRectangle(TEXTURE_BG);
+		s_nIdxBG = SetRectangle(aTexture[GetSelectMap()]);
 
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
@@ -54,8 +62,14 @@ void InitBG(void)
 	}
 
 	{// ステージ
+		TEXTURE aTexture[MAX_STAGE];
+
+		aTexture[0] = TEXTURE_Stage01;
+		aTexture[1] = TEXTURE_Stage02;
+		aTexture[2] = TEXTURE_Stage03;
+
 		// 矩形の設定
-		s_nIdxStage = SetRectangle(TEXTURE_Stage01);
+		s_nIdxStage = SetRectangle(aTexture[GetSelectMap()]);
 
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.6f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT * 0.8f, 0.0f);

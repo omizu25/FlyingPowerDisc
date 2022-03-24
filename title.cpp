@@ -21,6 +21,7 @@
 #include "texture.h"
 #include "cursor.h"
 #include "player.h"
+#include "map.h"
 
 #include <assert.h>
 
@@ -29,17 +30,18 @@
 //==================================================
 namespace
 {
-const int	MAX_LIGHT = 4;				// ライトの最大数
-const int	HALF_LIGHT = MAX_LIGHT / 2;	// ライトの半分
-const float	TITLE_WIDTH = 600.0f;		// タイトルの幅
-const float	TITLE_HEIGHT = 600.0f;		// タイトルの高さ
-const float	MENU_WIDTH = 300.0f;		// メニューの幅
-const float	MENU_HEIGHT = 80.0f;		// メニューの高さ
-const float	CURSOR_SIZE = 50.0f;		// カーソルのサイズ
+const int	MAX_BG = 3;								// 背景の最大数
+const int	MAX_LIGHT = 4;							// ライトの最大数
+const int	HALF_LIGHT = MAX_LIGHT / 2;				// ライトの半分
+const float	TITLE_WIDTH = 600.0f;					// タイトルの幅
+const float	TITLE_HEIGHT = 600.0f;					// タイトルの高さ
+const float	MENU_WIDTH = 300.0f;					// メニューの幅
+const float	MENU_HEIGHT = 80.0f;					// メニューの高さ
+const float	CURSOR_SIZE = 50.0f;					// カーソルのサイズ
 const int	MAX_FLASH_RED = 80;						// 点滅にかかる時間(赤)
 const int	HALF_FLASH_RED = MAX_FLASH_RED / 2;		// 点滅にかかる時間(赤)の半分
 const int	MAX_FLASH_BLUE = 120;					// 点滅にかかる時間(青)
-const int	HALF_FLASH_BLUE = 80;	// 点滅にかかる時間(青)の半分
+const int	HALF_FLASH_BLUE = 80;					// 点滅にかかる時間(青)の半分
 
 
 typedef enum
@@ -52,14 +54,13 @@ typedef enum
 	MENU_MAX
 }MENU;
 
-//ライト構造体の定義
 typedef struct
 {
-	D3DXVECTOR3 pos;	//位置
-	float fWidth;		//幅
-	float fHeight;		//高さ
-	bool bUse;			//使用しているか
-	int	nIdx;			// 矩形のインデックス
+	D3DXVECTOR3	pos;		// 位置
+	int			nIdx;		// 矩形のインデックス
+	float		fWidth;		// 幅
+	float		fHeight;	// 高さ
+	bool		bUse;		// 使用しているか
 }Light;
 }// namespaceはここまで
 
@@ -68,14 +69,14 @@ typedef struct
 //==================================================
 namespace
 {
-int	s_nIdxBG;				// 背景の矩形のインデックス
-int	s_nIdx;					// 矩形のインデックス
-int	s_nSelectMenu;			// 選ばれているメニュー
-int	s_nIdxUseMenu;			// 使っているメニューの番号
-int	s_nIdxCursor;			// カーソルの配列のインデックス
-int s_nFlashTimeRed;		// 点滅用の時間(赤)
-int s_nFlashTimeBlue;		// 点滅用の時間(青)
-Light s_Light[MAX_LIGHT];	// ライト構造体の取得
+int		s_nIdxBG;			// 背景の矩形のインデックス
+int		s_nIdx;				// 矩形のインデックス
+int		s_nSelectMenu;		// 選ばれているメニュー
+int		s_nIdxUseMenu;		// 使っているメニューの番号
+int		s_nIdxCursor;		// カーソルの配列のインデックス
+int		s_nFlashTimeRed;	// 点滅用の時間(赤)
+int		s_nFlashTimeBlue;	// 点滅用の時間(青)
+Light	s_Light[MAX_LIGHT];	// ライト構造体の取得
 }// namespaceはここまで
 
 //==================================================
@@ -110,8 +111,14 @@ void InitTitle(void)
 	s_nSelectMenu = 0;
 
 	{// 背景
+		TEXTURE aTexture[MAX_BG];
+
+		aTexture[0] = TEXTURE_BG;
+		aTexture[1] = TEXTURE_BG2;
+		aTexture[2] = TEXTURE_BG3;
+
 		// 矩形の設定
-		s_nIdxBG = SetRectangle(TEXTURE_BG);
+		s_nIdxBG = SetRectangle(aTexture[GetSelectMap()]);
 
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);

@@ -206,7 +206,7 @@ int ChangeSelectMap(void)
 	{//AƒL[‚ª‰Ÿ‚³‚ê‚½‚Æ‚«
 		if (s_nSelect >= 1 && s_nSelect <= MAX_MAP)
 		{//0–¢–ž‚É‚È‚ç‚È‚¢‚È‚ç
-		 //‰¹‚ÌÄ¶
+			//‰¹‚ÌÄ¶
 			PlaySound(SOUND_LABEL_SELECT);
 
 			s_nSelect--;
@@ -223,5 +223,13 @@ int ChangeSelectMap(void)
 		}
 	}
 
+	return s_nSelect;
+}
+
+//============================
+// ‘I‘ð”Ô†‚ÌŽæ“¾
+//============================
+int GetSelectMap(void)
+{
 	return s_nSelect;
 }

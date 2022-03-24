@@ -39,4 +39,5 @@ void SetMap(D3DXVECTOR3 pos);
 void SetBGMap(D3DXVECTOR3 pos);
 void FlashTextureMap(int nNumber);
 int ChangeSelectMap(void);
+int GetSelectMap(void);
 #endif
