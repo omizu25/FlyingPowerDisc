@@ -38,6 +38,7 @@ static Map s_Map[MAX_MAP];							//ルール構造体の取得
 static MAPBG s_MAPBG;								//背景構造体の取得
 static int s_nFlashTime;							//点滅の時間
 static int s_nSelect;								//選択中の番号
+
 //============================
 // ルール選択画面の初期化
 //============================
@@ -49,14 +50,14 @@ void InitMap(void)
 	//------------------------------
 	// テクスチャの取得
 	//------------------------------
-	s_Texture[0] = TEXTURE_Stage01;		//時間
-	s_Texture[1] = TEXTURE_Stage01;		//ポイント数
-	s_Texture[2] = TEXTURE_Stage01;		//セット数
+	s_Texture[0] = TEXTURE_Stage01;
+	s_Texture[1] = TEXTURE_Stage02;
+	s_Texture[2] = TEXTURE_Stage03;
 
-//------------------------------
-//	構造体の初期化
-//------------------------------
-//ルール構造体の初期化
+	//------------------------------
+	//	構造体の初期化
+	//------------------------------
+	//ルール構造体の初期化
 	for (int nCnt = 0; nCnt < MAX_MAP; nCnt++)
 	{
 		Map *Map = s_Map + nCnt;
@@ -71,9 +72,6 @@ void InitMap(void)
 	s_MAPBG.fWidth = 0.0f;
 	s_MAPBG.fHeight = 0.0f;
 	s_MAPBG.bUse = false;
-
-	// 数の初期化
-	InitNumber();
 }
 
 //============================
@@ -81,9 +79,6 @@ void InitMap(void)
 //============================
 void UninitMap(void)
 {
-	// 数の終了
-	UninitNumber();
-
 	for (int nCnt = 0; nCnt < MAX_MAP; nCnt++)
 	{
 		Map *Map = s_Map + nCnt;
@@ -91,6 +86,7 @@ void UninitMap(void)
 		// 矩形を使うのを止める
 		StopUseRectangle(Map->nIdx);
 	}
+
 	// 矩形を使うのを止める
 	StopUseRectangle(s_MAPBG.nIdx);
 }
@@ -103,23 +99,18 @@ void UpdateMap(void)
 	s_nFlashTime++;				//タイムの加算
 	s_nFlashTime %= MAX_FLASH;	//タイムの初期化
 
-	//選択番号の切り替え
-	int nNumber = ChangeSelectMap();
+	//テクスチャの点滅
+	FlashTextureMap(ChangeSelectMap());
 
 	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
 		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
-	 //音の再生
+		//音の再生
 		PlaySound(SOUND_LABEL_ENTER);
 
-	 //タイトルに戻る
+		//タイトルに戻る
 		ChangeMode(MODE_TITLE);
 	}
-	//テクスチャの点滅
-	FlashTextureMap(nNumber);
-
-	//// 数の更新
-	//UpdateNumber();
 }
 
 //============================
@@ -174,7 +165,7 @@ void SetBGMap(D3DXVECTOR3 pos)
 		s_MAPBG.bUse = true;
 
 		// 矩形の設定
-		s_MAPBG.nIdx = SetRectangle(s_Texture[5]);
+		s_MAPBG.nIdx = SetRectangle(TEXTURE_Select_BG);
 
 		D3DXVECTOR3 size = D3DXVECTOR3(s_MAPBG.fWidth, s_MAPBG.fHeight, 0.0f);
 
