@@ -20,6 +20,7 @@
 #include "sound.h"
 #include "texture.h"
 #include "cursor.h"
+#include "player.h"
 
 #include <assert.h>
 
@@ -100,6 +101,12 @@ void InitTitle(void)
 		SetPosRectangle(s_nIdx, pos, size);
 	}
 
+	// プレイヤーの初期化
+	InitPlayer();
+
+	// プレイヤーの設定
+	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.775f, 0.0f), 0, true, PLAYERSIZE * 2.0f);
+
 	{// メニュー
 		// メニューの初期化
 		InitMenu();
@@ -162,6 +169,12 @@ void UninitTitle(void)
 
 	// メニューの終了
 	UninitMenu();
+
+	// カーソルの終了
+	UninitCursor();
+
+	// プレイヤーの終了
+	UninitPlayer();
 
 	// 使うのを止める
 	StopUseRectangle(s_nIdxBG);
