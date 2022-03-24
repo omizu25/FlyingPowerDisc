@@ -34,7 +34,7 @@
 #define DESCRIPTION_HEIGHT	(350.0f)		//説明の高さ
 #define CURSOR_SIZE			(75.0f)			//カーソルのサイズ
 #define UI_SIZE				(100.0f)		//UIのサイズ
-#define SELECT_WIDTH		(225.0f)		//選択の幅
+#define SELECT_WIDTH		(250.0f)		//選択の幅
 #define SELECT_HEIGHT		(50.0f)			//選択の高さ
 
  //------------------------------
@@ -101,7 +101,7 @@ void InitCharacter(void)
 
 	{// プレイヤー選択
 		// 矩形の設定
-		s_nIdx = SetRectangle(TEXTURE_Map_Title);
+		s_nIdx = SetRectangle(TEXTURE_Char_Title);
 
 		D3DXVECTOR3 size = D3DXVECTOR3(SELECT_WIDTH, SELECT_HEIGHT, 0.0f);
 		D3DXVECTOR3 pos = D3DXVECTOR3(SELECT_WIDTH * 0.5f, SELECT_HEIGHT * 0.5f, 0.0f);

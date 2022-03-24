@@ -40,7 +40,7 @@ const int	MIN_POINT = 18;						// ポイントの最小値
 const int	MIN_SET = 1;						// セットの最小値
 const float	NUMBER_WIDTH = 30.0f;				// 数の幅
 const float	NUMBER_HEIGHT = 100.0f;				// 数の高さ
-const float	SELECT_WIDTH = 255.0f;				// 選択の幅
+const float	SELECT_WIDTH = 250.0f;				// 選択の幅
 const float	SELECT_HEIGHT = 50.0f;				// 選択の高さ
 const char	*RULE_FILE = "data/txt/Rule.txt";	// ルールのファイル
 
@@ -135,7 +135,7 @@ void InitRule(void)
 	SetBG(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 
 	// 矩形の設定
-	s_nSelectIdx = SetRectangle(TEXTURE_Map_Title);
+	s_nSelectIdx = SetRectangle(TEXTURE_Rule_Title);
 
 	D3DXVECTOR3 size = D3DXVECTOR3(SELECT_WIDTH, SELECT_HEIGHT, 0.0f);
 	D3DXVECTOR3 pos = D3DXVECTOR3(SELECT_WIDTH * 0.5f, SELECT_HEIGHT * 0.5f, 0.0f);

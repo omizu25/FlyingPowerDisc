@@ -29,7 +29,7 @@
 #define MAX_TEXTURE	(3)					//テクスチャの最大数
 #define MAX_FLASH	(80)				//点滅の往復時間
 #define HALF_FLASH	(MAX_FLASH / 2)		//点滅の切り替え時間
-#define SELECT_WIDTH	(225.0f)		//選択の幅
+#define SELECT_WIDTH	(250.0f)		//選択の幅
 #define SELECT_HEIGHT	(50.0f)			//選択の高さ
 
  //------------------------------
