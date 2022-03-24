@@ -27,10 +27,11 @@
  // マクロ定義
  //------------------------------
 #define MAX_CHARACTER	(5)					//キャラの最大数
-#define START_POS_X		(50.0f)				//スタート位置、調整用
+#define START_POS_X		(175.0f)			//スタート位置、調整用
 #define GAUGE_WIDTH		(50.0f)				//ゲージの幅
 #define GAUGE_HEIGHT	(42.5f)				//ゲージの高さ
 #define CURSOR_SIZE		(75.0f)				//カーソルのサイズ
+#define UI_SIZE			(100.0f)			//UIのサイズ
 
  //------------------------------
  // 列挙型
@@ -64,6 +65,7 @@ Status s_status[MAX_CHARACTER];
 LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
 int s_nIdxBG;
 int s_nIdxMenu;
+int s_nIdxUI[MAXPLAYER];
 int s_nIdxCursor[MAXPLAYER];
 
 //------------------------------
@@ -88,6 +90,26 @@ void InitCharacter(void)
 
 		// 矩形の位置の設定
 		SetPosRectangle(s_nIdxBG, pos, size);
+	}
+
+	{// UI
+		// 矩形の設定
+		s_nIdxUI[0] = SetRectangle(TEXTURE_UI000);
+
+		D3DXVECTOR3 pos = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+		D3DXVECTOR3 size = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxUI[0], pos, size);
+
+		// 矩形の設定
+		s_nIdxUI[1] = SetRectangle(TEXTURE_UI001);
+
+		pos = D3DXVECTOR3(SCREEN_WIDTH - UI_SIZE, UI_SIZE, 0.0f);
+		size = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxUI[1], pos, size);
 	}
 
 	LoadFileSet("data\\txt\\Status.txt");
@@ -195,9 +217,16 @@ void UninitCharacter(void)
 {
 	//音の停止
 	StopSound();
-	
+
 	// 使うのを止める
 	StopUseRectangle(s_nIdxBG);
+	StopUseRectangle(s_nIdxMenu);
+
+	for (int i = 0; i < MAXPLAYER; i++)
+	{
+		StopUseRectangle(s_nIdxUI[i]);
+		StopUseRectangle(s_nIdxCursor[i]);
+	}
 
 	UninitPlayer();
 
