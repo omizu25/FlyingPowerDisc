@@ -205,10 +205,6 @@ void SetMode(void)
 	{// 次のモードの初期化
 	case MODE_TITLE:	// タイトル
 		InitTitle();
-		SetLightRed(D3DXVECTOR3(80.0f, 150.0f, 0.0f), TEXTURE_Light_Red);		//左上赤
-		SetLightRed(D3DXVECTOR3(330.0f, 550.0f, 0.0f), TEXTURE_Light_Red);		//右下赤
-		SetLightBlue(D3DXVECTOR3(560.0f, 350.0f, 0.0f), TEXTURE_Light_Blue);	//右上青
-		SetLightBlue(D3DXVECTOR3(70.0f, 450.0f, 0.0f), TEXTURE_Light_Blue);		//左下青
 		break;
 
 	case MODE_MAP:		// マップ

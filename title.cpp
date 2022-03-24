@@ -96,7 +96,7 @@ void InitTitle(void)
 	// 矩形の初期化
 	InitRectangle();
 
-	//ライト構造体の初期化
+	// ライト構造体の初期化
 	for (int nCnt = 0; nCnt < MAX_LIGHT; nCnt++)
 	{
 		Light *light = s_Light + nCnt;
@@ -109,13 +109,10 @@ void InitTitle(void)
 
 	s_nSelectMenu = 0;
 
-	// 矩形の設定
-	s_nIdxBG = SetRectangle(TEXTURE_BG);
-
-	// 矩形の設定
-	s_nIdx = SetRectangle(TEXTURE_Title_Logo);
-
 	{// 背景
+		// 矩形の設定
+		s_nIdxBG = SetRectangle(TEXTURE_BG);
+
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
 
@@ -123,7 +120,16 @@ void InitTitle(void)
 		SetPosRectangle(s_nIdxBG, pos, size);
 	}
 
+	// ライトの設定
+	SetLightRed(D3DXVECTOR3(80.0f, 100.0f, 0.0f), TEXTURE_Light_Red);		//左上赤
+	SetLightRed(D3DXVECTOR3(330.0f, 550.0f, 0.0f), TEXTURE_Light_Red);		//右下赤
+	SetLightBlue(D3DXVECTOR3(545.0f, 350.0f, 0.0f), TEXTURE_Light_Blue);	//右上青
+	SetLightBlue(D3DXVECTOR3(70.0f, 450.0f, 0.0f), TEXTURE_Light_Blue);		//左下青
+
 	{// ロゴ
+		// 矩形の設定
+		s_nIdx = SetRectangle(TEXTURE_Title_Logo);
+
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.25f, SCREEN_HEIGHT * 0.5f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(TITLE_WIDTH, TITLE_HEIGHT, 0.0f);
 
@@ -131,11 +137,20 @@ void InitTitle(void)
 		SetPosRectangle(s_nIdx, pos, size);
 	}
 
-	// プレイヤーの初期化
-	InitPlayer();
+	{// プレイヤー
+		// プレイヤーの初期化
+		InitPlayer();
 
-	// プレイヤーの設定
-	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.775f, 0.0f), 0, true, PLAYERSIZE * 2.0f);
+		Player *pPlayer = GetPlayer();
+
+		// プレイヤーの設定
+		SetPlayer(D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.815f, 0.0f), pPlayer->nType, true, PLAYERSIZE * 1.4f);
+		
+		pPlayer++;
+
+		// プレイヤーの設定
+		SetPlayer(D3DXVECTOR3(SCREEN_WIDTH * 0.475f, SCREEN_HEIGHT * 0.815f, 0.0f), pPlayer->nType, false, PLAYERSIZE * 1.4f);
+	}
 
 	{// メニュー
 		// メニューの初期化
