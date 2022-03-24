@@ -40,6 +40,8 @@ const int	MIN_POINT = 18;						// ポイントの最小値
 const int	MIN_SET = 1;						// セットの最小値
 const float	NUMBER_WIDTH = 30.0f;				// 数の幅
 const float	NUMBER_HEIGHT = 100.0f;				// 数の高さ
+const float	SELECT_WIDTH = 255.0f;				// 選択の幅
+const float	SELECT_HEIGHT = 50.0f;				// 選択の高さ
 const char	*RULE_FILE = "data/txt/Rule.txt";	// ルールのファイル
 
 typedef enum
@@ -72,10 +74,11 @@ static Switch s_Switch[MAX_SWITCH];	//スイッチ構造体の取得
 static BG s_BG;						//背景構造体の取得
 
 //値
-static int s_nFlashTime;				//点滅の時間
-static int s_nSelect;					//選択中の番号
+static int s_nFlashTime;				// 点滅の時間
+static int s_nSelect;					// 選択中の番号
 static int s_nOption[OPTION_MAX];		// 選択肢の値
 static int s_nNumberIdx[OPTION_MAX];	// 選択肢の値のインデックス
+static int s_nSelectIdx;				// 選択の矩形のインデックス
 
 //============================
 // ルール選択画面の初期化
@@ -127,6 +130,21 @@ void InitRule(void)
 
 	// 数の初期化
 	InitNumber();
+
+	// ルール選択画面の設定
+	SetBG(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+
+	// 矩形の設定
+	s_nSelectIdx = SetRectangle(TEXTURE_Map_Title);
+
+	D3DXVECTOR3 size = D3DXVECTOR3(SELECT_WIDTH, SELECT_HEIGHT, 0.0f);
+	D3DXVECTOR3 pos = D3DXVECTOR3(SELECT_WIDTH * 0.5f, SELECT_HEIGHT * 0.5f, 0.0f);
+
+	SetPosRectangle(s_nSelectIdx, pos, size);
+
+	SetRule(D3DXVECTOR3(400.0f, 150.0f, 0.0f));
+	SetRule(D3DXVECTOR3(400.0f, 350.0f, 0.0f));
+	SetRule(D3DXVECTOR3(400.0f, 550.0f, 0.0f));
 }
 
 //============================
@@ -158,6 +176,9 @@ void UninitRule(void)
 
 	// 矩形を使うのを止める
 	StopUseRectangle(s_BG.nIdx);
+
+	// 矩形を使うのを止める
+	StopUseRectangle(s_nSelectIdx);
 }
 
 //============================
