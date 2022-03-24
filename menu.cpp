@@ -256,6 +256,7 @@ void ChangeOption(int nIdx)
 	assert(nIdx >= 0 && nIdx < MAX_OPTION);
 
 	s_nIdxOption = nIdx;
+	s_nAlphaTime = 0;
 }
 
 //--------------------------------------------------

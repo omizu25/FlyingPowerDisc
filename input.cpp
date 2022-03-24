@@ -45,6 +45,7 @@ static int					s_nTime[PLAYER_MAX];							// 振動持続時間
 static WORD					s_nStrength[PLAYER_MAX];						// 振動の強さ (0 - 65535)
 static bool					s_bUseJoyPad[PLAYER_MAX];						// ジョイパッドを使用してるか
 static bool					s_bStick[PLAYER_MAX][STICK_MAX][DIRECTION_MAX];	// スティックのトリガー情報
+static bool					s_bLean[PLAYER_MAX][STICK_MAX][DIRECTION_MAX];	// スティックが傾いたかどうか
 
 /*↓ マウス ↓*/
 
@@ -414,30 +415,62 @@ static void UpdateStickTrigger(JOYKEY Stick, JOYKEY Key, int nPlayer)
 	switch (Key)
 	{// 傾ける方向
 	case JOYKEY_UP:		// 上
-		if (stick.y >= -fDeadZone)
+		if (s_bLean[nPlayer][nStick][0])
+		{// 傾いた
+			s_bStick[nPlayer][nStick][0] = true;
+			s_bLean[nPlayer][nStick][0] = false;
+		}
+		else
 		{// 傾いてない
-			s_bStick[nPlayer][nStick][0] = false;
+			if (stick.y >= -fDeadZone)
+			{// 傾いてない
+				s_bStick[nPlayer][nStick][0] = false;
+			}
 		}
 		break;
 
 	case JOYKEY_DOWN:	// 下
-		if (stick.y <= fDeadZone)
+		if (s_bLean[nPlayer][nStick][1])
+		{// 傾いた
+			s_bStick[nPlayer][nStick][1] = true;
+			s_bLean[nPlayer][nStick][1] = false;
+		}
+		else
 		{// 傾いてない
-			s_bStick[nPlayer][nStick][1] = false;
+			if (stick.y <= fDeadZone)
+			{// 傾いてない
+				s_bStick[nPlayer][nStick][1] = false;
+			}
 		}
 		break;
 
 	case JOYKEY_LEFT:	// 左
-		if (stick.x >= -fDeadZone)
+		if (s_bLean[nPlayer][nStick][2])
+		{// 傾いた
+			s_bStick[nPlayer][nStick][2] = true;
+			s_bLean[nPlayer][nStick][2] = false;
+		}
+		else
 		{// 傾いてない
-			s_bStick[nPlayer][nStick][2] = false;
+			if (stick.x >= -fDeadZone)
+			{// 傾いてない
+				s_bStick[nPlayer][nStick][2] = false;
+			}
 		}
 		break;
 
 	case JOYKEY_RIGHT:	// 右
-		if (stick.x <= fDeadZone)
+		if (s_bLean[nPlayer][nStick][3])
+		{// 傾いた
+			s_bStick[nPlayer][nStick][3] = true;
+			s_bLean[nPlayer][nStick][3] = false;
+		}
+		else
 		{// 傾いてない
-			s_bStick[nPlayer][nStick][3] = false;
+			if (stick.x <= fDeadZone)
+			{// 傾いてない
+				s_bStick[nPlayer][nStick][3] = false;
+			}
 		}
 		break;
 
@@ -636,7 +669,7 @@ bool GetJoypadIdxStickTrigger(JOYKEY Stick, JOYKEY Key, int nPlayer)
 		{// 左スティックが傾いてない
 			if (stick.y < -fDeadZone)
 			{// 左スティックが傾いた
-				s_bStick[nPlayer][nStick][0] = true;
+				s_bLean[nPlayer][nStick][0] = true;
 				return true;
 			}
 		}
@@ -647,7 +680,7 @@ bool GetJoypadIdxStickTrigger(JOYKEY Stick, JOYKEY Key, int nPlayer)
 		{// 左スティックが傾いてない
 			if (stick.y > fDeadZone)
 			{// 左スティックが傾いた
-				s_bStick[nPlayer][nStick][1] = true;
+				s_bLean[nPlayer][nStick][1] = true;
 				return true;
 			}
 		}
@@ -658,7 +691,7 @@ bool GetJoypadIdxStickTrigger(JOYKEY Stick, JOYKEY Key, int nPlayer)
 		{// 左スティックが傾いてない
 			if (stick.x < -fDeadZone)
 			{// 左スティックが傾いた
-				s_bStick[nPlayer][nStick][2] = true;
+				s_bLean[nPlayer][nStick][2] = true;
 				return true;
 			}
 		}
@@ -669,7 +702,7 @@ bool GetJoypadIdxStickTrigger(JOYKEY Stick, JOYKEY Key, int nPlayer)
 		{// 左スティックが傾いてない
 			if (stick.x > fDeadZone)
 			{// 左スティックが傾いた
-				s_bStick[nPlayer][nStick][3] = true;
+				s_bLean[nPlayer][nStick][3] = true;
 				return true;
 			}
 		}
