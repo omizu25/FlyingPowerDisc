@@ -13,17 +13,17 @@
 typedef enum
 {
 	/*↓ タイトル ↓*/
-	TEXTURE_BG = 0,				// タイトル画面の背景
-	TEXTURE_Frame,				// タイトル画面の枠
-	TEXTURE_Title_blue,			// タイトルロゴ
-	TEXTURE_TitleLight_red,		// タイトルロゴの後光
+	TEXTURE_BG = 0,				// タイトル画面の背景(平原)
+	TEXTURE_BG2,				// タイトル画面の背景(雪原)
+	TEXTURE_BG3,				// タイトル画面の背景(海)
+	TEXTURE_Title_Logo,			// タイトルロゴ
+	TEXTURE_Light_Blue,			// 青い光
+	TEXTURE_Light_Red,			// 赤い光
 	TEXTURE_Game_Start,			// ゲームスタートの文字
 	TEXTURE_Rule_Select,		// ルール選択の文字
 	TEXTURE_Map_Select,			// マップ選択の文字
 	TEXTURE_Char_Select,		// キャラ選択の文字
 	TEXTURE_Tutorial_Start,		// チュートリアルの文字
-	TEXTURE_Three_Point,		// 3ポイント
-	TEXTURE_Five_Point,			// 5ポイント
 
 	/*↓ セレクト ↓*/
 	TEXTURE_Select_Left,		// 左ボタン
@@ -34,31 +34,33 @@ typedef enum
 	TEXTURE_Select_BG,			// セレクト画面の背景
 	TEXTURE_Map_Title,			// マップ選択
 	TEXTURE_Rule_Title,			// ルール選択
+	TEXTURE_Speed,				// 速度
+	TEXTURE_Power,				// 力
 
 	/*↓ ゲーム ↓*/
 	TEXTURE_Disc,				// ディスク
-	TEXTURE_Game_BG,			// ゲーム画面の背景
 	TEXTURE_Number_Yellow,		// 数字(黄色)
 	TEXTURE_Stage01,			// 1つ目のステージ
+	TEXTURE_Stage02,			// 2つ目のステージ
+	TEXTURE_Stage03,			// 3つ目のステージ
+	TEXTURE_Stage01_BG,			// 1つ目のステージの背景
+	TEXTURE_Stage02_BG,			// 2つ目のステージの背景
+	TEXTURE_Stage03_BG,			// 3つ目のステージの背景
 
 	/*↓ ゲーム中のUI ↓*/
-	TEXTURE_Set1_1p,			// セット1(1pカラー)
-	TEXTURE_Set2_1p,			// セット2(1pカラー)
-	TEXTURE_Set3_1p,			// セット3(1pカラー)
-	TEXTURE_Set1_2p,			// セット1(2pカラー)
-	TEXTURE_Set2_2p,			// セット2(2pカラー)
-	TEXTURE_Set3_2p,			// セット3(2pカラー)
 	TEXTURE_GAME_SetFrame01,	// セットの枠(1pカラー)
 	TEXTURE_GAME_SetFrame02,	// セットの枠(2pカラー)
 	TEXTURE_GAME_PtsFrame01,	// ポイントの枠(1pカラー)
 	TEXTURE_GAME_PtsFrame02,	// ポイントの枠(2pカラー)
 	TEXTURE_UI000,				// UI-0
 	TEXTURE_UI001,				// UI-1
-	TEXTURE_Set1,				//セット1の表示
-	TEXTURE_Set2,				//セット2の表示
-	TEXTURE_Set3,				//セット3の表示
-	TEXTURE_Set4,				//セット2の表示
-	TEXTURE_Set5,				//セット3の表示
+	TEXTURE_Set1,				// セット1の表示
+	TEXTURE_Set2,				// セット2の表示
+	TEXTURE_Set3,				// セット3の表示
+	TEXTURE_Set4,				// セット4の表示
+	TEXTURE_Set5,				// セット5の表示
+	TEXTURE_Three_Point,		// 3ポイント
+	TEXTURE_Five_Point,			// 5ポイント
 
 	/*↓ ポーズ ↓*/
 	TEXTURE_Pose_Title,			// ポーズ画面のタイトル
@@ -75,7 +77,7 @@ typedef enum
 	TEXTURE_kitune,				// ゴン
 	TEXTURE_player000,			// スライム
 	TEXTURE_ghost,				// ゴースト
-	TEXTURE_zolbak,				// 地面
+	TEXTURE_cat,				// 猫
 
 	/*↓ エフェクト ↓*/
 	TEXTURE_Effect_fire,		// 炎のエフェクト

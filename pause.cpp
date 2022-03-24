@@ -15,6 +15,7 @@
 #include "game.h"
 #include "mode.h"
 #include "texture.h"
+#include "cursor.h"
 
 #include <assert.h>
 
@@ -23,14 +24,15 @@
 //==================================================
 namespace
 {
-const float		MENU_WIDTH = 450.0f;					// メニューの幅
-const float		MENU_HEIGHT = 125.0f;					// メニューの高さ
-const float		MENU_LEFT = SCREEN_WIDTH * 0.275f;		// メニューの左端
-const float		MENU_RIGHT = SCREEN_WIDTH * 0.725f;		// メニューの右端
-const float		MENU_TOP = SCREEN_HEIGHT * 0.25f;		// メニューの上端
-const float		MENU_BOTTOM = SCREEN_HEIGHT * 0.95f;	// メニューの下端
+const float		MENU_WIDTH = 300.0f;					// メニューの幅
+const float		MENU_HEIGHT = 100.0f;					// メニューの高さ
+const float		MENU_LEFT = SCREEN_WIDTH * 0.3f;		// メニューの左端
+const float		MENU_RIGHT = SCREEN_WIDTH * 0.7f;		// メニューの右端
+const float		MENU_TOP = SCREEN_HEIGHT * 0.35f;		// メニューの上端
+const float		MENU_BOTTOM = SCREEN_HEIGHT * 0.85f;	// メニューの下端
 const D3DXCOLOR	BG_COLOR(0.0f, 0.0f, 0.0f, 0.6f);		// 背景の色
 const D3DXCOLOR	FRAME_COLOR(0.5f, 0.5f, 1.0f, 1.0f);	// フレームの色
+const float		CURSOR_SIZE = 75.0f;					// カーソルのサイズ
 
 typedef enum
 {
@@ -47,6 +49,7 @@ namespace
 {
 int	s_nSelectMenu;	// 選ばれているメニュー
 int	s_nIdxMenu;		// 使っているメニューの番号
+int	s_nIdxCursor;	// カーソルの配列のインデックス
 }// namespaceはここまで
 
 //==================================================
@@ -63,6 +66,51 @@ void Input(void);
 void InitPause(void)
 {
 	s_nSelectMenu = 0;
+
+	{// メニュー
+		MenuArgument menu;
+		menu.nNumUse = MENU_MAX;
+		menu.fLeft = MENU_LEFT;
+		menu.fRight = MENU_RIGHT;
+		menu.fTop = MENU_TOP;
+		menu.fBottom = MENU_BOTTOM;
+		menu.fWidth = MENU_WIDTH;
+		menu.fHeight = MENU_HEIGHT;
+		menu.bSort = true;
+
+		menu.texture[MENU_GAME] = TEXTURE_Pose_Resume;
+		menu.texture[MENU_TITLE] = TEXTURE_Pose_Quit;
+
+		FrameArgument Frame;
+		Frame.bUse = true;
+		Frame.col = FRAME_COLOR;
+		Frame.texture = TEXTURE_NONE;
+
+		// メニューの設定
+		s_nIdxMenu = SetMenu(menu, Frame);
+	}
+
+	{// カーソル
+		CursorArgument cursor;
+		cursor.nNumUse = MENU_MAX;
+		cursor.fPosX = SCREEN_WIDTH * 0.35f;
+		cursor.fTop = MENU_TOP;
+		cursor.fBottom = MENU_BOTTOM;
+		cursor.fWidth = CURSOR_SIZE;
+		cursor.fHeight = CURSOR_SIZE;
+		cursor.texture = TEXTURE_Disc;
+		cursor.nSelect = s_nSelectMenu;
+		cursor.bRotation = true;
+
+		// カーソルの設定
+		s_nIdxCursor = SetCursor(cursor);
+	}
+
+	// メニューの描画するかどうか
+	SetDrawMenu(s_nIdxMenu, false);
+
+	// カーソルの描画するかどうか
+	SetDrawCursor(s_nIdxCursor, false);
 }
 
 //--------------------------------------------------
@@ -94,26 +142,11 @@ void DrawPause(void)
 //--------------------------------------------------
 void SetPause(void)
 {
-	MenuArgument menu;
-	menu.nNumUse = MENU_MAX;
-	menu.fLeft = MENU_LEFT;
-	menu.fRight = MENU_RIGHT;
-	menu.fTop = MENU_TOP;
-	menu.fBottom = MENU_BOTTOM;
-	menu.fWidth = MENU_WIDTH;
-	menu.fHeight = MENU_HEIGHT;
-	menu.bSort = true;
+	// メニューの描画するかどうか
+	SetDrawMenu(s_nIdxMenu, true);
 
-	menu.texture[MENU_GAME] = TEXTURE_Pose_Resume;
-	menu.texture[MENU_TITLE] = TEXTURE_Pose_Quit;
-	
-	FrameArgument Frame;
-	Frame.bUse = true;
-	Frame.col = FRAME_COLOR;
-	Frame.texture = TEXTURE_NONE;
-
-	// メニューの設定
-	s_nIdxMenu = SetMenu(menu, Frame);
+	// カーソルの描画するかどうか
+	SetDrawCursor(s_nIdxCursor, true);
 }
 
 //--------------------------------------------------
@@ -121,8 +154,11 @@ void SetPause(void)
 //--------------------------------------------------
 void ResetPause(void)
 {
-	// メニューのリセット
-	ResetMenu(s_nIdxMenu);
+	// メニューの描画するかどうか
+	SetDrawMenu(s_nIdxMenu, false);
+
+	// カーソルの描画するかどうか
+	SetDrawCursor(s_nIdxCursor, false);
 }
 
 namespace
@@ -137,7 +173,8 @@ void Input(void)
 		return;
 	}
 
-	if (GetKeyboardTrigger(DIK_W))
+	if (GetKeyboardTrigger(DIK_W) || GetKeyboardTrigger(DIK_NUMPAD5) ||
+		GetJoypadTrigger(JOYKEY_UP))
 	{// Wキーが押されたかどうか
 		// 選択肢の色の初期化
 		InitColorOption();
@@ -147,8 +184,11 @@ void Input(void)
 		// 選択肢の変更
 		ChangeOption(s_nSelectMenu);
 
+		// カーソルの位置の変更
+		ChangePosCursor(s_nIdxCursor, s_nSelectMenu);
 	}
-	else if (GetKeyboardTrigger(DIK_S))
+	else if (GetKeyboardTrigger(DIK_S) || GetKeyboardTrigger(DIK_NUMPAD2) ||
+		GetJoypadTrigger(JOYKEY_DOWN))
 	{// Sキーが押されたかどうか
 		// 選択肢の色の初期化
 		InitColorOption();
@@ -157,15 +197,24 @@ void Input(void)
 
 		// 選択肢の変更
 		ChangeOption(s_nSelectMenu);
+
+		// カーソルの位置の変更
+		ChangePosCursor(s_nIdxCursor, s_nSelectMenu);
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN))
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
 		switch (s_nSelectMenu)
 		{
 		case MENU_GAME:		// ゲーム
 			SetEnablePause(false);
-			ResetMenu(s_nIdxMenu);
+
+			// メニューの描画するかどうか
+			SetDrawMenu(s_nIdxMenu, false);
+
+			// カーソルの描画するかどうか
+			SetDrawCursor(s_nIdxCursor, false);
 			break;
 
 		case MENU_TITLE:	// タイトル

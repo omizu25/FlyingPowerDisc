@@ -46,6 +46,9 @@ SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 	{"data/SE/Tee_Shot.wav", 0 },		// SE
 	{"data/SE/wallHit.wav", 0 },		// SE
 	{"data/SE/You_Win.wav", 0 },		// SE
+	{ "data/SE/Enter001.wav", 0 },		// SE
+	{ "data/SE/Select000.wav", 0 },		// SE
+	{ "data/SE/FivePts.wav", 0 },		// SE
 };
 
 //=============================================================================

@@ -27,6 +27,7 @@
 #include "score.h"
 #include "bg.h"
 #include "result.h"
+#include "cursor.h"
 
 #include <assert.h>
 
@@ -86,6 +87,9 @@ void InitGame(void)
 
 	// メニューの初期化
 	InitMenu();
+
+	// カーソル初期化
+	InitCursor();
 
 	// ポーズの初期化
 	InitPause();
@@ -166,6 +170,9 @@ void UninitGame(void)
 
 	// メニューの終了
 	UninitMenu();
+
+	// カーソルの終了
+	UninitCursor();
 }
 
 //--------------------------------------------------
@@ -173,19 +180,21 @@ void UninitGame(void)
 //--------------------------------------------------
 void UpdateGame(void)
 {
-	if (GetKeyboardTrigger(DIK_P))
+	if (GetKeyboardTrigger(DIK_P) || GetJoypadTrigger(JOYKEY_START))
 	{// Pキーが押された
 		if (s_gameState == GAMESTATE_NORMAL)
 		{// 通常状態の時
-			// ポーズのリセット
-			ResetPause();
-
 			s_bPause = !s_bPause;
 
 			if (s_bPause)
-			{// ポーズしている
+			{// ポーズしてる
 				// メニューの設定
 				SetPause();
+			}
+			else
+			{// ポーズしてない
+				// ポーズのリセット
+				ResetPause();
 			}
 		}
 	}
@@ -197,6 +206,9 @@ void UpdateGame(void)
 
 		// メニューの更新
 		UpdateMenu();
+
+		// カーソルの更新
+		UpdateCursor();
 		return;
 	}
 

@@ -9,6 +9,7 @@
 #include "fade.h"
 #include "sound.h"
 #include "mode.h"
+#include "sound.h"
 
 //====================================
 //グローバル変数
@@ -75,6 +76,8 @@ void InitTutorial(void)
 //====================================
 void UninitTutorial(void)
 {
+	//音の停止
+	StopSound();
 	//テクスチャの破棄
 	if (g_pTextureTutorial != NULL)
 	{
@@ -93,8 +96,11 @@ void UninitTutorial(void)
 //====================================
 void UpdateTutorial(void)
 {
-	if (GetKeyboardTrigger(DIK_RETURN) == true)
-	{//ENTERキーが押された
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
+	{//決定キー(ENTERキー)が押されたかどうか
+	 //音の再生
+		PlaySound(SOUND_LABEL_ENTER);
 	 //フェードの取得処理
 		FADE p_fade = GetFade();
 		if (p_fade == FADE_NONE)

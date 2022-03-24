@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="bg.cpp" />
     <ClCompile Include="color.cpp" />
+    <ClCompile Include="cursor.cpp" />
     <ClCompile Include="disc.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -186,6 +187,7 @@
   <ItemGroup>
     <ClInclude Include="bg.h" />
     <ClInclude Include="color.h" />
+    <ClInclude Include="cursor.h" />
     <ClInclude Include="disc.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="fade.h" />

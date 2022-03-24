@@ -17,6 +17,8 @@
 #include "menu.h"
 #include "color.h"
 #include "gauge.h"
+#include "cursor.h"
+#include "sound.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -25,9 +27,11 @@
  // マクロ定義
  //------------------------------
 #define MAX_CHARACTER	(5)					//キャラの最大数
-#define START_POS_X		(50.0f)				//スタート位置、調整用
+#define START_POS_X		(175.0f)			//スタート位置、調整用
 #define GAUGE_WIDTH		(50.0f)				//ゲージの幅
-#define GAUGE_HEIGHT	(45.0f)				//ゲージの高さ
+#define GAUGE_HEIGHT	(42.5f)				//ゲージの高さ
+#define CURSOR_SIZE		(75.0f)				//カーソルのサイズ
+#define UI_SIZE			(100.0f)			//UIのサイズ
 
  //------------------------------
  // 列挙型
@@ -38,7 +42,7 @@ typedef enum
 	MENU_CAPYBARA,	// カピバラ
 	MENU_SLIME,		// スライム
 	MENU_GHOST,		// ゴースト
-	MENU_GROUND,	// 地面
+	MENU_CAT,		// 猫
 	MENU_MAX
 }MENU;
 
@@ -61,6 +65,8 @@ Status s_status[MAX_CHARACTER];
 LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
 int s_nIdxBG;
 int s_nIdxMenu;
+int s_nIdxUI[MAXPLAYER];
+int s_nIdxCursor[MAXPLAYER];
 
 //------------------------------
 // プロトタイプ宣言
@@ -86,6 +92,26 @@ void InitCharacter(void)
 		SetPosRectangle(s_nIdxBG, pos, size);
 	}
 
+	{// UI
+		// 矩形の設定
+		s_nIdxUI[0] = SetRectangle(TEXTURE_UI000);
+
+		D3DXVECTOR3 pos = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+		D3DXVECTOR3 size = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxUI[0], pos, size);
+
+		// 矩形の設定
+		s_nIdxUI[1] = SetRectangle(TEXTURE_UI001);
+
+		pos = D3DXVECTOR3(SCREEN_WIDTH - UI_SIZE, UI_SIZE, 0.0f);
+		size = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxUI[1], pos, size);
+	}
+
 	LoadFileSet("data\\txt\\Status.txt");
 
 	//Player
@@ -104,28 +130,28 @@ void InitCharacter(void)
 		InitGauge();
 
 		float fHeight = GAUGE_HEIGHT * s_status[s_nSelect[0]].fPower;
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT, 0.0f);
 
 		// ゲージの設定
-		s_nIdxPower[0] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+		s_nIdxPower[0] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
-		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+		pos.x = SCREEN_WIDTH * 0.3f;
 
 		// ゲージの設定
-		s_nIdxSpeed[0] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+		s_nIdxSpeed[0] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
-		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.875f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+		pos.x = SCREEN_WIDTH * 0.875f;
 
 		// ゲージの設定
-		s_nIdxPower[1] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+		s_nIdxPower[1] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
-		pos = D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
+		pos.x = SCREEN_WIDTH * 0.7f;
 
 		// ゲージの設定
-		s_nIdxSpeed[1] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH, fHeight);
+		s_nIdxSpeed[1] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 	}
 
 	{// メニュー
@@ -146,7 +172,7 @@ void InitCharacter(void)
 		menu.texture[MENU_CAPYBARA] = TEXTURE_enemy000;
 		menu.texture[MENU_SLIME] = TEXTURE_player000;
 		menu.texture[MENU_GHOST] = TEXTURE_ghost;
-		menu.texture[MENU_GROUND] = TEXTURE_zolbak;
+		menu.texture[MENU_CAT] = TEXTURE_cat;
 
 		FrameArgument Frame;
 		Frame.bUse = false;
@@ -156,6 +182,32 @@ void InitCharacter(void)
 		// メニューの設定
 		s_nIdxMenu = SetMenu(menu, Frame);
 	}
+
+	{// カーソル
+		// カーソル初期化
+		InitCursor();
+
+		CursorArgument cursor;
+		cursor.nNumUse = MENU_MAX;
+		cursor.fPosX = SCREEN_WIDTH * 0.4f;
+		cursor.fTop = 0.0f;
+		cursor.fBottom = SCREEN_HEIGHT;
+		cursor.fWidth = CURSOR_SIZE;
+		cursor.fHeight = CURSOR_SIZE;
+		cursor.texture = TEXTURE_Select_Right;
+		cursor.nSelect = s_nSelect[0];
+		cursor.bRotation = false;
+
+		// カーソルの設定
+		s_nIdxCursor[0] = SetCursor(cursor);
+
+		cursor.fPosX = SCREEN_WIDTH * 0.6f;
+		cursor.texture = TEXTURE_Select_Left;
+		cursor.nSelect = s_nSelect[1];
+
+		// カーソルの設定
+		s_nIdxCursor[1] = SetCursor(cursor);
+	}
 }
 
 //============================
@@ -163,13 +215,26 @@ void InitCharacter(void)
 //============================
 void UninitCharacter(void)
 {
+	//音の停止
+	StopSound();
+
 	// 使うのを止める
 	StopUseRectangle(s_nIdxBG);
+	StopUseRectangle(s_nIdxMenu);
+
+	for (int i = 0; i < MAXPLAYER; i++)
+	{
+		StopUseRectangle(s_nIdxUI[i]);
+		StopUseRectangle(s_nIdxCursor[i]);
+	}
 
 	UninitPlayer();
 
 	// メニューの終了
 	UninitMenu();
+
+	// カーソルの終了
+	UninitCursor();
 
 	// ゲージの終了
 	UninitGauge();
@@ -186,8 +251,11 @@ void UpdateCharacter(void)
 	{
 		Player*player = GetPlayer();
 
-		if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
+		if (GetKeyboardTrigger(DIK_S) || GetJoypadIdxTrigger(JOYKEY_DOWN, 0))
 		{//Sキーが押されたとき
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 		 //数値の減算
 			player->nType++;
 
@@ -197,8 +265,11 @@ void UpdateCharacter(void)
 			}
 		}
 
-		if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP))
+		if (GetKeyboardTrigger(DIK_W) || GetJoypadIdxTrigger(JOYKEY_UP, 0))
 		{//Wキーが押されたとき
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 		 //数値の加算
 			player->nType--;
 			if (player->nType < 0)
@@ -212,14 +283,21 @@ void UpdateCharacter(void)
 		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 
+		// ゲージの変更
 		ChangeGauge();
+
+		// カーソルの位置の変更
+		ChangePosCursor(s_nIdxCursor[0], s_nSelect[0]);
 	}
 
 	{	
 		Player*player = GetPlayer();
 		player++;
-		if (GetKeyboardTrigger(DIK_NUMPAD2) || GetJoypadTrigger(JOYKEY_DOWN))
+		if (GetKeyboardTrigger(DIK_NUMPAD2) || GetJoypadIdxTrigger(JOYKEY_DOWN, 1))
 		{//Sキーが押されたとき
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 		 //数値の減算
 			player->nType++;
 			if (player->nType >= MAX_CHARACTER)
@@ -228,8 +306,11 @@ void UpdateCharacter(void)
 			}
 		}
 
-		if (GetKeyboardTrigger(DIK_NUMPAD5) || GetJoypadTrigger(JOYKEY_UP))
+		if (GetKeyboardTrigger(DIK_NUMPAD5) || GetJoypadIdxTrigger(JOYKEY_UP, 1))
 		{//Wキーが押されたとき
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 		 //数値の加算
 			player->nType--;
 			
@@ -243,13 +324,28 @@ void UpdateCharacter(void)
 		//テクスチャ更新
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 
+		// ゲージの変更
 		ChangeGauge();
+
+		// カーソルの位置の変更
+		ChangePosCursor(s_nIdxCursor[1], s_nSelect[1]);
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN))
-	{	//ゲーム選択画面行く
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
+	{//決定キー(ENTERキー)が押されたかどうか
+		//音の再生
+		PlaySound(SOUND_LABEL_ENTER);
+
+		//ゲーム選択画面行く
 		ChangeMode(MODE_TITLE);
 	}
+
+	// ゲージの更新
+	UpdateGauge();
+
+	// カーソルの更新
+	UpdateCursor();
 }
 
 //============================
@@ -348,26 +444,22 @@ void LoadFileSet(char *Filename)
 static void ChangeGauge(void)
 {
 	float fHeight = GAUGE_HEIGHT * s_status[s_nSelect[0]].fPower;
-	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
 
 	// ゲージの減少
-	SubGauge(s_nIdxPower[0], pos, GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxPower[0], GAUGE_WIDTH, fHeight);
 
 	fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
-	pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
-
+	
 	// ゲージの設定
-	SubGauge(s_nIdxSpeed[0], pos, GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxSpeed[0], GAUGE_WIDTH, fHeight);
 
 	fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
-	pos = D3DXVECTOR3(SCREEN_WIDTH * 0.875f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
-
+	
 	// ゲージの設定
-	SubGauge(s_nIdxPower[1], pos, GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxPower[1], GAUGE_WIDTH, fHeight);
 
 	fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
-	pos = D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT - (fHeight * 0.5f), 0.0f);
-
+	
 	// ゲージの設定
-	SubGauge(s_nIdxSpeed[1], pos, GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxSpeed[1], GAUGE_WIDTH, fHeight);
 }

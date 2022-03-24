@@ -19,6 +19,8 @@
 #include "color.h"
 #include "sound.h"
 #include "texture.h"
+#include "cursor.h"
+#include "player.h"
 
 #include <assert.h>
 
@@ -32,6 +34,7 @@ const float	TITLE_WIDTH = 600.0f;	// タイトルの幅
 const float	TITLE_HEIGHT = 600.0f;	// タイトルの高さ
 const float	MENU_WIDTH = 300.0f;	// メニューの幅
 const float	MENU_HEIGHT = 80.0f;	// メニューの高さ
+const float	CURSOR_SIZE = 50.0f;	// カーソルのサイズ
 
 typedef enum
 {
@@ -49,10 +52,11 @@ typedef enum
 //==================================================
 namespace
 {
-int		s_nIdxBG;		// 背景の矩形のインデックス
-int		s_nIdx;			// 矩形のインデックス
-int		s_nSelectMenu;	// 選ばれているメニュー
-int		s_nIdxUseMenu;	// 使っているメニューの番号
+int	s_nIdxBG;		// 背景の矩形のインデックス
+int	s_nIdx;			// 矩形のインデックス
+int	s_nSelectMenu;	// 選ばれているメニュー
+int	s_nIdxUseMenu;	// 使っているメニューの番号
+int	s_nIdxCursor;	// カーソルの配列のインデックス
 }// namespaceはここまで
 
 //==================================================
@@ -79,7 +83,7 @@ void InitTitle(void)
 	s_nIdxBG = SetRectangle(TEXTURE_BG);
 
 	// 矩形の設定
-	s_nIdx = SetRectangle(TEXTURE_Title_blue);
+	s_nIdx = SetRectangle(TEXTURE_Title_Logo);
 
 	{// 背景
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
@@ -96,6 +100,12 @@ void InitTitle(void)
 		// 矩形の位置の設定
 		SetPosRectangle(s_nIdx, pos, size);
 	}
+
+	// プレイヤーの初期化
+	InitPlayer();
+
+	// プレイヤーの設定
+	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.775f, 0.0f), 0, true, PLAYERSIZE * 2.0f);
 
 	{// メニュー
 		// メニューの初期化
@@ -125,6 +135,25 @@ void InitTitle(void)
 		// メニューの設定
 		s_nIdxUseMenu = SetMenu(menu, Frame);
 	}
+
+	{// カーソル
+		// カーソル初期化
+		InitCursor();
+
+		CursorArgument cursor;
+		cursor.nNumUse = MENU_MAX;
+		cursor.fPosX = SCREEN_WIDTH * 0.595f;
+		cursor.fTop = 0.0f;
+		cursor.fBottom = SCREEN_HEIGHT;
+		cursor.fWidth = CURSOR_SIZE;
+		cursor.fHeight = CURSOR_SIZE;
+		cursor.texture = TEXTURE_Disc;
+		cursor.nSelect = s_nSelectMenu;
+		cursor.bRotation = true;
+
+		// カーソルの設定
+		s_nIdxCursor = SetCursor(cursor);
+	}
 }
 
 //--------------------------------------------------
@@ -141,6 +170,12 @@ void UninitTitle(void)
 	// メニューの終了
 	UninitMenu();
 
+	// カーソルの終了
+	UninitCursor();
+
+	// プレイヤーの終了
+	UninitPlayer();
+
 	// 使うのを止める
 	StopUseRectangle(s_nIdxBG);
 	StopUseRectangle(s_nIdx);
@@ -156,6 +191,9 @@ void UpdateTitle(void)
 
 	// メニューの更新
 	UpdateMenu();
+
+	// カーソルの更新
+	UpdateCursor();
 }
 
 //--------------------------------------------------
@@ -181,6 +219,8 @@ void Input(void)
 
 	if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP))
 	{// Wキーが押されたかどうか
+		PlaySound(SOUND_LABEL_SELECT);
+
 		// 選択肢の色の初期化
 		InitColorOption();
 
@@ -189,9 +229,13 @@ void Input(void)
 		// 選択肢の変更
 		ChangeOption(s_nSelectMenu);
 
+		// カーソルの位置の変更
+		ChangePosCursor(s_nIdxCursor, s_nSelectMenu);
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
 	{// Sキーが押されたかどうか
+		PlaySound(SOUND_LABEL_SELECT);
+
 		// 選択肢の色の初期化
 		InitColorOption();
 
@@ -199,10 +243,15 @@ void Input(void)
 
 		// 選択肢の変更
 		ChangeOption(s_nSelectMenu);
+
+		// カーソルの位置の変更
+		ChangePosCursor(s_nIdxCursor, s_nSelectMenu);
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN))
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
+		PlaySound(SOUND_LABEL_ENTER);
 		switch (s_nSelectMenu)
 		{
 		case MENU_GAME:	// ゲーム

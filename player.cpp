@@ -13,6 +13,7 @@
 #include "game.h"
 #include "effect.h"
 #include "utility.h"
+#include "mode.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -30,6 +31,7 @@
 #define SKILLSETCOUNT (5)		//skillが何回やったら発生するかのカウント
 #define MOVESKILL  (1.1f)		//skill発生中の動きの倍率
 #define POWSKILL  (1.5f)		//skill発生中の攻撃の倍率
+#define TACKLE_SREED (2.0f)		// タックルの速度
 
 //スタティック変数///スタティックをヘッタに使うなよ？
 
@@ -106,6 +108,11 @@ void UninitPlayer(void)
 //===================
 void UpdatePlayer(void)
 {
+	if (GetMode() != MODE_GAME)
+	{// ゲーム状態じゃない
+		return;
+	}
+		
 	switch (GetGameState())
 	{
 	case GAMESTATE_NONE:	// 何もしていない状態
@@ -332,7 +339,8 @@ void MovePlayer(void)
 				s_Player[0].bDive = false;
 			}
 		}
-		else if (GetKeyboardTrigger(DIK_C) || GetJoypadIdxTrigger(JOYKEY_A, 0))
+		else if (GetKeyboardTrigger(DIK_C) || GetJoypadIdxTrigger(JOYKEY_B, 0) ||
+			GetJoypadIdxTrigger(JOYKEY_LEFT_SHOULDER, 0))
 		{//タックル
 			s_Player[0].pos.x += s_Player[0].Speed * 5;
 			s_Player[0].bDive = true;
@@ -406,7 +414,8 @@ void MovePlayer(void)
 	else
 	{// ディスクを持っている
 		s_Player[0].nHaveCount++;
-		if (GetKeyboardTrigger(DIK_SPACE) || GetJoypadIdxTrigger(JOYKEY_A, 0)|| s_Player[0].nHaveCount >= MAX_HAVE_COUNT)
+		if (GetKeyboardTrigger(DIK_SPACE) || GetJoypadIdxTrigger(JOYKEY_A, 0) ||
+			GetJoypadIdxTrigger(JOYKEY_RIGHT_SHOULDER, 0) || s_Player[0].nHaveCount >= MAX_HAVE_COUNT)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[0].bHave = false;
 			pDisc->nThrow = 0;
@@ -466,7 +475,8 @@ void MovePlayer(void)
 				s_Player[1].bDive = false;
 			}
 		}
-		else if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxTrigger(JOYKEY_A, 1))
+		else if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxTrigger(JOYKEY_B, 1) ||
+			GetJoypadIdxTrigger(JOYKEY_LEFT_SHOULDER, 1))
 		{//タックル
 
 			s_Player[1].pos.x -= s_Player[1].Speed * 5;
@@ -541,7 +551,8 @@ void MovePlayer(void)
 	else
 	{// ディスクを持っている
 		s_Player[1].nHaveCount++;
-		if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadIdxTrigger(JOYKEY_A, 1) || s_Player[1].nHaveCount >= MAX_HAVE_COUNT)
+		if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadIdxTrigger(JOYKEY_A, 1) ||
+			GetJoypadIdxTrigger(JOYKEY_RIGHT_SHOULDER, 1) || s_Player[1].nHaveCount >= MAX_HAVE_COUNT)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[1].bHave = false;
 			pDisc->nThrow = 1;
@@ -617,14 +628,14 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 				pDisc->nThrow = 0;
 				s_Player[0].bDive = false;
 				s_Player[0].nDiveCount = 0;
-				pDisc->move = D3DXVECTOR3(DISC_SPEED_X, 0.0f, 0.0f)*s_Player[0].Pow * 3;
+				pDisc->move = D3DXVECTOR3(DISC_SPEED_X, 0.0f, 0.0f)*s_Player[0].Pow * TACKLE_SREED;
 			}
 			else if (pDisc->nThrow == 0)
 			{
 				pDisc->nThrow = 1;
 				s_Player[1].bDive = false;
 				s_Player[1].nDiveCount = 0;
-				pDisc->move = D3DXVECTOR3(-DISC_SPEED_X, 0.0f, 0.0f)*s_Player[1].Pow * 3;
+				pDisc->move = D3DXVECTOR3(-DISC_SPEED_X, 0.0f, 0.0f)*s_Player[1].Pow * TACKLE_SREED;
 			}
 		}
 	
@@ -746,6 +757,9 @@ static void UpdateReset(void)
 		
 		// 矩形の回転する位置の設定
 		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
+
+		pPlayer->bDive = false;
+		pPlayer->nDiveCount = 0;
 	}
 }
 

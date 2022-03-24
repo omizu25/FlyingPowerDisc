@@ -16,6 +16,7 @@
 #include "texture.h"
 #include "number.h"
 #include "mode.h"
+#include "sound.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -133,6 +134,9 @@ void InitRule(void)
 //============================
 void UninitRule(void)
 {
+	//音の停止
+	StopSound();
+
 	// 数の終了
 	UninitNumber();
 
@@ -185,8 +189,12 @@ void UpdateRule(void)
 		SaveRule();
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_A))
-	{//エンターキーが押されたとき
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
+	{//決定キー(ENTERキー)が押されたかどうか
+	 //音の再生
+		PlaySound(SOUND_LABEL_ENTER);
+
 	 //タイトルに戻る
 		ChangeMode(MODE_TITLE);
 	}
@@ -360,6 +368,9 @@ void FlashTexture(int nNumber)
 	//------------------------------
 	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT))
 	{//Aキーが押されたとき
+	 //音の再生
+		PlaySound(SOUND_LABEL_SELECT);
+
 		if (s_nFlashTime >= HALF_FLASH)
 		{
 			// 矩形の色の設定
@@ -377,6 +388,9 @@ void FlashTexture(int nNumber)
 	//------------------------------
 	if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
 	{//Dキーが押されたとき
+	 //音の再生
+		PlaySound(SOUND_LABEL_SELECT);
+
 		if (s_nFlashTime >= HALF_FLASH)
 		{
 			// 矩形の色の設定
@@ -464,6 +478,9 @@ int ChangeSelect(void)
 	{//Wキーが押されたとき
 		if (s_nSelect >= 1 && s_nSelect <= MAX_RULE)
 		{//0未満にならないなら
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 			s_nSelect--;
 		}
 	}
@@ -471,6 +488,9 @@ int ChangeSelect(void)
 	{//Sキーが押されたとき
 		if (s_nSelect >= 0 && s_nSelect < (MAX_RULE - 1))
 		{//最大数を超えならないなら
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 			s_nSelect++;
 		}
 	}

@@ -21,17 +21,17 @@ namespace
 const char *s_FileName[] =
 {// テクスチャのパス
 	/*↓ タイトル ↓*/
-	"data/TEXTURE/TITLE/BG.png",				// タイトル画面の背景
-	"data/TEXTURE/TITLE/Frame.png",				// タイトル画面の枠
-	"data/TEXTURE/TITLE/Title_Rogo.png",		// タイトルロゴ
-	"data/TEXTURE/TITLE/TitleLight_red.png",	// タイトルロゴの後光
+	"data/TEXTURE/TITLE/BG.png",				// タイトル画面の背景(平原)
+	"data/TEXTURE/TITLE/BG2.png",				// タイトル画面の背景(雪原)
+	"data/TEXTURE/TITLE/BG3.png",				// タイトル画面の背景(海)
+	"data/TEXTURE/TITLE/Title_Logo.png",		// タイトルロゴ
+	"data/TEXTURE/TITLE/Light_Blue",			// 青い光
+	"data/TEXTURE/TITLE/Light_Red",				// 赤い光
 	"data/TEXTURE/TITLE/Game_Start.png",		// ゲームスタートの文字
 	"data/TEXTURE/TITLE/Rule_Select.png",		// ルール選択の文字
 	"data/TEXTURE/TITLE/Map_Select.png",		// マップ選択の文字
 	"data/TEXTURE/TITLE/Char_Select.png",		// キャラ選択の文字
 	"data/TEXTURE/TITLE/Tutorial_Start.png",	// チュートリアルの文字
-	"data/TEXTURE/TITLE/ThreePoints.png",		// 3ポイント
-	"data/TEXTURE/TITLE/FivrPoints.png",		// 5ポイント
 
 	/*↓ セレクト ↓*/
 	"data/TEXTURE/SELECT/Select_Left.png",		// 左ボタン
@@ -42,31 +42,33 @@ const char *s_FileName[] =
 	"data/TEXTURE/SELECT/Select_BG.png",		// セレクト画面の背景
 	"data/TEXTURE/SELECT/Map_Title.png",		// マップ選択
 	"data/TEXTURE/SELECT/Rule_Title.png",		// ルール選択
+	"data/TEXTURE/SELECT/SPEED.png",			// 速度
+	"data/TEXTURE/SELECT/POWER.png",			// パワー
 	
 	/*↓ ゲーム ↓*/
 	"data/TEXTURE/GAME/Disc.png",				// ディスク
-	"data/TEXTURE/GAME/Game_BG.png",			// ゲーム画面の背景
 	"data/TEXTURE/GAME/Number_Yellow.png",		// 数字(黄色)
 	"data/TEXTURE/GAME/Stage01.png",			// 1つ目のステージ
+	"data/TEXTURE/GAME/Stage02.png",			// 2つ目のステージ
+	"data/TEXTURE/GAME/Stage03.png",			// 3つ目のステージ
+	"data/TEXTURE/GAME/Stage01_BG.png",			// 1つ目のステージの背景
+	"data/TEXTURE/GAME/Stage02_BG.png",			// 2つ目のステージの背景
+	"data/TEXTURE/GAME/Stage03_BG.png",			// 3つ目のステージの背景
 
 	/*↓ ゲーム中のUI ↓*/
-	"data/TEXTURE/UI/Set1_1p.png",				// セット1(1pカラー)
-	"data/TEXTURE/UI/Set2_1p.png",				// セット2(1pカラー)
-	"data/TEXTURE/UI/Set3_1p.png",				// セット3(1pカラー)
-	"data/TEXTURE/UI/Set1_2p.png",				// セット1(2pカラー)
-	"data/TEXTURE/UI/Set2_2p.png",				// セット2(2pカラー)
-	"data/TEXTURE/UI/Set3_2p.png",				// セット3(2pカラー)
 	"data/TEXTURE/UI/SetFrame01.png",			// セットの枠(1pカラー)
 	"data/TEXTURE/UI/SetFrame02.png",			// セットの枠(2pカラー)
 	"data/TEXTURE/UI/PtsFrame01.png",			// ポイントの枠(1pカラー)
 	"data/TEXTURE/UI/PtsFrame02.png",			// ポイントの枠(2pカラー)
 	"data/TEXTURE/UI/UI000.png",				// プレイヤー1
 	"data/TEXTURE/UI/UI001.png",				// プレイヤー2
-	"data/TEXTURE/UI/Set1.png",					//セット1の表示
-	"data/TEXTURE/UI/Set2.png",					//セット2の表示
-	"data/TEXTURE/UI/Set3.png",					//セット3の表示
-	"data/TEXTURE/UI/Set4.png",					//セット3の表示
-	"data/TEXTURE/UI/Set5.png",					//セット3の表示
+	"data/TEXTURE/UI/Set1.png",					// セット1の表示
+	"data/TEXTURE/UI/Set2.png",					// セット2の表示
+	"data/TEXTURE/UI/Set3.png",					// セット3の表示
+	"data/TEXTURE/UI/Set4.png",					// セット4の表示
+	"data/TEXTURE/UI/Set5.png",					// セット5の表示
+	"data/TEXTURE/UI/ThreePoints.png",			// 3ポイント
+	"data/TEXTURE/UI/FivrPoints.png",			// 5ポイント
 
 	/*↓ ポーズ ↓*/
 	"data/TEXTURE/PAUSE/Pose_Title.png",		// ポーズ画面のタイトル
@@ -83,14 +85,14 @@ const char *s_FileName[] =
 	"data/TEXTURE/PLAYER/kitune.png",			// ゴン
 	"data/TEXTURE/PLAYER/player000.png",		// スライム
 	"data/TEXTURE/PLAYER/ghost.png",			// ゴースト
-	"data/TEXTURE/PLAYER/zolbak.png",			// 地面
+	"data/TEXTURE/PLAYER/cat.png",				// 猫
 
 	/*↓ エフェクト ↓*/
 	"data/TEXTURE/EFFECT/fire.png",			// 炎のエフェクト
 	"data/TEXTURE/EFFECT/spin.png",			// ディスクのエフェクト
 	"data/TEXTURE/EFFECT/tackle.png",		// タックルのエフェクト
 	"data/TEXTURE/EFFECT/Goal.png",			// ゴールのエフェクト
-	"data/TEXTURE/EFFECT/spark.png",		//壁の火花
+	"data/TEXTURE/EFFECT/spark.png",		// 壁の火花
 
 	/*↓ その他 ↓*/
 	"data/TEXTURE/Number_0To9.png",			// 数字

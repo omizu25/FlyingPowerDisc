@@ -49,6 +49,7 @@ typedef struct
 	float		fInterval;			// ‘I‘ðŽˆ‚ÌŠÔŠu
 	float		fBlinkSpeed;		// “_–Å‘¬“x
 	bool		bFrame;				// ˜g‚ª‚¢‚é‚©‚Ç‚¤‚© [ true : ‚¢‚é false : ‚¢‚ç‚È‚¢ ]
+	bool		bDraw;				// •`‰æ‚·‚é‚©‚Ç‚¤‚©
 	bool		bUse;				// Žg—p‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 }Menu;
 }// namespace‚Í‚±‚±‚Ü‚Å
@@ -168,6 +169,8 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		pMenu->fHeight = menu.fBottom - menu.fTop;
 		pMenu->fBlinkSpeed = NORMAL_BLINK_SPEED;
 		pMenu->bFrame = Frame.bUse;
+		pMenu->bDraw = true;
+		pMenu->bUse = true;
 
 		if (menu.bSort)
 		{// c
@@ -177,8 +180,6 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		{// ‰¡
 			pMenu->fInterval = pMenu->fWidth / (menu.nNumUse + 1);
 		}
-
-		pMenu->bUse = true;
 
 		s_nIdxMenu = i;
 		s_nIdxOption = 0;
@@ -278,6 +279,13 @@ void ResetMenu(int nIdx)
 	
 	Menu *pMenu = &s_aMenu[nIdx];
 
+	if (!pMenu->bUse)
+	{// Žg—p‚µ‚Ä‚¢‚È‚¢
+		return;
+	}
+
+	/*« Žg—p‚µ‚Ä‚¢‚é «*/
+
 	if (pMenu->bFrame)
 	{// ˜g‚ðŽg‚Á‚Ä‚¢‚é
 		// Žg‚¤‚Ì‚ðŽ~‚ß‚é
@@ -293,6 +301,45 @@ void ResetMenu(int nIdx)
 	}
 
 	pMenu->bUse = false;
+}
+
+//--------------------------------------------------
+// •`‰æ‚·‚é‚©‚Ç‚¤‚©
+//--------------------------------------------------
+void SetDrawMenu(int nIdx, bool bDraw)
+{
+	assert(nIdx >= 0 && nIdx < MAX_MENU);
+
+	Menu *pMenu = &s_aMenu[nIdx];
+
+	if (!pMenu->bUse)
+	{// Žg—p‚µ‚Ä‚¢‚È‚¢
+		return;
+	}
+
+	/*« Žg—p‚µ‚Ä‚¢‚é «*/
+
+	if (pMenu->bFrame)
+	{// ˜g‚ðŽg‚Á‚Ä‚¢‚é
+		// ‹éŒ`‚Ì•`‰æ‚·‚é‚©‚Ç‚¤‚©
+		SetDrawRectangle(pMenu->nIdx, bDraw);
+	}
+
+	for (int i = 0; i < pMenu->nNumUse; i++)
+	{
+		Option *pOption = &pMenu->Option[i];
+
+		// ‹éŒ`‚Ì•`‰æ‚·‚é‚©‚Ç‚¤‚©
+		SetDrawRectangle(pOption->nIdx, bDraw);
+
+		pOption->col = GetColor(COLOR_WHITE);
+	}
+
+	pMenu->bDraw = bDraw;
+
+	pMenu->fBlinkSpeed = NORMAL_BLINK_SPEED;
+	s_nIdxOption = 0;
+	s_nAlphaTime = 0;
 }
 
 namespace
