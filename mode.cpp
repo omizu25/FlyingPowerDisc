@@ -209,21 +209,11 @@ void SetMode(void)
 
 	case MODE_MAP:		// マップ
 		InitMap();
-		SetBGMap(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
-		SetMap(D3DXVECTOR3(200.0f, 300.0f, 0.0f));
-		SetMap(D3DXVECTOR3(600.0f, 300.0f, 0.0f));
-		SetMap(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
 		break;
 
 	case MODE_RULE:		// ルール
 		LoadRule();
 		InitRule();
-
-		// ルール選択画面の設定
-		SetBG(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
-		SetRule(D3DXVECTOR3(400.0f, 150.0f, 0.0f));
-		SetRule(D3DXVECTOR3(400.0f, 350.0f, 0.0f));
-		SetRule(D3DXVECTOR3(400.0f, 550.0f, 0.0f));
 		break;
 
 	case MODE_GAME:		// ゲーム

@@ -29,6 +29,8 @@
 #define MAX_TEXTURE	(3)					//テクスチャの最大数
 #define MAX_FLASH	(80)				//点滅の往復時間
 #define HALF_FLASH	(MAX_FLASH / 2)		//点滅の切り替え時間
+#define SELECT_WIDTH	(225.0f)		//選択の幅
+#define SELECT_HEIGHT	(50.0f)			//選択の高さ
 
  //------------------------------
  // スタティック変数
@@ -36,6 +38,7 @@
 static TEXTURE		s_Texture[MAX_TEXTURE] = {};	//テクスチャへのポインタ
 static Map s_Map[MAX_MAP];							//ルール構造体の取得
 static MAPBG s_MAPBG;								//背景構造体の取得
+static int s_nIdx;									//矩形のインデックス
 static int s_nFlashTime;							//点滅の時間
 static int s_nSelect;								//選択中の番号
 
@@ -72,6 +75,20 @@ void InitMap(void)
 	s_MAPBG.fWidth = 0.0f;
 	s_MAPBG.fHeight = 0.0f;
 	s_MAPBG.bUse = false;
+
+	SetBGMap(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+
+	// 矩形の設定
+	s_nIdx = SetRectangle(TEXTURE_Map_Title);
+
+	D3DXVECTOR3 size = D3DXVECTOR3(SELECT_WIDTH, SELECT_HEIGHT, 0.0f);
+	D3DXVECTOR3 pos = D3DXVECTOR3(SELECT_WIDTH * 0.5f, SELECT_HEIGHT * 0.5f, 0.0f);
+
+	SetPosRectangle(s_nIdx, pos, size);
+
+	SetMap(D3DXVECTOR3(200.0f, 300.0f, 0.0f));
+	SetMap(D3DXVECTOR3(600.0f, 300.0f, 0.0f));
+	SetMap(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
 }
 
 //============================
@@ -89,6 +106,7 @@ void UninitMap(void)
 
 	// 矩形を使うのを止める
 	StopUseRectangle(s_MAPBG.nIdx);
+	StopUseRectangle(s_nIdx);
 }
 
 //============================

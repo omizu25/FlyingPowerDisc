@@ -34,6 +34,8 @@
 #define DESCRIPTION_HEIGHT	(350.0f)		//説明の高さ
 #define CURSOR_SIZE			(75.0f)			//カーソルのサイズ
 #define UI_SIZE				(100.0f)		//UIのサイズ
+#define SELECT_WIDTH		(225.0f)		//選択の幅
+#define SELECT_HEIGHT		(50.0f)			//選択の高さ
 
  //------------------------------
  // 列挙型
@@ -60,17 +62,18 @@ typedef struct
  //------------------------------
  // スタティック変数
  //------------------------------
-int s_nSelect[MAXPLAYER];
-int s_nIdxPowerGauge[MAXPLAYER];
-int s_nIdxSpeedGauge[MAXPLAYER];
-int s_nIdxPower[MAXPLAYER];
-int s_nIdxSpeed[MAXPLAYER];
-Status s_status[MAX_CHARACTER];
-LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
-int s_nIdxBG;
-int s_nIdxMenu;
-int s_nIdxUI[MAXPLAYER];
-int s_nIdxCursor[MAXPLAYER];
+static int s_nSelect[MAXPLAYER];
+static int s_nIdxPowerGauge[MAXPLAYER];
+static int s_nIdxSpeedGauge[MAXPLAYER];
+static int s_nIdxPower[MAXPLAYER];
+static int s_nIdxSpeed[MAXPLAYER];
+static Status s_status[MAX_CHARACTER];
+static LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
+static int s_nIdxBG;
+static int s_nIdxMenu;
+static int s_nIdxUI[MAXPLAYER];
+static int s_nIdxCursor[MAXPLAYER];
+static int s_nIdx;
 
 //------------------------------
 // プロトタイプ宣言
@@ -94,6 +97,16 @@ void InitCharacter(void)
 
 		// 矩形の位置の設定
 		SetPosRectangle(s_nIdxBG, pos, size);
+	}
+
+	{// プレイヤー選択
+		// 矩形の設定
+		s_nIdx = SetRectangle(TEXTURE_Map_Title);
+
+		D3DXVECTOR3 size = D3DXVECTOR3(SELECT_WIDTH, SELECT_HEIGHT, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SELECT_WIDTH * 0.5f, SELECT_HEIGHT * 0.5f, 0.0f);
+
+		SetPosRectangle(s_nIdx, pos, size);
 	}
 
 	{// UI
@@ -271,6 +284,7 @@ void UninitCharacter(void)
 
 	// 使うのを止める
 	StopUseRectangle(s_nIdxBG);
+	StopUseRectangle(s_nIdx);
 	StopUseRectangle(s_nIdxMenu);
 
 	for (int i = 0; i < MAXPLAYER; i++)
