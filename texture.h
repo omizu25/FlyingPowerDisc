@@ -40,6 +40,11 @@ typedef enum
 	TEXTURE_Game_BG,			// ゲーム画面の背景
 	TEXTURE_Number_Yellow,		// 数字(黄色)
 	TEXTURE_Stage01,			// 1つ目のステージ
+	TEXTURE_Stage02,			// 2つ目のステージ
+	TEXTURE_Stage03,			// 3つ目のステージ
+	TEXTURE_Stage01_BG,			// 1つ目のステージの背景
+	TEXTURE_Stage02_BG,			// 2つ目のステージの背景
+	TEXTURE_Stage03_BG,			// 3つ目のステージの背景
 
 	/*↓ ゲーム中のUI ↓*/
 	TEXTURE_Set1_1p,			// セット1(1pカラー)
