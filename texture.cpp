@@ -45,6 +45,9 @@ const char *s_FileName[] =
 	"data/TEXTURE/SELECT/Char_Title.png",		// キャラ選択
 	"data/TEXTURE/SELECT/SPEED.png",			// 速度
 	"data/TEXTURE/SELECT/POWER.png",			// パワー
+	"data/TEXTURE/SELECT/STAGE01.png",			// ステージ1
+	"data/TEXTURE/SELECT/STAGE02.png",			// ステージ2
+	"data/TEXTURE/SELECT/STAGE03.png",			// ステージ3
 	
 	/*↓ ゲーム ↓*/
 	"data/TEXTURE/GAME/Disc.png",				// ディスク

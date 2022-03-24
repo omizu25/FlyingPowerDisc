@@ -37,6 +37,9 @@ typedef enum
 	TEXTURE_Char_Title,			// キャラ選択
 	TEXTURE_Speed,				// 速度
 	TEXTURE_Power,				// 力
+	TEXTURE_Stage1,				// ステージ1
+	TEXTURE_Stage2,				// ステージ2
+	TEXTURE_Stage3,				// ステージ3
 
 	/*↓ ゲーム ↓*/
 	TEXTURE_Disc,				// ディスク
