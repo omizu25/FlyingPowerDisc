@@ -26,12 +26,14 @@
  //------------------------------
  // マクロ定義
  //------------------------------
-#define MAX_CHARACTER	(5)					//キャラの最大数
-#define START_POS_X		(175.0f)			//スタート位置、調整用
-#define GAUGE_WIDTH		(50.0f)				//ゲージの幅
-#define GAUGE_HEIGHT	(42.5f)				//ゲージの高さ
-#define CURSOR_SIZE		(75.0f)				//カーソルのサイズ
-#define UI_SIZE			(100.0f)			//UIのサイズ
+#define MAX_CHARACTER		(5)				//キャラの最大数
+#define START_POS_X			(175.0f)		//スタート位置、調整用
+#define GAUGE_WIDTH			(50.0f)			//ゲージの幅
+#define GAUGE_HEIGHT		(35.0f)			//ゲージの高さ
+#define DESCRIPTION_WIDTH	(50.0f)			//説明の幅
+#define DESCRIPTION_HEIGHT	(350.0f)		//説明の高さ
+#define CURSOR_SIZE			(75.0f)			//カーソルのサイズ
+#define UI_SIZE				(100.0f)		//UIのサイズ
 
  //------------------------------
  // 列挙型
@@ -59,6 +61,8 @@ typedef struct
  // スタティック変数
  //------------------------------
 int s_nSelect[MAXPLAYER];
+int s_nIdxPowerGauge[MAXPLAYER];
+int s_nIdxSpeedGauge[MAXPLAYER];
 int s_nIdxPower[MAXPLAYER];
 int s_nIdxSpeed[MAXPLAYER];
 Status s_status[MAX_CHARACTER];
@@ -83,7 +87,7 @@ void InitCharacter(void)
 
 	{// 背景
 		// 矩形の設定
-		s_nIdxBG = SetRectangle(TEXTURE_BG);
+		s_nIdxBG = SetRectangle(TEXTURE_Select_BG);
 
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
@@ -96,7 +100,7 @@ void InitCharacter(void)
 		// 矩形の設定
 		s_nIdxUI[0] = SetRectangle(TEXTURE_UI000);
 
-		D3DXVECTOR3 pos = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(UI_SIZE, 130.0f, 0.0f);
 		D3DXVECTOR3 size = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
 
 		// 矩形の位置の設定
@@ -105,8 +109,7 @@ void InitCharacter(void)
 		// 矩形の設定
 		s_nIdxUI[1] = SetRectangle(TEXTURE_UI001);
 
-		pos = D3DXVECTOR3(SCREEN_WIDTH - UI_SIZE, UI_SIZE, 0.0f);
-		size = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+		pos.x = SCREEN_WIDTH - UI_SIZE;
 
 		// 矩形の位置の設定
 		SetPosRectangle(s_nIdxUI[1], pos, size);
@@ -119,39 +122,87 @@ void InitCharacter(void)
 
 	Player *pPlayer = GetPlayer();
 	s_nSelect[0] = pPlayer->nType;
-	SetPlayer(D3DXVECTOR3(START_POS_X + PLAYERSIZE , SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, true, PLAYERSIZE*2);
+	SetPlayer(D3DXVECTOR3(START_POS_X + PLAYERSIZE , SCREEN_HEIGHT * 0.25f, 0.0f), pPlayer->nType, true, PLAYERSIZE*2);
 
 	pPlayer++;
 	s_nSelect[1] = pPlayer->nType;
-	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - START_POS_X - PLAYERSIZE, SCREEN_HEIGHT * 0.2f, 0.0f), pPlayer->nType, false, PLAYERSIZE*2);
+	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - START_POS_X - PLAYERSIZE, SCREEN_HEIGHT * 0.25f, 0.0f), pPlayer->nType, false, PLAYERSIZE*2);
 	
 	{// ゲージ
 		// ゲージの初期化
 		InitGauge();
 
 		float fHeight = GAUGE_HEIGHT * s_status[s_nSelect[0]].fPower;
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT * 0.9025f, 0.0f);
 
 		// ゲージの設定
-		s_nIdxPower[0] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
+		s_nIdxPowerGauge[0] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
 		pos.x = SCREEN_WIDTH * 0.3f;
 
 		// ゲージの設定
-		s_nIdxSpeed[0] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
+		s_nIdxSpeedGauge[0] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
 		pos.x = SCREEN_WIDTH * 0.875f;
 
 		// ゲージの設定
-		s_nIdxPower[1] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
+		s_nIdxPowerGauge[1] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
 		pos.x = SCREEN_WIDTH * 0.7f;
 
 		// ゲージの設定
-		s_nIdxSpeed[1] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
+		s_nIdxSpeedGauge[1] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
+	}
+
+	{// 説明
+		D3DXVECTOR3 size = D3DXVECTOR3(DESCRIPTION_WIDTH, DESCRIPTION_HEIGHT, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, (SCREEN_HEIGHT * 0.9025f) - (size.y * 0.5f), 0.0f);
+
+		for (int i = 0; i < MAXPLAYER; i++)
+		{
+			// 矩形の設定
+			s_nIdxPower[i] = SetRectangle(TEXTURE_Power);
+			s_nIdxSpeed[i] = SetRectangle(TEXTURE_Speed);
+
+			switch (i)
+			{// パワーのXの位置
+			case 0:
+				pos.x = SCREEN_WIDTH * 0.075f;
+				break;
+
+			case 1:
+				pos.x = SCREEN_WIDTH * 0.925f;
+				break;
+
+			default:
+				assert(false);
+				break;
+			}
+
+			// 矩形の位置の設定
+			SetPosRectangle(s_nIdxPower[i], pos, size);
+
+			switch (i)
+			{// スピードのXの位置
+			case 0:
+				pos.x = SCREEN_WIDTH * 0.25f;
+				break;
+
+			case 1:
+				pos.x = SCREEN_WIDTH * 0.75f;
+				break;
+
+			default:
+				assert(false);
+				break;
+			}
+
+			// 矩形の位置の設定
+			SetPosRectangle(s_nIdxSpeed[i], pos, size);
+		}
 	}
 
 	{// メニュー
@@ -226,6 +277,8 @@ void UninitCharacter(void)
 	{
 		StopUseRectangle(s_nIdxUI[i]);
 		StopUseRectangle(s_nIdxCursor[i]);
+		StopUseRectangle(s_nIdxPower[i]);
+		StopUseRectangle(s_nIdxSpeed[i]);
 	}
 
 	UninitPlayer();
@@ -446,20 +499,20 @@ static void ChangeGauge(void)
 	float fHeight = GAUGE_HEIGHT * s_status[s_nSelect[0]].fPower;
 
 	// ゲージの減少
-	SubGauge(s_nIdxPower[0], GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxPowerGauge[0], GAUGE_WIDTH, fHeight);
 
 	fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
 	
 	// ゲージの設定
-	SubGauge(s_nIdxSpeed[0], GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxSpeedGauge[0], GAUGE_WIDTH, fHeight);
 
 	fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
 	
 	// ゲージの設定
-	SubGauge(s_nIdxPower[1], GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxPowerGauge[1], GAUGE_WIDTH, fHeight);
 
 	fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
 	
 	// ゲージの設定
-	SubGauge(s_nIdxSpeed[1], GAUGE_WIDTH, fHeight);
+	SubGauge(s_nIdxSpeedGauge[1], GAUGE_WIDTH, fHeight);
 }
