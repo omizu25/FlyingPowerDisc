@@ -276,17 +276,21 @@ void Goal(void)
 	{// 右
 		if ((s_disc.pos.y >= GOAL_TOP) && s_disc.pos.y <= GOAL_BOTTOM)
 		{
+			//5点の歓声
+			PlaySound(SOUND_LABEL_FIVE);
+
 			// ポイント数の加算
 			AddPointScore(0, 5);
 		}
 		else
 		{
+			//3点の歓声
+			PlaySound(SOUND_LABEL_KANSEI);
+
 			// ポイント数の加算
 			AddPointScore(0, 3);
 		}
 		SetEffect(D3DXVECTOR3(s_disc.pos.x, s_disc.pos.y, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_GOAL, 100, 50.0f, true);
-		//歓声
-		PlaySound(SOUND_LABEL_KANSEI);
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
 
@@ -300,17 +304,21 @@ void Goal(void)
 	{// 左
 		if ((s_disc.pos.y >= GOAL_TOP) && s_disc.pos.y <= GOAL_BOTTOM)
 		{
+			//5点の歓声
+			PlaySound(SOUND_LABEL_FIVE);
+
 			// ポイント数の加算
 			AddPointScore(1, 5);
 		}
 		else
 		{
+			//3点の歓声
+			PlaySound(SOUND_LABEL_KANSEI);
+
 			// ポイント数の加算
 			AddPointScore(1, 3);
 		}
 		SetEffect(D3DXVECTOR3(s_disc.pos.x, s_disc.pos.y, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_GOAL, 100, 50.0f, false);
-		//歓声
-		PlaySound(SOUND_LABEL_KANSEI);
 		// ゲームの状態の設定
 		SetGameState(GAMESTATE_RESET);
 

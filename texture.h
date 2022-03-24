@@ -50,11 +50,11 @@ typedef enum
 	TEXTURE_GAME_PtsFrame02,	// ポイントの枠(2pカラー)
 	TEXTURE_UI000,				// UI-0
 	TEXTURE_UI001,				// UI-1
-	TEXTURE_Set1,				//セット1の表示
-	TEXTURE_Set2,				//セット2の表示
-	TEXTURE_Set3,				//セット3の表示
-	TEXTURE_Set4,				//セット4の表示
-	TEXTURE_Set5,				//セット5の表示
+	TEXTURE_Set1,				// セット1の表示
+	TEXTURE_Set2,				// セット2の表示
+	TEXTURE_Set3,				// セット3の表示
+	TEXTURE_Set4,				// セット4の表示
+	TEXTURE_Set5,				// セット5の表示
 	TEXTURE_Three_Point,		// 3ポイント
 	TEXTURE_Five_Point,			// 5ポイント
 

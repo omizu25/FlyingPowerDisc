@@ -18,6 +18,7 @@
 #include "color.h"
 #include "gauge.h"
 #include "cursor.h"
+#include "sound.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -26,10 +27,11 @@
  // マクロ定義
  //------------------------------
 #define MAX_CHARACTER	(5)					//キャラの最大数
-#define START_POS_X		(50.0f)				//スタート位置、調整用
+#define START_POS_X		(175.0f)			//スタート位置、調整用
 #define GAUGE_WIDTH		(50.0f)				//ゲージの幅
 #define GAUGE_HEIGHT	(42.5f)				//ゲージの高さ
 #define CURSOR_SIZE		(75.0f)				//カーソルのサイズ
+#define UI_SIZE			(100.0f)			//UIのサイズ
 
  //------------------------------
  // 列挙型
@@ -63,6 +65,7 @@ Status s_status[MAX_CHARACTER];
 LPDIRECT3DTEXTURE9 s_pTexture[MAX_CHARACTER];
 int s_nIdxBG;
 int s_nIdxMenu;
+int s_nIdxUI[MAXPLAYER];
 int s_nIdxCursor[MAXPLAYER];
 
 //------------------------------
@@ -87,6 +90,26 @@ void InitCharacter(void)
 
 		// 矩形の位置の設定
 		SetPosRectangle(s_nIdxBG, pos, size);
+	}
+
+	{// UI
+		// 矩形の設定
+		s_nIdxUI[0] = SetRectangle(TEXTURE_UI000);
+
+		D3DXVECTOR3 pos = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+		D3DXVECTOR3 size = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxUI[0], pos, size);
+
+		// 矩形の設定
+		s_nIdxUI[1] = SetRectangle(TEXTURE_UI001);
+
+		pos = D3DXVECTOR3(SCREEN_WIDTH - UI_SIZE, UI_SIZE, 0.0f);
+		size = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxUI[1], pos, size);
 	}
 
 	LoadFileSet("data\\txt\\Status.txt");
@@ -192,8 +215,18 @@ void InitCharacter(void)
 //============================
 void UninitCharacter(void)
 {
+	//音の停止
+	StopSound();
+
 	// 使うのを止める
 	StopUseRectangle(s_nIdxBG);
+	StopUseRectangle(s_nIdxMenu);
+
+	for (int i = 0; i < MAXPLAYER; i++)
+	{
+		StopUseRectangle(s_nIdxUI[i]);
+		StopUseRectangle(s_nIdxCursor[i]);
+	}
 
 	UninitPlayer();
 
@@ -220,6 +253,9 @@ void UpdateCharacter(void)
 
 		if (GetKeyboardTrigger(DIK_S) || GetJoypadIdxTrigger(JOYKEY_DOWN, 0))
 		{//Sキーが押されたとき
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 		 //数値の減算
 			player->nType++;
 
@@ -231,6 +267,9 @@ void UpdateCharacter(void)
 
 		if (GetKeyboardTrigger(DIK_W) || GetJoypadIdxTrigger(JOYKEY_UP, 0))
 		{//Wキーが押されたとき
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 		 //数値の加算
 			player->nType--;
 			if (player->nType < 0)
@@ -256,6 +295,9 @@ void UpdateCharacter(void)
 		player++;
 		if (GetKeyboardTrigger(DIK_NUMPAD2) || GetJoypadIdxTrigger(JOYKEY_DOWN, 1))
 		{//Sキーが押されたとき
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 		 //数値の減算
 			player->nType++;
 			if (player->nType >= MAX_CHARACTER)
@@ -266,6 +308,9 @@ void UpdateCharacter(void)
 
 		if (GetKeyboardTrigger(DIK_NUMPAD5) || GetJoypadIdxTrigger(JOYKEY_UP, 1))
 		{//Wキーが押されたとき
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 		 //数値の加算
 			player->nType--;
 			
@@ -289,6 +334,9 @@ void UpdateCharacter(void)
 	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
 		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
+		//音の再生
+		PlaySound(SOUND_LABEL_ENTER);
+
 		//ゲーム選択画面行く
 		ChangeMode(MODE_TITLE);
 	}

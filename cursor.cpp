@@ -23,8 +23,8 @@
 //==================================================
 namespace
 {
-const int	MAX_CURSOR = 16;		// カーソルの最大数
-const float	ROT_SPEED = -0.25f;		// 回転速度
+const int	MAX_CURSOR = 16;	// カーソルの最大数
+const float	ROT_SPEED = -0.15f;	// 回転速度
 
 /*↓ メニュー ↓*/
 typedef struct
