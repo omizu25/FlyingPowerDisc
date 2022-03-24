@@ -173,7 +173,7 @@ void UpdateRule(void)
 
 	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT))
 	{//Aキーが押されたとき
-	//数値の減算
+		//数値の減算
 		SubRule(nNumber);
 
 		// セーブ
@@ -182,7 +182,7 @@ void UpdateRule(void)
 
 	if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
 	{//Dキーが押されたとき
-	 //数値の加算
+		//数値の加算
 		AddRule(nNumber);
 
 		// セーブ
@@ -192,10 +192,10 @@ void UpdateRule(void)
 	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
 		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
-	 //音の再生
+		 //音の再生
 		PlaySound(SOUND_LABEL_ENTER);
 
-	 //タイトルに戻る
+		 //タイトルに戻る
 		ChangeMode(MODE_TITLE);
 	}
 	//テクスチャの点滅
