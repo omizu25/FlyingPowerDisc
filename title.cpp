@@ -231,6 +231,14 @@ void UninitTitle(void)
 	// Žg‚¤‚Ì‚ðŽ~‚ß‚é
 	StopUseRectangle(s_nIdxBG);
 	StopUseRectangle(s_nIdx);
+
+	for (int i = 0; i < MAX_LIGHT; i++)
+	{
+		Light *pLight = &s_Light[i];
+
+		// Žg‚¤‚Ì‚ðŽ~‚ß‚é
+		StopUseRectangle(pLight->nIdx);
+	}
 }
 
 //--------------------------------------------------

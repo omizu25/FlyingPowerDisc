@@ -85,6 +85,8 @@ static void ChangeGauge(void);
 //============================
 void InitCharacter(void)
 {
+	PlaySound(SOUND_LABEL_TITLE);
+
 	// ‹éŒ`‚Ì‰Šú‰»
 	InitRectangle();
 

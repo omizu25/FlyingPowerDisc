@@ -55,6 +55,8 @@ static int s_nIdxCursor;							//カーソルの配列のインデックス
 //============================
 void InitMap(void)
 {
+	PlaySound(SOUND_LABEL_TITLE);
+
 	// 矩形の初期化
 	InitRectangle();
 
@@ -146,12 +148,15 @@ void InitMap(void)
 //============================
 void UninitMap(void)
 {
+	StopSound();
+
 	for (int nCnt = 0; nCnt < MAX_MAP; nCnt++)
 	{
 		Map *Map = s_Map + nCnt;
 
 		// 矩形を使うのを止める
 		StopUseRectangle(Map->nIdx);
+		StopUseRectangle(s_nIdxName[nCnt]);
 	}
 
 	// 矩形を使うのを止める

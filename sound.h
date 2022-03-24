@@ -14,7 +14,7 @@
 //*****************************************************************************
 typedef enum
 {
-	SOUND_LABEL_TITLE = 0,		// BGM0
+	SOUND_LABEL_TITLE = 0,
 	SOUND_LABEL_TITLE2,
 	SOUND_LABEL_BGM,
 	SOUND_LABEL_FIGHT,

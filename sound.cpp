@@ -36,13 +36,13 @@ SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 	{"data/BGM/yukiguni.wav", -1},		// BGM0
 	{"data/BGM/BGMTITLE.wav", -1 },		// BGM1
 	{"data/BGM/BGM.wav", -1 },			// BGM2
-	{"data/SE/fight.wav", 0 },		// SE
-	{"data/SE/kansei.wav", 0 },		// SE
+	{"data/SE/fight.wav", 0 },			// SE
+	{"data/SE/kansei.wav", 0 },			// SE
 	{"data/SE/Perfect.wav", 0 },		// SE
-	{"data/SE/round1.wav", 0 },		// SE
-	{"data/SE/round2.wav", 0 },		// SE
-	{"data/SE/round3.wav", 0 },		// SE
-	{"data/SE/Run.wav", 0 },		// SE
+	{"data/SE/round1.wav", 0 },			// SE
+	{"data/SE/round2.wav", 0 },			// SE
+	{"data/SE/round3.wav", 0 },			// SE
+	{"data/SE/Run.wav", 0 },			// SE
 	{"data/SE/Tee_Shot.wav", 0 },		// SE
 	{"data/SE/wallHit.wav", 0 },		// SE
 	{"data/SE/You_Win.wav", 0 },		// SE

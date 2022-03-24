@@ -8,7 +8,7 @@
 #include"disc.h"
 
 #define MAXEFFECTR (2)//“oêÅ‘å”
-#define MAX_EFFECT (128)//Effect‚ÌÅ‘å”
+#define MAX_EFFECT (256)//Effect‚ÌÅ‘å”
 typedef enum
 {
 	EFFECTSTATE_SHOOT = 0,	//‰Š

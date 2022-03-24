@@ -107,7 +107,16 @@ void InitResult(void)
 //--------------------------------------------------
 void UninitResult(void)
 {
-	
+	for (int i = 0; i < MAXPLAYER; i++)
+	{
+		Result *pResult = &s_aResult[i];
+
+		// Žg‚¤‚Ì‚ðŽ~‚ß‚é
+		StopUseRectangle(pResult->nIdx);
+	}
+
+	// Žg‚¤‚Ì‚ðŽ~‚ß‚é
+	StopUseRectangle(s_nIdxDraw);
 }
 
 //--------------------------------------------------

@@ -88,9 +88,6 @@ void InitPlayer(void)
 //===================
 void UninitPlayer(void)
 {
-	//サウンド停止
-	StopSound();
-
 	//テクスチャの破棄
 	for (int Tex = 0; Tex < MAXPLAYERTYPE; Tex++)
 	{

@@ -25,6 +25,7 @@ LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffTutorial = NULL;	//頂点バッファへのポインタ
 //====================================
 void InitTutorial(void)
 {
+	PlaySound(SOUND_LABEL_TITLE);
 
 	LPDIRECT3DDEVICE9 pDevice;
 

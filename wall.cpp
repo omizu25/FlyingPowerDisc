@@ -13,7 +13,6 @@
 
 //スタティック変数///スタティックをヘッタに使うなよ？
 
-static LPDIRECT3DTEXTURE9 s_pTextureWall[MAXWALLTYPE] = {}; //テクスチャのポインタ
 static LPDIRECT3DVERTEXBUFFER9 s_pVtxBuffWall = NULL; //頂点バッファの設定
 static D3DXVECTOR3	s_rotWall;	//向き
 static WALL Type[MAXWALL];
@@ -83,17 +82,6 @@ void UninitWall(void)
 {
 	//サウンド停止
 	StopSound();
-
-	//テクスチャの破棄
-	for (int Tex = 0; Tex < MAXWALLTYPE; Tex++)
-	{
-		//テクスチャの破棄
-		if (s_pTextureWall[Tex] != NULL)
-		{
-			s_pTextureWall[Tex]->Release();
-			s_pTextureWall[Tex] = NULL;
-		}
-	}
 
 	//頂点バッファの破棄
 	if (s_pVtxBuffWall != NULL)

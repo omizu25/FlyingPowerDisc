@@ -113,6 +113,7 @@ void UninitScore(void)
 		// ”‚ğg‚¤‚Ì‚ğ~‚ß‚é
 		StopUseNumber(s_nSetIdx[nPlayerNo]);
 		StopUseNumber(s_nPointIdx[nPlayerNo]);
+		StopUseNumber(s_nPointUI[nPlayerNo]);
 	}
 }
 

@@ -127,11 +127,15 @@ void InitUi(void)
 void UninitUi(void)
 {
 	//テクスチャの破棄
-	if (g_pTextureUi[NUM_UI] != NULL)
+	for (int i = 0; i < NUM_UI; i++)
 	{
-		g_pTextureUi[NUM_UI]->Release();
-		g_pTextureUi[NUM_UI] = NULL;
+		if (g_pTextureUi[i] != NULL)
+		{
+			g_pTextureUi[i]->Release();
+			g_pTextureUi[i] = NULL;
+		}
 	}
+
 	//頂点バッファの破棄
 	if (g_pVtxBuffUi != NULL)
 	{

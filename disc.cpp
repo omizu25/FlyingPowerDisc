@@ -82,9 +82,6 @@ void InitDisc(void)
 //--------------------------------------------------
 void UninitDisc(void)
 {
-	//サウンド停止
-	StopSound();
-
 	// 使うのを止める
 	StopUseRectangle(s_disc.nIdx);
 }

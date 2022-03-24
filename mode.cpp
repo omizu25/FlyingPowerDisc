@@ -45,7 +45,7 @@ void UninitMode(void)
 	// タイトルの終了
 	UninitTitle();
 
-	//マップ選択の終了
+	// マップ選択の終了
 	UninitMap();
 
 	// ゲームの終了

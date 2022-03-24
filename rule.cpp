@@ -88,6 +88,8 @@ static int s_nIdxCursor;				// カーソルの配列のインデックス
 //============================
 void InitRule(void)
 {
+	PlaySound(SOUND_LABEL_TITLE);
+
 	// 矩形の初期化
 	InitRectangle();
 
@@ -217,6 +219,9 @@ void UpdateRule(void)
 	//選択番号の切り替え
 	int nNumber = ChangeSelect();
 
+	//テクスチャの点滅
+	FlashTexture(nNumber);
+
 	if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_NUMPAD1) ||
 		GetJoypadTrigger(JOYKEY_LEFT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_LEFT))
 	{//Aキーが押されたとき
@@ -247,8 +252,6 @@ void UpdateRule(void)
 		 //タイトルに戻る
 		ChangeMode(MODE_TITLE);
 	}
-	//テクスチャの点滅
-	FlashTexture(nNumber);
 
 	// 数の更新
 	UpdateNumber();
