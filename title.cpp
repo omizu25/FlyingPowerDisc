@@ -83,7 +83,7 @@ void InitTitle(void)
 	s_nIdxBG = SetRectangle(TEXTURE_BG);
 
 	// ãÈå`ÇÃê›íË
-	s_nIdx = SetRectangle(TEXTURE_Title_blue);
+	s_nIdx = SetRectangle(TEXTURE_Title_Logo);
 
 	{// îwåi
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);

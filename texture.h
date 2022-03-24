@@ -13,8 +13,12 @@
 typedef enum
 {
 	/*↓ タイトル ↓*/
-	TEXTURE_BG = 0,				// タイトル画面の背景
-	TEXTURE_Title_blue,			// タイトルロゴ
+	TEXTURE_BG = 0,				// タイトル画面の背景(平原)
+	TEXTURE_BG2,				// タイトル画面の背景(雪原)
+	TEXTURE_BG3,				// タイトル画面の背景(海)
+	TEXTURE_Title_Logo,			// タイトルロゴ
+	TEXTURE_Light_Blue,			// 青い光
+	TEXTURE_Light_Red,			// 赤い光
 	TEXTURE_Game_Start,			// ゲームスタートの文字
 	TEXTURE_Rule_Select,		// ルール選択の文字
 	TEXTURE_Map_Select,			// マップ選択の文字
