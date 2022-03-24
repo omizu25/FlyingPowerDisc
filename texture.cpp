@@ -41,7 +41,8 @@ const char *s_FileName[] =
 	"data/TEXTURE/SELECT/Select_Set.png",		// セット数
 	"data/TEXTURE/SELECT/Select_BG.png",		// セレクト画面の背景
 	"data/TEXTURE/SELECT/Map_Title.png",		// マップ選択
-	"data/TEXTURE/SELECT/Rule_Title.png",		// ルール選択
+	"data/TEXTURE/SELECT/Rule_Title.png",		// ルール設定
+	"data/TEXTURE/SELECT/Char_Title.png",		// キャラ選択
 	"data/TEXTURE/SELECT/SPEED.png",			// 速度
 	"data/TEXTURE/SELECT/POWER.png",			// パワー
 	
