@@ -217,7 +217,8 @@ void UpdateRule(void)
 	//選択番号の切り替え
 	int nNumber = ChangeSelect();
 
-	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT))
+	if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_NUMPAD1) ||
+		GetJoypadTrigger(JOYKEY_LEFT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_LEFT))
 	{//Aキーが押されたとき
 		//数値の減算
 		SubRule(nNumber);
@@ -226,7 +227,8 @@ void UpdateRule(void)
 		SaveRule();
 	}
 
-	if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
+	if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_NUMPAD3) ||
+		GetJoypadTrigger(JOYKEY_RIGHT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_RIGHT))
 	{//Dキーが押されたとき
 		//数値の加算
 		AddRule(nNumber);
@@ -235,7 +237,8 @@ void UpdateRule(void)
 		SaveRule();
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+	if (GetKeyboardTrigger(DIK_RETURN) || GetKeyboardTrigger(DIK_SPACE) ||
+		GetJoypadTrigger(JOYKEY_START) ||
 		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
 		 //音の再生
@@ -412,7 +415,8 @@ void FlashTexture(int nNumber)
 	//------------------------------
 	// 左選択
 	//------------------------------
-	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT))
+	if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_NUMPAD1) ||
+		GetJoypadTrigger(JOYKEY_LEFT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_LEFT))
 	{//Aキーが押されたとき
 	 //音の再生
 		PlaySound(SOUND_LABEL_SELECT);
@@ -432,7 +436,8 @@ void FlashTexture(int nNumber)
 	//------------------------------
 	// 右選択
 	//------------------------------
-	if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT))
+	if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_NUMPAD3) ||
+		GetJoypadTrigger(JOYKEY_RIGHT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_RIGHT))
 	{//Dキーが押されたとき
 	 //音の再生
 		PlaySound(SOUND_LABEL_SELECT);
@@ -520,7 +525,8 @@ int ChangeSelect(void)
 	// 矩形の色の設定
 	SetColorRectangle(s_Rule[s_nSelect].nIdx, GetColor(COLOR_WHITE));
 
-	if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP))
+	if (GetKeyboardTrigger(DIK_W) || GetKeyboardTrigger(DIK_NUMPAD5) ||
+		GetJoypadTrigger(JOYKEY_UP) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP))
 	{//Wキーが押されたとき
 		if (s_nSelect >= 1 && s_nSelect <= MAX_RULE)
 		{//0未満にならないなら
@@ -533,7 +539,8 @@ int ChangeSelect(void)
 			ChangePosCursor(s_nIdxCursor, s_nSelect);
 		}
 	}
-	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
+	else if (GetKeyboardTrigger(DIK_S) || GetKeyboardTrigger(DIK_NUMPAD2) ||
+		GetJoypadTrigger(JOYKEY_DOWN) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN))
 	{//Sキーが押されたとき
 		if (s_nSelect >= 0 && s_nSelect < (MAX_RULE - 1))
 		{//最大数を超えならないなら

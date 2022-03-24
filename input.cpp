@@ -12,12 +12,15 @@
 //--------------------------------------------------
 #include "input.h"
 
+#include <assert.h>
+
 //--------------------------------------------------
 // マクロ定義
 //--------------------------------------------------
 #define NUM_KEY_MAX			(256)		// キーの最大数（キーボード）
 #define MOUSE_KEY_MAX		(8)			// キーの最大数（マウス）
 #define PLAYER_MAX			(4)			// プレイヤーの最大人数
+#define DIRECTION_MAX		(4)			// 向きの最大数
 
 //--------------------------------------------------
 // スタティック変数
@@ -25,30 +28,31 @@
 
 /*↓ キーボード ↓*/
 
-static LPDIRECTINPUT8			s_pInput = NULL;						// DirectInputオブジェクトへのポインタ
-static LPDIRECTINPUTDEVICE8		s_pDevKeyboard = NULL;					// 入力デバイス(キーボード)へのポインタ
-static BYTE						s_aKeyState[NUM_KEY_MAX];				// キーボードのプレス情報
-static BYTE						s_aKeyStateTrigger[NUM_KEY_MAX];		// キーボードのトリガー情報
-static BYTE						s_aKeyStateRelease[NUM_KEY_MAX];		// キーボードのリリース情報
+static LPDIRECTINPUT8			s_pInput = NULL;							// DirectInputオブジェクトへのポインタ
+static LPDIRECTINPUTDEVICE8		s_pDevKeyboard = NULL;						// 入力デバイス(キーボード)へのポインタ
+static BYTE						s_aKeyState[NUM_KEY_MAX];					// キーボードのプレス情報
+static BYTE						s_aKeyStateTrigger[NUM_KEY_MAX];			// キーボードのトリガー情報
+static BYTE						s_aKeyStateRelease[NUM_KEY_MAX];			// キーボードのリリース情報
 
 /*↓ ジョイパッド ↓*/
 
-static XINPUT_STATE				s_JoyKeyState[PLAYER_MAX];				// ジョイパッドのプレス情報
-static XINPUT_STATE				s_JoyKeyStateTrigger[PLAYER_MAX];		// ジョイパッドのトリガー情報
-static D3DXVECTOR3				s_JoyStickPos[PLAYER_MAX];				// ジョイスティックの傾き
-static XINPUT_VIBRATION			s_JoyMoter[PLAYER_MAX];					// ジョイパッドのモーター
-static int						s_nTime[PLAYER_MAX];					// 振動持続時間
-static WORD						s_nStrength[PLAYER_MAX];				// 振動の強さ (0 - 65535)
-static bool						s_bUseJoyPad[PLAYER_MAX];				// ジョイパッドを使用してるか
+static XINPUT_STATE				s_JoyKeyState[PLAYER_MAX];					// ジョイパッドのプレス情報
+static XINPUT_STATE				s_JoyKeyStateTrigger[PLAYER_MAX];			// ジョイパッドのトリガー情報
+static D3DXVECTOR3				s_JoyStickPos[PLAYER_MAX];					// ジョイスティックの傾き
+static XINPUT_VIBRATION			s_JoyMoter[PLAYER_MAX];						// ジョイパッドのモーター
+static int						s_nTime[PLAYER_MAX];						// 振動持続時間
+static WORD						s_nStrength[PLAYER_MAX];					// 振動の強さ (0 - 65535)
+static bool						s_bUseJoyPad[PLAYER_MAX];					// ジョイパッドを使用してるか
+static bool						s_bStickTrigger[PLAYER_MAX][DIRECTION_MAX];	// スティックのトリガー情報
 
 /*↓ マウス ↓*/
 
-static LPDIRECTINPUT8			s_pMouseInput = NULL;					// Directinutオブジェクトへのポインタ
-static LPDIRECTINPUTDEVICE8		s_pDevMouse = NULL;						// 入力でパスへのポインタ
-static DIMOUSESTATE2			s_aKeyStateMouse;						// マウスのプレス処理
-static DIMOUSESTATE2			s_aKeyStatetriggerMouse;				// マウスのトリガー処理
-static POINT					s_MousePos;								// マウスのカーソル用
-static HWND						s_hMouseWnd;							// ウィンドウハンドル
+static LPDIRECTINPUT8			s_pMouseInput = NULL;						// Directinutオブジェクトへのポインタ
+static LPDIRECTINPUTDEVICE8		s_pDevMouse = NULL;							// 入力でパスへのポインタ
+static DIMOUSESTATE2			s_aKeyStateMouse;							// マウスのプレス処理
+static DIMOUSESTATE2			s_aKeyStatetriggerMouse;					// マウスのトリガー処理
+static POINT					s_MousePos;									// マウスのカーソル用
+static HWND						s_hMouseWnd;								// ウィンドウハンドル
 
 //--------------------------------------------------
 // プロトタイプ宣言
@@ -503,6 +507,121 @@ void JoypadVibration(int nTime, WORD nStrength, int nPlayer)
 bool IsJoyPadUse(int nPlayer)
 {
 	return s_bUseJoyPad[nPlayer];
+}
+
+//--------------------------------------------------
+// ジョイパッドのスティックのトリガー処理(プレイヤー指定なし)
+//--------------------------------------------------
+bool GetJoypadStickTrigger(JOYKEY Stick, JOYKEY Key)
+{
+	for (int i = 0; i < PLAYER_MAX; i++)
+	{
+		if (GetJoypadIdxStickTrigger(Stick, Key, i))
+		{// 誰かが指定のスティックを指定の方向に倒した
+			return true;
+		}
+	}
+
+	return false;
+}
+
+//--------------------------------------------------
+// ジョイパッドのスティックのトリガー処理(プレイヤー指定あり)
+//--------------------------------------------------
+bool GetJoypadIdxStickTrigger(JOYKEY Stick, JOYKEY Key, int nPlayer)
+{
+	D3DXVECTOR3 stick = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	float fDeadZone = 0.0f;
+
+	switch (Stick)
+	{// スティックの種類
+	case JOYKEY_LEFT_STICK:
+		stick = D3DXVECTOR3((float)(s_JoyKeyState[nPlayer].Gamepad.sThumbLX), (float)(-s_JoyKeyState[nPlayer].Gamepad.sThumbLY), 0.0f);
+		fDeadZone = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+		break;
+
+	case JOYKEY_RIGHT_STICK:
+		stick = D3DXVECTOR3((float)(s_JoyKeyState[nPlayer].Gamepad.sThumbRX), (float)(-s_JoyKeyState[nPlayer].Gamepad.sThumbRY), 0.0f);
+		fDeadZone = XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+		break;
+
+	default:
+		assert(false);
+		break;
+	}
+
+	switch (Key)
+	{// 傾ける方向
+	case JOYKEY_UP:		// 上
+		if (stick.y >= -fDeadZone)
+		{// 傾いてない
+			s_bStickTrigger[nPlayer][0] = false;
+		}
+
+		if (!s_bStickTrigger[nPlayer][0])
+		{// 左スティックが傾いてない
+			if (stick.y < -fDeadZone)
+			{// 左スティックが傾いた
+				s_bStickTrigger[nPlayer][0] = true;
+				return true;
+			}
+		}
+		break;
+
+	case JOYKEY_DOWN:	// 下
+		if (stick.y <= fDeadZone)
+		{// 傾いてない
+			s_bStickTrigger[nPlayer][1] = false;
+		}
+
+		if (!s_bStickTrigger[nPlayer][1])
+		{// 左スティックが傾いてない
+			if (stick.y > fDeadZone)
+			{// 左スティックが傾いた
+				s_bStickTrigger[nPlayer][1] = true;
+				return true;
+			}
+		}
+		break;
+
+	case JOYKEY_LEFT:	// 左
+		if (stick.x >= -fDeadZone)
+		{// 傾いてない
+			s_bStickTrigger[nPlayer][2] = false;
+		}
+
+		if (!s_bStickTrigger[nPlayer][2])
+		{// 左スティックが傾いてない
+			if (stick.x < -fDeadZone)
+			{// 左スティックが傾いた
+				s_bStickTrigger[nPlayer][2] = true;
+				return true;
+			}
+		}
+		break;
+
+	case JOYKEY_RIGHT:	// 右
+		if (stick.x <= fDeadZone)
+		{// 傾いてない
+			s_bStickTrigger[nPlayer][3] = false;
+		}
+
+		if (!s_bStickTrigger[nPlayer][3])
+		{// 左スティックが傾いてない
+			if (stick.x > fDeadZone)
+			{// 左スティックが傾いた
+				s_bStickTrigger[nPlayer][3] = true;
+				return true;
+			}
+		}
+		break;
+
+	default:
+		assert(false);
+		break;
+	}
+
+	return false;
 }
 
 //**************************************************

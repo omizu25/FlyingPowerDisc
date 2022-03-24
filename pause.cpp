@@ -174,7 +174,7 @@ void Input(void)
 	}
 
 	if (GetKeyboardTrigger(DIK_W) || GetKeyboardTrigger(DIK_NUMPAD5) ||
-		GetJoypadTrigger(JOYKEY_UP))
+		GetJoypadTrigger(JOYKEY_UP) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP))
 	{// Wキーが押されたかどうか
 		// 選択肢の色の初期化
 		InitColorOption();
@@ -188,7 +188,7 @@ void Input(void)
 		ChangePosCursor(s_nIdxCursor, s_nSelectMenu);
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetKeyboardTrigger(DIK_NUMPAD2) ||
-		GetJoypadTrigger(JOYKEY_DOWN))
+		GetJoypadTrigger(JOYKEY_DOWN) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN))
 	{// Sキーが押されたかどうか
 		// 選択肢の色の初期化
 		InitColorOption();
@@ -202,7 +202,8 @@ void Input(void)
 		ChangePosCursor(s_nIdxCursor, s_nSelectMenu);
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+	if (GetKeyboardTrigger(DIK_RETURN) || GetKeyboardTrigger(DIK_SPACE) ||
+		GetJoypadTrigger(JOYKEY_START) ||
 		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
 		switch (s_nSelectMenu)

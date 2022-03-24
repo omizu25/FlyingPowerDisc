@@ -173,7 +173,8 @@ void UpdateMap(void)
 	//テクスチャの点滅
 	FlashTextureMap(ChangeSelectMap());
 
-	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+	if (GetKeyboardTrigger(DIK_RETURN) || GetKeyboardTrigger(DIK_SPACE) ||
+		GetJoypadTrigger(JOYKEY_START) ||
 		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
 		//音の再生
@@ -273,7 +274,8 @@ int ChangeSelectMap(void)
 	// 矩形の色の設定
 	SetColorRectangle(s_Map[s_nSelect].nIdx, GetColor(COLOR_WHITE));
 
-	if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP))
+	if (GetKeyboardTrigger(DIK_W) || GetKeyboardTrigger(DIK_NUMPAD5) ||
+		GetJoypadTrigger(JOYKEY_UP) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP))
 	{//Wキーが押されたとき
 		if (s_nSelect >= 1 && s_nSelect <= MAX_MAP)
 		{//0未満にならないなら
@@ -286,7 +288,8 @@ int ChangeSelectMap(void)
 			ChangePosCursor(s_nIdxCursor, s_nSelect);
 		}
 	}
-	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
+	else if (GetKeyboardTrigger(DIK_S) || GetKeyboardTrigger(DIK_NUMPAD2) ||
+		GetJoypadTrigger(JOYKEY_DOWN) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN))
 	{//Sキーが押されたとき
 		if (s_nSelect >= 0 && s_nSelect < (MAX_MAP - 1))
 		{//最大数を超えならないなら

@@ -318,7 +318,8 @@ void UpdateCharacter(void)
 	{
 		Player*player = GetPlayer();
 
-		if (GetKeyboardTrigger(DIK_S) || GetJoypadIdxTrigger(JOYKEY_DOWN, 0))
+		if (GetKeyboardTrigger(DIK_S) || GetJoypadIdxTrigger(JOYKEY_DOWN, 0) ||
+			GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN, 0))
 		{//Sキーが押されたとき
 		 //音の再生
 			PlaySound(SOUND_LABEL_SELECT);
@@ -332,7 +333,8 @@ void UpdateCharacter(void)
 			}
 		}
 
-		if (GetKeyboardTrigger(DIK_W) || GetJoypadIdxTrigger(JOYKEY_UP, 0))
+		if (GetKeyboardTrigger(DIK_W) || GetJoypadIdxTrigger(JOYKEY_UP, 0) ||
+			GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP, 0))
 		{//Wキーが押されたとき
 		 //音の再生
 			PlaySound(SOUND_LABEL_SELECT);
@@ -360,7 +362,8 @@ void UpdateCharacter(void)
 	{	
 		Player*player = GetPlayer();
 		player++;
-		if (GetKeyboardTrigger(DIK_NUMPAD2) || GetJoypadIdxTrigger(JOYKEY_DOWN, 1))
+		if (GetKeyboardTrigger(DIK_NUMPAD2) || GetJoypadIdxTrigger(JOYKEY_DOWN, 1) ||
+			GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN, 1))
 		{//Sキーが押されたとき
 		 //音の再生
 			PlaySound(SOUND_LABEL_SELECT);
@@ -373,7 +376,8 @@ void UpdateCharacter(void)
 			}
 		}
 
-		if (GetKeyboardTrigger(DIK_NUMPAD5) || GetJoypadIdxTrigger(JOYKEY_UP, 1))
+		if (GetKeyboardTrigger(DIK_NUMPAD5) || GetJoypadIdxTrigger(JOYKEY_UP, 1) ||
+			GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP, 1))
 		{//Wキーが押されたとき
 		 //音の再生
 			PlaySound(SOUND_LABEL_SELECT);
@@ -398,7 +402,8 @@ void UpdateCharacter(void)
 		ChangePosCursor(s_nIdxCursor[1], s_nSelect[1]);
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+	if (GetKeyboardTrigger(DIK_RETURN) || GetKeyboardTrigger(DIK_SPACE) ||
+		GetJoypadTrigger(JOYKEY_START) ||
 		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
 		//音の再生
