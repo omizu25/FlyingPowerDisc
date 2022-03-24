@@ -206,6 +206,8 @@ void Input(void)
 
 	if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP))
 	{// Wキーが押されたかどうか
+		PlaySound(SOUND_LABEL_SELECT);
+
 		// 選択肢の色の初期化
 		InitColorOption();
 
@@ -219,6 +221,8 @@ void Input(void)
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN))
 	{// Sキーが押されたかどうか
+		PlaySound(SOUND_LABEL_SELECT);
+
 		// 選択肢の色の初期化
 		InitColorOption();
 
@@ -234,6 +238,7 @@ void Input(void)
 	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
 		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
+		PlaySound(SOUND_LABEL_ENTER);
 		switch (s_nSelectMenu)
 		{
 		case MENU_GAME:	// ゲーム
