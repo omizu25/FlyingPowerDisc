@@ -185,8 +185,9 @@ void UpdateRule(void)
 		SaveRule();
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_A))
-	{//エンターキーが押されたとき
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
+		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
+	{//決定キー(ENTERキー)が押されたかどうか
 	 //タイトルに戻る
 		ChangeMode(MODE_TITLE);
 	}

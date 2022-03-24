@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="bg.cpp" />
     <ClCompile Include="color.cpp" />
+    <ClCompile Include="cursor.cpp" />
     <ClCompile Include="disc.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="gauge.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="mode.cpp" />
     <ClCompile Include="number.cpp" />
@@ -185,6 +187,7 @@
   <ItemGroup>
     <ClInclude Include="bg.h" />
     <ClInclude Include="color.h" />
+    <ClInclude Include="cursor.h" />
     <ClInclude Include="disc.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="fade.h" />
@@ -192,6 +195,7 @@
     <ClInclude Include="gauge.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="mode.h" />
     <ClInclude Include="number.h" />

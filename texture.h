@@ -75,12 +75,14 @@ typedef enum
 	TEXTURE_kitune,				// ゴン
 	TEXTURE_player000,			// スライム
 	TEXTURE_ghost,				// ゴースト
-	TEXTURE_zolbak,				// 地面
+	TEXTURE_cat,				// 猫
 
 	/*↓ エフェクト ↓*/
 	TEXTURE_Effect_fire,		// 炎のエフェクト
 	TEXTURE_Effect_spin,		// ディスクのエフェクト
 	TEXTURE_Effect_tackle,		// タックルのエフェクト
+	TEXTURE_Effect_goal,
+	TEXTURE_Effect_spark,
 
 	/*↓ その他 ↓*/
 	TEXTURE_Number_0To9,		// 数字

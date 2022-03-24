@@ -88,12 +88,14 @@ const char *s_FileName[] =
 	"data/TEXTURE/PLAYER/kitune.png",			// ゴン
 	"data/TEXTURE/PLAYER/player000.png",		// スライム
 	"data/TEXTURE/PLAYER/ghost.png",			// ゴースト
-	"data/TEXTURE/PLAYER/zolbak.png",			// 地面
+	"data/TEXTURE/PLAYER/cat.png",				// 猫
 
 	/*↓ エフェクト ↓*/
 	"data/TEXTURE/EFFECT/fire.png",			// 炎のエフェクト
 	"data/TEXTURE/EFFECT/spin.png",			// ディスクのエフェクト
 	"data/TEXTURE/EFFECT/tackle.png",		// タックルのエフェクト
+	"data/TEXTURE/EFFECT/Goal.png",			// ゴールのエフェクト
+	"data/TEXTURE/EFFECT/spark.png",		//壁の火花
 
 	/*↓ その他 ↓*/
 	"data/TEXTURE/Number_0To9.png",			// 数字

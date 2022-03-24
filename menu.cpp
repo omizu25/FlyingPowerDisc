@@ -25,7 +25,7 @@ namespace
 const int	MAX_MENU = 16;					// メニューの最大数
 const float	NORMAL_BLINK_SPEED = 0.01f;		// 通常時の点滅速度
 const float	DECISION_BLINK_SPEED = 0.1f;	// 決定時の点滅速度
-const float	MIN_ALPHA = 0.6f;				// α値の最小値
+const float	MIN_ALPHA = 0.5f;				// α値の最小値
 
 /*↓ 選択肢 ↓*/
 typedef struct
@@ -307,7 +307,7 @@ void ChangeColor(Menu *pMenu)
 	Option *pOption = &pMenu->Option[s_nIdxOption];
 
 	float fCurve = cosf((s_nAlphaTime * pMenu->fBlinkSpeed) * (D3DX_PI * 2.0f));
-	float fAlpha = (fCurve * (1.0f - MIN_ALPHA)) + MIN_ALPHA;
+	float fAlpha = (((fCurve + 1.0f) * 0.5f) * (1.0f - MIN_ALPHA)) + MIN_ALPHA;
 
 	pOption->col = D3DXCOLOR(1.0f, 1.0f, 1.0f, fAlpha);
 

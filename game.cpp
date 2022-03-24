@@ -74,9 +74,9 @@ void InitGame(void)
 
 	// プレイヤーの設定
 	Player *pPlayer = GetPlayer();
-	SetPlayer(D3DXVECTOR3((float)PLAYER_POS_X + PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, true);
+	SetPlayer(D3DXVECTOR3((float)PLAYER_POS_X + PLAYERSIZE, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, true, PLAYERSIZE);
 	pPlayer++;
-	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYER_POS_X - PLAYERSIZE_X, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, false);
+	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYER_POS_X - PLAYERSIZE, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, false, PLAYERSIZE);
 
 	// UIの初期化
 	InitUi();
@@ -173,7 +173,7 @@ void UninitGame(void)
 //--------------------------------------------------
 void UpdateGame(void)
 {
-	if (GetKeyboardTrigger(DIK_P))
+	if (GetKeyboardTrigger(DIK_P) || GetJoypadTrigger(JOYKEY_START))
 	{// Pキーが押された
 		if (s_gameState == GAMESTATE_NORMAL)
 		{// 通常状態の時

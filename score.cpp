@@ -148,7 +148,7 @@ void UpdateScore(void)
 				SetResult(0, RESULT_WIN);
 				SetResult(1, RESULT_LOSE);
 			}
-			else if (s_nSet[0] > s_nSet[1])
+			else if (s_nSet[0] < s_nSet[1])
 			{// 2P‚ÌŸ‚¿
 				SetResult(0, RESULT_LOSE);
 				SetResult(1, RESULT_WIN);

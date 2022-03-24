@@ -1,69 +1,76 @@
 //**************************************************
 //
-// FPD制作 ( gauge.h )
+// FPD制作 ( Cursor.h )
 // Author  : katsuki mizuki
 //
 //**************************************************
-#ifndef _GAUGE_H_	// このマクロ定義がされてなかったら
-#define _GAUGE_H_	// ２重インクルード防止のマクロ定義
+#ifndef _CURSOR_H_	//このマクロ定義がされてなかったら
+#define _CURSOR_H_	//２重インクルード防止のマクロ定義
 
 //==================================================
 // インクルード
 //==================================================
-#include "main.h"
+#include "texture.h"
 
 //==================================================
-// 列挙型
+// 構造体
 //==================================================
-typedef enum
+
+/*↓ メニューの引数 ↓*/
+typedef struct
 {
-	GAUGE_TOP = 0,	// 上
-	GAUGE_BOTTOM,	// 下
-	GAUGE_LEFT,		// 左
-	GAUGE_RIGHT,	// 右
-	GAUGE_MAX
-}GAUGE;
+	TEXTURE	texture;	// テクスチャ
+	int		nNumUse;	// 使用数
+	int		nSelect;	// 選ばれている
+	float	fPosX;		// Xの位置
+	float	fTop;		// 上端
+	float	fBottom;	// 下端
+	float	fWidth;		// 幅
+	float	fHeight;	// 高さ
+	bool	bRotation;	// 回転するかどうか
+}CursorArgument;
 
 //==================================================
-//プロトタイプ宣言
+// プロトタイプ宣言
 //==================================================
 //--------------------------------------------------
 // 初期化
 //--------------------------------------------------
-void InitGauge(void);
+void InitCursor(void);
 
 //--------------------------------------------------
 // 終了
 //--------------------------------------------------
-void UninitGauge(void);
+void UninitCursor(void);
 
 //--------------------------------------------------
 // 更新
 //--------------------------------------------------
-void UpdateGauge(void);
+void UpdateCursor(void);
 
 //--------------------------------------------------
 // 描画
 //--------------------------------------------------
-void DrawGauge(void);
+void DrawCursor(void);
 
 //--------------------------------------------------
 // 設定
-// 引数1  : D3DXVECTOR3 &pos / 始まりの位置
-// 引数2  : D3DXCOLOR &col / 色
-// 引数3  : float fWidth / 幅
-// 引数4  : float fHeight / 高さ
-// 引数5  : GAUGE gauge / 列挙型 中心の位置
-// 返値   ; int / 配列のインデックス
+// 引数  : CursorArgument &menu / 構造体 カーソルの情報
+// 返値  ; int / 何番目かのインデックス
 //--------------------------------------------------
-int SetGauge(const D3DXVECTOR3 &posStart, const D3DXCOLOR &col, float fWidth, float fHeight, GAUGE gauge);
+int SetCursor(const CursorArgument &cursor);
 
 //--------------------------------------------------
-// 減少
+// 位置の変更
 // 引数1  : int nIdx / 配列のインデックス
-// 引数2  : float fWidth / 幅
-// 引数3  : float fHeight / 高さ
+// 引数2  : int nSelect / 選ばれている番号
 //--------------------------------------------------
-void SubGauge(int nIdx, float fWidth, float fHeight);
+void ChangePosCursor(int nIdx, int nSelect);
 
-#endif // !_GAUGE_H_
+//--------------------------------------------------
+// リセット
+// 引数  : int nIdx / 配列のインデックス
+//--------------------------------------------------
+void ResetCursor(int nIdx);
+
+#endif // !_CURSOR_H_

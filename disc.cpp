@@ -180,11 +180,11 @@ void UpdateStart(void)
 	switch (s_nPossPlayer)
 	{
 	case 0:
-		posDest.x += PLAYERSIZE_X * 0.5f;
+		posDest.x += PLAYERSIZE * 0.5f;
 		break;
 		
 	case 1:
-		posDest.x += -PLAYERSIZE_X * 0.5f;
+		posDest.x += -PLAYERSIZE * 0.5f;
 		break;
 
 	default:
@@ -284,6 +284,7 @@ void Goal(void)
 			// ポイント数の加算
 			AddPointScore(0, 3);
 		}
+		SetEffect(D3DXVECTOR3(s_disc.pos.x, s_disc.pos.y, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_GOAL, 100, 50.0f, true);
 		//歓声
 		PlaySound(SOUND_LABEL_KANSEI);
 		// ゲームの状態の設定
@@ -307,6 +308,7 @@ void Goal(void)
 			// ポイント数の加算
 			AddPointScore(1, 3);
 		}
+		SetEffect(D3DXVECTOR3(s_disc.pos.x, s_disc.pos.y, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_GOAL, 100, 50.0f, false);
 		//歓声
 		PlaySound(SOUND_LABEL_KANSEI);
 		// ゲームの状態の設定
