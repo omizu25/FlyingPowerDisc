@@ -73,4 +73,11 @@ void ChangePosCursor(int nIdx, int nSelect);
 //--------------------------------------------------
 void ResetCursor(int nIdx);
 
+//--------------------------------------------------
+// 描画するかどうか
+// 引数1  : int nIdx / メニューのインデックス
+// 引数2  : bool bDraw / 描画するかどうか
+//--------------------------------------------------
+void SetDrawCursor(int nIdx, bool bDraw);
+
 #endif // !_CURSOR_H_

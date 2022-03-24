@@ -66,42 +66,7 @@ void Input(void);
 void InitPause(void)
 {
 	s_nSelectMenu = 0;
-}
 
-//--------------------------------------------------
-// 終了
-//--------------------------------------------------
-void UninitPause(void)
-{
-	// カーソルの終了
-	UninitCursor();
-}
-
-//--------------------------------------------------
-// 更新
-//--------------------------------------------------
-void UpdatePause(void)
-{
-	// 入力
-	Input();
-
-	// カーソルの更新
-	UpdateCursor();
-}
-
-//--------------------------------------------------
-// 描画
-//--------------------------------------------------
-void DrawPause(void)
-{
-	/* 矩形で描画してます */
-}
-
-//--------------------------------------------------
-// 設定
-//--------------------------------------------------
-void SetPause(void)
-{
 	{// メニュー
 		MenuArgument menu;
 		menu.nNumUse = MENU_MAX;
@@ -126,9 +91,6 @@ void SetPause(void)
 	}
 
 	{// カーソル
-		// カーソル初期化
-		InitCursor();
-
 		CursorArgument cursor;
 		cursor.nNumUse = MENU_MAX;
 		cursor.fPosX = SCREEN_WIDTH * 0.35f;
@@ -143,6 +105,48 @@ void SetPause(void)
 		// カーソルの設定
 		s_nIdxCursor = SetCursor(cursor);
 	}
+
+	// メニューの描画するかどうか
+	SetDrawMenu(s_nIdxMenu, false);
+
+	// カーソルの描画するかどうか
+	SetDrawCursor(s_nIdxCursor, false);
+}
+
+//--------------------------------------------------
+// 終了
+//--------------------------------------------------
+void UninitPause(void)
+{
+}
+
+//--------------------------------------------------
+// 更新
+//--------------------------------------------------
+void UpdatePause(void)
+{
+	// 入力
+	Input();
+}
+
+//--------------------------------------------------
+// 描画
+//--------------------------------------------------
+void DrawPause(void)
+{
+	/* 矩形で描画してます */
+}
+
+//--------------------------------------------------
+// 設定
+//--------------------------------------------------
+void SetPause(void)
+{
+	// メニューの描画するかどうか
+	SetDrawMenu(s_nIdxMenu, true);
+
+	// カーソルの描画するかどうか
+	SetDrawCursor(s_nIdxCursor, true);
 }
 
 //--------------------------------------------------
@@ -150,11 +154,11 @@ void SetPause(void)
 //--------------------------------------------------
 void ResetPause(void)
 {
-	// メニューのリセット
-	ResetMenu(s_nIdxMenu);
+	// メニューの描画するかどうか
+	SetDrawMenu(s_nIdxMenu, false);
 
-	// カーソルのリセット
-	ResetCursor(s_nIdxCursor);
+	// カーソルの描画するかどうか
+	SetDrawCursor(s_nIdxCursor, false);
 }
 
 namespace
@@ -205,7 +209,12 @@ void Input(void)
 		{
 		case MENU_GAME:		// ゲーム
 			SetEnablePause(false);
-			ResetMenu(s_nIdxMenu);
+
+			// メニューの描画するかどうか
+			SetDrawMenu(s_nIdxMenu, false);
+
+			// カーソルの描画するかどうか
+			SetDrawCursor(s_nIdxCursor, false);
 			break;
 
 		case MENU_TITLE:	// タイトル

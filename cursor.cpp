@@ -38,6 +38,7 @@ typedef struct
 	float		fHeight;	// ‚‚³
 	float		fInterval;	// ‘I‘ðŽˆ‚ÌŠÔŠu
 	bool		bRotation;	// ‰ñ“]‚·‚é‚©‚Ç‚¤‚©
+	bool		bDraw;		// •`‰æ‚·‚é‚©‚Ç‚¤‚©
 	bool		bUse;		// Žg—p‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 }Cursor;
 }// namespace‚Í‚±‚±‚Ü‚Å
@@ -145,6 +146,7 @@ int SetCursor(const CursorArgument &cursor)
 		pCursor->fHeight = cursor.fHeight;
 		pCursor->fTop = cursor.fTop;
 		pCursor->bRotation = cursor.bRotation;
+		pCursor->bDraw = true;
 		pCursor->bUse = true;
 
 		// ‹éŒ`‚ÌÝ’è
@@ -199,4 +201,26 @@ void ResetCursor(int nIdx)
 	StopUseRectangle(pCursor->nIdx);
 	
 	pCursor->bUse = false;
+}
+
+//--------------------------------------------------
+// •`‰æ‚·‚é‚©‚Ç‚¤‚©
+//--------------------------------------------------
+void SetDrawCursor(int nIdx, bool bDraw)
+{
+	assert(nIdx >= 0 && nIdx < MAX_CURSOR);
+
+	Cursor *pCursor = &s_aCursor[nIdx];
+
+	if (!pCursor->bUse)
+	{// Žg—p‚µ‚Ä‚¢‚È‚¢
+		return;
+	}
+
+	/*« Žg—p‚µ‚Ä‚¢‚é «*/
+
+	// ‹éŒ`‚Ì•`‰æ‚·‚é‚©‚Ç‚¤‚©
+	SetDrawRectangle(pCursor->nIdx, bDraw);
+	
+	pCursor->bDraw = bDraw;
 }
