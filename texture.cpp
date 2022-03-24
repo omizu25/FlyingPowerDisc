@@ -48,6 +48,11 @@ const char *s_FileName[] =
 	"data/TEXTURE/GAME/Game_BG.png",			// ゲーム画面の背景
 	"data/TEXTURE/GAME/Number_Yellow.png",		// 数字(黄色)
 	"data/TEXTURE/GAME/Stage01.png",			// 1つ目のステージ
+	"data/TEXTURE/GAME/Stage02.png",			// 2つ目のステージ
+	"data/TEXTURE/GAME/Stage03.png",			// 3つ目のステージ
+	"data/TEXTURE/GAME/Stage01_BG.png",			// 1つ目のステージの背景
+	"data/TEXTURE/GAME/Stage02_BG.png",			// 2つ目のステージの背景
+	"data/TEXTURE/GAME/Stage03_BG.png",			// 3つ目のステージの背景
 
 	/*↓ ゲーム中のUI ↓*/
 	"data/TEXTURE/UI/Set1_1p.png",				// セット1(1pカラー)
@@ -62,11 +67,11 @@ const char *s_FileName[] =
 	"data/TEXTURE/UI/PtsFrame02.png",			// ポイントの枠(2pカラー)
 	"data/TEXTURE/UI/UI000.png",				// プレイヤー1
 	"data/TEXTURE/UI/UI001.png",				// プレイヤー2
-	"data/TEXTURE/UI/Set1.png",					//セット1の表示
-	"data/TEXTURE/UI/Set2.png",					//セット2の表示
-	"data/TEXTURE/UI/Set3.png",					//セット3の表示
-	"data/TEXTURE/UI/Set4.png",					//セット3の表示
-	"data/TEXTURE/UI/Set5.png",					//セット3の表示
+	"data/TEXTURE/UI/Set1.png",					// セット1の表示
+	"data/TEXTURE/UI/Set2.png",					// セット2の表示
+	"data/TEXTURE/UI/Set3.png",					// セット3の表示
+	"data/TEXTURE/UI/Set4.png",					// セット3の表示
+	"data/TEXTURE/UI/Set5.png",					// セット3の表示
 
 	/*↓ ポーズ ↓*/
 	"data/TEXTURE/PAUSE/Pose_Title.png",		// ポーズ画面のタイトル
