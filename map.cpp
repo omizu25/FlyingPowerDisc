@@ -17,6 +17,7 @@
 #include "texture.h"
 #include "number.h"
 #include "mode.h"
+#include "sound.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -108,6 +109,9 @@ void UpdateMap(void)
 	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START) ||
 		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
 	{//決定キー(ENTERキー)が押されたかどうか
+	 //音の再生
+		PlaySound(SOUND_LABEL_ENTER);
+
 	 //タイトルに戻る
 		ChangeMode(MODE_TITLE);
 	}
@@ -211,6 +215,9 @@ int ChangeSelectMap(void)
 	{//Aキーが押されたとき
 		if (s_nSelect >= 1 && s_nSelect <= MAX_MAP)
 		{//0未満にならないなら
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 			s_nSelect--;
 		}
 	}
@@ -218,6 +225,9 @@ int ChangeSelectMap(void)
 	{//Dキーが押されたとき
 		if (s_nSelect >= 0 && s_nSelect < (MAX_MAP - 1))
 		{//最大数を超えならないなら
+		 //音の再生
+			PlaySound(SOUND_LABEL_SELECT);
+
 			s_nSelect++;
 		}
 	}
