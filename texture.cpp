@@ -21,7 +21,9 @@ namespace
 const char *s_FileName[] =
 {// テクスチャのパス
 	/*↓ タイトル ↓*/
-	"data/TEXTURE/TITLE/BG.png",				// タイトル画面の背景
+	"data/TEXTURE/TITLE/BG.png",				// タイトル画面の背景(平原)
+	"data/TEXTURE/TITLE/BG2.png",				// タイトル画面の背景(雪原)
+	"data/TEXTURE/TITLE/BG3.png",				// タイトル画面の背景(海)
 	"data/TEXTURE/TITLE/Title_Rogo.png",		// タイトルロゴ
 	"data/TEXTURE/TITLE/Game_Start.png",		// ゲームスタートの文字
 	"data/TEXTURE/TITLE/Rule_Select.png",		// ルール選択の文字

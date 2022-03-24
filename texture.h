@@ -13,7 +13,9 @@
 typedef enum
 {
 	/*↓ タイトル ↓*/
-	TEXTURE_BG = 0,				// タイトル画面の背景
+	TEXTURE_BG = 0,				// タイトル画面の背景(平原)
+	TEXTURE_BG2,				// タイトル画面の背景(雪原)
+	TEXTURE_BG3,				// タイトル画面の背景(海)
 	TEXTURE_Title_blue,			// タイトルロゴ
 	TEXTURE_Game_Start,			// ゲームスタートの文字
 	TEXTURE_Rule_Select,		// ルール選択の文字
