@@ -52,8 +52,9 @@ void SetPosNumber(int nIdx, const D3DXVECTOR3 &pos, const D3DXVECTOR3 &size);
 // 変更
 // 引数1  : int nIdx / 配列のインデックス
 // 引数2  : int nNumber / 数
+// 返値  : int / 新しい配列のインデックス
 //--------------------------------------------------
-void ChangeNumber(int nIdx, int nNumber);
+int ChangeNumber(int nIdx, int nNumber);
 
 //--------------------------------------------------
 // 使うのを止める

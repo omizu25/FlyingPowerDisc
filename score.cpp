@@ -93,7 +93,8 @@ void InitScore(void)
 		s_nPointIdx[nPlayerNo] = SetNumber(posPoint, size, GetColor(COLOR_BLACK), s_nPoint[nPlayerNo]);
 
 		int nDigit = DigitNumber(s_nPoint[nPlayerNo]);
-		D3DXVECTOR3 posUI = D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 200.0f + (nPlayerNo * 600.0f) + (NUMBER_UI_WIDTH * (nDigit * 0.5f)), 450.0f, 0.0f);
+		D3DXVECTOR3 posUI = D3DXVECTOR3((SCREEN_WIDTH * 0.5f) + ((nPlayerNo * 600.0f) - 200.0f), 450.0f, 0.0f);
+		posUI.x += (NUMBER_UI_WIDTH * ((nDigit - 1) * 0.5f));
 
 		s_nPointUI[nPlayerNo] = SetNumber(posUI, sizeUI, color, s_nPoint[nPlayerNo]);
 		
@@ -199,7 +200,7 @@ void ZeroSetScore(int nPlayerNo)
 	s_nSet[nPlayerNo] = 0;
 
 	// 数の変更
-	ChangeNumber(s_nSetIdx[nPlayerNo], s_nSet[nPlayerNo]);
+	s_nSetIdx[nPlayerNo] = ChangeNumber(s_nSetIdx[nPlayerNo], s_nSet[nPlayerNo]);
 }
 
 //--------------------------------------------------
@@ -212,7 +213,7 @@ void ZeroPointScore(int nPlayerNo)
 	s_nPoint[nPlayerNo] = 0;
 
 	// 数の変更
-	ChangeNumber(s_nPointIdx[nPlayerNo], s_nPoint[nPlayerNo]);
+	s_nPointIdx[nPlayerNo] = ChangeNumber(s_nPointIdx[nPlayerNo], s_nPoint[nPlayerNo]);
 }
 
 //--------------------------------------------------
@@ -225,7 +226,7 @@ void AddSetScore(int nPlayerNo, int nValue)
 	s_nSet[nPlayerNo] += nValue;
 
 	// 数の変更
-	ChangeNumber(s_nSetIdx[nPlayerNo], s_nSet[nPlayerNo]);
+	s_nSetIdx[nPlayerNo] = ChangeNumber(s_nSetIdx[nPlayerNo], s_nSet[nPlayerNo]);
 
 	if (s_nSet[nPlayerNo] >= GetSetRule())
 	{// セット数が指定の値を越えた
@@ -273,7 +274,7 @@ void AllAddSetScore(int nValue)
 		s_nSet[nPlayerNo] += nValue;
 
 		// 数の変更
-		ChangeNumber(s_nSetIdx[nPlayerNo], s_nSet[nPlayerNo]);
+		s_nSetIdx[nPlayerNo] = ChangeNumber(s_nSetIdx[nPlayerNo], s_nSet[nPlayerNo]);
 	}
 
 	for (int nPlayerNo = 0; nPlayerNo < MAXPLAYER; nPlayerNo++)
@@ -324,14 +325,22 @@ void AddPointScore(int nPlayerNo, int nValue)
 	s_nPoint[nPlayerNo] += nValue;
 
 	// 数の変更
-	ChangeNumber(s_nPointIdx[nPlayerNo], s_nPoint[nPlayerNo]);
+	s_nPointIdx[nPlayerNo] = ChangeNumber(s_nPointIdx[nPlayerNo], s_nPoint[nPlayerNo]);
 
 	if (s_nPoint[nPlayerNo] < GetPointRule())
 	{// ポイント数が指定の値より下
 		for (int i = 0; i < MAXPLAYER; i++)
 		{
 			// 数の変更
-			ChangeNumber(s_nPointUI[i], s_nPoint[i]);
+			s_nPointUI[i] = ChangeNumber(s_nPointUI[i], s_nPoint[i]);
+
+			int nDigit = DigitNumber(s_nPoint[i]);
+			D3DXVECTOR3 size = D3DXVECTOR3(NUMBER_UI_WIDTH, NUMBER_UI_HEIGHT, 0.0f);
+			D3DXVECTOR3 pos = D3DXVECTOR3((SCREEN_WIDTH * 0.5f) + ((i * 600.0f) - 200.0f), 450.0f, 0.0f);
+			pos.x += (NUMBER_UI_WIDTH * ((nDigit - 1) * 0.5f));
+
+			// 数の位置の設定
+			SetPosNumber(s_nPointUI[i], pos, size);
 
 			// 数の描画するかどうか
 			SetDrawNumber(s_nPointUI[i], true);
