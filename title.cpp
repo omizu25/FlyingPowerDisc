@@ -29,12 +29,18 @@
 //==================================================
 namespace
 {
-const int	MAX_LIGHT = 2;			// 後光の最大数
-const float	TITLE_WIDTH = 600.0f;	// タイトルの幅
-const float	TITLE_HEIGHT = 600.0f;	// タイトルの高さ
-const float	MENU_WIDTH = 300.0f;	// メニューの幅
-const float	MENU_HEIGHT = 80.0f;	// メニューの高さ
-const float	CURSOR_SIZE = 50.0f;	// カーソルのサイズ
+const int	MAX_LIGHT = 4;				// ライトの最大数
+const int	HALF_LIGHT = MAX_LIGHT / 2;	// ライトの半分
+const float	TITLE_WIDTH = 600.0f;		// タイトルの幅
+const float	TITLE_HEIGHT = 600.0f;		// タイトルの高さ
+const float	MENU_WIDTH = 300.0f;		// メニューの幅
+const float	MENU_HEIGHT = 80.0f;		// メニューの高さ
+const float	CURSOR_SIZE = 50.0f;		// カーソルのサイズ
+const int	MAX_FLASH_RED = 80;						// 点滅にかかる時間(赤)
+const int	HALF_FLASH_RED = MAX_FLASH_RED / 2;		// 点滅にかかる時間(赤)の半分
+const int	MAX_FLASH_BLUE = 80;					// 点滅にかかる時間(青)
+const int	HALF_FLASH_BLUE = MAX_FLASH_BLUE / 2;	// 点滅にかかる時間(青)の半分
+
 
 typedef enum
 {
@@ -45,6 +51,16 @@ typedef enum
 	MENU_TUTORIAL,	// チュートリアル
 	MENU_MAX
 }MENU;
+
+//ライト構造体の定義
+typedef struct
+{
+	D3DXVECTOR3 pos;	//位置
+	float fWidth;		//幅
+	float fHeight;		//高さ
+	bool bUse;			//使用しているか
+	int	nIdx;			// 矩形のインデックス
+}Light;
 }// namespaceはここまで
 
 //==================================================
@@ -52,11 +68,14 @@ typedef enum
 //==================================================
 namespace
 {
-int	s_nIdxBG;		// 背景の矩形のインデックス
-int	s_nIdx;			// 矩形のインデックス
-int	s_nSelectMenu;	// 選ばれているメニュー
-int	s_nIdxUseMenu;	// 使っているメニューの番号
-int	s_nIdxCursor;	// カーソルの配列のインデックス
+int	s_nIdxBG;				// 背景の矩形のインデックス
+int	s_nIdx;					// 矩形のインデックス
+int	s_nSelectMenu;			// 選ばれているメニュー
+int	s_nIdxUseMenu;			// 使っているメニューの番号
+int	s_nIdxCursor;			// カーソルの配列のインデックス
+int s_nFlashTimeRed;		// 点滅用の時間(赤)
+int s_nFlashTimeBlue;		// 点滅用の時間(青)
+Light s_Light[MAX_LIGHT];	// ライト構造体の取得
 }// namespaceはここまで
 
 //==================================================
@@ -76,6 +95,17 @@ void InitTitle(void)
 
 	// 矩形の初期化
 	InitRectangle();
+
+	//ライト構造体の初期化
+	for (int nCnt = 0; nCnt < MAX_LIGHT; nCnt++)
+	{
+		Light *light = s_Light + nCnt;
+
+		light->pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
+		light->fWidth = 0.0f;	//幅
+		light->fHeight = 0.0f;	//高さ
+		light->bUse = false;	//使用していない状態
+	}
 
 	s_nSelectMenu = 0;
 
@@ -194,6 +224,9 @@ void UpdateTitle(void)
 
 	// カーソルの更新
 	UpdateCursor();
+
+	// ライトの点滅
+	FlashLight();
 }
 
 //--------------------------------------------------
@@ -203,6 +236,106 @@ void DrawTitle(void)
 {
 	// 矩形の描画
 	DrawRectangle();
+}
+
+//--------------------------------------------------
+// 赤ライトの設定
+//--------------------------------------------------
+void SetLightRed(D3DXVECTOR3 pos,TEXTURE texture)
+{
+	for (int nCnt = 0; nCnt < HALF_LIGHT; nCnt++)
+	{
+		Light *light = s_Light + nCnt;
+
+		if (light->bUse == false)
+		{//使用していないなら
+		 //構造体の設定
+			light->pos = pos;
+			light->fWidth = 100.0f;
+			light->fHeight = 100.0f;
+			light->bUse = true;
+
+			// 矩形の設定
+			light->nIdx = SetRectangle(texture);
+
+			D3DXVECTOR3 size = D3DXVECTOR3(light->fWidth, light->fHeight, 0.0f);
+
+			// 矩形の位置の設定
+			SetPosRectangle(light->nIdx, pos, size);
+
+			break;
+		}
+	}
+}
+
+//--------------------------------------------------
+// 青ライトの設定
+//--------------------------------------------------
+void SetLightBlue(D3DXVECTOR3 pos, TEXTURE texture)
+{
+	for (int nCnt = HALF_LIGHT; nCnt < MAX_LIGHT; nCnt++)
+	{
+		Light *light = s_Light + nCnt;
+
+		if (light->bUse == false)
+		{//使用していないなら
+		 //構造体の設定
+			light->pos = pos;
+			light->fWidth = 100.0f;
+			light->fHeight = 100.0f;
+			light->bUse = true;
+
+			// 矩形の設定
+			light->nIdx = SetRectangle(texture);
+
+			D3DXVECTOR3 size = D3DXVECTOR3(light->fWidth, light->fHeight, 0.0f);
+
+			// 矩形の位置の設定
+			SetPosRectangle(light->nIdx, pos, size);
+
+			break;
+		}
+	}
+}
+
+//--------------------------------------------------
+// ライトの点滅
+//--------------------------------------------------
+void FlashLight(void)
+{
+	s_nFlashTimeRed++;						//タイムの加算
+	s_nFlashTimeRed %= MAX_FLASH_RED;		//タイムの初期化
+
+	s_nFlashTimeBlue++;						//タイムの加算
+	s_nFlashTimeBlue %= MAX_FLASH_BLUE;		//タイムの初期化
+
+	//------------------------------
+	// 赤ライトの点滅
+	//------------------------------
+	if (s_nFlashTimeRed >= HALF_FLASH_RED)
+	{
+		SetColorRectangle(s_Light[0].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+		SetColorRectangle(s_Light[1].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+	}
+	else
+	{
+		SetColorRectangle(s_Light[0].nIdx, GetColor(COLOR_WHITE));
+		SetColorRectangle(s_Light[1].nIdx, GetColor(COLOR_WHITE));
+	}
+
+	//------------------------------
+	// 青ライトの点滅
+	//------------------------------
+	if (s_nFlashTimeBlue >= HALF_FLASH_BLUE)
+	{
+		SetColorRectangle(s_Light[2].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+		SetColorRectangle(s_Light[3].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+	}
+	else
+	{
+		SetColorRectangle(s_Light[2].nIdx, GetColor(COLOR_WHITE));
+		SetColorRectangle(s_Light[3].nIdx, GetColor(COLOR_WHITE));
+	}
 }
 
 namespace

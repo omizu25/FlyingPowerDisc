@@ -16,6 +16,7 @@
 #include "rule.h"
 #include "playerselect.h"
 #include "tutorial.h"
+#include "texture.h"
 
 #include <assert.h>
 
@@ -204,6 +205,10 @@ void SetMode(void)
 	{// 次のモードの初期化
 	case MODE_TITLE:	// タイトル
 		InitTitle();
+		SetLightRed(D3DXVECTOR3(200.0f, 300.0f, 0.0f), TEXTURE_Light_Red);
+		SetLightRed(D3DXVECTOR3(300.0f, 300.0f, 0.0f), TEXTURE_Light_Red);
+		SetLightBlue(D3DXVECTOR3(400.0f, 300.0f, 0.0f), TEXTURE_Light_Blue);
+		SetLightBlue(D3DXVECTOR3(500.0f, 300.0f, 0.0f), TEXTURE_Light_Blue);
 		break;
 
 	case MODE_MAP:		// マップ
