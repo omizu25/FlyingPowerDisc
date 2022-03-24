@@ -38,8 +38,8 @@ const float	MENU_HEIGHT = 80.0f;		// メニューの高さ
 const float	CURSOR_SIZE = 50.0f;		// カーソルのサイズ
 const int	MAX_FLASH_RED = 80;						// 点滅にかかる時間(赤)
 const int	HALF_FLASH_RED = MAX_FLASH_RED / 2;		// 点滅にかかる時間(赤)の半分
-const int	MAX_FLASH_BLUE = 80;					// 点滅にかかる時間(青)
-const int	HALF_FLASH_BLUE = MAX_FLASH_BLUE / 2;	// 点滅にかかる時間(青)の半分
+const int	MAX_FLASH_BLUE = 120;					// 点滅にかかる時間(青)
+const int	HALF_FLASH_BLUE = 80;	// 点滅にかかる時間(青)の半分
 
 
 typedef enum
@@ -306,8 +306,12 @@ void FlashLight(void)
 	s_nFlashTimeRed++;						//タイムの加算
 	s_nFlashTimeRed %= MAX_FLASH_RED;		//タイムの初期化
 
-	s_nFlashTimeBlue++;						//タイムの加算
-	s_nFlashTimeBlue %= MAX_FLASH_BLUE;		//タイムの初期化
+	s_nFlashTimeBlue++;		//タイムの加算
+	//タイムの初期化
+	if (s_nFlashTimeBlue % MAX_FLASH_BLUE == 0)
+	{
+		s_nFlashTimeBlue = 40;
+	}
 
 	//------------------------------
 	// 赤ライトの点滅
