@@ -684,7 +684,7 @@ Player* GetPlayer(void)
 static void UpdateNormal(void)
 {
 	MovePlayer();
-	Disc *pDisc = GetDisc();
+
 	for (int count = 0; count < MAXPLAYER; count++)
 	{
 		Player *pPlayer = &s_Player[count];
