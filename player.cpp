@@ -334,7 +334,8 @@ void MovePlayer(void)
 				s_Player[0].bDive = false;
 			}
 		}
-		else if (GetKeyboardTrigger(DIK_C) || GetJoypadIdxTrigger(JOYKEY_B, 0))
+		else if (GetKeyboardTrigger(DIK_C) || GetJoypadIdxTrigger(JOYKEY_B, 0) ||
+			GetJoypadIdxTrigger(JOYKEY_LEFT_SHOULDER, 0))
 		{//タックル
 			s_Player[0].pos.x += s_Player[0].Speed * 5;
 			s_Player[0].bDive = true;
@@ -408,7 +409,8 @@ void MovePlayer(void)
 	else
 	{// ディスクを持っている
 		s_Player[0].nHaveCount++;
-		if (GetKeyboardTrigger(DIK_SPACE) || GetJoypadIdxTrigger(JOYKEY_A, 0)|| s_Player[0].nHaveCount >= MAX_HAVE_COUNT)
+		if (GetKeyboardTrigger(DIK_SPACE) || GetJoypadIdxTrigger(JOYKEY_A, 0) ||
+			GetJoypadIdxTrigger(JOYKEY_RIGHT_SHOULDER, 0) || s_Player[0].nHaveCount >= MAX_HAVE_COUNT)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[0].bHave = false;
 			pDisc->nThrow = 0;
@@ -464,7 +466,8 @@ void MovePlayer(void)
 				s_Player[1].bDive = false;
 			}
 		}
-		else if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxTrigger(JOYKEY_B, 1))
+		else if (GetKeyboardTrigger(DIK_L) || GetJoypadIdxTrigger(JOYKEY_B, 1) ||
+			GetJoypadIdxTrigger(JOYKEY_LEFT_SHOULDER, 1))
 		{//タックル
 
 			s_Player[1].pos.x -= s_Player[1].Speed * 5;
@@ -539,7 +542,8 @@ void MovePlayer(void)
 	else
 	{// ディスクを持っている
 		s_Player[1].nHaveCount++;
-		if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadIdxTrigger(JOYKEY_A, 1) || s_Player[1].nHaveCount >= MAX_HAVE_COUNT)
+		if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadIdxTrigger(JOYKEY_A, 1) ||
+			GetJoypadIdxTrigger(JOYKEY_RIGHT_SHOULDER, 1) || s_Player[1].nHaveCount >= MAX_HAVE_COUNT)
 		{//ここに玉投げる動作（パワーを玉の速度にするといいんじゃないかな）
 			s_Player[1].bHave = false;
 			pDisc->nThrow = 1;
