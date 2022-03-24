@@ -723,6 +723,9 @@ static void UpdateReset(void)
 		
 		// ‹éŒ`‚Ì‰ñ“]‚·‚éˆÊ’u‚ÌÝ’è
 		SetRotationPosRectangle(pPlayer->nIdx, pPlayer->pos, pPlayer->rot, pPlayer->fwidth, pPlayer->fheight);
+
+		pPlayer->bDive = false;
+		pPlayer->nDiveCount = 0;
 	}
 }
 
