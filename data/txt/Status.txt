@@ -10,7 +10,7 @@ TEXTURE_FILENAME = data/TEXTURE/PLAYER/kitune.png			# [0]Playerテクスチャ
 TEXTURE_FILENAME = data/TEXTURE/PLAYER/enemy000.png			# [1]Playerテクスチャ
 TEXTURE_FILENAME = data/TEXTURE/PLAYER/player000.png		# [2]Playerテクスチャ
 TEXTURE_FILENAME = data/TEXTURE/PLAYER/ghost.png			# [3]Playerテクスチャ
-TEXTURE_FILENAME = data/TEXTURE/PLAYER/zolbak.png			# [4]Playerテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/PLAYER/cat.png				# [4]Playerテクスチャ
 
 STATUSSET
 

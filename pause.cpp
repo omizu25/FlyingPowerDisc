@@ -25,7 +25,7 @@
 namespace
 {
 const float		MENU_WIDTH = 300.0f;					// メニューの幅
-const float		MENU_HEIGHT = 75.0f;					// メニューの高さ
+const float		MENU_HEIGHT = 100.0f;					// メニューの高さ
 const float		MENU_LEFT = SCREEN_WIDTH * 0.3f;		// メニューの左端
 const float		MENU_RIGHT = SCREEN_WIDTH * 0.7f;		// メニューの右端
 const float		MENU_TOP = SCREEN_HEIGHT * 0.35f;		// メニューの上端

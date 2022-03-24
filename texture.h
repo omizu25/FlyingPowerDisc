@@ -75,7 +75,7 @@ typedef enum
 	TEXTURE_kitune,				// ゴン
 	TEXTURE_player000,			// スライム
 	TEXTURE_ghost,				// ゴースト
-	TEXTURE_zolbak,				// 地面
+	TEXTURE_cat,				// 猫
 
 	/*↓ エフェクト ↓*/
 	TEXTURE_Effect_fire,		// 炎のエフェクト

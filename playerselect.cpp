@@ -40,7 +40,7 @@ typedef enum
 	MENU_CAPYBARA,	// カピバラ
 	MENU_SLIME,		// スライム
 	MENU_GHOST,		// ゴースト
-	MENU_GROUND,	// 地面
+	MENU_CAT,		// 猫
 	MENU_MAX
 }MENU;
 
@@ -149,7 +149,7 @@ void InitCharacter(void)
 		menu.texture[MENU_CAPYBARA] = TEXTURE_enemy000;
 		menu.texture[MENU_SLIME] = TEXTURE_player000;
 		menu.texture[MENU_GHOST] = TEXTURE_ghost;
-		menu.texture[MENU_GROUND] = TEXTURE_zolbak;
+		menu.texture[MENU_CAT] = TEXTURE_cat;
 
 		FrameArgument Frame;
 		Frame.bUse = false;
