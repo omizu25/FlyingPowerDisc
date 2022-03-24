@@ -13,6 +13,7 @@
 #include "game.h"
 #include "effect.h"
 #include "utility.h"
+#include "mode.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -26,6 +27,7 @@
 #define DISC_SPEED_Y (5.0f)		// ディスクのYの速さ
 #define TACKLESIZE (50.0f)		//タックルの当たり判定
 #define LIMIT_POS_Y (140.0f)	// 移動制限の上壁
+#define TACKLE_SREED (2.0f)		// タックルの速度
 
 //スタティック変数///スタティックをヘッタに使うなよ？
 
@@ -101,6 +103,11 @@ void UninitPlayer(void)
 //===================
 void UpdatePlayer(void)
 {
+	if (GetMode() != MODE_GAME)
+	{// ゲーム状態じゃない
+		return;
+	}
+		
 	switch (GetGameState())
 	{
 	case GAMESTATE_NONE:	// 何もしていない状態
@@ -603,14 +610,14 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 				pDisc->nThrow = 0;
 				s_Player[0].bDive = false;
 				s_Player[0].nDiveCount = 0;
-				pDisc->move = D3DXVECTOR3(DISC_SPEED_X, 0.0f, 0.0f)*s_Player[0].Pow * 3;
+				pDisc->move = D3DXVECTOR3(DISC_SPEED_X, 0.0f, 0.0f)*s_Player[0].Pow * TACKLE_SREED;
 			}
 			else if (pDisc->nThrow == 0)
 			{
 				pDisc->nThrow = 1;
 				s_Player[1].bDive = false;
 				s_Player[1].nDiveCount = 0;
-				pDisc->move = D3DXVECTOR3(-DISC_SPEED_X, 0.0f, 0.0f)*s_Player[1].Pow * 3;
+				pDisc->move = D3DXVECTOR3(-DISC_SPEED_X, 0.0f, 0.0f)*s_Player[1].Pow * TACKLE_SREED;
 			}
 		}
 	
