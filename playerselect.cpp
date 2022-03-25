@@ -260,15 +260,15 @@ void InitCharacter(void)
 		cursor.fBottom = SCREEN_HEIGHT;
 		cursor.fWidth = CURSOR_SIZE;
 		cursor.fHeight = CURSOR_SIZE;
-		cursor.texture = TEXTURE_Cursor_Right;
+		cursor.texture = TEXTURE_Disc;
 		cursor.nSelect = s_nSelect[0];
-		cursor.bRotation = false;
+		cursor.bRotation = true;
 
 		// カーソルの設定
 		s_nIdxCursor[0] = SetCursor(cursor);
 
 		cursor.fPosX = SCREEN_WIDTH * 0.6f;
-		cursor.texture = TEXTURE_Cursor_Left;
+		cursor.texture = TEXTURE_Disc;
 		cursor.nSelect = s_nSelect[1];
 
 		// カーソルの設定

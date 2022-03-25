@@ -164,9 +164,9 @@ void InitRule(void)
 		cursor.fBottom = SCREEN_HEIGHT;
 		cursor.fWidth = CURSOR_SIZE;
 		cursor.fHeight = CURSOR_SIZE;
-		cursor.texture = TEXTURE_Cursor_Right;
+		cursor.texture = TEXTURE_Disc;
 		cursor.nSelect = s_nSelect;
-		cursor.bRotation = false;
+		cursor.bRotation = true;
 
 		// カーソルの設定
 		s_nIdxCursor = SetCursor(cursor);
@@ -257,6 +257,9 @@ void UpdateRule(void)
 
 	// 数の更新
 	UpdateNumber();
+
+	// カーソルの更新
+	UpdateCursor();
 }
 
 //============================

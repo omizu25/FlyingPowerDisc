@@ -48,9 +48,7 @@ const char *s_FileName[] =
 	"data/TEXTURE/SELECT/STAGE1.png",			// ステージ1
 	"data/TEXTURE/SELECT/STAGE2.png",			// ステージ2
 	"data/TEXTURE/SELECT/STAGE3.png",			// ステージ3
-	"data/TEXTURE/SELECT/Cursor_Left.png",		// 左カーソル
-	"data/TEXTURE/SELECT/Cursor_Right.png",		// 右カーソル
-	
+
 	/*↓ ゲーム ↓*/
 	"data/TEXTURE/GAME/Disc.png",				// ディスク
 	"data/TEXTURE/GAME/Number_Yellow.png",		// 数字(黄色)
@@ -94,14 +92,14 @@ const char *s_FileName[] =
 	"data/TEXTURE/PLAYER/cat.png",				// 猫
 
 	/*↓ エフェクト ↓*/
-	"data/TEXTURE/EFFECT/fire.png",			// 炎のエフェクト
-	"data/TEXTURE/EFFECT/spin.png",			// ディスクのエフェクト
-	"data/TEXTURE/EFFECT/tackle.png",		// タックルのエフェクト
-	"data/TEXTURE/EFFECT/Goal.png",			// ゴールのエフェクト
-	"data/TEXTURE/EFFECT/spark.png",		// 壁の火花
+	"data/TEXTURE/EFFECT/fire.png",				// 炎のエフェクト
+	"data/TEXTURE/EFFECT/spin.png",				// ディスクのエフェクト
+	"data/TEXTURE/EFFECT/tackle.png",			// タックルのエフェクト
+	"data/TEXTURE/EFFECT/Goal.png",				// ゴールのエフェクト
+	"data/TEXTURE/EFFECT/spark.png",			// 壁の火花
 
 	/*↓ その他 ↓*/
-	"data/TEXTURE/Number_0To9.png",			// 数字
+	"data/TEXTURE/Number_0To9.png",				// 数字
 };
 }// namespaceはここまで
 
