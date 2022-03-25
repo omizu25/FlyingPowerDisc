@@ -2,6 +2,7 @@
 //
 // ルール選択画面の処理
 // Author:Sato Teruto
+// Author:Katsuki Mizuki
 //
 //================================
 
@@ -224,26 +225,6 @@ void UpdateRule(void)
 	//テクスチャの点滅
 	FlashTexture(nNumber);
 
-	if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_NUMPAD1) ||
-		GetJoypadTrigger(JOYKEY_LEFT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_LEFT))
-	{//Aキーが押されたとき
-		//数値の減算
-		SubRule(nNumber);
-
-		// セーブ
-		SaveRule();
-	}
-
-	if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_NUMPAD3) ||
-		GetJoypadTrigger(JOYKEY_RIGHT) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_RIGHT))
-	{//Dキーが押されたとき
-		//数値の加算
-		AddRule(nNumber);
-
-		// セーブ
-		SaveRule();
-	}
-
 	if (GetKeyboardTrigger(DIK_RETURN) || GetKeyboardTrigger(DIK_SPACE) ||
 		GetJoypadTrigger(JOYKEY_START) ||
 		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
@@ -431,6 +412,12 @@ void FlashTexture(int nNumber)
 
 		// 矩形の色の設定
 		SetColorRectangle(s_Switch[nNumber].nIdx, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+
+		//数値の減算
+		SubRule(nNumber);
+
+		// セーブ
+		SaveRule();
 	}
 
 	//------------------------------

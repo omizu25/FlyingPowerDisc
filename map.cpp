@@ -3,6 +3,7 @@
 // マップ選択画面の処理
 // Author:Sato Teruto
 // Author:Seino Riku
+// Author:Katsuki Mizuki
 //
 //================================
 

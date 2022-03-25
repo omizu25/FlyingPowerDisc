@@ -165,16 +165,65 @@ int SetGauge(const D3DXVECTOR3 &posStart, const D3DXCOLOR &col, float fWidth, fl
 }
 
 //--------------------------------------------------
-// 減少
+// 変更
 //--------------------------------------------------
-void SubGauge(int nIdx, float fWidth, float fHeight)
+void ChangeGauge(int nIdx, float fWidth, float fHeight)
 {
 	assert(nIdx >= 0 && nIdx < MAX_GAUGE);
 
 	Gauge *pGauge = &s_gauge[nIdx];
 
+	if (!pGauge->bUse)
+	{// 使用していない
+		return;
+	}
+
+	/*↓ 使用している ↓*/
+
 	pGauge->fWidthDest = fWidth;
 	pGauge->fHeightDest = fHeight;
+}
+
+//--------------------------------------------------
+// サイズの設定
+//--------------------------------------------------
+void SetSizeGauge(int nIdx, float fWidth, float fHeight)
+{
+	assert(nIdx >= 0 && nIdx < MAX_GAUGE);
+
+	Gauge *pGauge = &s_gauge[nIdx];
+
+	if (!pGauge->bUse)
+	{// 使用していない
+		return;
+	}
+
+	/*↓ 使用している ↓*/
+
+	pGauge->fWidth = fWidth;
+	pGauge->fHeight = fHeight;
+	pGauge->fWidthDest = fWidth;
+	pGauge->fHeightDest = fHeight;
+}
+
+//--------------------------------------------------
+// 色の設定
+//--------------------------------------------------
+void SetColorGauge(int nIdx, const D3DXCOLOR &color)
+{
+	assert(nIdx >= 0 && nIdx < MAX_GAUGE);
+
+	Gauge *pGauge = &s_gauge[nIdx];
+
+	if (!pGauge->bUse)
+	{// 使用していない
+		return;
+	}
+
+	/*↓ 使用している ↓*/
+
+	// 矩形の色の設定
+	SetColorRectangle(pGauge->nIdx, color);
 }
 
 namespace

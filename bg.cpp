@@ -25,7 +25,7 @@ namespace
 {
 const int	MAX_STAGE = 3;			// ステージの最大数
 const float	MAX_WIDTH = 200.0f;		// 幅の最大値
-const float	MAX_HEIGHT = 125.0f;	// 高さの最大値
+const float	MAX_HEIGHT = 115.0f;	// 高さの最大値
 }// namespaceはここまで
 
 //==================================================
@@ -85,7 +85,7 @@ void InitBG(void)
 		s_nIdxSet[0] = SetRectangle(TEXTURE_GAME_SetFrame01);
 		s_nIdxSet[1] = SetRectangle(TEXTURE_GAME_SetFrame02);
 
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.1f, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.08f, 0.0f);
 
 		// 矩形の位置の設定
 		SetPosRectangle(s_nIdxSet[0], pos, size);
@@ -100,7 +100,7 @@ void InitBG(void)
 		s_nIdxPoint[0] = SetRectangle(TEXTURE_GAME_PtsFrame01);
 		s_nIdxPoint[1] = SetRectangle(TEXTURE_GAME_PtsFrame02);
 
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT * 0.1f, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT * 0.08f, 0.0f);
 
 		// 矩形の位置の設定
 		SetPosRectangle(s_nIdxPoint[0], pos, size);

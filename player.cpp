@@ -14,26 +14,33 @@
 #include "effect.h"
 #include "utility.h"
 #include "mode.h"
+#include "color.h"
+#include "gauge.h"
 #include <stdio.h>
 #include <assert.h>
 
-#define MAXPLAYERTYPE (5)		//Type最大数
-#define MOVESPEED (5.0f)
-#define DEAD_ZONE	(0.1f)		// スティックの遊び
-#define MAX_DIVECOUNT (15)		// ダイブの硬直時間
-#define MAX_RESET_SPEED (7.0f)	// リセット状態の速さ
-#define MAX_HAVE_COUNT (120)	// 持ってる時間の最大値
-#define DISC_SPEED_X (2.0f)		// ディスクのXの速さ
-#define DISC_SPEED_Y (5.0f)		// ディスクのYの速さ
-#define TACKLESIZE (50.0f)		//タックルの当たり判定
-#define LIMIT_POS_Y (140.0f)	// 移動制限の上壁
-#define SKILLMAX (600)			//skillの制限時間
-#define SKILLSETCOUNT (5)		//skillが何回やったら発生するかのカウント
-#define MOVESKILL  (1.1f)		//skill発生中の動きの倍率
-#define POWSKILL  (1.5f)		//skill発生中の攻撃の倍率
-#define TACKLE_SREED (2.0f)		// タックルの速度
-#define MAXTRACK (540)			//soundの時間
-
+#define DEAD_ZONE (0.1f)			// スティックの遊び
+#define MAX_DIVECOUNT (15)			// ダイブの硬直時間
+#define MAX_RESET_SPEED (7.0f)		// リセット状態の速さ
+#define MAX_HAVE_COUNT (120)		// 持ってる時間の最大値
+#define DISC_SPEED_X (2.0f)			// ディスクのXの速さ
+#define DISC_SPEED_Y (5.0f)			// ディスクのYの速さ
+#define LIMIT_POS_Y (140.0f)		// 移動制限の上壁
+#define GAUGE_MAX_WIDTH (475.0f)	// ゲージの幅
+#define GAUGE_MAX_HEIGHT (20.0f)	// ゲージの高さ
+#define BLINK_START_TIME (180)		// 点滅の開始時間
+#define FRAME_SIZE (4.0f)			// 枠のサイズ
+#define TACKLE_SREED (2.0f)			// タックルの速度
+#define MIN_COLOR (0.5f)			// 色の最小値
+#define MAXPLAYERTYPE (5)			//Type最大数
+#define MOVESPEED (5.0f)			//速度
+#define TACKLESIZE (50.0f)			//タックルの当たり判定
+#define INTERVALMAX (60)			//skillのインターバル
+#define SKILLMAX (600)				//skillの制限時間
+#define SKILLSETCOUNT (5)			//skillが何回やったら発生するかのカウント
+#define MOVESKILL (1.1f)			//skill発生中の動きの倍率
+#define POWSKILL (1.5f)				//skill発生中の攻撃の倍率
+#define MAXTRACK (540)				//soundの時間
 
 //スタティック変数///スタティックをヘッタに使うなよ？
 
@@ -44,6 +51,9 @@ static bool	s_bKeyBoardWASD;			// WASDのキーボード入力があるかどうか
 static bool	s_bKeyBoardNumPad;			// テンキーのキーボード入力があるかどうか
 static bool	s_bJoyPad[MAXPLAYER];		// ジョイパッド入力があるかどうか
 static bool	s_bStickLeft[MAXPLAYER];	// 左スティック入力があるかどうか
+static int	s_nIdxGauge[MAXPLAYER];		// スキルゲージの矩形のインデックス
+static int	s_nIdxFrame[MAXPLAYER];		// 枠の矩形のインデックス
+static int	s_nIdxMax[MAXPLAYER];		// 最大値の矩形のインデックス
 static int sound;
 static bool fastsound;
 
@@ -73,8 +83,9 @@ void InitPlayer(void)
 		s_Player[count].bDive = false;
 		s_Player[count].fheight = PLAYERSIZE;
 		s_Player[count].fwidth = PLAYERSIZE;
-		s_Player[count].nSkillCount = 0;
-		s_Player[count].nSkilltimerCount = 0;
+		s_Player[count].nSkill = 0;
+		s_Player[count].nSkilltimer = 0;
+		s_Player[count].nSkillInterval = 0;
 		s_Player[count].nDiveCount = 0;
 		s_Player[count].nHaveCount = 0;
 		// 矩形の設定
@@ -103,6 +114,7 @@ void UninitPlayer(void)
 	{
 		// 使うのを止める
 		StopUseRectangle(s_Player[count].nIdx);
+		StopUseRectangle(s_nIdxGauge[count]);
 	}
 }
 
@@ -165,7 +177,10 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light,float siz)
 		{
 			continue;
 		}
-		s_Player[count].nSkillCount = 0;
+
+		s_Player[count].nSkilltimer = 0;
+		s_Player[count].nSkillInterval = 0;
+		s_Player[count].nSkill = 0;
 		s_Player[count].bSkill = false;
 		s_Player[count].nType = nType;
 		s_Player[count].bUse = true;
@@ -201,6 +216,27 @@ void SetPlayer(D3DXVECTOR3 pos, int nType,bool light,float siz)
 		
 		break;
 	}
+}
+
+//===================
+//スキルゲージのセット
+//===================
+void SetGaugePlayer(void)
+{
+	float fFrameWidth = (FRAME_SIZE * 2.0f);
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, SCREEN_HEIGHT * 0.175f, 0.0f);
+
+	// ゲージの設定
+	s_nIdxFrame[0] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_MAX_WIDTH + FRAME_SIZE, GAUGE_MAX_HEIGHT + fFrameWidth, GAUGE_LEFT);
+	s_nIdxMax[0] = SetGauge(pos, GetColor(COLOR_BLACK), GAUGE_MAX_WIDTH, GAUGE_MAX_HEIGHT, GAUGE_LEFT);
+	s_nIdxGauge[0] = SetGauge(pos, GetColor(COLOR_RED), 0.0f, GAUGE_MAX_HEIGHT, GAUGE_LEFT);
+
+	pos.x = SCREEN_WIDTH;
+
+	// ゲージの設定
+	s_nIdxFrame[1] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_MAX_WIDTH + FRAME_SIZE, GAUGE_MAX_HEIGHT + fFrameWidth, GAUGE_RIGHT);
+	s_nIdxMax[1] = SetGauge(pos, GetColor(COLOR_BLACK), GAUGE_MAX_WIDTH, GAUGE_MAX_HEIGHT, GAUGE_RIGHT);
+	s_nIdxGauge[1] = SetGauge(pos, GetColor(COLOR_BLUE), 0.0f, GAUGE_MAX_HEIGHT, GAUGE_RIGHT);
 }
 
 //----------------------------
@@ -635,11 +671,17 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 			pDisc->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			pDisc->bHave = true;
 			pPlayer->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			pPlayer->nSkillCount++;
-			if (pPlayer->nSkillCount >= SKILLSETCOUNT)
+
+			if (!pPlayer->bSkill)
 			{
-				pPlayer->nSkillCount = 0;
-				pPlayer->bSkill = true;
+				pPlayer->nSkill++;
+				if (pPlayer->nSkill >= SKILLSETCOUNT)
+				{
+					pPlayer->nSkill = 0;
+					pPlayer->nSkilltimer = 0;
+					pPlayer->nSkillInterval = 0;
+					pPlayer->bSkill = true;
+				}
 			}
 			pPlayer->bHave = true;
 		}
@@ -689,18 +731,65 @@ static void UpdateNormal(void)
 		//skill使用可能な時のエフェクト
 		if (s_Player[count].bSkill)
 		{
+			s_Player[count].nSkillInterval++;
 
-			s_Player[count].nSkilltimerCount++;
-			if (s_Player[count].nSkilltimerCount >= SKILLMAX)
+			if (s_Player[count].nSkillInterval >= INTERVALMAX)
 			{
-				s_Player[count].nSkilltimerCount = 0;
-				s_Player[count].nSkillCount = 0;
+				s_Player[count].nSkilltimer++;
+			}
+			
+			if (s_Player[count].nSkilltimer >= SKILLMAX)
+			{
+				s_Player[count].nSkilltimer = 0;
+				s_Player[count].nSkillInterval = 0;
+				s_Player[count].nSkill = 0;
 				s_Player[count].bSkill = false;
+			}
+			else if (s_Player[count].nSkilltimer >= (SKILLMAX - BLINK_START_TIME))
+			{
+				D3DXCOLOR col = GetColor(COLOR_WHITE);
+				float fCurve = cosf((s_Player[count].nSkilltimer * 0.1f) * (D3DX_PI * 2.0f));
+
+				switch (count)
+				{
+				case 0:
+
+					col = GetColor(COLOR_RED);
+					col.r = (((fCurve + 1.0f) * 0.5f) * (1.0f - MIN_COLOR)) + MIN_COLOR;
+					break;
+
+				case 1:
+					col = GetColor(COLOR_BLUE);
+					col.b = (((fCurve + 1.0f) * 0.5f) * (1.0f - MIN_COLOR)) + MIN_COLOR;
+					break;
+
+				default:
+					assert(false);
+					break;
+				}
+				
+				// ゲージの色の設定
+				SetColorGauge(s_nIdxGauge[count], col);
 			}
   			
 			s_Player[count].move*= MOVESKILL;
 			SetEffect(D3DXVECTOR3(s_Player[count].pos.x, s_Player[count].pos.y - 70.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), EFFECTSTATE_SHOOT, 10, 200.0f, false);
 		}
+
+		float fWidth = 0.0f;
+
+		if (s_Player[count].bSkill)
+		{
+			fWidth = GAUGE_MAX_WIDTH - ((GAUGE_MAX_WIDTH / SKILLMAX) * s_Player[count].nSkilltimer);
+		}
+		else
+		{
+			fWidth = (GAUGE_MAX_WIDTH / SKILLSETCOUNT) * s_Player[count].nSkill;
+		}
+
+		// ゲージの変更
+		ChangeGauge(s_nIdxGauge[count], fWidth, GAUGE_MAX_HEIGHT);
+
 		//移動量を更新(減衰させる)
 		s_Player[count].move.x += (0.0f - s_Player[count].move.x)*0.2f;//（目的の値-現在の値）＊減衰係数											  
 		s_Player[count].move.y += (0.0f - s_Player[count].move.y)*0.2f;//（目的の値-現在の値）＊減衰係数
@@ -753,6 +842,14 @@ static void UpdateReset(void)
 	for (int nPlayerNo = 0; nPlayerNo < MAXPLAYER; nPlayerNo++)
 	{
 		Player *pPlayer = &s_Player[nPlayerNo];
+
+		pPlayer->nSkilltimer = 0;
+		pPlayer->nSkillInterval = 0;
+		pPlayer->nSkill = 0;
+		pPlayer->bSkill = false;
+
+		// ゲージの変更
+		ChangeGauge(s_nIdxGauge[nPlayerNo], 0.0f, GAUGE_MAX_HEIGHT);
 
 		bOverlap[nPlayerNo] = false;
 

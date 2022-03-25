@@ -19,6 +19,7 @@ typedef enum
 	COLOR_PURPLE,		// Ž‡
 	COLOR_LIGHTBLUE,	// …F
 	COLOR_WHITE,		// ”’
+	COLOR_GRAY,			// ŠDF
 	COLOR_BLACK,		// •
 	COLOR_MAX,
 }COLOR;

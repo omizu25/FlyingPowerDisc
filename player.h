@@ -38,8 +38,9 @@ typedef struct
 	int nLife;					//寿命
 	int nType;					//タイプ
 	int nIdx;					//矩形のインデックス
-	int nSkillCount;
-	int nSkilltimerCount;
+	int nSkill;
+	int nSkilltimer;
+	int nSkillInterval;
 	int nDiveCount;				//タックルの硬直時間
 	int nHaveCount;				//もってる時間
 	float fheight;				//高さ
@@ -58,6 +59,7 @@ void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
 void SetPlayer(D3DXVECTOR3 pos, int nType, bool light,float siz);
+void SetGaugePlayer(void);
 bool CollisionPlayer(Disc *pDisc, float Size,int number);
 
 void MovePlayer(void);

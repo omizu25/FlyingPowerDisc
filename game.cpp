@@ -28,6 +28,7 @@
 #include "bg.h"
 #include "result.h"
 #include "cursor.h"
+#include "gauge.h"
 
 #include <assert.h>
 
@@ -51,6 +52,9 @@ void InitGame(void)
 
 	// 矩形の初期化
 	InitRectangle();
+
+	// ゲージの初期化
+	InitGauge();
 
 	// 背景の初期化
 	InitBG();
@@ -78,6 +82,9 @@ void InitGame(void)
 	SetPlayer(D3DXVECTOR3((float)PLAYER_POS_X + PLAYERSIZE, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, true, PLAYERSIZE);
 	pPlayer++;
 	SetPlayer(D3DXVECTOR3((float)SCREEN_WIDTH - PLAYER_POS_X - PLAYERSIZE, (float)SCREEN_HEIGHT * 0.6f, 0.0f), pPlayer->nType, false, PLAYERSIZE);
+
+	// プレイヤーのゲージの設定
+	SetGaugePlayer();
 
 	// UIの初期化
 	InitUi();
@@ -134,6 +141,9 @@ void UninitGame(void)
 
 	// 背景の終了
 	UninitBG();
+
+	// ゲージの終了
+	UninitGauge();
 
 	// タイムの終了
 	UninitTime();
@@ -232,6 +242,9 @@ void UpdateGame(void)
 
 	// プレイヤーの更新
 	UpdatePlayer();
+
+	// ゲージの更新
+	UpdateGauge();
 
 	// リザルトの更新
 	UpdateResult();

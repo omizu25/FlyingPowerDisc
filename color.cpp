@@ -25,6 +25,7 @@ const D3DXCOLOR	YELLOW(1.0f, 1.0f, 0.0f, 1.0f);		// â©êF
 const D3DXCOLOR	PURPLE(1.0f, 0.0f, 1.0f, 1.0f);		// éá
 const D3DXCOLOR	LIGHTBLUE(0.0f, 1.0f, 1.0f, 1.0f);	// êÖêF
 const D3DXCOLOR	WHITE(1.0f, 1.0f, 1.0f, 1.0f);		// îí
+const D3DXCOLOR	GRAY(0.5f, 0.5f, 0.5f, 1.0f);		// äDêF
 const D3DXCOLOR	BLACK(0.0f, 0.0f, 0.0f, 1.0f);		// çï
 
 const D3DXCOLOR* s_Colors[] =
@@ -36,6 +37,7 @@ const D3DXCOLOR* s_Colors[] =
 	&PURPLE,
 	&LIGHTBLUE,
 	&WHITE,
+	&GRAY,
 	&BLACK
 };
 }// namespaceÇÕÇ±Ç±Ç‹Ç≈

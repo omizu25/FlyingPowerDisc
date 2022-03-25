@@ -2,6 +2,7 @@
 //
 // キャラ選択画面の処理
 // Author:HAMADA
+// Author:KATSUKI MIZUKI
 //
 //================================
 
@@ -30,6 +31,7 @@
 #define START_POS_X			(175.0f)		//スタート位置、調整用
 #define GAUGE_WIDTH			(50.0f)			//ゲージの幅
 #define GAUGE_HEIGHT		(35.0f)			//ゲージの高さ
+#define FRAME_SIZE			(5.0f)			//枠のサイズ
 #define DESCRIPTION_WIDTH	(50.0f)			//説明の幅
 #define DESCRIPTION_HEIGHT	(350.0f)		//説明の高さ
 #define CURSOR_SIZE			(75.0f)			//カーソルのサイズ
@@ -65,6 +67,8 @@ typedef struct
 static int s_nSelect[MAXPLAYER];
 static int s_nIdxPowerGauge[MAXPLAYER];
 static int s_nIdxSpeedGauge[MAXPLAYER];
+static int s_nIdxPowerFrame[MAXPLAYER];
+static int s_nIdxSpeedFrame[MAXPLAYER];
 static int s_nIdxPower[MAXPLAYER];
 static int s_nIdxSpeed[MAXPLAYER];
 static Status s_status[MAX_CHARACTER];
@@ -78,7 +82,7 @@ static int s_nIdx;
 //------------------------------
 // プロトタイプ宣言
 //------------------------------
-static void ChangeGauge(void);
+static void UpdateChangeGauge(void);
 
 //============================
 // キャラ選択画面の初期化
@@ -148,27 +152,32 @@ void InitCharacter(void)
 		InitGauge();
 
 		float fHeight = GAUGE_HEIGHT * s_status[s_nSelect[0]].fPower;
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT * 0.9025f, 0.0f);
-
+		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.125f, SCREEN_HEIGHT * 0.903f, 0.0f);
+		float fFrameWidth = (FRAME_SIZE * 2.0f);
+		
 		// ゲージの設定
+		s_nIdxPowerFrame[0] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH + fFrameWidth, fHeight + FRAME_SIZE, GAUGE_BOTTOM);
 		s_nIdxPowerGauge[0] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
 		pos.x = SCREEN_WIDTH * 0.3f;
 
 		// ゲージの設定
+		s_nIdxSpeedFrame[0] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH + fFrameWidth, fHeight + FRAME_SIZE, GAUGE_BOTTOM);
 		s_nIdxSpeedGauge[0] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
 		pos.x = SCREEN_WIDTH * 0.875f;
 
 		// ゲージの設定
+		s_nIdxPowerFrame[1] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH + fFrameWidth, fHeight + FRAME_SIZE, GAUGE_BOTTOM);
 		s_nIdxPowerGauge[1] = SetGauge(pos, GetColor(COLOR_RED), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 
 		fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
 		pos.x = SCREEN_WIDTH * 0.7f;
 
 		// ゲージの設定
+		s_nIdxSpeedFrame[1] = SetGauge(pos, GetColor(COLOR_WHITE), GAUGE_WIDTH + fFrameWidth, fHeight + FRAME_SIZE, GAUGE_BOTTOM);
 		s_nIdxSpeedGauge[1] = SetGauge(pos, GetColor(COLOR_BLUE), GAUGE_WIDTH, fHeight, GAUGE_BOTTOM);
 	}
 
@@ -355,7 +364,7 @@ void UpdateCharacter(void)
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 
 		// ゲージの変更
-		ChangeGauge();
+		UpdateChangeGauge();
 
 		// カーソルの位置の変更
 		ChangePosCursor(s_nIdxCursor[0], s_nSelect[0]);
@@ -398,7 +407,7 @@ void UpdateCharacter(void)
 		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
 
 		// ゲージの変更
-		ChangeGauge();
+		UpdateChangeGauge();
 
 		// カーソルの位置の変更
 		ChangePosCursor(s_nIdxCursor[1], s_nSelect[1]);
@@ -515,25 +524,30 @@ void LoadFileSet(char *Filename)
 //----------------------------
 //ゲージの変更
 //----------------------------
-static void ChangeGauge(void)
+static void UpdateChangeGauge(void)
 {
+	float fFrameWidth = (FRAME_SIZE * 2.0f);
 	float fHeight = GAUGE_HEIGHT * s_status[s_nSelect[0]].fPower;
 
-	// ゲージの減少
-	SubGauge(s_nIdxPowerGauge[0], GAUGE_WIDTH, fHeight);
+	// ゲージの変更
+	ChangeGauge(s_nIdxPowerGauge[0], GAUGE_WIDTH, fHeight);
+	ChangeGauge(s_nIdxPowerFrame[0], GAUGE_WIDTH + fFrameWidth, fHeight + FRAME_SIZE);
 
 	fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[0]].fSpeed * 0.5f);
 	
-	// ゲージの設定
-	SubGauge(s_nIdxSpeedGauge[0], GAUGE_WIDTH, fHeight);
+	// ゲージの変更
+	ChangeGauge(s_nIdxSpeedGauge[0], GAUGE_WIDTH, fHeight);
+	ChangeGauge(s_nIdxSpeedFrame[0], GAUGE_WIDTH + fFrameWidth, fHeight + FRAME_SIZE);
 
 	fHeight = GAUGE_HEIGHT * s_status[s_nSelect[1]].fPower;
 	
-	// ゲージの設定
-	SubGauge(s_nIdxPowerGauge[1], GAUGE_WIDTH, fHeight);
+	// ゲージの変更
+	ChangeGauge(s_nIdxPowerGauge[1], GAUGE_WIDTH, fHeight);
+	ChangeGauge(s_nIdxPowerFrame[1], GAUGE_WIDTH + fFrameWidth, fHeight + FRAME_SIZE);
 
 	fHeight = GAUGE_HEIGHT * (s_status[s_nSelect[1]].fSpeed * 0.5f);
 	
-	// ゲージの設定
-	SubGauge(s_nIdxSpeedGauge[1], GAUGE_WIDTH, fHeight);
+	// ゲージの変更
+	ChangeGauge(s_nIdxSpeedGauge[1], GAUGE_WIDTH, fHeight);
+	ChangeGauge(s_nIdxSpeedFrame[1], GAUGE_WIDTH + fFrameWidth, fHeight + FRAME_SIZE);
 }

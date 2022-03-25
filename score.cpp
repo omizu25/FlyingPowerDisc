@@ -32,7 +32,7 @@ const float	NUMBER_WIDTH = 40.0f;		// 数の幅
 const float	NUMBER_HEIGHT = 60.0f;		// 数の高さ
 const float	NUMBER_UI_WIDTH = 200.0f;	// UIの数の幅
 const float	NUMBER_UI_HEIGHT = 300.0f;	// UIの数の高さ
-const float	START_POS_Y = 83.0f;		// 始まりのYの位置
+const float	START_POS_Y = 70.0f;		// 始まりのYの位置
 }// namespaceはここまで
 
 //==================================================

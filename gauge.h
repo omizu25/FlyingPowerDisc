@@ -59,11 +59,26 @@ void DrawGauge(void);
 int SetGauge(const D3DXVECTOR3 &posStart, const D3DXCOLOR &col, float fWidth, float fHeight, GAUGE gauge);
 
 //--------------------------------------------------
-// 減少
+// 変更
 // 引数1  : int nIdx / 配列のインデックス
 // 引数2  : float fWidth / 幅
 // 引数3  : float fHeight / 高さ
 //--------------------------------------------------
-void SubGauge(int nIdx, float fWidth, float fHeight);
+void ChangeGauge(int nIdx, float fWidth, float fHeight);
+
+//--------------------------------------------------
+// サイズの設定
+// 引数1  : int nIdx / 配列のインデックス
+// 引数2  : float fWidth / 幅
+// 引数3  : float fHeight / 高さ
+//--------------------------------------------------
+void SetSizeGauge(int nIdx, float fWidth, float fHeight);
+
+//--------------------------------------------------
+// 色の設定
+// 引数1  : int nIdx / 配列のインデックス
+// 引数2  : D3DXCOLOR &color / 色
+//--------------------------------------------------
+void SetColorGauge(int nIdx, const D3DXCOLOR &color);
 
 #endif // !_GAUGE_H_
