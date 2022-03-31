@@ -198,14 +198,25 @@ void UpdateGame(void)
 
 			if (s_bPause)
 			{// ポーズしてる
-				// メニューの設定
-				SetPause();
+				for (int i = 0; i < GetMaxInput(); i++)
+				{
+					if (!GetJoypadIdxTrigger(JOYKEY_START, i))
+					{
+						continue;
+					}
+
+					// メニューの設定
+					SetPause(i);
+					break;
+				}
 			}
 			else
 			{// ポーズしてない
 				// ポーズのリセット
 				ResetPause();
 			}
+
+			return;
 		}
 	}
 

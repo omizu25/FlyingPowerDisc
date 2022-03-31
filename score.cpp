@@ -135,6 +135,9 @@ void UpdateScore(void)
 
 			// セット数の加算
 			AddSetScore(nPlayerNo, 1);
+
+			// プレイヤーのゲームのリセット
+			ResetGaugePlayer();
 		}
 
 		if (s_nSet[nPlayerNo] >= GetSetRule())

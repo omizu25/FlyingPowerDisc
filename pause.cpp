@@ -50,6 +50,7 @@ namespace
 int	s_nSelectMenu;	// 選ばれているメニュー
 int	s_nIdxMenu;		// 使っているメニューの番号
 int	s_nIdxCursor;	// カーソルの配列のインデックス
+int	s_nPlayerNo;	// 押したプレイヤー
 }// namespaceはここまで
 
 //==================================================
@@ -66,6 +67,7 @@ void Input(void);
 void InitPause(void)
 {
 	s_nSelectMenu = 0;
+	s_nPlayerNo = 0;
 
 	{// メニュー
 		MenuArgument menu;
@@ -140,13 +142,29 @@ void DrawPause(void)
 //--------------------------------------------------
 // 設定
 //--------------------------------------------------
-void SetPause(void)
+void SetPause(int nPlayerNo)
 {
 	// メニューの描画するかどうか
 	SetDrawMenu(s_nIdxMenu, true);
 
 	// カーソルの描画するかどうか
 	SetDrawCursor(s_nIdxCursor, true);
+
+	s_nSelectMenu = 0;
+
+	// 選択肢の色の初期化
+	InitColorOption();
+
+	// 選択肢の変更
+	ChangeOption(s_nSelectMenu);
+
+	// 選択肢の色の初期化
+	InitColorOption();
+
+	// 位置の変更
+	ChangePosCursor(s_nIdxCursor, s_nSelectMenu);
+
+	s_nPlayerNo = nPlayerNo;
 }
 
 //--------------------------------------------------
@@ -159,6 +177,9 @@ void ResetPause(void)
 
 	// カーソルの描画するかどうか
 	SetDrawCursor(s_nIdxCursor, false);
+
+	// 選択肢の色の初期化
+	InitColorOption();
 }
 
 namespace
@@ -174,7 +195,7 @@ void Input(void)
 	}
 
 	if (GetKeyboardTrigger(DIK_W) || GetKeyboardTrigger(DIK_NUMPAD5) ||
-		GetJoypadTrigger(JOYKEY_UP) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP))
+		GetJoypadIdxTrigger(JOYKEY_UP, s_nPlayerNo) || GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP, s_nPlayerNo))
 	{// Wキーが押されたかどうか
 		// 選択肢の色の初期化
 		InitColorOption();
@@ -188,7 +209,7 @@ void Input(void)
 		ChangePosCursor(s_nIdxCursor, s_nSelectMenu);
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetKeyboardTrigger(DIK_NUMPAD2) ||
-		GetJoypadTrigger(JOYKEY_DOWN) || GetJoypadStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN))
+		GetJoypadIdxTrigger(JOYKEY_DOWN, s_nPlayerNo) || GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN, s_nPlayerNo))
 	{// Sキーが押されたかどうか
 		// 選択肢の色の初期化
 		InitColorOption();
@@ -203,19 +224,15 @@ void Input(void)
 	}
 
 	if (GetKeyboardTrigger(DIK_RETURN) || GetKeyboardTrigger(DIK_SPACE) ||
-		GetJoypadTrigger(JOYKEY_START) ||
-		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
+		GetJoypadIdxTrigger(JOYKEY_A, s_nPlayerNo) || GetJoypadIdxTrigger(JOYKEY_B, s_nPlayerNo))
 	{//決定キー(ENTERキー)が押されたかどうか
 		switch (s_nSelectMenu)
 		{
 		case MENU_GAME:		// ゲーム
 			SetEnablePause(false);
 
-			// メニューの描画するかどうか
-			SetDrawMenu(s_nIdxMenu, false);
-
-			// カーソルの描画するかどうか
-			SetDrawCursor(s_nIdxCursor, false);
+			// リセット
+			ResetPause();
 			break;
 
 		case MENU_TITLE:	// タイトル

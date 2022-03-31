@@ -41,6 +41,7 @@ typedef struct
 typedef struct
 {
 	D3DXVECTOR3	pos;				// 位置
+	D3DXCOLOR	colDest;			// 色
 	Option		Option[MAX_OPTION];	// 選択肢の情報
 	int			nNumUse;			// 使用数
 	int			nIdx;				// 矩形のインデックス

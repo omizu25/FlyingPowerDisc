@@ -61,6 +61,7 @@ void DrawPlayer(void);
 void SetPlayer(D3DXVECTOR3 pos, int nType, bool light,float siz);
 void SetGaugePlayer(void);
 bool CollisionPlayer(Disc *pDisc, float Size,int number);
+void ResetGaugePlayer(void);
 
 void MovePlayer(void);
 void LoadFile(char *Filename);

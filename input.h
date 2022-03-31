@@ -73,6 +73,7 @@ typedef enum
 HRESULT InitInput(HINSTANCE hInstance, HWND hWnd);						// 入力処理全部の初期化
 void UninitInput(void);													// 入力処理全部の終了処理
 void UpdateInput(void);													// 入力処理全部の更新処理
+int GetMaxInput(void);													// 入力処理のプレイヤー数を取得
 
 /*↓ プロトタイプ宣言 (キーボード) ↓*/
 

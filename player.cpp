@@ -710,6 +710,18 @@ bool CollisionPlayer(Disc *pDisc, float Size, int number)
 }
 
 //----------------------------
+//ゲージのリセット
+//----------------------------
+void ResetGaugePlayer(void)
+{
+	for (int count = 0; count < MAXPLAYER; count++)
+	{
+		// ゲージの変更
+		ChangeGauge(s_nIdxGauge[count], 0.0f, GAUGE_MAX_HEIGHT);
+	}
+}
+
+//----------------------------
 //Player情報を取得
 //----------------------------
 Player* GetPlayer(void)
@@ -842,14 +854,6 @@ static void UpdateReset(void)
 	for (int nPlayerNo = 0; nPlayerNo < MAXPLAYER; nPlayerNo++)
 	{
 		Player *pPlayer = &s_Player[nPlayerNo];
-
-		pPlayer->nSkilltimer = 0;
-		pPlayer->nSkillInterval = 0;
-		pPlayer->nSkill = 0;
-		pPlayer->bSkill = false;
-
-		// ゲージの変更
-		ChangeGauge(s_nIdxGauge[nPlayerNo], 0.0f, GAUGE_MAX_HEIGHT);
 
 		bOverlap[nPlayerNo] = false;
 
