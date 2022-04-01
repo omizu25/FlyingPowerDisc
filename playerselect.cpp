@@ -35,7 +35,10 @@
 #define DESCRIPTION_WIDTH	(50.0f)			//説明の幅
 #define DESCRIPTION_HEIGHT	(350.0f)		//説明の高さ
 #define CURSOR_SIZE			(75.0f)			//カーソルのサイズ
-#define UI_SIZE				(100.0f)		//UIのサイズ
+#define UI_WIDTH			(100.0f)		//UIの幅
+#define UI_HEIGHT			(75.0f)			//UIの高さ
+#define OK_WIDTH			(150.0f)		//OKの幅
+#define OK_HEIGHT			(75.0f)			//OKの高さ
 #define SELECT_WIDTH		(250.0f)		//選択の幅
 #define SELECT_HEIGHT		(50.0f)			//選択の高さ
 
@@ -78,6 +81,8 @@ static int s_nIdxMenu;
 static int s_nIdxUI[MAXPLAYER];
 static int s_nIdxCursor[MAXPLAYER];
 static int s_nIdx;
+static int s_nIdxSelect[MAXPLAYER];
+static bool s_bSelect[MAXPLAYER];
 
 //------------------------------
 // プロトタイプ宣言
@@ -119,8 +124,8 @@ void InitCharacter(void)
 		// 矩形の設定
 		s_nIdxUI[0] = SetRectangle(TEXTURE_UI000);
 
-		D3DXVECTOR3 pos = D3DXVECTOR3(UI_SIZE, 130.0f, 0.0f);
-		D3DXVECTOR3 size = D3DXVECTOR3(UI_SIZE, UI_SIZE, 0.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(UI_WIDTH, 130.0f, 0.0f);
+		D3DXVECTOR3 size = D3DXVECTOR3(UI_WIDTH, UI_HEIGHT, 0.0f);
 
 		// 矩形の位置の設定
 		SetPosRectangle(s_nIdxUI[0], pos, size);
@@ -128,10 +133,32 @@ void InitCharacter(void)
 		// 矩形の設定
 		s_nIdxUI[1] = SetRectangle(TEXTURE_UI001);
 
-		pos.x = SCREEN_WIDTH - UI_SIZE;
+		pos.x = SCREEN_WIDTH - UI_WIDTH;
 
 		// 矩形の位置の設定
 		SetPosRectangle(s_nIdxUI[1], pos, size);
+	}
+
+	{// OK
+		// 矩形の設定
+		s_nIdxSelect[0] = SetRectangle(TEXTURE_OK);
+
+		D3DXVECTOR3 pos = D3DXVECTOR3(UI_WIDTH, SCREEN_HEIGHT * 0.3f, 0.0f);
+		D3DXVECTOR3 size = D3DXVECTOR3(OK_WIDTH, OK_HEIGHT, 0.0f);
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxSelect[0], pos, size);
+
+		// 矩形の設定
+		s_nIdxSelect[1] = SetRectangle(TEXTURE_OK);
+
+		pos.x = SCREEN_WIDTH - UI_WIDTH;
+
+		// 矩形の位置の設定
+		SetPosRectangle(s_nIdxSelect[1], pos, size);
+
+		s_bSelect[0] = false;
+		s_bSelect[1] = false;
 	}
 
 	LoadFileSet("data\\txt\\Status.txt");
@@ -326,109 +353,152 @@ void UninitCharacter(void)
 //============================
 void UpdateCharacter(void)
 {
+	if (s_bSelect[0] && s_bSelect[1])
 	{
-		Player*player = GetPlayer();
-
-		if (GetKeyboardTrigger(DIK_S) || GetJoypadIdxTrigger(JOYKEY_DOWN, 0) ||
-			GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN, 0))
-		{//Sキーが押されたとき
-		 //音の再生
-			PlaySound(SOUND_LABEL_SELECT);
-
-		 //数値の減算
-			player->nType++;
-
-			if (player->nType >= MAX_CHARACTER)
-			{
-				player->nType = 0;
-			}
-		}
-
-		if (GetKeyboardTrigger(DIK_W) || GetJoypadIdxTrigger(JOYKEY_UP, 0) ||
-			GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP, 0))
-		{//Wキーが押されたとき
-		 //音の再生
-			PlaySound(SOUND_LABEL_SELECT);
-
-		 //数値の加算
-			player->nType--;
-			if (player->nType < 0)
-			{
-				player->nType = MAX_CHARACTER - 1;
-				
-			}
-		}
-
-		s_nSelect[0] = player->nType;
-		//テクスチャ更新
-		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
-
-		// ゲージの変更
-		UpdateChangeGauge();
-
-		// カーソルの位置の変更
-		ChangePosCursor(s_nIdxCursor[0], s_nSelect[0]);
-	}
-
-	{	
-		Player*player = GetPlayer();
-		player++;
-		if (GetKeyboardTrigger(DIK_NUMPAD2) || GetJoypadIdxTrigger(JOYKEY_DOWN, 1) ||
-			GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN, 1))
-		{//Sキーが押されたとき
-		 //音の再生
-			PlaySound(SOUND_LABEL_SELECT);
-
-		 //数値の減算
-			player->nType++;
-			if (player->nType >= MAX_CHARACTER)
-			{
-				player->nType = 0;
-			}
-		}
-
-		if (GetKeyboardTrigger(DIK_NUMPAD5) || GetJoypadIdxTrigger(JOYKEY_UP, 1) ||
-			GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP, 1))
-		{//Wキーが押されたとき
-		 //音の再生
-			PlaySound(SOUND_LABEL_SELECT);
-
-		 //数値の加算
-			player->nType--;
-			
-			if (player->nType < 0)
-			{
-				player->nType = MAX_CHARACTER - 1;
-			}
-		}
-
-		s_nSelect[1] = player->nType;
-		//テクスチャ更新
-		ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
-
-		// ゲージの変更
-		UpdateChangeGauge();
-
-		// カーソルの位置の変更
-		ChangePosCursor(s_nIdxCursor[1], s_nSelect[1]);
-	}
-
-	if (GetKeyboardTrigger(DIK_RETURN) || GetKeyboardTrigger(DIK_SPACE) ||
-		GetJoypadTrigger(JOYKEY_START) ||
-		GetJoypadTrigger(JOYKEY_A) || GetJoypadTrigger(JOYKEY_B))
-	{//決定キー(ENTERキー)が押されたかどうか
-		//音の再生
-		PlaySound(SOUND_LABEL_ENTER);
-
 		//ゲーム選択画面行く
 		ChangeMode(MODE_TITLE);
 	}
+	else
+	{
+		{
+			Player*player = GetPlayer();
 
-	// ゲージの更新
-	UpdateGauge();
+			if (GetKeyboardTrigger(DIK_S) || GetJoypadIdxTrigger(JOYKEY_DOWN, 0) ||
+				GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN, 0))
+			{//Sキーが押されたとき
+			 //音の再生
+				PlaySound(SOUND_LABEL_SELECT);
 
-	// カーソルの更新
-	UpdateCursor();
+				//数値の減算
+				player->nType++;
+
+				if (player->nType >= MAX_CHARACTER)
+				{
+					player->nType = 0;
+				}
+
+				s_bSelect[0] = false;
+
+				// 矩形の色の設定
+				SetColorRectangle(s_nIdxSelect[0], GetColor(COLOR_WHITE));
+			}
+
+			if (GetKeyboardTrigger(DIK_W) || GetJoypadIdxTrigger(JOYKEY_UP, 0) ||
+				GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP, 0))
+			{//Wキーが押されたとき
+			 //音の再生
+				PlaySound(SOUND_LABEL_SELECT);
+
+				//数値の加算
+				player->nType--;
+				if (player->nType < 0)
+				{
+					player->nType = MAX_CHARACTER - 1;
+
+				}
+
+				s_bSelect[0] = false;
+
+				// 矩形の色の設定
+				SetColorRectangle(s_nIdxSelect[0], GetColor(COLOR_WHITE));
+			}
+
+			s_nSelect[0] = player->nType;
+			//テクスチャ更新
+			ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
+
+			// ゲージの変更
+			UpdateChangeGauge();
+
+			// カーソルの位置の変更
+			ChangePosCursor(s_nIdxCursor[0], s_nSelect[0]);
+		}
+
+		{
+			Player*player = GetPlayer();
+			player++;
+			if (GetKeyboardTrigger(DIK_NUMPAD2) || GetJoypadIdxTrigger(JOYKEY_DOWN, 1) ||
+				GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_DOWN, 1))
+			{//Sキーが押されたとき
+			 //音の再生
+				PlaySound(SOUND_LABEL_SELECT);
+
+				//数値の減算
+				player->nType++;
+				if (player->nType >= MAX_CHARACTER)
+				{
+					player->nType = 0;
+				}
+
+				s_bSelect[1] = false;
+
+				// 矩形の色の設定
+				SetColorRectangle(s_nIdxSelect[1], GetColor(COLOR_WHITE));
+			}
+
+			if (GetKeyboardTrigger(DIK_NUMPAD5) || GetJoypadIdxTrigger(JOYKEY_UP, 1) ||
+				GetJoypadIdxStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP, 1))
+			{//Wキーが押されたとき
+			 //音の再生
+				PlaySound(SOUND_LABEL_SELECT);
+
+				//数値の加算
+				player->nType--;
+
+				if (player->nType < 0)
+				{
+					player->nType = MAX_CHARACTER - 1;
+				}
+
+				s_bSelect[1] = false;
+
+				// 矩形の色の設定
+				SetColorRectangle(s_nIdxSelect[1], GetColor(COLOR_WHITE));
+			}
+
+			s_nSelect[1] = player->nType;
+			//テクスチャ更新
+			ChangeTextureRectangleWithTex(player->nIdx, s_pTexture[player->nType]);
+
+			// ゲージの変更
+			UpdateChangeGauge();
+
+			// カーソルの位置の変更
+			ChangePosCursor(s_nIdxCursor[1], s_nSelect[1]);
+		}
+
+		if (GetKeyboardTrigger(DIK_RETURN) || GetKeyboardTrigger(DIK_SPACE) ||
+			GetJoypadIdxTrigger(JOYKEY_START, 0) ||
+			GetJoypadIdxTrigger(JOYKEY_A, 0) || GetJoypadIdxTrigger(JOYKEY_B, 0))
+		{//決定キー(ENTERキー)が押されたかどうか
+			//音の再生
+			PlaySound(SOUND_LABEL_ENTER);
+
+			s_bSelect[0] = true;
+
+			// 矩形の色の設定
+			SetColorRectangle(s_nIdxSelect[0], GetColor(COLOR_RED));
+		}
+
+		if (GetKeyboardTrigger(DIK_RETURN) || GetKeyboardTrigger(DIK_SPACE) ||
+			GetJoypadIdxTrigger(JOYKEY_START, 1) ||
+			GetJoypadIdxTrigger(JOYKEY_A, 1) || GetJoypadIdxTrigger(JOYKEY_B, 1))
+		{//決定キー(ENTERキー)が押されたかどうか
+		 //音の再生
+			PlaySound(SOUND_LABEL_ENTER);
+
+			s_bSelect[1] = true;
+
+			// 矩形の色の設定
+			SetColorRectangle(s_nIdxSelect[1], GetColor(COLOR_RED));
+		}
+
+		// ゲージの更新
+		UpdateGauge();
+
+		// カーソルの更新
+		UpdateCursor();
+	}
 }
 
 //============================

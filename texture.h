@@ -40,6 +40,7 @@ typedef enum
 	TEXTURE_Stage1,				// ステージ1
 	TEXTURE_Stage2,				// ステージ2
 	TEXTURE_Stage3,				// ステージ3
+	TEXTURE_OK,					// OK
 
 	/*↓ ゲーム ↓*/
 	TEXTURE_Disc,				// ディスク

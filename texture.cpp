@@ -48,6 +48,7 @@ const char *s_FileName[] =
 	"data/TEXTURE/SELECT/STAGE1.png",			// ステージ1
 	"data/TEXTURE/SELECT/STAGE2.png",			// ステージ2
 	"data/TEXTURE/SELECT/STAGE3.png",			// ステージ3
+	"data/TEXTURE/SELECT/OK.png",				// OK
 
 	/*↓ ゲーム ↓*/
 	"data/TEXTURE/GAME/Disc.png",				// ディスク
